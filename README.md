@@ -27,18 +27,36 @@ curl -fsSL https://raw.githubusercontent.com/r4zendev/dotfiles/main/install.sh |
 
 ## Future
 
-- [ ] Finish proper Neovim LSP, treesitter, theme, and other defaults setup
+- [ ] Add missing essential plugins:
+  - [ ] copilot
+  - [ ] vim-visual-multi
+  - [ ] project
+  - [ ] glance
+  - [ ] nvim-spectre
+- [ ] Tweak neovim configuration that I have shamelessly stolen and learn the shortcuts
+- [ ] Improve which-key to learn scs faster
+- [ ] Add more Neovim & shell keymaps
 - [ ] Finish initial dotfiles setup and installation script
 - [ ] Dogfood current setup
-- [ ] Add more Neovim plugins of taste
+- [ ] Improve the usage of the following tools in regular day-to-day workflow:
+  - [ ] zoxide
+  - [ ] tmux
+  - [ ] harpoon
 - [ ] Cleanup fish config
-- [ ] Add more Neovim & shell keybinds
+- [ ] Add more Neovim plugins of taste:
+  - [ ] flash
+  - [ ] oil
+  - [ ] aerial
+  - [ ] toggleterm with gitui
+  - [ ] vim-move
+- [ ] Setup default prettier config path
+- [ ] Rust Neovim setup
+- [ ] Adapt 1password & Fantastical
 - [ ] Adapt [gitui](https://github.com/extrawurst/gitui), [lazydocker](https://github.com/jesseduffield/lazydocker), [yazi](https://github.com/DreamMaoMao/yazi.nvim), [espanso](https://espanso.org/)
 - [ ] Configure & adapt [Wezterm](https://wezfurlong.org/wezterm/) from scratch (current config file is a good set of defaults)
 - [ ] Ditch tmux for Wezterm panes if they're fine
 - [ ] Learn more goddamn Lua
 - [ ] Improve Neovim setup with Lua knowledge gained, [Primeagen VIM as your editor](https://www.youtube.com/playlist?list=PLm323Lc7iSW_wuxqmKx_xxNtJC_hJbQ7R) playlist and references, such as [LazyVim](https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim), [ayamir](https://github.com/ayamir/nvimdots)
-- [ ] Adapt 1password & Fantastical
 
 Long way ahead we've got... Hope it's going to be fun!
 
@@ -53,5 +71,5 @@ Long way ahead we've got... Hope it's going to be fun!
 Thanks to these wonderful people and repos, I was able to assemble this dotfiles repository of mine.
 
 - [joshmedeski/dotfiles](https://github.com/joshmedeski/dotfiles)
-- [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
+- [Josean Martinez](https://github.com/josean-dev/dev-environment-files/)
 - and more...
