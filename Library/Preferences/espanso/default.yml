@@ -1,0 +1,21 @@
+# espanso configuration file
+# https://espanso.org/docs/
+# Matches are the substitution rules, when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  # Signature
+  - trigger: "sig;"
+    replace: "Regards,\nSasha Mysak"
+
+  # Emails
+  - trigger: "em;"
+    replace: "reactionnnnn@gmail.com"
+
+  # Dates
+  - trigger: "td;"
+    replace: "{{today}}"
+    vars:
+      - name: today
+        type: date
+        params:
+          format: "%m/%d/%Y"
