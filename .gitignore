@@ -1,12 +1,8 @@
 .aws
-.config/fish/conf.d/openai.fish
-.config/fish/fish_variables
-.config/fish/functions/fzf_key_bindings.fish
 .DS_Store
+.config/gh/hosts.yml
 .ssh
 dist
 logs
 npm-debug.log
-pids
-run
 .gitconfig

@@ -1,10 +1,6 @@
 # zsh
 
-export ZSH="$HOME/.oh-my-zsh"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search)
-source $ZSH/oh-my-zsh.sh
-
-# Path
+source ~/zsh-plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Set PATH, MANPATH, etc., for Homebrew.
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -18,6 +14,17 @@ export EDITOR="nvim"
 alias lg="lazygit"
 alias ls="lsd -a"
 alias p="pnpm"
+alias g="gitui"
+alias v="nvim"
+alias n="nvim"
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 # alias python=python3
 # alias pip=pip3
 
@@ -48,3 +55,10 @@ eval "$(pyenv init -)"
 
 export JAVA_HOME="$(/usr/libexec/java_home)"
 export npm_config_target_arch=x64
+
+# AI API Keys
+export GEMINI_API_KEY="GEMINI_API_KEY"
+export DEEPSEEK_API_KEY="DEEPSEEK_API_KEY"
+# export OPENAI_API_KEY="OPENAI_API_KEY"
+# export ANTHROPIC_API_KEY="ANTHROPIC_API_KEY"
+

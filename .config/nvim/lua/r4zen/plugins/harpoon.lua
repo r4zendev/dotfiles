@@ -1,24 +1,31 @@
 return {
   "ThePrimeagen/harpoon",
+  branch = "harpoon2",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
   config = function()
-    -- set keymaps
-    local keymap = vim.keymap -- for conciseness
+    local harpoon = require("harpoon")
 
-    keymap.set(
-      "n",
-      "<leader>hm",
-      "<cmd>lua require('harpoon.mark').add_file()<cr>",
-      { desc = "Mark file with harpoon" }
-    )
-    keymap.set("n", "<leader>hn", "<cmd>lua require('harpoon.ui').nav_next()<cr>", { desc = "Go to next harpoon mark" })
-    keymap.set(
-      "n",
-      "<leader>hp",
-      "<cmd>lua require('harpoon.ui').nav_prev()<cr>",
-      { desc = "Go to previous harpoon mark" }
-    )
+    harpoon:setup({
+      settings = {
+        -- save_on_toggle = true,
+      },
+    })
+
+    vim.keymap.set("n", "<leader>k", function()
+      harpoon:list():add()
+    end)
+    vim.keymap.set("n", "<C-e>", function()
+      harpoon.ui:toggle_quick_menu(harpoon:list())
+    end)
+
+    -- Toggle previous & next buffers stored within Harpoon list
+    vim.keymap.set("n", "<C-_>", function()
+      harpoon:list():prev()
+    end)
+    vim.keymap.set("n", "<C-]>", function()
+      harpoon:list():next()
+    end)
   end,
 }
