@@ -20,7 +20,7 @@ stow . -t ~
 - Terminal: [Alacritty](https://alacritty.org/)
 - Multiplexer: [tmux](https://github.com/tmux/tmux/wiki)
 - Shell: [zsh](https://www.zsh.org/)
-- Prompt: [starship](https://starship.rs/)
+- Prompt: [pure](https://github.com/sindresorhus/pure)
 - Editor: [Neovim](https://neovim.io)
 - Git: [gitui](https://github.com/extrawurst/gitui)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)

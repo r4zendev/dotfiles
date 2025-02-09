@@ -302,6 +302,9 @@ size = 22.0
 family = "SFMono Nerd Font"
 style = "Medium"
 
+[font.italic]
+style = "Medium"
+
 [mouse]
 hide_when_typing = true
 
