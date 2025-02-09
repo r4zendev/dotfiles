@@ -1,8 +1,9 @@
 .aws
-.DS_Store
-.config/gh/hosts.yml
 .ssh
+.config/gh/hosts.yml
+.config/github-copilot
+
 dist
 logs
+.DS_Store
 npm-debug.log
-.gitconfig

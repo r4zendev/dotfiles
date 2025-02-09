@@ -1,0 +1,29 @@
+[user]
+	email = reactionnnnn@gmail.com
+	name = r4zendev
+
+[core]
+	excludesFile = ~/.gitignore_global
+  pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # Enable line navigation (use arrow keys)
+    side-by-side = true  # Side-by-side diffs
+    syntax-theme = Dracula  # Change theme (try 'GitHub', 'OneHalfDark', etc.)
+    line-numbers = true  # Show line numbers
+    hyperlinks = true  # Enable clickable links
+
+[diff]
+    colorMoved = default  # Highlight moved code
+    tool = delta  # Use delta as the diff tool
+
+[merge]
+    conflictStyle = diff3  # Shows base version in merge conflicts
+
+[pager]
+    diff = delta
+    log = delta
+    show = delta

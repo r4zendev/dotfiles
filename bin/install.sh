@@ -19,6 +19,7 @@ brew install fzf
 brew install gh
 brew install gdu
 brew install git
+brew install git-delta
 brew install gitui
 brew install jq
 brew install lazydocker

@@ -1,6 +1,7 @@
 .git
 bin
 .DS_Store
-.gitconfig
 .ssh/config
 .wget-hsts
+README.md
+.gitignore
