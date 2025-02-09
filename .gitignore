@@ -1,5 +1,6 @@
 .aws
 .ssh
+.zsh_env_vars
 .config/gh/hosts.yml
 .config/github-copilot
 
