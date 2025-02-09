@@ -39,6 +39,10 @@ brew install yazi
 brew install zoxide
 pnpm i -g fkill-cli
 
+brew install zsh-autocomplete
+brew install zsh-autosuggestions
+brew install zsh-syntax-highlighting
+
 brew install skhd
 skhd --start-service
 brew install yabai
