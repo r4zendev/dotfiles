@@ -12,6 +12,19 @@ return {
     vim.cmd([[ highlight NvimTreeFolderArrowClosed guifg=#3FC5FF ]])
     vim.cmd([[ highlight NvimTreeFolderArrowOpen guifg=#3FC5FF ]])
 
+    local nt_api = require("nvim-tree.api")
+
+    local on_attach = function(bufnr)
+      local function opts(desc)
+        return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+
+      vim.keymap.set("n", "<cr>", function()
+        nt_api.node.open.edit()
+        nt_api.tree.focus()
+      end, opts("View file"))
+    end
+
     -- configure nvim-tree
     nvimtree.setup({
       view = {
@@ -52,6 +65,7 @@ return {
       git = {
         ignore = false,
       },
+      on_attach = on_attach,
     })
 
     -- set keymaps

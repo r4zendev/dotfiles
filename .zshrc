@@ -1,11 +1,23 @@
 # zsh
 
-source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-bindkey -e # dont use vim for zsh
+# bindkey -e # dont use vim for zsh
 bindkey '^F' autosuggest-accept
+
+autoload -U select-word-style
+select-word-style bash
+
+delete_word_backwards() {
+  # local WORDCHARS='~!#$%^&*(){}[]<>?+;'
+  local WORDCHARS="${WORDCHARS:s#/#}"
+  zle backward-delete-word
+}
+
+zle -N delete_word_backwards
+bindkey '\e^?' delete_word_backwards
 
 # Set PATH, MANPATH, etc., for Homebrew.
 eval "$(/opt/homebrew/bin/brew shellenv)"
