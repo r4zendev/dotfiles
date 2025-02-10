@@ -27,19 +27,15 @@ return {
       local list = harpoon:list()
       local idx = list._index
 
-      print("Initial index:", idx, "Direction:", direction)
-
       local step = direction == "prev" and -1 or 1
       local start_idx = idx + step
 
       for i = start_idx, (direction == "prev" and 1 or #list.items), step do
         local item = list:get(i)
-        print("Checking index:", i, "Value:", item and item.value or "nil")
 
         if item and item.value then
           list:select(i)
           list._index = i -- Ensure _index is updated manually, probably a bug in harpoon idk
-          print("New selected index:", list._index)
           return
         end
       end
@@ -50,12 +46,10 @@ return {
 
       for i = wrap_start, wrap_end, wrap_step do
         local item = list:get(i)
-        print("Wrapping check index:", i, "Value:", item and item.value or "nil")
 
         if item and item.value then
           list:select(i)
           list._index = i
-          print("Wrapped selection to index:", list._index)
           return
         end
       end

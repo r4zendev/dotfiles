@@ -15,6 +15,7 @@ local theme = {
   -- Also you can do this: fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
   head = "TabLine",
   current_tab = "TabLineSel",
+  external_tab = { fg = "#f2e9de", bg = "#907aa9", style = "italic" },
   tab = "TabLine",
   win = "TabLine",
   tail = "TabLine",
@@ -31,18 +32,40 @@ return {
       line = function(line)
         local marks = normalizeTable(require("harpoon"):list().items)
 
-        local tabs = {}
-
         local bufpath = vim.fn.expand("%")
+        local buf_fn = get_file_name(bufpath)
+
+        local tabs = {}
+        local is_in_marks = false
+
         for index, mark in ipairs(marks) do
           local is_current = bufpath:find(mark.value, 1, true)
           local hl = is_current and theme.current_tab or theme.tab
+
+          if is_current then
+            is_in_marks = true
+          end
 
           table.insert(tabs, {
             line.sep("", hl, theme.fill),
             is_current and "" or "󰆣",
             index,
             get_file_name(mark.value),
+            line.sep("", hl, theme.fill),
+            hl = hl,
+            margin = " ",
+          })
+        end
+
+        -- Unpinned tab
+        if not is_in_marks and buf_fn and not buf_fn:find("__harpoon-menu__", 1, true) then
+          local hl = theme.external_tab -- Use a different theme style for unmarked tabs
+
+          table.insert(tabs, {
+            line.sep("", hl, theme.fill),
+            "󰛔", -- Different icon for unmarked files
+            #tabs + 1,
+            buf_fn,
             line.sep("", hl, theme.fill),
             hl = hl,
             margin = " ",
