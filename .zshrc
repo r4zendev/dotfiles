@@ -6,6 +6,8 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # bindkey -e # dont use vim for zsh
 bindkey '^F' autosuggest-accept
+# setopt IGNORE_EOF
+bindkey '^D' noop
 
 autoload -U select-word-style
 select-word-style bash

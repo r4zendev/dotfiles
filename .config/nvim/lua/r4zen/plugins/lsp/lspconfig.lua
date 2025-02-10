@@ -55,6 +55,9 @@ return {
 
       opts.desc = "Restart LSP"
       vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+
+      opts.desc = "Organize imports"
+      vim.keymap.set("n", "<leader>oi", ":LspOrganizeImports<CR>", opts) -- organize imports
     end
 
     -- used to enable autocompletion (assign to every lsp server config)
@@ -74,10 +77,25 @@ return {
       on_attach = on_attach,
     })
 
+    local function organize_imports()
+      local params = {
+        command = "_typescript.organizeImports",
+        arguments = { vim.api.nvim_buf_get_name(0) },
+        title = "",
+      }
+      vim.lsp.buf.execute_command(params)
+    end
+
     -- configure typescript server with plugin
     lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      commands = {
+        LspOrganizeImports = {
+          organize_imports,
+          description = "Organize Imports",
+        },
+      },
     })
 
     -- configure css server

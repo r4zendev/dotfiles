@@ -12,6 +12,7 @@ vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("n", "x", '"_x') -- delete single character without copying into register
 vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
 vim.keymap.set("n", "<leader>cw", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
+-- vim.keymap.set("n", "<leader>ss", 'w !diff % -', { desc = "Show diff" }) -- show diff
 
 -- remap arrows to hjkl to be able to use them in my glove80 layout with custom alphas (graphite)
 vim.keymap.set({ "n", "v" }, "<Left>", "h")
