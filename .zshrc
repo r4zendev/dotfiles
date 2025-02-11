@@ -30,7 +30,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export EDITOR="nvim"
 
 # Aliases
-alias lg="lazygit"
+alias d="lazydocker"
 alias ls="lsd -a"
 alias p="pnpm"
 alias g="gitui"

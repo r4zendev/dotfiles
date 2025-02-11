@@ -1,10 +1,4 @@
-local function normalizeTable(t)
-  local newTable = {}
-  for _, v in pairs(t) do
-    table.insert(newTable, v)
-  end
-  return newTable
-end
+local utils = require("r4zen.utils")
 
 return {
   "ThePrimeagen/harpoon",
@@ -38,7 +32,7 @@ return {
       local idx = list._index
 
       -- Normalize the list only once
-      local normalized_list = normalizeTable(list.items)
+      local normalized_list = utils.normalize_table(list.items)
 
       -- Modify the original list to only contain valid items
       list.items = normalized_list
