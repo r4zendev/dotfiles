@@ -1,3 +1,5 @@
+!.rgignore
+
 .aws
 .ssh
 .zsh_env_vars

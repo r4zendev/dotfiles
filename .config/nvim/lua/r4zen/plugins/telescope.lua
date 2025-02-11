@@ -26,11 +26,6 @@ return {
 
     telescope.setup({
       defaults = {
-        -- file_ignore_patterns = {
-        --   "node_modules",
-        --   "karabiner",
-        --   "raycast",
-        -- },
         path_display = { "truncate " },
         mappings = {
           i = {
@@ -42,36 +37,29 @@ return {
       },
       pickers = {
         find_files = {
-          find_command = { "rg", "--files", "--sortr=modified", "--smart-case", "--hidden" },
+          find_command = {
+            "rg",
+            "--files",
+            "--hidden",
+            "--sortr=modified",
+            "--smart-case",
+          },
         },
-        -- Use grug-far instead
-        -- live_grep = {
-        --   -- default_text = text
-        --   --   :gsub("\n", "\\n")
-        --   --   :gsub("([%(%).%%%+%-%*%?%[%]%^%$%\\%{%}%|])", "\\%1")
-        --   --   :gsub("\\\\n", "\\n"),
-        --   find_command = {
-        --     "rg",
-        --     "--color=never",
-        --     "--no-heading",
-        --     "--with-filename",
-        --     "--line-number",
-        --     "--column",
-        --     "--smart-case",
-        --     "--hidden",
-        --     "--trim",
-        --     "--multiline",
-        --     "--multiline-dotall",
-        --   },
-        -- },
       },
     })
 
     telescope.load_extension("fzf")
 
-    -- vim.keymap.set("v", "<leader>fv", live_grep_visual, { desc = "Find visually selected text in cwd" })
     vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files in cwd" })
-    vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent files" })
+    vim.keymap.set(
+      "n",
+      "<leader>fl",
+      "<cmd>Telescope lsp_document_symbols<cr>",
+      { desc = "Browse LSP nodes in current buffer" }
+    )
+    --
+    -- vim.keymap.set("v", "<leader>fv", live_grep_visual, { desc = "Find visually selected text in cwd" })
+    -- vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent files" })
 
     -- Use grug-far instead
     -- vim.keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })

@@ -50,7 +50,8 @@ yabai --start-service
 
 # casks
 brew tap homebrew/cask-fonts
-brew install --cask font-fira-code
+# brew install --cask font-fira-code
+brew install --cask font-jetbrains-mono-nerd-font
 brew install --cask 1password
 brew install --cask alacritty
 brew install --cask raycast

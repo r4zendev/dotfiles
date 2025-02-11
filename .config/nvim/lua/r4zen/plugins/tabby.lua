@@ -24,7 +24,10 @@ local theme = {
 return {
   "nanozuki/tabby.nvim",
   -- event = 'VimEnter', -- if you want lazy load, see below
-  dependencies = { "nvim-tree/nvim-web-devicons", "ThePrimeagen/harpoon" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    "ThePrimeagen/harpoon",
+  },
   config = function()
     local tabby = require("tabby")
     local harpoon = require("harpoon")
@@ -98,18 +101,6 @@ return {
         }
       end,
       -- option = {}, -- setup modules' option,
-    })
-
-    harpoon:extend({
-      ADD = function()
-        tabby.update()
-      end,
-      REMOVE = function()
-        tabby.update()
-      end,
-      LIST_CHANGE = function()
-        tabby.update()
-      end,
     })
   end,
 }

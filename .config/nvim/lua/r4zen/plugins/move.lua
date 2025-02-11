@@ -19,7 +19,7 @@ return {
     -- -- Visual-mode commands
     vim.keymap.set("v", "<C-j>", ":MoveBlock(1)<CR>")
     vim.keymap.set("v", "<C-k>", ":MoveBlock(-1)<CR>")
-    vim.keymap.set("v", "<C-h>", ":MoveHBlock(-1)<CR>")
-    vim.keymap.set("v", "<C-l>", ":MoveHBlock(1)<CR>")
+    -- vim.keymap.set("v", "<C-h>", ":MoveHBlock(-1)<CR>")
+    -- vim.keymap.set("v", "<C-l>", ":MoveHBlock(1)<CR>")
   end,
 }

@@ -20,6 +20,7 @@ return {
     vim.keymap.set("n", "<leader>fs", function()
       grug_far.open()
     end, { desc = "Search and replace" })
+
     --
     -- vim.keymap.set("n", "<C-j>", function()
     --   grug_far.open_next_location()

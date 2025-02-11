@@ -1,4 +1,5 @@
 .DS_Store
+.rgignore
 node_modules
 dist
 .aider*

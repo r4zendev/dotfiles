@@ -14,6 +14,7 @@ return {
   },
   config = function()
     local harpoon = require("harpoon")
+    local tabby = require("tabby")
 
     harpoon:setup({
       settings = {
@@ -21,18 +22,19 @@ return {
       },
     })
 
+    local list = harpoon:list()
+
     vim.keymap.set("n", "<leader>j", function()
-      harpoon:list():remove()
+      list:remove()
     end)
     vim.keymap.set("n", "<leader>k", function()
-      harpoon:list():add()
+      list:add()
     end)
     vim.keymap.set("n", "<C-e>", function()
-      harpoon.ui:toggle_quick_menu(harpoon:list())
+      harpoon.ui:toggle_quick_menu(list)
     end)
 
     local function select_valid_index(direction)
-      local list = harpoon:list()
       local idx = list._index
 
       -- Normalize the list only once
@@ -79,5 +81,32 @@ return {
     vim.keymap.set("n", "<C-]>", function()
       select_valid_index("next")
     end)
+
+    -- Tab-like experience
+    harpoon:extend({
+      ADD = function(cx)
+        list._index = cx.idx
+        tabby.update()
+      end,
+      REMOVE = function()
+        list._index = #list.items
+        tabby.update()
+      end,
+      SELECT = function(cx)
+        list._index = cx.idx
+        tabby.update()
+      end,
+      LIST_CHANGE = function()
+        tabby.update()
+      end,
+      -- extensions.builtins.navigate_with_number()
+      UI_CREATE = function(cx)
+        for i = 1, 9 do
+          vim.keymap.set("n", "" .. i, function()
+            require("harpoon"):list():select(i)
+          end, { buffer = cx.bufnr })
+        end
+      end,
+    })
   end,
 }
