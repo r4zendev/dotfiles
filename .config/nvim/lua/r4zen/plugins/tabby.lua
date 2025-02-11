@@ -27,10 +27,11 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons", "ThePrimeagen/harpoon" },
   config = function()
     local tabby = require("tabby")
+    local harpoon = require("harpoon")
 
     tabby.setup({
       line = function(line)
-        local marks = normalizeTable(require("harpoon"):list().items)
+        local marks = normalizeTable(harpoon:list().items)
 
         local bufpath = vim.fn.expand("%")
         local buf_fn = get_file_name(bufpath)
@@ -99,7 +100,7 @@ return {
       -- option = {}, -- setup modules' option,
     })
 
-    require("harpoon"):extend({
+    harpoon:extend({
       ADD = function()
         tabby.update()
       end,
