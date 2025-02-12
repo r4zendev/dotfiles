@@ -74,17 +74,18 @@ return {
           local hl = theme.external_tab -- Use a different theme style for unmarked tabs
 
           local unpinned_buf_fn, unpinned_buf_ext = utils.get_file_name(current_buf_path)
-
-          table.insert(tabs, {
-            line.sep("", hl, theme.fill),
-            -- "󰛔", -- Different icon for unmarked files
-            line.api.get_icon(unpinned_buf_ext),
-            #tabs + 1,
-            unpinned_buf_fn .. unpinned_buf_ext,
-            line.sep("", hl, theme.fill),
-            hl = hl,
-            margin = " ",
-          })
+          if string.len(unpinned_buf_fn) > 0 then
+            table.insert(tabs, {
+              line.sep("", hl, theme.fill),
+              -- "󰛔", -- Different icon for unmarked files
+              line.api.get_icon(unpinned_buf_ext),
+              #tabs + 1,
+              unpinned_buf_fn .. unpinned_buf_ext,
+              line.sep("", hl, theme.fill),
+              hl = hl,
+              margin = " ",
+            })
+          end
         end
 
         return {

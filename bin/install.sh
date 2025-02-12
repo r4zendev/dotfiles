@@ -13,6 +13,7 @@ git clone git@github.com:razenization/dotfiles.git dotfiles
 brew install bash
 brew install bat
 brew install btop
+brew install oven-sh/bun/bun
 brew install fd
 brew install fnm
 brew install fzf

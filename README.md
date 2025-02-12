@@ -24,12 +24,10 @@ stow . -t ~
 - Editor: [Neovim](https://neovim.io)
 - Git: [gitui](https://github.com/extrawurst/gitui)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)
-- Font: [Fira Code](https://github.com/tonsky/FiraCode)
+- Font: [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
 - Colors: [tokyonight](https://github.com/folke/tokyonight.nvim) mostly
-- Hotkeys: [Karabiner](https://karabiner-elements.pqrs.org/)
+- Hotkeys: [Karabiner](https://karabiner-elements.pqrs.org/) & [skhd](https://github.com/koekeishiya/skhd)
 - Window manager: [yabai](https://github.com/koekeishiya/yabai)
-- macOS package manager: [Homebrew](https://brew.sh)
-- npm package manager: [pnpm](https://pnpm.io/)
 - Other tools: brew, fd, ripgrep, zoxide, fzf, yazi, gdu ...
 
 ## Hardware
