@@ -30,12 +30,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export EDITOR="nvim"
 
 # Aliases
-alias d="lazydocker"
-alias ls="lsd -a"
-alias p="pnpm"
-alias g="gitui"
-alias v="nvim"
-alias n="nvim"
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
@@ -44,8 +38,25 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
-# alias python=python3
-# alias pip=pip3
+alias v="nvim"
+alias n="nvim"
+alias p="pnpm"
+alias g="gitui"
+alias d="lazydocker"
+alias ls="lsd -a"
+
+alias gs="git status"
+
+alias gd="git diff"
+alias ga="git add ."
+alias ga_="git add"
+alias gc="git commit -m"
+alias gp="git push origin HEAD"
+
+alias gss="git stash"
+alias gsv="git add . && git stash"
+alias gsp="git stash pop"
+alias gca="git commit --amend --no-edit"
 
 # fnm
 eval "$(fnm env --use-on-cd)"
