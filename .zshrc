@@ -4,13 +4,15 @@
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-bindkey '^F' autosuggest-accept
-bindkey '^D' noop
-setopt globdots
-# setopt IGNORE_EOF
-
 autoload -U select-word-style
 select-word-style bash
+
+bindkey '^F' autosuggest-accept
+
+# Show dotfiles
+setopt globdots
+# Prevent Ctrl-D from exiting window
+setopt IGNORE_EOF
 
 delete_word_backwards() {
   # local WORDCHARS='~!#$%^&*(){}[]<>?+;'
@@ -27,6 +29,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 [ -f ~/.config/fzf/.fzf.zsh ] && source ~/.config/fzf/.fzf.zsh
 
+export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR="nvim"
 
 # Aliases
@@ -38,6 +41,9 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+alias ds="discordo --token $DISCORD_TOKEN"
+alias tg="nchat"
+
 alias v="nvim"
 alias n="nvim"
 alias p="pnpm"
@@ -49,6 +55,7 @@ alias gs="git status"
 
 alias gd="git diff"
 alias gl="git log"
+alias gck="git checkout"
 
 alias ga="git add ."
 alias ga_="git add"

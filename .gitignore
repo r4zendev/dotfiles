@@ -5,6 +5,8 @@
 .zsh_env_vars
 .config/gh/hosts.yml
 .config/github-copilot
+.config/nchat
+.config/slack-term
 
 dist
 logs
