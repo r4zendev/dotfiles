@@ -11,14 +11,18 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("n", "x", '"_x') -- delete single character without copying into register
 vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
-vim.keymap.set("n", "<leader>cw", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
+vim.keymap.set("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
+vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" }) -- copy path
+-- vim.keymap.set("n", "<leader>gg", { desc = "Copy relative path" }) -- copy path
+-- vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
+-- vim.keymap.set("n", "<leader>cw", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
 -- vim.keymap.set("n", "<leader>ss", 'w !diff % -', { desc = "Show diff" }) -- show diff
 
 -- remap arrows to hjkl to be able to use them in my glove80 layout with custom alphas (graphite)
-vim.keymap.set({ "n", "v" }, "<Left>", "h")
-vim.keymap.set({ "n", "v" }, "<Down>", "j")
-vim.keymap.set({ "n", "v" }, "<Up>", "k")
-vim.keymap.set({ "n", "v" }, "<Right>", "l")
+-- vim.keymap.set({ "n", "v" }, "<Left>", "h")
+-- vim.keymap.set({ "n", "v" }, "<Down>", "j")
+-- vim.keymap.set({ "n", "v" }, "<Up>", "k")
+-- vim.keymap.set({ "n", "v" }, "<Right>", "l")
 
 -- increment/decrement numbers (kinda useless)
 -- vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
@@ -32,8 +36,11 @@ vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current spli
 vim.keymap.set("n", "<leader>-", "20<C-w><", { desc = "Shrink window" })
 vim.keymap.set("n", "<leader>=", "20<C-w>>", { desc = "Grow window" })
 
-vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
-vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
-vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
-vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
-vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
+vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" }) -- copy path
+
+-- tabs are currently handled customly using tabby & harpoon
+-- vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
+-- vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
+-- vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
+-- vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
+-- vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab

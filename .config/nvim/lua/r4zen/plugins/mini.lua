@@ -1,3 +1,5 @@
+local utils = require("r4zen.utils")
+
 return {
   {
     "echasnovski/mini.icons",
@@ -19,11 +21,38 @@ return {
       require("mini.ai").setup()
       require("mini.pairs").setup()
       require("mini.surround").setup()
-      require("mini.move").setup()
+      require("mini.animate").setup({
+        scroll = {
+          enable = false,
+        },
+      })
 
-      -- A bit later
-      -- require("mini.hipatterns").setup()
-      -- require("mini.operators").setup()
+      utils.remap("n", "gx", "<leader>ox")
+      utils.remap("x", "gx", "<leader>ox")
+      require("mini.operators").setup()
+
+      require("mini.move").setup({
+        mappings = {
+          left = "H",
+          down = "J",
+          up = "K",
+          right = "L",
+        },
+      })
+
+      local hipatterns = require("mini.hipatterns")
+      hipatterns.setup({
+        highlighters = {
+          -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+          fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+          hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+          todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+          note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+
+          -- Highlight hex color strings (`#rrggbb`) using that color
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+      })
 
       require("mini.files").setup()
       vim.keymap.set("n", "=", "<cmd>lua MiniFiles.open()<cr>", { desc = "Open mini.files" })

@@ -1,5 +1,6 @@
 return {
   "MagicDuck/grug-far.nvim",
+  lazy = true,
   config = function()
     local grug_far = require("grug-far")
 
