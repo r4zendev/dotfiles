@@ -1,6 +1,7 @@
 local opt = vim.opt -- for conciseness
 
 vim.o.showtabline = 2
+vim.o.updatetime = 100
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers

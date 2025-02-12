@@ -41,9 +41,6 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
-alias ds="discordo --token $DISCORD_TOKEN"
-alias tg="nchat"
-
 alias v="nvim"
 alias n="nvim"
 alias p="pnpm"
@@ -67,6 +64,9 @@ alias gss="git stash"
 alias gsv="git add . && git stash"
 alias gsp="git stash pop"
 alias gca="git commit --amend --no-edit"
+
+alias ds='discordo --token "$DISCORD_TOKEN"'
+alias tg="nchat"
 
 # fnm
 eval "$(fnm env --use-on-cd)"

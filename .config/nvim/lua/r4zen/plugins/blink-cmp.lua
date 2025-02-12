@@ -80,6 +80,9 @@ return {
       --   TypeParameter = "󰬛",
       -- },
     },
+    sources = {
+      default = { "lsp", "path", "buffer" },
+    },
     signature = {
       enabled = true,
       trigger = {
