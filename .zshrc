@@ -48,10 +48,13 @@ alias ls="lsd -a"
 alias gs="git status"
 
 alias gd="git diff"
+alias gl="git log"
+
 alias ga="git add ."
 alias ga_="git add"
 alias gc="git commit -m"
 alias gp="git push origin HEAD"
+alias gap="ga && gc wip && gp"
 
 alias gss="git stash"
 alias gsv="git add . && git stash"
