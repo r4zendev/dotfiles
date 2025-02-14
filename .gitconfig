@@ -10,15 +10,19 @@
     diffFilter = delta --color-only
 
 [delta]
-    navigate = true  # Enable line navigation (use arrow keys)
-    side-by-side = true  # Side-by-side diffs
-    syntax-theme = Dracula  # Change theme (try 'GitHub', 'OneHalfDark', etc.)
-    line-numbers = true  # Show line numbers
-    hyperlinks = true  # Enable clickable links
+    navigate = true
+    side-by-side = false  # Disable side-by-side to avoid before/after views
+    syntax-theme = Dracula
+    line-numbers = false  # Disable line numbers for easier copying
+    hyperlinks = true
+    plus-style = "syntax #012800"  # Customize added lines
+    minus-style = "syntax #340001"  # Customize removed lines
+    zero-style = "syntax"  # Keep unchanged lines minimal
+    features = minimal  # Remove extra clutter
 
 [diff]
-    colorMoved = default  # Highlight moved code
-    tool = delta  # Use delta as the diff tool
+    colorMoved = default
+    tool = delta
 
 [merge]
     conflictStyle = diff3  # Shows base version in merge conflicts

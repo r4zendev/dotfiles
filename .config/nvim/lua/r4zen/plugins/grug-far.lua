@@ -8,6 +8,7 @@ return {
         flags = "--multiline --smart-case --hidden --sortr=modified",
       },
       keymaps = {
+        replace = { n = "<leader>r" },
         openNextLocation = { n = "<C-j>" },
         openPrevLocation = { n = "<C-k>" },
       },
@@ -20,6 +21,10 @@ return {
     vim.keymap.set("n", "<leader>fs", function()
       grug_far.open()
     end, { desc = "Search and replace" })
+
+    vim.keymap.set("n", "<leader>rr", function()
+      grug_far.open()
+    end, { desc = "Replace" })
 
     --
     -- vim.keymap.set("n", "<C-j>", function()

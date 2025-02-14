@@ -76,6 +76,13 @@ return {
       select_valid_index("next")
     end)
 
+    -- for i = 1, 9 do
+    --   print("<C-" .. i .. ">")
+    --   vim.keymap.set("n", "<C-" .. i .. ">", function()
+    --     require("harpoon"):list():select(i)
+    --   end)
+    -- end
+
     -- Tab-like experience
     harpoon:extend({
       ADD = function(cx)
@@ -83,7 +90,7 @@ return {
         tabby.update()
       end,
       REMOVE = function()
-        list._index = #list.items
+        list._index = #list.items + 1
         tabby.update()
       end,
       SELECT = function(cx)

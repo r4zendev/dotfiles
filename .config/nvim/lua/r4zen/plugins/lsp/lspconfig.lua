@@ -2,12 +2,12 @@ return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    "saghen/blink.cmp",
     { "antosha417/nvim-lsp-file-operations", config = true },
+    { "saghen/blink.cmp" },
   },
   config = function()
-    -- import lspconfig plugin
     local lspconfig = require("lspconfig")
+    local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     local opts = { noremap = true, silent = true }
     local on_attach = function(client, bufnr)
@@ -57,9 +57,6 @@ return {
       vim.keymap.set("n", "<leader>oi", ":LspOrganizeImports<CR>", opts) -- organize imports
     end
 
-    -- used to enable autocompletion (assign to every lsp server config)
-    local capabilities = require("blink.cmp").get_lsp_capabilities()
-
     -- Change the Diagnostic symbols in the sign column (gutter)
     -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -99,26 +96,20 @@ return {
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
 
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          buffer = bufnr,
-          command = "EslintFixAll",
-        })
+        vim.keymap.set("n", "<leader>es", ":EslintFixAll<CR>", { desc = "Fix all ESLint issues", buffer = bufnr })
       end,
     })
 
-    -- configure css server
     lspconfig["cssls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- configure tailwindcss server
     lspconfig["tailwindcss"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- configure svelte server
     lspconfig["svelte"].setup({
       capabilities = capabilities,
       on_attach = function(client, bufnr)
@@ -135,37 +126,31 @@ return {
       end,
     })
 
-    -- configure prisma orm server
     lspconfig["prismals"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- configure graphql language server
     lspconfig["graphql"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
       filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
     })
 
-    -- configure python server
     lspconfig["pyright"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- configure lua server (with special settings)
     lspconfig["lua_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
-      settings = { -- custom settings for lua
+      settings = {
         Lua = {
-          -- make the language server recognize "vim" global
           diagnostics = {
             globals = { "vim" },
           },
           workspace = {
-            -- make language server aware of runtime files
             library = {
               [vim.fn.expand("$VIMRUNTIME/lua")] = true,
               [vim.fn.stdpath("config") .. "/lua"] = true,

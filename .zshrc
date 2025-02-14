@@ -9,6 +9,13 @@ select-word-style bash
 
 bindkey '^F' autosuggest-accept
 
+stty -ixon  # Disable XON/XOFF flow control to free up Ctrl+Q
+exit_on_ctrl_q() {
+  exit
+}
+zle -N exit_on_ctrl_q
+bindkey '^Q' exit_on_ctrl_q
+
 # Show dotfiles
 setopt globdots
 # Prevent Ctrl-D from exiting window

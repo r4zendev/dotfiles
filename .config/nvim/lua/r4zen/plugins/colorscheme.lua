@@ -42,8 +42,12 @@ return {
           colors.fg_sidebar = fg_dark
         end,
       })
+
       -- load the colorscheme here
       vim.cmd([[colorscheme tokyonight]])
+      vim.highlight.priorities.semantic_tokens = 95
+      local smth = 0
+      vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = fg_gutter, bg = bg_dark })
     end,
   },
 }
