@@ -22,6 +22,7 @@ brew install gdu
 brew install git
 brew install git-delta
 brew install gitui
+brew install jordanbaird-ice
 brew install jq
 brew install lazydocker
 brew install lsd
@@ -44,8 +45,8 @@ brew install zsh-autocomplete
 brew install zsh-autosuggestions
 brew install zsh-syntax-highlighting
 
-brew install skhd
-skhd --start-service
+# brew install skhd
+# skhd --start-service
 brew install yabai
 yabai --start-service
 
@@ -55,6 +56,7 @@ brew tap homebrew/cask-fonts
 brew install --cask font-jetbrains-mono-nerd-font
 brew install --cask 1password
 brew install --cask alacritty
+brew install --cask hammerspoon
 brew install --cask raycast
 brew install --cask discord          
 brew install --cask obsidian         

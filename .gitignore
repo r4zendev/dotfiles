@@ -7,6 +7,7 @@
 .config/github-copilot
 .config/nchat
 .config/slack-term
+.config/qBittorrent
 
 dist
 logs

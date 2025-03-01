@@ -69,16 +69,15 @@ return {
       end
     end
 
-    vim.keymap.set("n", "<C-_>", function()
-      select_valid_index("prev")
-    end)
-    vim.keymap.set("n", "<C-]>", function()
+    vim.keymap.set("n", "<M-]>", function()
       select_valid_index("next")
+    end)
+    vim.keymap.set("n", "<M-[>", function()
+      select_valid_index("prev")
     end)
 
     -- for i = 1, 9 do
-    --   print("<C-" .. i .. ">")
-    --   vim.keymap.set("n", "<C-" .. i .. ">", function()
+    --   vim.keymap.set("n", "<M-" .. i .. ">", function()
     --     require("harpoon"):list():select(i)
     --   end)
     -- end

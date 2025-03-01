@@ -37,6 +37,8 @@ vim.keymap.set("n", "<leader>-", "20<C-w><", { desc = "Shrink window" })
 vim.keymap.set("n", "<leader>=", "20<C-w>>", { desc = "Grow window" })
 
 vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" }) -- copy path
+-- something was rebinding this
+vim.api.nvim_set_keymap("n", "<C-i>", "<C-i>", { noremap = true, silent = true })
 
 -- tabs are currently handled customly using tabby & harpoon
 -- vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab

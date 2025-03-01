@@ -5,7 +5,7 @@ return {
 
     grug_far.setup({
       prefills = {
-        flags = "--multiline --smart-case --hidden --sortr=modified",
+        flags = "--multiline --smart-case --hidden --sortr=modified --fixed-strings",
       },
       keymaps = {
         replace = { n = "<leader>r" },

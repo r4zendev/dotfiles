@@ -1,245 +1,21 @@
-
 # [[keyboard.bindings]]
-# chars = "\u0002,"
-# key = "Comma"
+# chars = """
+# :Telescope git_files
+# """
+# key = "P"
 # mods = "Command"
 #
 # [[keyboard.bindings]]
-# chars = "\u0002K"
-# key = "D"
-# mods = "Command"
-
-[[keyboard.bindings]]
-chars = """
-:Telescope git_files
-"""
-key = "P"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = """
-:Telescope commands
-"""
-key = "P"
-mods = "Command|Shift"
-
-# [[keyboard.bindings]]
-# chars = "\u0002g"
-# key = "G"
-# mods = "Command"
+# chars = """
+# :Telescope commands
+# """
+# key = "P"
+# mods = "Command|Shift"
 #
 # [[keyboard.bindings]]
-# chars = "\u0002s"
-# key = "K"
+# chars = "\u0002L"
+# key = "L"
 # mods = "Command"
-
-# [[keyboard.bindings]]
-# chars = "\u00021"
-# key = "Key1"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00022"
-# key = "Key2"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00023"
-# key = "Key3"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00024"
-# key = "Key4"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00025"
-# key = "Key5"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00026"
-# key = "Key6"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00027"
-# key = "Key7"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00028"
-# key = "Key8"
-# mods = "Command"
-#
-# [[keyboard.bindings]]
-# chars = "\u00029"
-# key = "Key9"
-# mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002L"
-key = "L"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0003["
-key = "LBracket"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002p"
-key = "LBracket"
-mods = "Command|Shift"
-
-[[keyboard.bindings]]
-chars = "\u0002u"
-key = "O"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002%"
-key = "E"
-mods = "Command|Shift"
-
-[[keyboard.bindings]]
-chars = "\u0002\""
-key = "E"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = """
-:q
-"""
-key = "Q"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002n"
-key = "RBracket"
-mods = "Command|Shift"
-
-[[keyboard.bindings]]
-chars = """
-\u001B[A
-"""
-key = "R"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = """
-\u001B:w
-"""
-key = "S"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = """
-:wa
-"""
-key = "S"
-mods = "Command|Shift"
-
-[[keyboard.bindings]]
-chars = "\u0002:"
-key = "Semicolon"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002c"
-key = "T"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002T"
-key = "J"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002x"
-key = "W"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u0002z"
-key = "Z"
-mods = "Command"
-
-[[keyboard.bindings]]
-chars = "\u001BC"
-key = "C"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001Bs"
-key = "S"
-mods = "Alt"
-
-# [[keyboard.bindings]]
-# chars = "\u001B`"
-# key = "Grave"
-# mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B-"
-key = "Minus"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B="
-key = "Equals"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B["
-key = "LBracket"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B]"
-key = "RBracket"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B\\"
-key = "Backslash"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B;"
-key = "Semicolon"
-mods = "Alt"
-
-# [[keyboard.bindings]]
-# chars = "\u001B'"
-# key = "Apostrophe"
-# mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B,"
-key = "Comma"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B."
-key = "Period"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B/"
-key = "Slash"
-mods = "Alt"
-
-[[keyboard.bindings]]
-chars = "\u001B("
-key = "Key9"
-mods = "Alt|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B)"
-key = "Key0"
-mods = "Alt|Shift"
 
 [general]
 live_config_reload = true
@@ -300,11 +76,12 @@ size = 22.0
 
 [font.normal]
 # family = "SFMono Nerd Font"
-family = "JetBrainsMono Nerd Font"
+# family = "JetBrainsMono Nerd Font"
+family = "Monaspace Xenon"
 style = "Medium"
 
-[font.italic]
-style = "Medium"
+# [font.italic]
+# style = "Medium"
 
 [mouse]
 hide_when_typing = true
@@ -315,6 +92,7 @@ semantic_escape_chars = ''',│`|:"' ()[]{}<>	'''
 
 [window]
 blur = true
+option_as_alt = "Both"
 decorations = "buttonless"
 dynamic_padding = false
 opacity = 0.8

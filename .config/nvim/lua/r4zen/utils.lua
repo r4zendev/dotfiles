@@ -57,4 +57,17 @@ M.remap = function(mode, lhs_from, lhs_to)
   vim.keymap.set(mode, lhs_to, rhs, { desc = keymap.desc })
 end
 
+M.is_in_list = function(list, item)
+  for _, value in ipairs(list) do
+    if value == item then
+      return true
+    end
+  end
+  return false
+end
+
+M.git_root = function()
+  return vim.fs.root(0, { ".git" })
+end
+
 return M

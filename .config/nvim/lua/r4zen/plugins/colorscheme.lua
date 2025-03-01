@@ -21,6 +21,12 @@ return {
       local fg_gutter = "#627E97"
       local border = "#547998"
 
+      -- Dark Gray: #A9A9A9
+      -- Steel Blue: #4682B4
+      -- Light Steel Blue: #B0C4DE
+      -- Slate Blue (purple-ish): #6A5ACD
+      local comments = "#4682B4"
+
       require("tokyonight").setup({
         transparent = true,
         style = "night",
@@ -43,10 +49,11 @@ return {
         end,
       })
 
-      -- load the colorscheme here
+      -- Load the colorscheme here
       vim.cmd([[colorscheme tokyonight]])
+
       vim.highlight.priorities.semantic_tokens = 95
-      local smth = 0
+      vim.api.nvim_set_hl(0, "Comment", { fg = comments })
       vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = fg_gutter, bg = bg_dark })
     end,
   },
