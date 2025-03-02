@@ -24,9 +24,9 @@ stow . -t ~
 - Editor: [Neovim](https://neovim.io)
 - Git: [gitui](https://github.com/extrawurst/gitui)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)
-- Font: [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
+- Font: [Monaspace](https://monaspace.githubnext.com/)
 - Colors: [tokyonight](https://github.com/folke/tokyonight.nvim) mostly
-- Hotkeys: [Karabiner](https://karabiner-elements.pqrs.org/) & [skhd](https://github.com/koekeishiya/skhd)
+- Hotkeys: [Hammerspoon](https://hammerspoon.org/)
 - Window manager: [yabai](https://github.com/koekeishiya/yabai)
 - Other tools: brew, fd, ripgrep, zoxide, fzf, yazi, gdu ...
 
@@ -38,7 +38,6 @@ stow . -t ~
 ## Future
 
 - [ ] Add more shortcuts and integrate with which-key
-- [ ] Review Alacritty keymaps
 - [ ] Setup default prettier config path
 - [ ] Rust/C++ Neovim setup
 

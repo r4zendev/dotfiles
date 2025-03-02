@@ -11,8 +11,8 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("n", "x", '"_x') -- delete single character without copying into register
 vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
-vim.keymap.set("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
-vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" }) -- copy path
+vim.keymap.set("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
+vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
 -- vim.keymap.set("n", "<leader>gg", { desc = "Copy relative path" }) -- copy path
 -- vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
 -- vim.keymap.set("n", "<leader>cw", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path

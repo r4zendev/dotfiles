@@ -17,9 +17,11 @@ local bindings = {
 	-- { "a", "Wezterm" },
 	-- { "b", "MongoDB Compass" },
 	-- { "c", "" },
-	-- { "d", "Discord" },
 	-- { "e", "" },
-	{ "f", "Finder" },
+	-- { "d", "Discord" },
+	{ "/", "Activity Monitor" },
+	{ ".", "Settings" },
+	{ "p", "Finder" },
 	-- { "g", "Google Chrome" },
 	-- { "i", "" },
 	-- NOTE: reserved for arrow keys

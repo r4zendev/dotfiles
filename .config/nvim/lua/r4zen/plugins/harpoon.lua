@@ -18,16 +18,6 @@ return {
 
     local list = harpoon:list()
 
-    vim.keymap.set("n", "<leader>j", function()
-      list:remove()
-    end)
-    vim.keymap.set("n", "<leader>k", function()
-      list:add()
-    end)
-    vim.keymap.set("n", "<C-e>", function()
-      harpoon.ui:toggle_quick_menu(list)
-    end)
-
     local function select_valid_index(direction)
       local idx = list._index
 
@@ -69,6 +59,15 @@ return {
       end
     end
 
+    vim.keymap.set("n", "<leader>j", function()
+      list:remove()
+    end)
+    vim.keymap.set("n", "<leader>k", function()
+      list:add()
+    end)
+    vim.keymap.set("n", "<C-e>", function()
+      harpoon.ui:toggle_quick_menu(list)
+    end)
     vim.keymap.set("n", "<M-]>", function()
       select_valid_index("next")
     end)

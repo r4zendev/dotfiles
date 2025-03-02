@@ -45,19 +45,19 @@ brew install zsh-autocomplete
 brew install zsh-autosuggestions
 brew install zsh-syntax-highlighting
 
-# brew install skhd
-# skhd --start-service
 brew install yabai
 yabai --start-service
 
-# casks
+# fonts
 brew tap homebrew/cask-fonts
-# brew install --cask font-fira-code
+brew install --cask font-fira-code
 brew install --cask font-jetbrains-mono-nerd-font
+brew install --cask font-monaspace
+
+# casks
 brew install --cask 1password
 brew install --cask alacritty
 brew install --cask hammerspoon
-brew install --cask raycast
 brew install --cask discord          
 brew install --cask obsidian         
 brew install --cask postman          
