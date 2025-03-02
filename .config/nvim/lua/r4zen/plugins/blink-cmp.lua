@@ -24,6 +24,7 @@ return {
       keymap = {
         preset = "enter",
 
+        ["<CR>"] = { "accept", "fallback" },
         ["<C-n>"] = {},
         ["<C-p>"] = {},
         ["<C-k>"] = { "select_prev", "fallback" },

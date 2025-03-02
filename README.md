@@ -17,10 +17,10 @@ stow . -t ~
 
 ## Software
 
-- Terminal: [Alacritty](https://alacritty.org/)
+- Terminal: [WezTerm](https://wezterm.org/)
 - Multiplexer: [tmux](https://github.com/tmux/tmux/wiki)
 - Shell: [zsh](https://www.zsh.org/)
-- Prompt: [pure](https://github.com/sindresorhus/pure)
+- Prompt: [Starship](https://starship.rs/)
 - Editor: [Neovim](https://neovim.io)
 - Git: [gitui](https://github.com/extrawurst/gitui)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)

@@ -72,16 +72,8 @@ alias gsv="git add . && git stash"
 alias gsp="git stash pop"
 alias gca="git commit --amend --no-edit"
 
-alias ds='discordo --token "$DISCORD_TOKEN"'
-alias tg="nchat"
-
 # fnm
 eval "$(fnm env --use-on-cd)"
-
-# pure prompt
-fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
-prompt pure
 
 # alt-left / alt-right
 bindkey "^[[1;3C" forward-word
@@ -103,10 +95,12 @@ eval "$(pyenv init -)"
 export JAVA_HOME="$(/usr/libexec/java_home)"
 export npm_config_target_arch=x64
 
+# starship
+eval "$(starship init zsh)"
+
 # AI API Keys
 source ~/.zsh_env_vars
 # export GEMINI_API_KEY="GEMINI_API_KEY"
 # export DEEPSEEK_API_KEY="DEEPSEEK_API_KEY"
 # export OPENAI_API_KEY="OPENAI_API_KEY"
 # export ANTHROPIC_API_KEY="ANTHROPIC_API_KEY"
-
