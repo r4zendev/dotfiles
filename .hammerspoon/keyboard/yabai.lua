@@ -7,6 +7,8 @@
 --    ██║   ██║  ██║██████╔╝██║  ██║██║
 --    ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝
 
+local utils = require("utils")
+
 local function yabai(args)
 	if type(args) == "table" then
 		if args.primary then
@@ -23,32 +25,16 @@ local function yabai(args)
 	end
 end
 
-local function repeatBind(mods, key, commands, delay, interval)
-	local timer = nil
-
-	hs.hotkey.bind(mods, key, function() -- Pressed
-		yabai(commands) -- Execute immediately
-		timer = hs.timer.doAfter(delay, function()
-			timer = hs.timer
-				.new(interval, function()
-					yabai(commands)
-				end)
-				:start()
-		end)
-	end, function() -- Released
-		if timer then
-			timer:stop()
-			timer = nil
-		end
-	end)
-end
-
 local function alt(key, commands)
-	repeatBind({ "alt" }, key, commands, 0.3, 0.1)
+	utils.repeatBind({ "alt" }, key, function()
+		yabai(commands)
+	end, 0.3, 0.1)
 end
 
 local function altShift(key, commands)
-	repeatBind({ "alt", "shift" }, key, commands, 0.3, 0.1)
+	utils.repeatBind({ "alt", "shift" }, key, function()
+		yabai(commands)
+	end, 0.3, 0.1)
 end
 
 --
@@ -68,31 +54,40 @@ alt("s", { sequence = { "space --rotate 180" } })
 
 alt("t", { sequence = { "window --toggle float", "window --grid 4:4:1:1:2:2" } })
 alt("e", { sequence = { "window --toggle split" } }) -- toggle window split type
+alt("g", { sequence = { "space --toggle padding", "space --toggle gap" } })
 
--- create desktop, move window and follow focus - uses jq for parsing json (brew install jq)
--- shift + alt - n : yabai -m space --create && \
---                    index="$(yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index')" && \
---                    yabai -m window --space "${index}" && \
---                    yabai -m space --focus "${index}"
+-- create desktop, move window and follow focus
+hs.hotkey.bind({ "alt", "shift" }, "n", function()
+	-- Create new space
+	yabai({ sequence = { "space --create" } })
 
--- alt("a", { sequence = { "window --rotate 90" } })
--- alt("d", { sequence = { "space --rotate 90" } })
--- alt("t", { sequence = { "window --toggle float", "window --grid 4:4:1:1:2:2" } })
---
--- alt("l", { sequence = { "space --focus recent" } })
--- alt("m", { sequence = { "space --toggle mission-control" } })
--- alt("p", { sequence = { "window --toggle pip" } })
--- alt("g", { sequence = { "space --toggle padding", "space --toggle gap" } })
+	-- Capture output of yabai displays
+	local json_str = hs.execute("/opt/homebrew/bin/yabai -m query --spaces --display", true)
+
+	-- Decode json to table
+	local spaces = hs.json.decode(json_str)
+
+	-- Find last active window index (non-fullscreen)
+	local index = nil
+	for _, space in ipairs(spaces) do
+		if not space["is-native-fullscreen"] then
+			index = space.index
+		end
+	end
+
+	-- Move window and switch to new space
+	yabai({ sequence = { "window --space " .. index } })
+	yabai({ sequence = { "space --focus " .. index } })
+end)
 
 -- special characters
-alt("'", { sequence = { "space --layout stack" } })
 alt(";", { sequence = { "space --layout bsp" } })
 alt("tab", { sequence = { "space --focus recent" } })
 
 --
 --
 --
--- Home row (focus between windows or swap them)
+-- Home row (cycle/swap windows & cycle spaces)
 local homeRow = { h = "west", j = "south", k = "north", l = "east" }
 
 -- Cycle windows
