@@ -51,7 +51,7 @@ function y() {
 alias v="nvim"
 alias n="nvim"
 alias p="pnpm"
-alias g="gitui"
+alias g="lazygit"
 alias d="lazydocker"
 alias ls="lsd -a"
 

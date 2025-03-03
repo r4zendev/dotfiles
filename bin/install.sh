@@ -21,10 +21,10 @@ brew install gh
 brew install gdu
 brew install git
 brew install git-delta
-brew install gitui
 brew install jordanbaird-ice
 brew install jq
 brew install lazydocker
+brew install lazygit
 brew install lsd
 brew install mackup
 brew install neofetch

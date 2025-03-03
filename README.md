@@ -22,7 +22,7 @@ stow . -t ~
 - Shell: [zsh](https://www.zsh.org/)
 - Prompt: [Starship](https://starship.rs/)
 - Editor: [Neovim](https://neovim.io)
-- Git: [gitui](https://github.com/extrawurst/gitui)
+- Git: [lazygit](https://github.com/jesseduffield/lazygit)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)
 - Font: [Monaspace](https://monaspace.githubnext.com/)
 - Colors: [tokyonight](https://github.com/folke/tokyonight.nvim) mostly

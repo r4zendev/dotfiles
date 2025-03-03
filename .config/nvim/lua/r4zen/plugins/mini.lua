@@ -1,4 +1,4 @@
-local utils = require("r4zen.utils")
+-- local utils = require("r4zen.utils")
 
 return {
   {
@@ -21,15 +21,16 @@ return {
       require("mini.ai").setup()
       require("mini.pairs").setup()
       require("mini.surround").setup()
-      require("mini.animate").setup({
-        scroll = {
-          enable = false,
-        },
-      })
+      -- require("mini.animate").setup({
+      --   scroll = {
+      --     enable = false,
+      --   },
+      -- })
+      require("mini.notify").setup()
 
-      utils.remap("n", "gx", "<leader>ox")
-      utils.remap("x", "gx", "<leader>ox")
-      require("mini.operators").setup()
+      -- utils.remap("n", "gx", "<leader>ox")
+      -- utils.remap("x", "gx", "<leader>ox")
+      -- require("mini.operators").setup()
 
       require("mini.move").setup({
         mappings = {
