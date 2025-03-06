@@ -20,21 +20,19 @@ return {
       require("mini.align").setup()
       require("mini.pairs").setup()
       require("mini.surround").setup()
+      require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
       require("mini.notify").setup({
         lsp_progress = {
           enable = false,
         },
       })
+      -- require("mini.operators").setup()
 
       require("mini.diff").setup()
-      vim.keymap.set("n", "<leader>d", function()
+      vim.keymap.set("n", "<leader>=", function()
         MiniDiff.toggle_overlay()
       end, { desc = "Toggle diff overlay" })
-
-      -- require("mini.diff").setup()
-      -- require("mini.align").setup()
-      -- require("mini.operators").setup()
 
       require("mini.move").setup({
         mappings = {

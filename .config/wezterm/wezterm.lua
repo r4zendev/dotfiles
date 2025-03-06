@@ -1,10 +1,6 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
-local sth = "a"
-local sth1 = "b"
-local sth2 = "c"
-
 local zsh_path = "/opt/homebrew/bin/zsh"
 
 local config = {}
@@ -114,5 +110,7 @@ config.mouse_bindings = {
 config.adjust_window_size_when_changing_font_size = true
 
 config.send_composed_key_when_right_alt_is_pressed = false
+
+config.cursor_blink_rate = 0
 
 return config

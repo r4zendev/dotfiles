@@ -203,5 +203,11 @@ return {
         end
       end,
     })
+
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        trigger_status_ui()
+      end,
+    })
   end,
 }

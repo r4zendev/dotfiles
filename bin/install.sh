@@ -30,7 +30,7 @@ brew install lsd
 brew install mackup
 brew install neofetch
 brew install neovim
-brew install orbstack
+brew install colima
 brew install pgcli
 brew install ripgrep
 brew install starship

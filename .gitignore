@@ -6,6 +6,7 @@
 .config/gh/hosts.yml
 .config/github-copilot
 .config/qBittorrent
+.config/colima
 # planned to use
 .config/zed
 

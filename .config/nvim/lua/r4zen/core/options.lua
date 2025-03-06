@@ -1,4 +1,4 @@
-local opt = vim.opt -- for conciseness
+local opt = vim.opt
 
 vim.o.showtabline = 0
 vim.o.updatetime = 100
@@ -6,8 +6,11 @@ vim.o.updatetime = 100
 -- Below is required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
 -- vim.o.showtabline = 2
 
+-- Obsidian
+opt.conceallevel = 2
+
 -- remove window title
-vim.opt.title = false
+opt.title = false
 -- vim.opt.titlelen = 0 -- do not shorten title
 -- vim.opt.titlestring = 'nvim %{expand("%:p")}'
 

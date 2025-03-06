@@ -41,11 +41,13 @@ return {
             break
           end
 
-          if utils.is_relative_path(harpoon_item.value) then
-            harpoon_item.value = utils.get_full_path(root_dir, harpoon_item.value)
+          local path = harpoon_item.value
+
+          if utils.is_relative_path(path) then
+            path = utils.get_full_path(root_dir, path)
           end
 
-          if harpoon_item.value == current_file_path then
+          if path == current_file_path then
             found = true
             break
           end
