@@ -47,7 +47,6 @@ local function get_current_index()
 end
 
 local function show_status_ui()
-  -- local harpoon = require("harpoon")
   local buf = vim.api.nvim_create_buf(false, true)
 
   local content = get_harpooned_files()
