@@ -22,11 +22,18 @@ return {
     version = "*",
     opts = {
       keymap = {
+
         preset = "none",
         ["<C-f>"] = { "accept", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+
+        -- ["<M-space>"] = {
+        --   function(cmp)
+        --     cmp.show({ providers = { "minuet" } })
+        --   end,
+        -- },
 
         cmdline = {
           preset = "none",
@@ -76,6 +83,14 @@ return {
       },
       sources = {
         default = { "lsp", "path", "buffer" },
+        -- default = { "minuet", "lsp", "path", "buffer" },
+        -- providers = {
+        --   minuet = {
+        --     name = "minuet",
+        --     module = "minuet.blink",
+        --     score_offset = 100,
+        --   },
+        -- },
       },
       signature = {
         enabled = true,

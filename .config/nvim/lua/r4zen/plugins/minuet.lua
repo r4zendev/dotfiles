@@ -36,6 +36,9 @@ return {
       notify = "error",
       request_timeout = 2,
       throttle = 2000,
+      -- blink = {
+      --   enable_auto_complete = true,
+      -- },
       virtualtext = {
         auto_trigger_ft = { "*" },
         -- auto_trigger_ignore_ft = {},
