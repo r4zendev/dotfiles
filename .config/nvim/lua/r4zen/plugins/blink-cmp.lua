@@ -22,21 +22,18 @@ return {
     version = "*",
     opts = {
       keymap = {
-        preset = "enter",
-
-        ["<CR>"] = { "accept", "fallback" },
-        ["<C-n>"] = {},
-        ["<C-p>"] = {},
+        preset = "none",
+        ["<C-f>"] = { "accept", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
+        ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 
         cmdline = {
-          preset = "default",
-
-          ["<C-n>"] = {},
-          ["<C-p>"] = {},
+          preset = "none",
+          ["<C-f>"] = { "accept", "fallback" },
           ["<C-k>"] = { "select_prev", "fallback" },
           ["<C-j>"] = { "select_next", "fallback" },
+          ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
         },
       },
       completion = {
