@@ -16,28 +16,42 @@ local function get_harpooned_files()
   local harpoon = require("harpoon")
   local file_list = {}
 
-  for _, item in ipairs(harpoon:list().items) do
+  for _, item in ipairs(utils.normalize_table(harpoon:list().items)) do
     local item_fn, item_ext = utils.get_file_name(item.value)
-    table.insert(file_list, " " .. item_fn .. item_ext)
+    table.insert(file_list, item_fn .. item_ext)
   end
 
   return file_list
 end
 
 local function get_current_index()
+  local harpoon = require("harpoon")
   local current_file = vim.fn.bufname()
+  local root_dir = harpoon:list().config:get_root_dir()
 
-  for index, item in ipairs(require("harpoon"):list().items) do
-    if item.value == current_file then
+  for index, item in ipairs(utils.normalize_table(harpoon:list().items)) do
+    local path = item.value
+
+    if utils.is_relative_path(path) then
+      path = utils.get_full_path(root_dir, path)
+    end
+
+    if utils.is_relative_path(current_file) then
+      current_file = utils.get_full_path(root_dir, current_file)
+    end
+
+    if path == current_file then
       return index
     end
   end
 end
 
 local function show_status_ui()
+  -- local harpoon = require("harpoon")
   local buf = vim.api.nvim_create_buf(false, true)
 
   local content = get_harpooned_files()
+
   -- if #content == 0 then
   --     print("No harpooned files")
   --     return
@@ -73,7 +87,6 @@ local function show_status_ui()
     height = height,
     focusable = false,
     style = "minimal",
-    -- border = "rounded",
   }
 
   status_window = vim.api.nvim_open_win(buf, false, opts)
@@ -170,10 +183,14 @@ return {
 
     harpoon:extend({
       ADD = function()
+        list._index = #list.items
         trigger_status_ui()
       end,
       REMOVE = function()
         trigger_status_ui()
+      end,
+      SELECT = function(cx)
+        list._index = cx.idx
       end,
       NAVIGATE = function()
         trigger_status_ui()

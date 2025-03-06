@@ -91,10 +91,10 @@ return {
       vim.api.nvim_set_hl(0, "MiniCursorword", { bg = cursor_word_hl })
       vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { bg = cursor_word_hl })
 
-      local panel_hl = "#7390AA"
+      -- local panel_hl = "#7390AA"
       local selected_hl = "#5DE4C7"
       local option_hl = "#89DDFF"
-      vim.api.nvim_set_hl(0, "HarpoonFilesPanelHL", { bg = panel_hl })
+      -- vim.api.nvim_set_hl(0, "HarpoonFilesPanelHL", { bg = panel_hl })
       vim.api.nvim_set_hl(0, "HarpoonSelectedOptionHL", { fg = selected_hl })
       vim.api.nvim_set_hl(0, "HarpoonOptionHL", { fg = option_hl })
 
