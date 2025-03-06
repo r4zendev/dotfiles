@@ -18,16 +18,18 @@
     plus-style = "syntax #012800"  # Customize added lines
     minus-style = "syntax #340001"  # Customize removed lines
     zero-style = "syntax"  # Keep unchanged lines minimal
-    features = minimal  # Remove extra clutter
+    ; features = minimal  # Remove extra clutter
 
 [diff]
-    colorMoved = default
-    tool = delta
+    tool = difftastic
+
+[difftool]
+    prompt = false
 
 [merge]
     conflictStyle = diff3  # Shows base version in merge conflicts
 
 [pager]
-    diff = delta
+    difftool = true
     log = delta
     show = delta

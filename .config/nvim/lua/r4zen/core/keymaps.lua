@@ -9,12 +9,20 @@ vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 -- re-enter visual after moving a visual block
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("n", "x", '"_x') -- delete single character without copying into register
-vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
+
+-- registers
+vim.keymap.set("n", "x", '"_x') -- delete char without polluting copy register by default
+vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" })
 vim.keymap.set("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
 vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
+vim.keymap.set("n", "<leader>gp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
+
+-- repeat dot multiple times
+vim.keymap.set("n", "<leader>.", function()
+  return "<esc>" .. string.rep(".", vim.v.count1)
+end, { expr = true })
+
 -- vim.keymap.set("n", "<leader>gg", { desc = "Copy relative path" }) -- copy path
--- vim.keymap.set("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" }) -- clear search highlights
 -- vim.keymap.set("n", "<leader>cw", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" }) -- copy path
 -- vim.keymap.set("n", "<leader>ss", 'w !diff % -', { desc = "Show diff" }) -- show diff
 
@@ -36,7 +44,6 @@ vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current spli
 vim.keymap.set("n", "<leader>-", "20<C-w><", { desc = "Shrink window" })
 vim.keymap.set("n", "<leader>=", "20<C-w>>", { desc = "Grow window" })
 
-vim.keymap.set("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" }) -- copy path
 -- something was rebinding this
 vim.api.nvim_set_keymap("n", "<C-i>", "<C-i>", { noremap = true, silent = true })
 

@@ -77,7 +77,7 @@ size = 22.0
 [font.normal]
 # family = "SFMono Nerd Font"
 # family = "JetBrainsMono Nerd Font"
-family = "Monaspace Xenon"
+family = "Monaspace Argon"
 style = "Medium"
 
 # [font.italic]

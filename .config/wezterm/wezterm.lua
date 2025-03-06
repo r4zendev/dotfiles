@@ -1,6 +1,10 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
+local sth = "a"
+local sth1 = "b"
+local sth2 = "c"
+
 local zsh_path = "/opt/homebrew/bin/zsh"
 
 local config = {}
@@ -54,14 +58,13 @@ config.colors = {
 }
 
 config.font = wezterm.font_with_fallback({
-	{ family = "Monaspace Xenon", scale = 1.2, weight = "DemiBold" },
-	{ family = "JetBrains Mono", weight = "Medium" },
+	{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
 })
 config.font_rules = {
 	{
 		italic = true,
 		font = wezterm.font_with_fallback({
-			{ family = "Monaspace Xenon", scale = 1.2, weight = "DemiBold" },
+			{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
 		}),
 	},
 }
@@ -109,5 +112,7 @@ config.mouse_bindings = {
 }
 
 config.adjust_window_size_when_changing_font_size = true
+
+config.send_composed_key_when_right_alt_is_pressed = false
 
 return config

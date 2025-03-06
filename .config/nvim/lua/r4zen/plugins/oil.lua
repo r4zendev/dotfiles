@@ -1,8 +1,6 @@
 return {
   "stevearc/oil.nvim",
-  -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
   lazy = false,
-  -- Optional dependencies
   dependencies = {
     "nvim-tree/nvim-web-devicons",
   },
@@ -15,10 +13,26 @@ return {
       },
       keymaps = {
         ["<leader>yy"] = {
-          desc = "Copy filepath to system clipboard",
+          desc = "Copy path of file under cursor",
           callback = function()
-            require("oil.actions").copy_entry_path.callback()
-            vim.fn.setreg("+", vim.fn.getreg(vim.v.register))
+            local entry = oil.get_cursor_entry()
+            local dir = oil.get_current_dir()
+            if not entry or not dir then
+              return
+            end
+            vim.fn.setreg(vim.v.register, dir .. entry.name)
+          end,
+        },
+        ["<leader>yr"] = {
+          desc = "Copy relative path of file under cursor",
+          callback = function()
+            local entry = oil.get_cursor_entry()
+            local dir = oil.get_current_dir()
+            if not entry or not dir then
+              return
+            end
+            local relpath = vim.fn.fnamemodify(dir, ":.")
+            vim.fn.setreg(vim.v.register, relpath .. entry.name)
           end,
         },
       },

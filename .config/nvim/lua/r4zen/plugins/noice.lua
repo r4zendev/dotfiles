@@ -4,11 +4,7 @@ return {
     "MunifTanjim/nui.nvim",
   },
   event = "VeryLazy",
-  ---@class NoiceConfig
   opts = {
-    ---@type NoicePresets
-    presets = { inc_rename = true },
-    ---@type NoiceConfigViews
     views = {
       cmdline_popup = {
         position = {

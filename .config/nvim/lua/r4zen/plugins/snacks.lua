@@ -1,12 +1,11 @@
 return {
   "folke/snacks.nvim",
+  dependencies = {
+    "mini.nvim",
+  },
   priority = 1000,
   lazy = false,
-  ---@type snacks.Config
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
     picker = {
       prompt = " ",
       sources = {},
@@ -23,13 +22,13 @@ return {
         fuzzy = true, -- use fuzzy matching
         smartcase = true, -- use smartcase
         ignorecase = true, -- use ignorecase
-        sort_empty = false, -- sort results when the search string is empty
+        sort_empty = true, -- sort results when the search string is empty
         filename_bonus = true, -- give bonus for matching file names (last part of the path)
         file_pos = true, -- support patterns like `file:line:col` and `file:line`
         -- the bonusses below, possibly require string concatenation and path normalization,
         -- so this can have a performance impact for large lists and increase memory usage
         cwd_bonus = false, -- give bonus for matching files in the cwd
-        frecency = false, -- frecency bonus
+        frecency = true, -- frecency bonus
         history_bonus = false, -- give more weight to chronological order
       },
       sort = {
@@ -60,15 +59,12 @@ return {
           pos = "left", -- position of the diagnostics
         },
       },
-      ---@class snacks.picker.previewers.Config
       previewers = {
         diff = {
-          builtin = true, -- use Neovim for previewing diffs (true) or use an external tool (false)
-          cmd = { "delta" }, -- example to show a diff with delta
+          builtin = false, -- use Neovim for previewing diffs (true) or use an external tool (false)
         },
         git = {
-          builtin = true, -- use Neovim for previewing git output (true) or use git (false)
-          args = {}, -- additional arguments passed to the git command. Useful to set pager options usin `-c ...`
+          builtin = false, -- use Neovim for previewing git output (true) or use git (false)
         },
         file = {
           max_size = 1024 * 1024, -- 1MB
@@ -131,9 +127,9 @@ return {
   keys = {
     -- Top Pickers & Explorer
     {
-      "<leader>.",
+      "<leader><leader>",
       function()
-        Snacks.picker.smart()
+        Snacks.picker.smart({ hidden = true })
       end,
       desc = "Smart Find Files",
     },
@@ -143,12 +139,22 @@ return {
         Snacks.picker.grep({ hidden = true })
       end,
       desc = "Grep",
+      mode = { "n" },
+    },
+    {
+      "<leader>,",
+      function()
+        Snacks.picker.grep_word({ hidden = true })
+      end,
+      desc = "Grep",
+      mode = { "x" },
     },
     {
       "<leader>e",
       function()
         Snacks.explorer({
           hidden = true,
+          ignored = true,
           layout = {
             layout = {
               position = "right",
@@ -158,19 +164,22 @@ return {
       end,
       desc = "File Explorer",
     },
-    -- {
-    --   "<leader>fc",
-    --   function()
-    --     Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-    --   end,
-    --   desc = "Find Config File",
-    -- },
     {
       "<leader>ff",
       function()
-        Snacks.picker.files()
+        Snacks.picker.recent({ hidden = true })
       end,
-      desc = "Find Files",
+      desc = "Find Recent Files",
+    },
+    {
+      "<leader>fc",
+      function()
+        Snacks.picker.files({
+          hidden = true,
+          cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles",
+        })
+      end,
+      desc = "Find Under Dotfiles",
     },
     {
       "<leader>fp",
@@ -178,13 +187,6 @@ return {
         Snacks.picker.projects()
       end,
       desc = "Projects",
-    },
-    {
-      "<leader>fr",
-      function()
-        Snacks.picker.recent()
-      end,
-      desc = "Recent",
     },
     {
       "<leader>gb",
@@ -199,6 +201,13 @@ return {
         Snacks.picker.git_log()
       end,
       desc = "Git Log",
+    },
+    {
+      "<leader>gf",
+      function()
+        Snacks.picker.git_log_file()
+      end,
+      desc = "Git Log File",
     },
     -- Grep
     {
@@ -216,19 +225,14 @@ return {
       desc = "Grep Open Buffers",
     },
     {
-      "<leader>sg",
+      "<leader>st",
       function()
-        Snacks.picker.grep()
+        Snacks.picker({
+          finder = "grep",
+          search = "()TODO()|()FIXME()|()HACK()|()NOTE()",
+        })
       end,
-      desc = "Grep",
-    },
-    {
-      "<leader>sw",
-      function()
-        Snacks.picker.grep_word()
-      end,
-      desc = "Visual selection or word",
-      mode = { "n", "x" },
+      desc = "Search TODOs",
     },
     -- search
     {

@@ -14,6 +14,7 @@ brew install bash
 brew install bat
 brew install btop
 brew install oven-sh/bun/bun
+brew install difftastic
 brew install fd
 brew install fnm
 brew install fzf
@@ -38,6 +39,7 @@ brew install tmux
 brew install pnpm
 brew install thefuck
 brew install yazi
+brew install yt-dlp
 brew install zoxide
 pnpm i -g fkill-cli
 
@@ -50,8 +52,6 @@ yabai --start-service
 
 # fonts
 brew tap homebrew/cask-fonts
-brew install --cask font-fira-code
-brew install --cask font-jetbrains-mono-nerd-font
 brew install --cask font-monaspace
 
 # casks

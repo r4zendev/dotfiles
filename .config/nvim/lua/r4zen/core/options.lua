@@ -1,7 +1,15 @@
 local opt = vim.opt -- for conciseness
 
-vim.o.showtabline = 2
+vim.o.showtabline = 0
 vim.o.updatetime = 100
+
+-- Below is required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
+-- vim.o.showtabline = 2
+
+-- remove window title
+vim.opt.title = false
+-- vim.opt.titlelen = 0 -- do not shorten title
+-- vim.opt.titlestring = 'nvim %{expand("%:p")}'
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers

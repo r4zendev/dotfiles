@@ -1,5 +1,97 @@
 local utils = require("r4zen.utils")
 
+local status_timer
+local status_window
+
+local disappear_delay = 1200
+
+local function close_status_window()
+  if status_window then
+    vim.api.nvim_win_close(status_window, true)
+    status_timer = nil
+  end
+end
+
+local function get_harpooned_files()
+  local harpoon = require("harpoon")
+  local file_list = {}
+
+  for _, item in ipairs(harpoon:list().items) do
+    local item_fn, item_ext = utils.get_file_name(item.value)
+    table.insert(file_list, " " .. item_fn .. item_ext)
+  end
+
+  return file_list
+end
+
+local function get_current_index()
+  local current_file = vim.fn.bufname()
+
+  for index, item in ipairs(require("harpoon"):list().items) do
+    if item.value == current_file then
+      return index
+    end
+  end
+end
+
+local function show_status_ui()
+  local buf = vim.api.nvim_create_buf(false, true)
+
+  local content = get_harpooned_files()
+  -- if #content == 0 then
+  --     print("No harpooned files")
+  --     return
+  -- end
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
+
+  local current_index = get_current_index()
+
+  for idx, _ in ipairs(content) do
+    local color = "HarpoonOptionHL"
+    if idx == current_index then
+      color = "HarpoonSelectedOptionHL"
+      vim.api.nvim_buf_add_highlight(buf, -1, color, idx - 1, 0, -1)
+    end
+  end
+
+  local height = math.max(1, math.min(#content, vim.o.lines - 3))
+
+  local width = 0
+  for _, line in pairs(content) do
+    width = math.max(width, #line)
+  end
+  width = math.min(width + 2, vim.o.columns - 2)
+  local row = 2
+
+  local opts = {
+    relative = "win",
+    anchor = "NE",
+    col = vim.o.columns,
+    row = row,
+    width = width,
+    height = height,
+    focusable = false,
+    style = "minimal",
+    -- border = "rounded",
+  }
+
+  status_window = vim.api.nvim_open_win(buf, false, opts)
+  -- vim.api.nvim_win_set_option(status_window, "winhl", uiInfoHighlightGroup)
+
+  vim.api.nvim_win_set_option(status_window, "winhighlight", "Normal:" .. "HarpoonFilesPanelHL")
+end
+
+local function trigger_status_ui()
+  if status_timer then
+    vim.fn.timer_stop(status_timer)
+    close_status_window()
+  end
+
+  show_status_ui()
+  status_timer = vim.fn.timer_start(disappear_delay, close_status_window)
+end
+
 return {
   "ThePrimeagen/harpoon",
   branch = "harpoon2",
@@ -8,7 +100,6 @@ return {
   },
   config = function()
     local harpoon = require("harpoon")
-    local tabby = require("tabby")
 
     harpoon:setup({
       settings = {
@@ -45,6 +136,8 @@ return {
         -- Only select valid items (the normalized list already filters out nils)
         if item then
           list:select(i)
+          trigger_status_ui()
+
           list._index = i
           return
         end
@@ -75,28 +168,15 @@ return {
       select_valid_index("prev")
     end)
 
-    -- for i = 1, 9 do
-    --   vim.keymap.set("n", "<M-" .. i .. ">", function()
-    --     require("harpoon"):list():select(i)
-    --   end)
-    -- end
-
-    -- Tab-like experience
     harpoon:extend({
-      ADD = function(cx)
-        list._index = cx.idx
-        tabby.update()
+      ADD = function()
+        trigger_status_ui()
       end,
       REMOVE = function()
-        list._index = #list.items + 1
-        tabby.update()
+        trigger_status_ui()
       end,
-      SELECT = function(cx)
-        list._index = cx.idx
-        tabby.update()
-      end,
-      LIST_CHANGE = function()
-        tabby.update()
+      NAVIGATE = function()
+        trigger_status_ui()
       end,
       -- extensions.builtins.navigate_with_number()
       UI_CREATE = function(cx)

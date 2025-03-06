@@ -70,4 +70,49 @@ M.git_root = function()
   return vim.fs.root(0, { ".git" })
 end
 
+M.get_absolute_path = function(relative_path)
+  local command
+
+  if package.config:sub(1, 1) == "\\" then
+    command = 'cd "' .. relative_path .. '" && cd'
+  else
+    command = 'cd "' .. relative_path .. '" && pwd'
+  end
+
+  local handle = io.popen(command)
+  print(vim.inspect(handle))
+  if not handle then
+    return ""
+  end
+
+  local result = handle:read("*a")
+  handle:close()
+
+  return result:gsub("\n", "")
+end
+
+M.is_relative_path = function(path)
+  return string.sub(path, 1, 1) ~= "/"
+end
+
+M.lazy_require = function(require_path)
+  return setmetatable({}, {
+    __index = function(_, key)
+      return require(require_path)[key]
+    end,
+
+    __newindex = function(_, key, value)
+      require(require_path)[key] = value
+    end,
+  })
+end
+
+M.get_full_path = function(root_dir, value)
+  if vim.loop.os_uname().sysname == "Windows_NT" then
+    return root_dir .. "\\" .. value
+  end
+
+  return root_dir .. "/" .. value
+end
+
 return M

@@ -101,6 +101,6 @@ eval "$(starship init zsh)"
 # AI API Keys
 source ~/.zsh_env_vars
 # export GEMINI_API_KEY="GEMINI_API_KEY"
-# export DEEPSEEK_API_KEY="DEEPSEEK_API_KEY"
 # export OPENAI_API_KEY="OPENAI_API_KEY"
+# export DEEPSEEK_API_KEY="DEEPSEEK_API_KEY"
 # export ANTHROPIC_API_KEY="ANTHROPIC_API_KEY"

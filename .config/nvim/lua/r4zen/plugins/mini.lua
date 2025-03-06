@@ -1,5 +1,3 @@
--- local utils = require("r4zen.utils")
-
 return {
   {
     "echasnovski/mini.icons",
@@ -19,17 +17,15 @@ return {
     version = "*",
     config = function()
       require("mini.ai").setup()
+      require("mini.align").setup()
+      require("mini.diff").setup()
       require("mini.pairs").setup()
       require("mini.surround").setup()
-      -- require("mini.animate").setup({
-      --   scroll = {
-      --     enable = false,
-      --   },
-      -- })
-      require("mini.notify").setup()
+      require("mini.cursorword").setup()
 
-      -- utils.remap("n", "gx", "<leader>ox")
-      -- utils.remap("x", "gx", "<leader>ox")
+      -- require("mini.notify").setup()
+      -- require("mini.diff").setup()
+      -- require("mini.align").setup()
       -- require("mini.operators").setup()
 
       require("mini.move").setup({
@@ -54,12 +50,6 @@ return {
           hex_color = hipatterns.gen_highlighter.hex_color(),
         },
       })
-
-      require("mini.files").setup()
-      vim.keymap.set("n", "=", "<cmd>lua MiniFiles.open()<cr>", { desc = "Open mini.files" })
-
-      -- require("mini.diff").setup()
-      -- require("mini.align").setup()
     end,
   },
 }
