@@ -18,12 +18,20 @@ return {
     config = function()
       require("mini.ai").setup()
       require("mini.align").setup()
-      require("mini.diff").setup()
       require("mini.pairs").setup()
       require("mini.surround").setup()
       require("mini.cursorword").setup()
+      require("mini.notify").setup({
+        lsp_progress = {
+          enable = false,
+        },
+      })
 
-      -- require("mini.notify").setup()
+      require("mini.diff").setup()
+      vim.keymap.set("n", "<leader>d", function()
+        MiniDiff.toggle_overlay()
+      end, { desc = "Toggle diff overlay" })
+
       -- require("mini.diff").setup()
       -- require("mini.align").setup()
       -- require("mini.operators").setup()

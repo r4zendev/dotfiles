@@ -97,6 +97,22 @@ return {
       vim.api.nvim_set_hl(0, "HarpoonFilesPanelHL", { bg = panel_hl })
       vim.api.nvim_set_hl(0, "HarpoonSelectedOptionHL", { fg = selected_hl })
       vim.api.nvim_set_hl(0, "HarpoonOptionHL", { fg = option_hl })
+
+      -- Added buffer lines are highlighted with MiniDiffOverAdd highlight group.
+      -- MiniDiffOverAdd
+
+      -- Deleted reference lines are shown as virtual text and highlighted with MiniDiffOverDelete highlight group.
+      -- MiniDiffOverDelete
+
+      -- Changed reference lines are shown as virtual text and highlighted with MiniDiffOverChange highlight group.
+      -- MiniDiffOverChange
+
+      -- "Change" hunks with equal number of buffer and reference lines have special treatment and show "word diff". Reference line is shown next to its buffer counterpart and only changed parts of both lines are highlighted with MiniDiffOverChange. The rest of reference line has MiniDiffOverContext highlighting.
+      -- MiniDiffOverChange
+      -- rest of the line: MiniDiffOverContext
+
+      local diff_over_change_colors = { fg = "#E4F0FB", bg = "#5FB3A1" }
+      vim.api.nvim_set_hl(0, "MiniDiffOverChange", diff_over_change_colors)
     end,
   },
 }
