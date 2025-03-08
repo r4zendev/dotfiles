@@ -16,7 +16,8 @@ abbr ls "lsd -a"
 
 abbr gs "git status"
 
-abbr gd "git diff"
+#abbr gd "git diff"
+abbr gd "nvim +DiffviewOpen"
 abbr gl "git log"
 abbr gck "git checkout"
 

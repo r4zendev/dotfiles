@@ -24,8 +24,8 @@ brew install neovim # editor
 # Git
 brew install gh
 brew install git
-brew install git-delta
-brew install difftastic # diff algorithm & UI
+# brew install git-delta
+# brew install difftastic
 brew install lazygit # git UI
 
 # Docker
