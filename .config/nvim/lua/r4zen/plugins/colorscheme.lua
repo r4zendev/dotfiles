@@ -1,3 +1,5 @@
+-- TODO: refactor this file
+--
 -- Poimanres theme palette
 -- https://github.com/olivercederborg/poimandres.nvim/blob/main/lua/poimandres/palette.lua
 

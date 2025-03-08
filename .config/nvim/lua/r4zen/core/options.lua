@@ -1,5 +1,10 @@
 vim.o.updatetime = 100
 
+-- required to make `vim-tmux-navigator` work.
+-- if this affects my workflow in any way, i will remove it
+-- and find another way to integrate with tmux panes
+vim.o.shell = "/bin/bash"
+
 local opt = vim.opt
 
 -- line numbers
