@@ -26,11 +26,11 @@ return {
       -- opts.desc = "Show line diagnostics"
       -- vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
-      opts.desc = "Go to previous diagnostic"
-      vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-
-      opts.desc = "Go to next diagnostic"
-      vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+      -- opts.desc = "Go to previous diagnostic"
+      -- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+      --
+      -- opts.desc = "Go to next diagnostic"
+      -- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
 
       opts.desc = "Show documentation for what is under cursor"
       vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
@@ -87,8 +87,25 @@ return {
       on_attach = on_attach,
     })
 
+    lspconfig["biome"].setup({
+      capabilities = capabilities,
+      root_dir = require("lspconfig.util").root_pattern(
+        ".eslintrc.js",
+        ".eslintrc.cjs",
+        ".eslintrc.yaml",
+        ".eslintrc.yml",
+        ".eslintrc.json"
+      ),
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        vim.keymap.set("n", "<leader>es", ":EslintFixAll<CR>", { desc = "Fix all ESLint issues", buffer = bufnr })
+      end,
+    })
+
     lspconfig["eslint"].setup({
       capabilities = capabilities,
+      root_dir = require("lspconfig.util").root_pattern("biome.json"),
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
 

@@ -1,5 +1,8 @@
 !.rgignore
 
+# planned to use
+.config/zed
+
 .aws
 .ssh
 .zsh_env_vars
@@ -7,8 +10,10 @@
 .config/github-copilot
 .config/qBittorrent
 .config/colima
-# planned to use
-.config/zed
+.config/gcloud
+.config/fish/fish_variables
+
+.config/fish/conf.d/env.fish
 
 dist
 logs

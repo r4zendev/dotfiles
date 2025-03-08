@@ -95,6 +95,16 @@ eval "$(pyenv init -)"
 export JAVA_HOME="$(/usr/libexec/java_home)"
 export npm_config_target_arch=x64
 
+
+# disable bracketed paste
+setopt no_bracketed_paste
+
+# unset zle params
+unset zle_bracketed_paste zle_highlight
+
+# reset terminal after paste
+alias fixpaste="stty sane"
+
 # starship
 eval "$(starship init zsh)"
 

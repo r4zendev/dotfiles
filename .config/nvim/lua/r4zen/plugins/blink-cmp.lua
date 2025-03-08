@@ -44,6 +44,8 @@ return {
         },
       },
       completion = {
+        -- Whether to show brackets in completion
+        -- accept = { auto_brackets = { enabled = true } },
         trigger = {
           show_on_trigger_character = true,
         },

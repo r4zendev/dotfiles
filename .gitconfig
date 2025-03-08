@@ -33,3 +33,5 @@
     difftool = true
     log = delta
     show = delta
+[init]
+	defaultBranch = main

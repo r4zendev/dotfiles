@@ -35,6 +35,13 @@ return {
             vim.fn.setreg(vim.v.register, relpath .. entry.name)
           end,
         },
+        -- Don't trigger harpoon mark keymaps in oil
+        ["<leader>k"] = {
+          callback = function() end,
+        },
+        ["<leader>j"] = {
+          callback = function() end,
+        },
       },
     })
 

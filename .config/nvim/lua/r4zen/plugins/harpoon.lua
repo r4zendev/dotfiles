@@ -122,6 +122,10 @@ return {
     local list = harpoon:list()
 
     local function select_valid_index(direction)
+      if #list.items == 0 then
+        return
+      end
+
       local idx = list._index
 
       -- Normalize the list only once

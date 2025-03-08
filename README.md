@@ -19,7 +19,7 @@ stow . -t ~
 
 - Terminal: [WezTerm](https://wezterm.org/)
 - Multiplexer: [tmux](https://github.com/tmux/tmux/wiki)
-- Shell: [zsh](https://www.zsh.org/)
+- Shell: [fish](https://fishshell.com/)
 - Prompt: [Starship](https://starship.rs/)
 - Editor: [Neovim](https://neovim.io)
 - Git: [lazygit](https://github.com/jesseduffield/lazygit)
@@ -28,7 +28,7 @@ stow . -t ~
 - Colors: [tokyonight](https://github.com/folke/tokyonight.nvim) mostly
 - Hotkeys: [Hammerspoon](https://hammerspoon.org/)
 - Window manager: [yabai](https://github.com/koekeishiya/yabai)
-- Other tools: brew, fd, ripgrep, zoxide, fzf, yazi, gdu ...
+- See [`install.sh`](bin/install.sh) for other utils used
 
 ## Hardware
 
@@ -37,13 +37,14 @@ stow . -t ~
 
 ## Future
 
-- [ ] Add more shortcuts and integrate with which-key
-- [ ] Setup default prettier config path
+- [ ] Add [aider.chat](https://aider.chat/) with [`yarepl.nvim`](https://github.com/milanglacier/yarepl.nvim)
+- [ ] Use default prettierrc from `$HOME`
 - [ ] Rust/C++ Neovim setup
 
 ## 🎉 Acknowledgment
 
 Thanks to these wonderful people and repos, I was able to assemble this dotfiles repository of mine.
 
-- [joshmedeski/dotfiles](https://github.com/joshmedeski/dotfiles)
+- [Josh Medeski](https://github.com/joshmedeski/dotfiles)
 - [Josean Martinez](https://github.com/josean-dev/dev-environment-files/)
+- [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
