@@ -8,8 +8,9 @@ vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 
-vim.keymap.set("n", "<leader>q", ":qa<cr>", { desc = "Quit all" })
-vim.keymap.set("n", "<leader>w", ":wqa<cr>", { desc = "Save and quit all" })
+-- currently trying to use ZZ/ZQ instead
+-- vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "Quit all" })
+-- vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "Save and quit all" })
 
 -- remap arrows to hjkl
 vim.keymap.set({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
@@ -35,8 +36,8 @@ vim.keymap.set("n", "<C-b>", "<C-a>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-a>", "<Nop>", { noremap = true, silent = true })
 
 -- center screen after paging
-vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 
 -- window management
 
@@ -45,7 +46,7 @@ vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }
 -- split window horizontally
 vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 -- make splits equal width & height
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
+vim.keymap.set("n", "<leader>s=", "<C-w>=", { desc = "Make splits equal size" })
 -- close current split
 vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
 -- open current split in a new tab (maximize), :q to de-maximize

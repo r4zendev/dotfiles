@@ -1,5 +1,6 @@
 return {
   "augmentcode/augment.vim",
+  event = "VeryLazy",
   keys = {
     { "<leader>Ac", "<cmd>Augment chat<cr>", desc = "Augment: Ask" },
     { "<leader>An", "<cmd>Augment chat-new<cr>", desc = "Augment: New Chat" },
