@@ -1,15 +1,13 @@
 return {
   {
     "xzbdmw/colorful-menu.nvim",
-    config = function()
-      require("colorful-menu").setup({
-        ls = {
-          ts_ls = {
-            extra_info_hl = "@comment.hint",
-          },
+    opts = {
+      ls = {
+        ts_ls = {
+          extra_info_hl = "@comment.hint",
         },
-      })
-    end,
+      },
+    },
   },
   {
     "saghen/blink.cmp",

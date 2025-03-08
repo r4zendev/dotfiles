@@ -5,7 +5,7 @@ return {
   build = function()
     vim.fn["mkdp#util#install"]()
   end,
-  config = function()
-    vim.keymap.set("n", "<leader>md", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Toggle Markdown Preview" })
-  end,
+  keys = {
+    { "<leader>md", "<cmd>MarkdownPreviewToggle<cr>", desc = "Toggle Markdown Preview" },
+  },
 }

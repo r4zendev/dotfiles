@@ -39,8 +39,9 @@ stow . -t ~
 
 - [ ] Add [aider.chat](https://aider.chat/) with [`yarepl.nvim`](https://github.com/milanglacier/yarepl.nvim)
 - [ ] Use default prettierrc from `$HOME`
-- [ ] Rust/C++ Neovim setup
+- [ ] Better `which-key` categories/mappings
 - [ ] Add more hammerspoon scripts/hotkeys
+- [ ] Rust/C++ Neovim setup
 
 ## 🎉 Acknowledgment
 

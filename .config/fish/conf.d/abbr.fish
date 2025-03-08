@@ -7,6 +7,9 @@ function y
 	rm -f -- "$tmp"
 end
 
+# nul - ctrl-space
+# bind -k nul expand-abbr
+
 abbr v "nvim"
 abbr n "nvim"
 abbr p "pnpm"
@@ -17,7 +20,7 @@ abbr ls "lsd -a"
 abbr gs "git status"
 
 #abbr gd "git diff"
-abbr gd "nvim +DiffviewOpen"
+abbr gd "nvim -c 'DiffviewOpen '"
 abbr gl "git log"
 abbr gck "git checkout"
 

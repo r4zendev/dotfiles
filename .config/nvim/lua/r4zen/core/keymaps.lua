@@ -8,11 +8,14 @@ vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 
+vim.keymap.set("n", "<leader>q", ":qa<cr>", { desc = "Quit all" })
+vim.keymap.set("n", "<leader>w", ":wqa<cr>", { desc = "Save and quit all" })
+
 -- remap arrows to hjkl
-vim.keymap.set({ "n", "v" }, "<Left>", "h")
-vim.keymap.set({ "n", "v" }, "<Down>", "j")
-vim.keymap.set({ "n", "v" }, "<Up>", "k")
-vim.keymap.set({ "n", "v" }, "<Right>", "l")
+vim.keymap.set({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
 
 -- registers
 vim.keymap.set("n", "x", '"_x') -- delete char without polluting copy register by default
