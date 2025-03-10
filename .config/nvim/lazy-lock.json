@@ -1,9 +1,10 @@
 {
   "augment.vim": { "branch": "main", "commit": "a50e362f6c16a0c43da20f613e337a6dfd3fb94a" },
   "blink.cmp": { "branch": "main", "commit": "b6f11a0aa33e601c469a126e3ed6e35208fe3ea3" },
-  "codecompanion.nvim": { "branch": "main", "commit": "0a8950b88bee4f4a62c45e869e2cdaf622527b8e" },
+  "codecompanion.nvim": { "branch": "main", "commit": "855c4bce42eca5209a0ef53f7a4188d78d520ed1" },
   "colorful-menu.nvim": { "branch": "master", "commit": "f7fb36467fb0a1ba1ce7c330aa59e9869403670f" },
   "conform.nvim": { "branch": "master", "commit": "c309423479f83f561d68d93d74c899f1683834f7" },
+  "copilot.lua": { "branch": "create-pull-request/update-copilot-dist", "commit": "825b6a9574584c5f90a4abcdf04ebb98f2c1260a" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },
   "git-blame.nvim": { "branch": "master", "commit": "2883a7460f611c2705b23f12d58d398d5ce6ec00" },

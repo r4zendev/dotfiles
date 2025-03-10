@@ -4,7 +4,8 @@ return {
   init = function()
     require("which-key").add({
       { "<leader>a", group = "Codecompanion" },
-      { "<leader>A", group = "Augment" },
+      -- currently testing out copilot with gpt-4o
+      -- { "<leader>A", group = "Augment" },
       { "<leader>s", group = "Search/Splits" },
       { "<leader>f", group = "Files" },
       { "<leader>g", group = "Git" },

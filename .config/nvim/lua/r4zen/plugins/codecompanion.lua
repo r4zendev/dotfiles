@@ -3,7 +3,7 @@ local supported_adapters = {
     return require("codecompanion.adapters").extend("copilot", {
       schema = {
         model = {
-          default = "claude-3.5-sonnet",
+          default = "claude-3.7-sonnet",
         },
       },
     })
@@ -89,7 +89,7 @@ return {
           },
         },
 
-        adapter = "openrouter_claude",
+        adapter = "copilot",
       },
 
       inline = {
@@ -97,9 +97,9 @@ return {
       },
     },
     display = {
-      chat = {
-        show_settings = true,
-      },
+      -- chat = {
+      --   show_settings = true,
+      -- },
 
       action_palette = {
         provider = "default",
