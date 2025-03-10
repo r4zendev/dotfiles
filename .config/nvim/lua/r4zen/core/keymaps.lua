@@ -8,6 +8,19 @@ vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 
+-- move in wrapped line, useful when vim.opt.wrap is set to true.
+-- may break plugins if they rely on default j,k behavior.
+-- in that case, it is better to map "gk" and "gj" to other keys:
+-- vim.keymap.set("n", "<Down>", "gj", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<Up>", "gk", { noremap = true, silent = true })
+--
+-- vim.keymap.set("n", "k", function()
+--   return vim.v.count == 0 and "gk" or "k"
+-- end, { expr = true })
+-- vim.keymap.set("n", "j", function()
+--   return vim.v.count == 0 and "gj" or "j"
+-- end, { expr = true })
+
 -- currently trying to use ZZ/ZQ instead
 -- vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "Quit all" })
 -- vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "Save and quit all" })
@@ -56,18 +69,6 @@ vim.keymap.set("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
 vim.keymap.set("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
 vim.keymap.set("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 vim.keymap.set("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
-
--- move in wrapped line, useful when vim.opt.wrap is set to true.
--- may break plugins if they rely on default j,k behavior.
--- in that case, it is better to map "gk" and "gj" to other keys:
--- vim.keymap.set("n", "<Down>", "gj", { noremap = true, silent = true })
--- vim.keymap.set("n", "<Up>", "gk", { noremap = true, silent = true })
-vim.keymap.set("n", "k", function()
-  return vim.v.count == 0 and "gk" or "k"
-end, { expr = true })
-vim.keymap.set("n", "j", function()
-  return vim.v.count == 0 and "gj" or "j"
-end, { expr = true })
 
 -- bufferline is currently not used, instead a custom UI tailored to harpoon is implemented
 

@@ -15,6 +15,20 @@ local supported_adapters = {
       },
     })
   end,
+  openrouter_o3mini = function()
+    return require("codecompanion.adapters").extend("openai_compatible", {
+      env = {
+        url = "https://openrouter.ai/api",
+        api_key = "OPENROUTER_API_KEY",
+        chat_url = "/v1/chat/completions",
+      },
+      schema = {
+        model = {
+          default = "openai/o3-mini-high",
+        },
+      },
+    })
+  end,
   openrouter_claude = function()
     return require("codecompanion.adapters").extend("openai_compatible", {
       env = {
@@ -180,6 +194,7 @@ Format findings as markdown and with:
     { "<leader>ag", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
     { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
     { "<leader>ad", ":CodeCompanionChat openrouter_deepseek_r1<CR>", desc = "Codecompanion: DeepSeek R1" },
+    { "<leader>ao", ":CodeCompanionChat openrouter_o3mini<CR>", desc = "Codecompanion: OpenAI o3-mini" },
 
     { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },
     {
