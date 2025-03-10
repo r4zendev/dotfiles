@@ -39,7 +39,7 @@ return {
       vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
       opts.desc = "Organize imports"
-      vim.keymap.set("n", "<leader>oi", ":LspOrganizeImports<CR>", opts) -- organize imports
+      vim.keymap.set("n", "<leader>ci", ":LspOrganizeImports<CR>", opts) -- organize imports
     end
 
     -- Change the Diagnostic symbols in the sign column (gutter)

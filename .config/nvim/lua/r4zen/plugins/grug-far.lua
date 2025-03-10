@@ -3,6 +3,10 @@ return {
   opts = {
     prefills = {
       flags = "--multiline --smart-case --hidden --sortr=modified --fixed-strings",
+      filesFilter = [[
+!node_modules
+!*-lock.json
+!bun.lock]],
     },
     keymaps = {
       replace = { n = "<leader>r" },

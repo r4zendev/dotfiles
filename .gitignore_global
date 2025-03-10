@@ -5,3 +5,4 @@ dist
 .aider*
 .lazy.lua
 .augmentignore
+Session.vim

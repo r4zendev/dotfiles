@@ -45,21 +45,23 @@ return {
         },
       })
 
-      require("mini.sessions").setup({
-        autoread = true,
-        autowrite = true,
-        force = { read = true, write = true, delete = false },
-        verbose = { read = true, write = true, delete = true },
-      })
-      vim.keymap.set("n", "<leader>ha", function()
-        MiniSessions.write()
-      end, { desc = "Write session" })
-      vim.keymap.set("n", "<leader>hd", function()
-        MiniSessions.delete()
-      end, { desc = "Delete session" })
-      vim.keymap.set("n", "<leader>hh", function()
-        MiniSessions.select()
-      end, { desc = "Select session" })
+      -- currently, harpoon is enough for my setup
+      --
+      -- require("mini.sessions").setup({
+      --   autoread = true,
+      --   autowrite = true,
+      --   force = { read = true, write = true, delete = true },
+      --   verbose = { read = true, write = true, delete = true },
+      -- })
+      -- vim.keymap.set("n", "<leader>ha", function()
+      --   MiniSessions.write()
+      -- end, { desc = "Write session" })
+      -- vim.keymap.set("n", "<leader>hd", function()
+      --   MiniSessions.delete()
+      -- end, { desc = "Delete session" })
+      -- vim.keymap.set("n", "<leader>hh", function()
+      --   MiniSessions.select()
+      -- end, { desc = "Select session" })
 
       local hipatterns = require("mini.hipatterns")
       hipatterns.setup({

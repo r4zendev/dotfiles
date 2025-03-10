@@ -170,19 +170,19 @@ return {
 
     vim.keymap.set("n", "<leader>j", function()
       list:remove()
-    end)
+    end, { desc = "Harpoon remove" })
     vim.keymap.set("n", "<leader>k", function()
       list:add()
-    end)
+    end, { desc = "Harpoon add" })
     vim.keymap.set("n", "<C-e>", function()
       harpoon.ui:toggle_quick_menu(list)
-    end)
+    end, { desc = "Harpoon menu" })
     vim.keymap.set("n", "<M-]>", function()
       select_valid_index("next")
-    end)
+    end, { desc = "Harpoon next" })
     vim.keymap.set("n", "<M-[>", function()
       select_valid_index("prev")
-    end)
+    end, { desc = "Harpoon previous" })
 
     harpoon:extend({
       ADD = function()
@@ -194,6 +194,7 @@ return {
       end,
       SELECT = function(cx)
         list._index = cx.idx
+        vim.api.nvim_feedkeys("zz", "n", false)
       end,
       NAVIGATE = function()
         trigger_status_ui()

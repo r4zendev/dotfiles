@@ -10,8 +10,8 @@ end
 # nul - ctrl-space
 # bind -k nul expand-abbr
 
+abbr b "bun"
 abbr v "nvim"
-abbr n "nvim"
 abbr p "pnpm"
 abbr g "lazygit"
 abbr d "lazydocker"

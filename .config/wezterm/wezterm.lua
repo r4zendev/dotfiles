@@ -105,7 +105,22 @@ config.mouse_bindings = {
 		mods = "NONE",
 		action = act.PasteFrom("Clipboard"),
 	},
+
+	-- Doesn't seem to work in tmux (Shift-Left click works though)
+	--
+	-- {
+	-- 	event = { Up = { streak = 1, button = "Left" } },
+	-- 	mods = "CMD",
+	-- 	action = wezterm.action.Multiple({
+	-- 		wezterm.action.OpenLinkAtMouseCursor,
+	-- 		wezterm.action.Nop,
+	-- 	}),
+	-- },
 }
+
+-- config.keys = {
+-- 	{ key = "k", mods = "CMD", action = act.ClearScrollback("ScrollbackAndViewport") },
+-- }
 
 config.adjust_window_size_when_changing_font_size = true
 

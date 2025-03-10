@@ -29,6 +29,9 @@ brew install git
 brew install lazygit # git UI
 
 # Docker
+brew install docker # docker CLI
+brew install docker-compose
+brew install docker-credential-helper
 brew install colima # docker driver
 brew install lazydocker # docker UI
 

@@ -6,6 +6,7 @@ return {
   opts = {
     highlight = {
       enable = true,
+      additional_vim_regex_highlighting = false,
     },
     -- enable indentation
     indent = { enable = true },
@@ -41,4 +42,7 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("nvim-treesitter.configs").setup(opts)
+  end,
 }
