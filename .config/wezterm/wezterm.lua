@@ -118,9 +118,20 @@ config.mouse_bindings = {
 	-- },
 }
 
--- config.keys = {
--- 	{ key = "k", mods = "CMD", action = act.ClearScrollback("ScrollbackAndViewport") },
--- }
+-- send <c-t>N on ctrl-N
+-- nvim config has bindings for harpoon tab using these
+config.keys = {
+	{ key = "1", mods = "CTRL", action = wezterm.action.SendString("\x14\x31") },
+	{ key = "2", mods = "CTRL", action = wezterm.action.SendString("\x14\x32") },
+	{ key = "3", mods = "CTRL", action = wezterm.action.SendString("\x14\x33") },
+	{ key = "4", mods = "CTRL", action = wezterm.action.SendString("\x14\x34") },
+	{ key = "5", mods = "CTRL", action = wezterm.action.SendString("\x14\x35") },
+	{ key = "6", mods = "CTRL", action = wezterm.action.SendString("\x14\x36") },
+	{ key = "7", mods = "CTRL", action = wezterm.action.SendString("\x14\x37") },
+	{ key = "8", mods = "CTRL", action = wezterm.action.SendString("\x14\x38") },
+	{ key = "9", mods = "CTRL", action = wezterm.action.SendString("\x14\x39") },
+	-- { key = "k", mods = "CMD", action = act.ClearScrollback("ScrollbackAndViewport") },
+}
 
 config.adjust_window_size_when_changing_font_size = true
 

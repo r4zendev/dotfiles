@@ -34,7 +34,7 @@ stow . -t ~
 ## Hardware
 
 - Laptop: 13-inch MacBook Air, Apple M2 Chip, 16GB RAM, Late 2022
-- During free time, I practice my [MoErgo Glove80](https://www.moergo.com/collections/glove80-keyboards/products/glove80-split-ergonomic-keyboard-revision-2) with [my own layout](https://github.com/r4zendev/glophite) based on Graphite keyboard layout
+- During free time, I practice my [MoErgo Glove80](https://www.moergo.com/collections/glove80-keyboards/products/glove80-split-ergonomic-keyboard-revision-2) and [Piantor Pro](https://shop.beekeeb.com/product/pre-soldered-piantor-split-keyboard/) with [my own layout](https://github.com/r4zendev/glophite) based on Graphite keyboard layout
 
 ## Future
 

@@ -22,3 +22,8 @@ autocmd("TextYankPost", {
 --     vim.opt.formatoptions:remove({ "c", "r", "o" })
 --   end,
 -- })
+
+-- load buffer into memory snippet
+-- local bufnr = vim.api.nvim_create_buf(true, false)
+-- vim.api.nvim_buf_set_name(bufnr, path)
+-- vim.api.nvim_buf_call(bufnr, vim.cmd.edit)

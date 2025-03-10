@@ -43,20 +43,10 @@ return {
         callback = function()
           local path = get_path_under_cursor(true)
 
-          -- load buffer into memory
-          local bufnr = vim.api.nvim_create_buf(true, false)
-          vim.api.nvim_buf_set_name(bufnr, path)
-          vim.api.nvim_buf_call(bufnr, vim.cmd.edit)
-
-          local list = require("harpoon"):list()
-          local list_items = list.items
-          table.insert(list_items, {
+          require("harpoon"):list():add({
             context = { col = 0, row = 1 },
             value = path,
           })
-          list.items = list_items
-
-          require("harpoon.extensions").extensions:emit("ADD")
         end,
         desc = "Harpoon add",
       },
@@ -65,16 +55,13 @@ return {
           local path = get_path_under_cursor(true)
 
           local list = require("harpoon"):list()
-          local list_items = list.items
-          for i, item in ipairs(list_items) do
+
+          for _, item in ipairs(list.items) do
             if item.value == path then
-              table.remove(list_items, i)
+              list:remove(item)
               break
             end
           end
-          list.items = list_items
-
-          require("harpoon.extensions").extensions:emit("REMOVE")
         end,
         desc = "Harpoon remove",
       },

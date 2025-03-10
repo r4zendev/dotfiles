@@ -16,9 +16,9 @@ local function get_harpooned_files()
   local harpoon = require("harpoon")
   local file_list = {}
 
-  for _, item in ipairs(utils.normalize_table(harpoon:list().items)) do
+  for idx, item in ipairs(utils.normalize_table(harpoon:list().items)) do
     local item_fn, item_ext = utils.get_file_name(item.value)
-    table.insert(file_list, item_fn .. item_ext)
+    table.insert(file_list, string.format("[%s] %s%s", idx, item_fn, item_ext))
   end
 
   return file_list
@@ -183,6 +183,12 @@ return {
     vim.keymap.set("n", "<M-[>", function()
       select_valid_index("prev")
     end, { desc = "Harpoon previous" })
+
+    for i = 1, 9 do
+      vim.keymap.set("n", "<c-t>" .. i, function()
+        require("harpoon"):list():select(i)
+      end, { desc = string.format("Harpoon: Go to %s", i) })
+    end
 
     harpoon:extend({
       ADD = function()
