@@ -81,6 +81,7 @@ pnpm i -g fkill-cli # kill processes
 brew tap homebrew/cask-fonts
 brew install --cask font-monaspace
 brew install --cask font-jetbrains-mono-nerd-font
+brew install --cask font-inconsolata-lgc-nerd-font # cyrillic
 
 # Apps
 brew install --cask 1password

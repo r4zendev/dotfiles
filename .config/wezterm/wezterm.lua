@@ -55,12 +55,15 @@ config.colors = {
 
 config.font = wezterm.font_with_fallback({
 	{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
+	-- Monaspace не поддерживает кириллицу.
+	{ family = "Inconsolata LGC Nerd Font Mono", scale = 1.2, weight = "Bold" },
 })
 config.font_rules = {
 	{
 		italic = true,
 		font = wezterm.font_with_fallback({
 			{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
+			{ family = "Inconsolata LGC Nerd Font Mono", scale = 1.2, weight = "Bold" },
 		}),
 	},
 }
