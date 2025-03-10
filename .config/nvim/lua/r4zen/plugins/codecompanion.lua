@@ -97,9 +97,9 @@ return {
       },
     },
     display = {
-      -- chat = {
-      --   show_settings = true,
-      -- },
+      chat = {
+        show_settings = true,
+      },
 
       action_palette = {
         provider = "default",
@@ -181,7 +181,7 @@ Format findings as markdown and with:
     { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
     { "<leader>ad", ":CodeCompanionChat openrouter_deepseek_r1<CR>", desc = "Codecompanion: DeepSeek R1" },
 
-    { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion toggle" },
+    { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },
     {
       "<leader>aS",
       function()
@@ -190,10 +190,10 @@ Format findings as markdown and with:
           vim.cmd("CodeCompanionSave " .. name)
         end
       end,
-      desc = "Codecompanion Save chat",
+      desc = "Codecompanion: Save chat",
     },
-    { "<leader>aL", ":CodeCompanionLoad<CR>", desc = "Codecompanion Load chat" },
-    { "<leader>aP", ":CodeCompanionActions<CR>", desc = "Codecompanion Prompts" },
+    { "<leader>aL", ":CodeCompanionLoad<CR>", desc = "Codecompanion: Load chat" },
+    { "<leader>aP", ":CodeCompanionActions<CR>", desc = "Codecompanion: Prompts" },
   },
   init = function()
     --- Load a saved codecompanion.nvim chat file into a new CodeCompanion chat buffer.

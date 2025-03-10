@@ -3,9 +3,8 @@ return {
   event = "VeryLazy",
   init = function()
     require("which-key").add({
-      { "<leader>a", group = "Codecompanion" },
-      -- currently testing out copilot with gpt-4o
-      -- { "<leader>A", group = "Augment" },
+      { "<leader>a", group = "AI" },
+      { "<leader>A", group = "Augment" },
       { "<leader>s", group = "Search/Splits" },
       { "<leader>f", group = "Files" },
       { "<leader>g", group = "Git" },

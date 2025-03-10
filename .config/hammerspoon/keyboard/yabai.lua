@@ -28,13 +28,13 @@ end
 local function alt(key, commands)
 	utils.repeatBind({ "alt" }, key, function()
 		yabai(commands)
-	end, 0.3, 0.1)
+	end, 0.1, 0.01)
 end
 
 local function altShift(key, commands)
 	utils.repeatBind({ "alt", "shift" }, key, function()
 		yabai(commands)
-	end, 0.3, 0.1)
+	end, 0.1, 0.01)
 end
 
 --
