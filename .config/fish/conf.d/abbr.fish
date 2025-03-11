@@ -16,6 +16,7 @@ abbr p "pnpm"
 abbr g "lazygit"
 abbr d "lazydocker"
 abbr ls "lsd -a"
+abbr gdu "gdu-go"
 
 abbr gs "git status"
 

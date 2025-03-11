@@ -37,17 +37,14 @@ set -x XDG_CONFIG_HOME "$HOME/.config"
 
 set -x PYENV_ROOT "$HOME/.pyenv"
 if not command -v pyenv > /dev/null
-    fish_add_path "$PYENV_ROOT/bin"
+  fish_add_path "$PYENV_ROOT/bin"
 end
 pyenv init - | source
 
-
-# golang - https://golang.google.cn/
-# set -Ux GOPATH (go env GOPATH)
-# fish_add_path $GOPATH/bin
-
 fish_add_path $HOME/.config/bin # my custom scripts
 fish_add_path $HOME/.cargo/bin # cargo
+set -Ux GOPATH (go env GOPATH)
+fish_add_path $GOPATH/bin # go
 
 # fish_config theme choose Dracula
 fish_config theme choose tokyonight
