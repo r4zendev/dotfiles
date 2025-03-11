@@ -14,39 +14,29 @@ local toggleFocus = function(appName)
 end
 
 local bindings = {
-	-- { "a", "Wezterm" },
-	-- { "b", "MongoDB Compass" },
-	-- { "c", "" },
-	-- { "e", "" },
-	-- { "d", "Discord" },
-	{ "/", "Activity Monitor" },
+	{ "q", "QuickTime Player" },
 	{ ".", "Settings" },
-	{ "p", "Finder" },
-	-- { "g", "Google Chrome" },
-	-- { "i", "" },
+	{ "/", "Activity Monitor" },
+	{ "p", "Finder", { { "cmd", "n" } } },
+	{ "o", "Obsidian" },
+	{ "b", "Brave" },
+	{ "a", "WezTerm" },
+	{ "z", "zoom.us" },
 	-- NOTE: reserved for arrow keys
 	-- { "h", "" },
 	-- { "j", "" },
 	-- { "k", "" },
 	-- { "l", "" },
-	-- { "m", "Messages" },
-	-- { "n", "Notes" },
-	-- { "o", "Obsidian" },
-	-- { "p", "Music" },
-	-- { "q", "" },
-	-- { "r", "Reminders" },
-	-- { "s", "Obsidian" },
-	-- { "t", "" },
-	-- { "u", "" },
-	-- { "v", "DaVinci Resolve" },
-	-- { "w", "Arc" },
-	-- { "x", "" },
-	-- { "y", "" },
-	-- { "z", "zoom.us" },
 }
 
 for _, app in ipairs(bindings) do
 	hs.hotkey.bind({ "alt" }, app[1], function()
 		toggleFocus(app[2])
+
+		if app[3] then
+			for _, key in ipairs(app[3]) do
+				hs.eventtap.keyStroke(key[1], key[2])
+			end
+		end
 	end)
 end

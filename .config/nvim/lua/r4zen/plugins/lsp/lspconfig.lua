@@ -87,12 +87,71 @@ return {
       on_attach = on_attach,
     })
 
-    lspconfig["eslint"].setup({
-      capabilities = capabilities,
+    local eslint_alerted = false
 
+    -- Default eslint root files
+    -- Taken from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/eslint.lua
+    local eslint_root_file = {
+      ".eslintrc",
+      ".eslintrc.js",
+      ".eslintrc.cjs",
+      ".eslintrc.yaml",
+      ".eslintrc.yml",
+      ".eslintrc.json",
+      "eslint.config.js",
+      "eslint.config.mjs",
+      "eslint.config.cjs",
+      "eslint.config.ts",
+      "eslint.config.mts",
+      "eslint.config.cts",
+    }
+
+    lspconfig["eslint"].setup({
       -- Makes ESLint work in monorepos (???)
       -- settings = { workingDirectory = { mode = "auto" } },
       -- root_dir = lspconfig.util.find_git_ancestor,
+
+      capabilities = capabilities,
+
+      root_dir = function(fname)
+        local ignored_dirs = {
+          "/Users/razen/projects/ballerine/oss",
+        }
+
+        for _, dir in ipairs(ignored_dirs) do
+          if string.find(fname, dir) then
+            -- Don't load ESLint for projects where it is broken
+            return nil
+          end
+        end
+
+        -- Default lspconfig root_dir function
+        -- Taken from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/eslint.lua
+        local util = require("lspconfig.util")
+        eslint_root_file = util.insert_package_json(eslint_root_file, "eslintConfig", fname)
+        return util.root_pattern(eslint_root_file)(fname)
+      end,
+
+      handlers = {
+        ["textDocument/diagnostic"] = function(...)
+          local data, _, evt, _ = ...
+
+          if data.code and data.code < 0 then
+            if not eslint_alerted then
+              vim.notify(
+                string.format("ESLint failed due to an error: \n%s", data.message),
+                vim.log.levels.WARN,
+                { title = "ESLint" }
+              )
+              eslint_alerted = true
+            end
+
+            return
+          end
+
+          return vim.lsp.diagnostic.on_diagnostic(...)
+        end,
+      },
 
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)

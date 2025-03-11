@@ -18,6 +18,7 @@ return {
     {
       "<leader>fs",
       function()
+        -- TODO: close oil.nvim on open
         require("grug-far").open()
       end,
       mode = { "n" },
