@@ -49,7 +49,6 @@ brew install yazi # file manager
 brew install zoxide # cd alternative
 
 # System utils
-brew install thefuck # correction tool
 brew install --cask hammerspoon # advanced scripting & automation
 brew install jordanbaird-ice # toolbar for macOS
 
