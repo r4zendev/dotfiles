@@ -87,30 +87,33 @@ return {
       on_attach = on_attach,
     })
 
-    lspconfig["biome"].setup({
+    lspconfig["eslint"].setup({
       capabilities = capabilities,
-      root_dir = require("lspconfig.util").root_pattern(
-        ".eslintrc.js",
-        ".eslintrc.cjs",
-        ".eslintrc.yaml",
-        ".eslintrc.yml",
-        ".eslintrc.json"
-      ),
+
+      -- Makes ESLint work in monorepos (???)
+      -- settings = { workingDirectory = { mode = "auto" } },
+      -- root_dir = lspconfig.util.find_git_ancestor,
+
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
 
-        vim.keymap.set("n", "<leader>es", ":EslintFixAll<CR>", { desc = "Fix all ESLint issues", buffer = bufnr })
+        -- Auto-format with LSP
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          command = "EslintFixAll",
+        })
+
+        vim.keymap.set("n", "<leader>ce", ":EslintFixAll<CR>", {
+          desc = "Fix all ESLint issues",
+          buffer = bufnr,
+        })
       end,
     })
 
-    lspconfig["eslint"].setup({
+    -- Auto-formatting is handled in conform using lsp_fallback flag
+    lspconfig["biome"].setup({
       capabilities = capabilities,
-      root_dir = require("lspconfig.util").root_pattern("biome.json"),
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-
-        vim.keymap.set("n", "<leader>es", ":EslintFixAll<CR>", { desc = "Fix all ESLint issues", buffer = bufnr })
-      end,
+      on_attach = on_attach,
     })
 
     lspconfig["cssls"].setup({

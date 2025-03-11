@@ -1,3 +1,5 @@
+local utils = require("r4zen.utils")
+
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
@@ -10,6 +12,27 @@ autocmd("TextYankPost", {
   desc = "Highlight text when yank",
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Reload the file if it changes externally
+vim.api.nvim_create_autocmd({ "FileChangedShell", "FocusGained" }, {
+  pattern = "*",
+  callback = function()
+    vim.cmd("checktime")
+  end,
+})
+
+-- Also reload after a short delay when saving.
+-- Some external tooling may modify it and the autocmd above won't work.
+-- Useful for working with likes of TanStack Router
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*",
+  callback = function()
+    -- Delay the reload to allow the external process to modify the file
+    vim.defer_fn(function()
+      vim.cmd("silent! checktime")
+    end, 500)
   end,
 })
 

@@ -35,8 +35,8 @@ opt.conceallevel = 2
 
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "number"
--- opt.signcolumn = "yes:1"
+-- opt.signcolumn = "number"
+opt.signcolumn = "yes:1" -- both sign & number
 
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
@@ -53,3 +53,6 @@ opt.swapfile = false
 
 -- persistent undo
 opt.undofile = true
+
+-- update file on external changes
+opt.autoread = true

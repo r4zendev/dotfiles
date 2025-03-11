@@ -11,6 +11,7 @@
 .config/qBittorrent
 .config/colima
 .config/gcloud
+.config/pgcli
 .config/fish/fish_variables
 
 .config/fish/conf.d/env.fish
