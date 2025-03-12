@@ -14,10 +14,9 @@ local toggleFocus = function(appName)
 end
 
 local bindings = {
-	{ "q", "QuickTime Player" },
 	{ ".", "Settings" },
 	{ "/", "Activity Monitor" },
-	{ "p", "Finder", { { "cmd", "n" } } },
+	{ "p", "Finder", { mods = { "cmd" }, keys = "n" } },
 	{ "o", "Obsidian" },
 	{ "b", "Brave" },
 	{ "a", "WezTerm" },
@@ -34,9 +33,7 @@ for _, app in ipairs(bindings) do
 		toggleFocus(app[2])
 
 		if app[3] then
-			for _, key in ipairs(app[3]) do
-				hs.eventtap.keyStroke(key[1], key[2])
-			end
+			hs.eventtap.keyStroke(app[3].mods, app[3].keys)
 		end
 	end)
 end

@@ -68,6 +68,7 @@ brew install gdu # disk usage analyzer
 brew install jq # JSON processor
 brew install fd # find alternative
 brew install fzf # fuzzy finder
+brew install ffmpeg # multimedia processing
 brew install tealdeer # quick man-pages extracts
 brew install ripgrep # search engine
 brew install pgcli # postgres client
