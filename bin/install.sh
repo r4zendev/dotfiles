@@ -48,10 +48,6 @@ brew install hurl # testing & advanced
 brew install yazi # file manager
 brew install zoxide # cd alternative
 
-# System utils
-brew install --cask hammerspoon # advanced scripting & automation
-brew install jordanbaird-ice # toolbar for macOS
-
 # Zsh add-ons
 brew install zsh-autocomplete
 brew install zsh-autosuggestions
@@ -90,3 +86,8 @@ brew install --cask obsidian
 brew install --cask slack
 brew install --cask telegram
 brew install --cask brave-browser
+
+# System utils
+brew install --cask hammerspoon # advanced scripting & automation
+brew install --cask blackhole-2ch # virtual audio driver
+brew install jordanbaird-ice # toolbar

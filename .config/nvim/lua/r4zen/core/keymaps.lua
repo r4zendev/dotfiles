@@ -43,10 +43,12 @@ vim.keymap.set("n", "<leader>.", function()
   return "<esc>" .. string.rep(".", vim.v.count1)
 end, { expr = true, desc = "Repeat dot action" })
 
--- remap increment due to using <C-a> as a tmux prefix
--- use <C-x> to decrement (default)
-vim.keymap.set("n", "<C-b>", "<C-a>", { noremap = true, silent = true })
+-- remap increment
+-- <C-a> is a tmux prefix
+vim.keymap.set("n", "<M-->", "<C-x>", { noremap = true, silent = true })
+vim.keymap.set("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-a>", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-x>", "<Nop>", { noremap = true, silent = true })
 
 -- center screen after paging
 vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })
