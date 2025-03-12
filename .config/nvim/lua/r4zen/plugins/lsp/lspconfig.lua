@@ -136,7 +136,7 @@ return {
         ["textDocument/diagnostic"] = function(...)
           local data, _, evt, _ = ...
 
-          if data.code and data.code < 0 then
+          if data and data.code and data.code < 0 then
             if not eslint_alerted then
               vim.notify(
                 string.format("ESLint failed due to an error: \n%s", data.message),

@@ -31,6 +31,13 @@ return {
       "dockerfile",
       "gitignore",
       "query",
+      "rust",
+      "go",
+      "c",
+      "cpp",
+      "cmake",
+      "fish",
+      "tmux",
     },
     incremental_selection = {
       enable = true,

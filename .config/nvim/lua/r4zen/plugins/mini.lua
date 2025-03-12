@@ -2,21 +2,6 @@ local M = {}
 
 M.hl = {}
 
-M.ft = {
-  "astro",
-  "css",
-  "heex",
-  "html",
-  "html-eex",
-  "javascript",
-  "javascriptreact",
-  "rust",
-  "svelte",
-  "typescript",
-  "typescriptreact",
-  "vue",
-}
-
 M.plugin = {
   {
     "echasnovski/mini.icons",
@@ -97,11 +82,15 @@ M.plugin = {
           -- Highlight tailwind colors
           tailwind = {
             pattern = function()
-              if not vim.tbl_contains(M.ft, vim.bo.filetype) then
+              if not vim.tbl_contains(M.tailwind_filetypes, vim.bo.filetype) then
                 return
               end
 
-              return "%f[%w:-]()[%w:-]+%-[a-z%-]+%-%d+()%f[^%w:-]"
+              if M.tailwind_style == "full" then
+                return "%f[%w:-]()[%w:-]+%-[a-z%-]+%-%d+()%f[^%w:-]"
+              elseif M.tailwind_style == "compact" then
+                return "%f[%w:-][%w:-]+%-()[a-z%-]+%-%d+()%f[^%w:-]"
+              end
             end,
             group = function(_, _, m)
               ---@type string
@@ -128,6 +117,23 @@ M.plugin = {
     end,
   },
 }
+
+M.tailwind_filetypes = {
+  "astro",
+  "css",
+  "heex",
+  "html",
+  "html-eex",
+  "javascript",
+  "javascriptreact",
+  "rust",
+  "svelte",
+  "typescript",
+  "typescriptreact",
+  "vue",
+}
+
+M.tailwind_style = "compact"
 
 M.tailwind_colors = {
   slate = {

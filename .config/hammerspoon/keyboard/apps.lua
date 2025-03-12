@@ -19,7 +19,7 @@ local bindings = {
 	{ "p", "Finder", { mods = { "cmd" }, keys = "n" } },
 	{ "o", "Obsidian" },
 	{ "b", "Brave" },
-	{ "a", "WezTerm" },
+	{ "`", "WezTerm" },
 	{ "z", "zoom.us" },
 	-- NOTE: reserved for arrow keys
 	-- { "h", "" },
