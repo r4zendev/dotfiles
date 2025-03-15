@@ -29,9 +29,10 @@ opt.cursorline = true -- highlight the current cursor line
 
 -- appearance
 -- vim.o.showtabline = 2 -- required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
+-- opt.conceallevel = 2
 vim.o.showtabline = 0
 opt.title = false
-opt.conceallevel = 2
+opt.conceallevel = 0
 
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark

@@ -26,7 +26,7 @@ abbr -a gck "git checkout"
 
 abbr -a ga "git add ."
 abbr -a ga_ "git add"
-abbr -a gc "git commit -m"
+abbr -a gc --position anywhere --set-cursor "git commit -m '%'"
 abbr -a gp "git push origin HEAD"
 abbr -a gap "ga && gc wip && gp"
 

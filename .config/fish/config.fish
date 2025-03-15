@@ -33,6 +33,8 @@ set -x PNPM_HOME "/Users/razen/Library/pnpm"
 fish_add_path $PNPM_HOME
 fish_add_path (pnpm --global bin)
 
+fish_add_path "$HOME/.bun/bin"
+
 set -x XDG_CONFIG_HOME "$HOME/.config"
 
 set -x PYENV_ROOT "$HOME/.pyenv"
