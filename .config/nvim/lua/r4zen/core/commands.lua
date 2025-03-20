@@ -34,6 +34,13 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
+-- Kill daemons manually until core_d provides this functionality.
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    vim.fn.jobstart("killall prettierd eslint_d", { detach = true })
+  end,
+})
+
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.
 -- autocmd("BufEnter", {

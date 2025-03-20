@@ -65,21 +65,16 @@ return {
           theme = "tokyonight",
         },
         sections = {
-          -- lualine_c = { "lualine_harpoon" },
-          -- lualine_c = { "filename" },
           lualine_c = {
             harpoon_aware_fname,
             { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available },
           },
           lualine_x = {
-            -- {
-            --   require("noice").api.statusline.mode.get,
-            --   cond = require("noice").api.statusline.mode.has,
-            --   -- lazy_status.updates,
-            --   -- cond = lazy_status.has_updates,
-            --   color = { fg = "#ff9e64" },
-            -- },
-            -- { keymap },
+            {
+              require("noice").api.statusline.mode.get,
+              cond = require("noice").api.statusline.mode.has,
+              color = { fg = "#ff9e64" },
+            },
             { "encoding" },
             { "fileformat" },
             { "filetype" },

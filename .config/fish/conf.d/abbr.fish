@@ -34,8 +34,3 @@ abbr -a gss "git stash"
 abbr -a gsv "git add . && git stash"
 abbr -a gsp "git stash pop"
 abbr -a gca "git commit --amend --no-edit"
-
-# list ffmpeg devices
-abbr -a fdev "ffmpeg -f avfoundation -list_devices true -i ''"
-# capture and save to random hash file
-abbr -a frec --position anywhere --set-cursor "ffmpeg -f avfoundation -i '%:' -vf format=yuv420p -c:v libx264 -preset ultrafast -tune zerolatency -crf 23 -f mp4 '$HOME/projects/r4zendotdev/screen-recordings/output-$(openssl rand -hex 8).mp4'"

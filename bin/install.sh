@@ -89,5 +89,4 @@ brew install --cask brave-browser
 
 # System utils
 brew install --cask hammerspoon # advanced scripting & automation
-brew install --cask blackhole-2ch # virtual audio driver
 brew install jordanbaird-ice # toolbar

@@ -5,8 +5,8 @@ return {
       flags = "--multiline --smart-case --hidden --sortr=modified --fixed-strings",
       filesFilter = [[
 !node_modules
-!*-lock.json
-!bun.lock]],
+!*-lock.{json,yaml}
+!*.lock]],
     },
     keymaps = {
       replace = { n = "<leader>r" },

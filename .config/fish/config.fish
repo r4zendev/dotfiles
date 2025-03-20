@@ -16,7 +16,7 @@ eval (/opt/homebrew/bin/brew shellenv)
 # source (pkgx --shellcode)
 
 starship init fish | source # https://starship.rs/
-zoxide init fish --cmd cd | source # 'ajeetdsouza/zoxide'
+zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
 fnm --log-level quiet env --use-on-cd | source # "Schniz/fnm"
 # direnv hook fish | source # https://direnv.net/
 # fx --comp fish | source # https://fx.wtf/

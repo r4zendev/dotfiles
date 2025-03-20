@@ -159,7 +159,11 @@ return {
         -- Auto-format with LSP
         vim.api.nvim_create_autocmd("BufWritePre", {
           buffer = bufnr,
-          command = "EslintFixAll",
+          callback = function()
+            if not vim.g.disable_autoformat then
+              vim.cmd("EslintFixAll")
+            end
+          end,
         })
 
         vim.keymap.set("n", "<leader>ce", ":EslintFixAll<CR>", {
@@ -215,6 +219,19 @@ return {
     lspconfig["pyright"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+    })
+
+    -- Using instead of vim's native spell check
+    lspconfig["typos_lsp"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd_env = { RUST_LOG = "error" },
+      init_options = {
+        -- Equivalent to the typos `--config` cli argument.
+        config = "~/.config/nvim/_typos.toml",
+        -- How typos are rendered in the editor, can be one of an Error, Warning, Info or Hint.
+        diagnosticSeverity = "Hint",
+      },
     })
 
     lspconfig["lua_ls"].setup({
