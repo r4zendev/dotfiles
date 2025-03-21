@@ -1,7 +1,7 @@
 return {
   "folke/snacks.nvim",
   dependencies = {
-    "mini.nvim",
+    "echasnovski/mini.nvim",
   },
   priority = 1000,
   lazy = false,

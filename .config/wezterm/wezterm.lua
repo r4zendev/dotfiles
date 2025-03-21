@@ -54,7 +54,12 @@ config.colors = {
 }
 
 config.font = wezterm.font_with_fallback({
-	{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
+	{
+		family = "Monaspace Argon",
+		scale = 1.2,
+		weight = "Medium",
+		harfbuzz_features = { "calt", "ss01", "ss02", "ss03", "ss04" },
+	},
 	-- Monaspace не поддерживает кириллицу.
 	{ family = "Inconsolata LGC Nerd Font Mono", scale = 1.2, weight = "Bold" },
 })
@@ -62,7 +67,12 @@ config.font_rules = {
 	{
 		italic = true,
 		font = wezterm.font_with_fallback({
-			{ family = "Monaspace Argon", scale = 1.2, weight = "Medium" },
+			{
+				family = "Monaspace Argon",
+				scale = 1.2,
+				weight = "Medium",
+				harfbuzz_features = { "calt", "ss01", "ss02", "ss03", "ss04" },
+			},
 			{ family = "Inconsolata LGC Nerd Font Mono", scale = 1.2, weight = "Bold" },
 		}),
 	},
