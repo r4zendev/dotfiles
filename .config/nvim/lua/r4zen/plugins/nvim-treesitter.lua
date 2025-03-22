@@ -38,6 +38,7 @@ return {
       "cmake",
       "fish",
       "tmux",
+      "kdl",
     },
     incremental_selection = {
       enable = true,

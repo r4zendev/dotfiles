@@ -1,14 +1,15 @@
 return {
   {
     "folke/ts-comments.nvim",
+    version = "*",
+    after = "nvim-treesitter",
     opts = {},
-    event = "VeryLazy",
-    enabled = vim.fn.has("nvim-0.10.0") == 1,
   },
   {
     "windwp/nvim-ts-autotag",
     version = "*",
-    event = "VeryLazy",
+    after = "nvim-treesitter",
+    ft = { "html", "javascript", "typescript", "jsx", "tsx" },
     opts = {
       opts = {
         enable_close = true,

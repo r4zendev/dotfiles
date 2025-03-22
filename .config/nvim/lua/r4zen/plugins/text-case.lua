@@ -41,7 +41,7 @@ local picker_items = generate_items({
 
 return {
   "johmsalas/text-case.nvim",
-  lazy = false,
+  cmd = { "TextCaseReplace" },
   opts = {
     prefix = "<leader>C",
     substitude_command_name = "TextCaseReplace",
@@ -65,5 +65,4 @@ return {
       mode = { "n", "v" },
     },
   },
-  cmd = { "TextCaseReplace" },
 }

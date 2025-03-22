@@ -7,40 +7,65 @@ return {
       { "<leader>At", "<cmd>Augment chat-toggle<cr>", desc = "Augment: Toggle Chat" },
     },
     config = function()
-      -- Remove tab binding in favor of copilot
-      vim.g.augment_disable_tab_mapping = true
       -- Add cwd to workspace for better Augment suggestions
       vim.g.augment_workspace_folders = { vim.fn.getcwd() }
-      -- To make it not attach the LSP and add completion source to blink
-      vim.g.augment_job_command = "> /dev/null 2>&1"
-      -- Disable completion, but keep the chat
-      vim.cmd([[Augment disable]])
+      -- Disable completion in favor of copilot, but keep the chat available
+      vim.g.augment_disable_completions = true
     end,
   },
   {
-    "github/copilot.vim",
-    dependencies = {
-      -- Making sure this loads first and unmaps tab,
-      -- then copilot will map it back
-      "augmentcode/augment.vim",
-    },
-    lazy = false,
+    "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    event = { "BufReadPost", "BufNewFile" },
-    keys = {
-      { "<leader>ap", "<cmd>Copilot<cr>", desc = "Copilot Panel" },
-    },
-    init = function()
-      vim.g.copilot_workspace_folders = { vim.fn.getcwd() }
-      vim.g.copilot_no_tab_map = false
+    event = "InsertEnter",
+    opts = {
+      -- Figure out how to use this
+      -- workspace_folders = { vim.fn.getcwd() },
+      copilot_model = "gpt-4o-copilot", -- gpt-35-turbo | gpt-4o-copilot
 
-      -- Use gpt-4o
-      vim.g.copilot_settings = { selectedCompletionModel = "gpt-4o-copilot" }
-      vim.g.copilot_integration_id = "vscode-chat"
-    end,
+      panel = {
+        enabled = true,
+        auto_refresh = false,
+        keymap = {
+          open = "<M-CR>",
+          accept = "<CR>",
+          refresh = "gr",
+          jump_prev = "[[",
+          jump_next = "]]",
+        },
+        layout = {
+          position = "bottom", -- | top | left | right | horizontal | vertical
+          ratio = 0.4,
+        },
+      },
+
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        keymap = {
+          accept = "<Tab>",
+          accept_line = "<C-l>",
+          accept_word = "<C-w>",
+          prev = "[[",
+          next = "]]",
+        },
+      },
+
+      filetypes = {
+        yaml = false,
+        markdown = false,
+        help = false,
+        gitcommit = false,
+        gitrebase = false,
+        hgcommit = false,
+        svn = false,
+        cvs = false,
+        ["."] = false,
+      },
+    },
   },
   {
     "saghen/blink.cmp",
+    version = "*",
     dependencies = {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
@@ -56,7 +81,6 @@ return {
         },
       },
     },
-    version = "*",
     opts = {
       keymap = {
         preset = "none",
