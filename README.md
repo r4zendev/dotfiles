@@ -38,11 +38,9 @@ stow . -t ~
 
 ## Future
 
-- [ ] Add [aider.chat](https://aider.chat/) with [`yarepl.nvim`](https://github.com/milanglacier/yarepl.nvim)
-- [ ] Use default prettierrc from `$HOME`
-- [ ] Better `which-key` categories/mappings
-- [ ] Add more hammerspoon scripts/hotkeys
-- [ ] Rust/C++ Neovim setup
+- [ ] Setup [`nvim-dap`](https://github.com/mfussenegger/nvim-dap) debugger
+- [ ] Toggle conform single-file support using config files from `$HOME`
+- [ ] Try out [aider.chat](https://aider.chat/) with [`yarepl.nvim`](https://github.com/milanglacier/yarepl.nvim) (currently happy with [`codecompanion.nvim`](https://github.com/olimorris/codecompanion.nvim))
 
 ## 🎉 Acknowledgment
 
