@@ -1,7 +1,7 @@
 {
   "augment.vim": { "branch": "main", "commit": "97418c9dfc1918fa9bdd23863ea3d2e49130727f" },
   "blink.cmp": { "branch": "main", "commit": "1c8d8e45d6fba3d11512f4762b1fdf906bffca42" },
-  "codecompanion.nvim": { "branch": "main", "commit": "e114ae6a3168a183bafab3ee54473da88c59747e" },
+  "codecompanion.nvim": { "branch": "main", "commit": "3b41af8ea3c858711cdc6f7589e2708d61f4948d" },
   "colorful-menu.nvim": { "branch": "master", "commit": "0041037582353a2101f0ba8bd8cae21c064921dc" },
   "conform.nvim": { "branch": "master", "commit": "f9ef25a7ef00267b7d13bfc00b0dea22d78702d5" },
   "copilot.lua": { "branch": "master", "commit": "49807c6d963ff0f1cb5110d3672732f3734965e6" },
