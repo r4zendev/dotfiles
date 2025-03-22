@@ -1,8 +1,6 @@
 return {
   "folke/snacks.nvim",
-  dependencies = {
-    "echasnovski/mini.nvim",
-  },
+  dependencies = { "echasnovski/mini.nvim" },
   priority = 1000,
   lazy = false,
   opts = {
@@ -357,13 +355,6 @@ return {
         if event.data.actions.type == "move" then
           Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
         end
-      end,
-    })
-
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "MiniFilesActionRename",
-      callback = function(event)
-        Snacks.rename.on_rename_file(event.data.from, event.data.to)
       end,
     })
   end,

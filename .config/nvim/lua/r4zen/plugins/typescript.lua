@@ -2,13 +2,12 @@ return {
   {
     "folke/ts-comments.nvim",
     version = "*",
-    after = "nvim-treesitter",
+    ft = { "html", "javascript", "typescript", "jsx", "tsx" },
     opts = {},
   },
   {
     "windwp/nvim-ts-autotag",
     version = "*",
-    after = "nvim-treesitter",
     ft = { "html", "javascript", "typescript", "jsx", "tsx" },
     opts = {
       opts = {

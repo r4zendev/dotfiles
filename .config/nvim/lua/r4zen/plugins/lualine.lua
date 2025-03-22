@@ -3,6 +3,7 @@ local utils = require("r4zen.utils")
 return {
   {
     "nvim-lualine/lualine.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "f-person/git-blame.nvim",
