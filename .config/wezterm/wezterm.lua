@@ -80,7 +80,7 @@ config.font_rules = {
 config.font_size = 18.0
 
 -- Window settings
-config.window_background_opacity = 0.8
+config.window_background_opacity = 0.6
 config.macos_window_background_blur = 40 -- Using a numeric value instead of boolean
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = "NeverPrompt"
