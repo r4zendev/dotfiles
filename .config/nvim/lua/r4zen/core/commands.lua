@@ -1,11 +1,11 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
-local HiglightOnYankGroup = augroup("HiglightOnYank", { clear = true })
+local HighlightOnYankGroup = augroup("HighlightOnYank", { clear = true })
 
 -- Highlight on yank
 autocmd("TextYankPost", {
-  group = HiglightOnYankGroup,
+  group = HighlightOnYankGroup,
   pattern = "*",
   desc = "Highlight text when yank",
   callback = function()
@@ -17,7 +17,7 @@ autocmd("TextYankPost", {
 vim.api.nvim_create_autocmd({ "FileChangedShell", "FocusGained" }, {
   pattern = "*",
   callback = function()
-    vim.cmd("checktime")
+    vim.cmd("silent! checktime")
   end,
 })
 

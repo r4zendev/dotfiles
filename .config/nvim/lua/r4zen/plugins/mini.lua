@@ -3,6 +3,7 @@ local M = {}
 M.hl = {}
 
 M.plugin = {
+  -- lualine still uses nvim-web-devicons, so it's being stubbed here
   {
     "echasnovski/mini.icons",
     version = "*",

@@ -67,8 +67,18 @@ return {
         },
         sections = {
           lualine_c = {
-            harpoon_aware_fname,
-            { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available },
+            {
+              harpoon_aware_fname,
+              cond = function()
+                return not vim.api.nvim_buf_get_name(0):match("^oil://")
+              end,
+            },
+            {
+              git_blame.get_current_blame_text,
+              cond = function()
+                return git_blame.is_blame_text_available() and not vim.api.nvim_buf_get_name(0):match("^oil://")
+              end,
+            },
           },
           lualine_x = {
             {
