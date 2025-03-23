@@ -97,23 +97,36 @@ return {
       preset = {
         keys = {
           {
-            icon = " ",
+            icon = " ",
             key = "f",
-            desc = "Find File",
-            action = ":lua Snacks.dashboard.pick('files', {hidden = true, ignore = true})",
+            desc = "Find Files",
+            action = ":lua Snacks.dashboard.pick('smart', {hidden = true})",
           },
-          { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-          { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-          { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
           {
-            icon = " ",
-            key = "c",
-            desc = "Config",
-            action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+            icon = " ",
+            key = "g",
+            desc = "Find Text",
+            action = ":lua Snacks.dashboard.pick('live_grep', {hidden = true})",
           },
-          { icon = " ", key = "d", desc = "View Diff", action = ":DiffviewOpen" },
-          { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+          {
+            icon = " ",
+            key = "d",
+            desc = "View Diff",
+            action = ":DiffviewOpen",
+          },
+          {
+            icon = "󰒲 ",
+            key = "L",
+            desc = "Lazy",
+            action = ":Lazy",
+            enabled = package.loaded.lazy ~= nil,
+          },
+          {
+            icon = " ",
+            key = "q",
+            desc = "Quit",
+            action = ":qa",
+          },
         },
         header = [[⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⣠⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿

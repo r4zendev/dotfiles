@@ -43,6 +43,7 @@ stow . -t ~
 - [ ] Setup [`nvim-dap`](https://github.com/mfussenegger/nvim-dap) debugger
 - [ ] Toggle conform single-file support using config files from `$HOME`
 - [ ] Try out [aider.chat](https://aider.chat/) with [`yarepl.nvim`](https://github.com/milanglacier/yarepl.nvim) (currently happy with [`codecompanion.nvim`](https://github.com/olimorris/codecompanion.nvim))
+- [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace) (currently happy with [`yabai`](https://github.com/koekeishiya/yabai))
 
 ## 🎉 Acknowledgment
 
