@@ -18,24 +18,13 @@ return {
     cmd = "Copilot",
     event = "InsertEnter",
     opts = {
-      -- Figure out how to use this
+      -- Figure out how to use this properly
       -- workspace_folders = { vim.fn.getcwd() },
       copilot_model = "gpt-4o-copilot", -- gpt-35-turbo | gpt-4o-copilot
 
       panel = {
         enabled = true,
-        auto_refresh = false,
-        keymap = {
-          open = "<M-CR>",
-          accept = "<CR>",
-          refresh = "gr",
-          jump_prev = "[[",
-          jump_next = "]]",
-        },
-        layout = {
-          position = "bottom", -- | top | left | right | horizontal | vertical
-          ratio = 0.4,
-        },
+        auto_refresh = true,
       },
 
       suggestion = {
@@ -49,18 +38,9 @@ return {
           next = "]]",
         },
       },
-
-      filetypes = {
-        yaml = false,
-        markdown = false,
-        help = false,
-        gitcommit = false,
-        gitrebase = false,
-        hgcommit = false,
-        svn = false,
-        cvs = false,
-        ["."] = false,
-      },
+    },
+    keys = {
+      { "<leader>Ap", "<cmd>Copilot panel<cr>", desc = "Copilot panel" },
     },
   },
   {

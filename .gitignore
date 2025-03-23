@@ -13,6 +13,7 @@
 .config/gcloud
 .config/pgcli
 .config/fish/fish_variables
+.config/wezterm/images
 
 .config/fish/conf.d/env.fish
 .config/mcpservers.json
