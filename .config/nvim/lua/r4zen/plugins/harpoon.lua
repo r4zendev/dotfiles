@@ -107,6 +107,10 @@ end
 return {
   "ThePrimeagen/harpoon",
   branch = "harpoon2",
+  -- Don't lazy load in order to display marks list on startup
+  lazy = false,
+  -- Replace lazy = false with this to lazy load (removes UI on startup)
+  -- event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },

@@ -15,7 +15,7 @@ end
 
 return {
   "stevearc/oil.nvim",
-  lazy = false,
+  cmd = { "Oil" },
   dependencies = {
     "nvim-tree/nvim-web-devicons",
     "ThePrimeagen/harpoon",

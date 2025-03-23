@@ -1,6 +1,6 @@
 return {
   "f-person/git-blame.nvim",
-  event = "VeryLazy",
+  event = { "BufReadPre", "BufNewFile" },
   opts = {
     enabled = true,
     message_template = " <date> • <author> • <<sha>>",
