@@ -1,6 +1,8 @@
 return {
   {
     "augmentcode/augment.vim",
+    cmd = "Augment",
+    event = "InsertEnter",
     keys = {
       { "<leader>Ac", "<cmd>Augment chat<cr>", desc = "Augment: Ask", mode = { "n", "v" } },
       { "<leader>An", "<cmd>Augment chat-new<cr>", desc = "Augment: New Chat" },
@@ -9,8 +11,9 @@ return {
     config = function()
       -- Add cwd to workspace for better Augment suggestions
       vim.g.augment_workspace_folders = { vim.fn.getcwd() }
+
       -- Disable completion in favor of copilot, but keep the chat available
-      vim.g.augment_disable_completions = true
+      -- vim.g.augment_disable_completions = true
     end,
   },
   {
@@ -28,7 +31,9 @@ return {
       },
 
       suggestion = {
-        enabled = true,
+        -- Trying out AugmentCode, keeping the copilot panel for now
+        -- Copilot is also used in codecompanion for access to its chat models
+        enabled = false,
         auto_trigger = true,
         keymap = {
           accept = "<Tab>",
