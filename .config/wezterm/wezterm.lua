@@ -72,10 +72,6 @@ config.font_size = 16.0
 config.adjust_window_size_when_changing_font_size = false
 
 config.cursor_blink_rate = 0
--- config.window_background_opacity = 0.2
--- config.macos_window_background_blur = 10
-config.window_background_opacity = 0.8
-config.macos_window_background_blur = 40
 
 config.send_composed_key_when_right_alt_is_pressed = false
 config.window_decorations = "RESIZE"
@@ -116,24 +112,27 @@ config.keys = {
 	{ key = "7", mods = "CTRL", action = act.SendString("\x14\x37") },
 	{ key = "8", mods = "CTRL", action = act.SendString("\x14\x38") },
 	{ key = "9", mods = "CTRL", action = act.SendString("\x14\x39") },
-	-- Currently disabled due to using background images
 	-- { key = "b", mods = "CMD", action = act.EmitEvent("toggle-opacity-blur") },
 	{ key = "l", mods = "CMD", action = act.ShowDebugOverlay },
 }
 
-wezterm.on("toggle-opacity-blur", function(window, _)
-	local overrides = window:get_config_overrides() or {}
+-- config.window_background_opacity = 0.8
+-- config.macos_window_background_blur = 40
 
-	if overrides.window_background_opacity or overrides.macos_window_background_blur then
-		overrides.window_background_opacity = nil
-		overrides.macos_window_background_blur = nil
-	else
-		overrides.window_background_opacity = 0.8
-		overrides.macos_window_background_blur = 40
-	end
-
-	window:set_config_overrides(overrides)
-end)
+-- Has no effect when using config.background
+-- wezterm.on("toggle-opacity-blur", function(window, _)
+-- 	local overrides = window:get_config_overrides() or {}
+--
+-- 	if overrides.window_background_opacity or overrides.macos_window_background_blur then
+-- 		overrides.window_background_opacity = nil
+-- 		overrides.macos_window_background_blur = nil
+-- 	else
+-- 		overrides.window_background_opacity = 0.2
+-- 		overrides.macos_window_background_blur = 10
+-- 	end
+--
+-- 	window:set_config_overrides(overrides)
+-- end)
 
 local function get_background_images()
 	local images = {}
@@ -166,12 +165,19 @@ local images = get_background_images()
 
 config.background = {
 	{
-		source = {
-			File = images[math.random(#images)],
-		},
-
+		source = { Color = config.colors.background or "black" },
 		width = "100%",
 		height = "100%",
+		opacity = 0.8,
+	},
+	{
+		source = { File = images[math.random(#images)] },
+
+		-- Stretching makes some images look ugly
+		-- width = "Cover",
+		width = "Contain",
+		height = "100%",
+		horizontal_align = "Center",
 		repeat_x = "NoRepeat",
 
 		opacity = 0.6,
