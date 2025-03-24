@@ -9,8 +9,10 @@ return {
       { "<leader>At", "<cmd>Augment chat-toggle<cr>", desc = "Augment: Toggle Chat" },
     },
     config = function()
+      local utils = require("r4zen.utils")
+
       -- Add cwd to workspace for better Augment suggestions
-      vim.g.augment_workspace_folders = { vim.fn.getcwd() }
+      vim.g.augment_workspace_folders = { utils.git_root() or vim.fn.getcwd() }
 
       -- Disable completion in favor of copilot, but keep the chat available
       -- vim.g.augment_disable_completions = true
