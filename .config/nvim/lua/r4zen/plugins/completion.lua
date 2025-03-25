@@ -8,7 +8,7 @@ return {
       { "<leader>An", "<cmd>Augment chat-new<cr>", desc = "Augment: New Chat" },
       { "<leader>At", "<cmd>Augment chat-toggle<cr>", desc = "Augment: Toggle Chat" },
     },
-    config = function()
+    init = function()
       local utils = require("r4zen.utils")
 
       -- Add cwd to workspace for better Augment suggestions

@@ -32,6 +32,7 @@ M.plugin = {
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
       require("mini.notify").setup({
+        -- Covered by noice.nvim
         lsp_progress = {
           enable = false,
         },

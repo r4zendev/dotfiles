@@ -4,94 +4,16 @@ return {
   lazy = false,
   opts = {
     picker = {
-      prompt = " ",
-      sources = {},
-      focus = "input",
-      layout = {
-        cycle = true,
-        --- Use the default layout or vertical if the window is too narrow
-        preset = function()
-          return vim.o.columns >= 120 and "default" or "vertical"
-        end,
-      },
-      ---@class snacks.picker.matcher.Config
-      matcher = {
-        fuzzy = true, -- use fuzzy matching
-        smartcase = true, -- use smartcase
-        ignorecase = true, -- use ignorecase
-        sort_empty = true, -- sort results when the search string is empty
-        filename_bonus = true, -- give bonus for matching file names (last part of the path)
-        file_pos = true, -- support patterns like `file:line:col` and `file:line`
-        -- the bonusses below, possibly require string concatenation and path normalization,
-        -- so this can have a performance impact for large lists and increase memory usage
-        cwd_bonus = false, -- give bonus for matching files in the cwd
-        frecency = true, -- frecency bonus
-        history_bonus = false, -- give more weight to chronological order
-      },
-      sort = {
-        -- default sort is by score, text length and index
-        fields = { "score:desc", "#text", "idx" },
-      },
-      ui_select = true, -- replace `vim.ui.select` with the snacks picker
-      ---@class snacks.picker.formatters.Config
-      formatters = {
-        text = {
-          ft = nil, ---@type string? filetype for highlighting
-        },
-        file = {
-          filename_first = false, -- display filename before the file path
-          truncate = 40, -- truncate the file path to (roughly) this length
-          filename_only = false, -- only show the filename
-          icon_width = 2, -- width of the icon (in characters)
-          git_status_hl = true, -- use the git status highlight group for the filename
-        },
-        selected = {
-          show_always = false, -- only show the selected column when there are multiple selections
-          unselected = true, -- use the unselected icon for unselected items
-        },
-        severity = {
-          icons = true, -- show severity icons
-          level = false, -- show severity level
-          ---@type "left"|"right"
-          pos = "left", -- position of the diagnostics
-        },
-      },
+      matcher = { frecency = true },
       previewers = {
-        diff = {
-          builtin = false, -- use Neovim for previewing diffs (true) or use an external tool (false)
-        },
-        git = {
-          builtin = false, -- use Neovim for previewing git output (true) or use git (false)
-        },
-        file = {
-          max_size = 1024 * 1024, -- 1MB
-          max_line_length = 500, -- max line length
-          ft = nil, ---@type string? filetype for highlighting. Use `nil` for auto detect
-        },
-        man_pager = nil, ---@type string? MANPAGER env to use for `man` preview
-      },
-      ---@class snacks.picker.jump.Config
-      jump = {
-        jumplist = true, -- save the current position in the jumplist
-        tagstack = false, -- save the current position in the tagstack
-        reuse_win = false, -- reuse an existing window if the buffer is already open
-        close = true, -- close the picker when jumping/editing to a location (defaults to true)
-        match = false, -- jump to the first match position. (useful for `lines`)
-      },
-      toggles = {
-        follow = "f",
-        hidden = "h",
-        ignored = "i",
-        modified = "m",
-        regex = { icon = "R", value = false },
+        diff = { builtin = true },
+        git = { builtin = true },
       },
     },
     dashboard = {
       sections = {
         { section = "header", padding = 2 },
         { section = "keys", gap = 1, padding = 1 },
-        -- { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-        -- { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         { section = "startup" },
       },
       preset = {
@@ -155,7 +77,6 @@ return {
     indent = { enabled = true },
   },
   keys = {
-    -- Top Pickers & Explorer
     {
       "<leader><leader>",
       function()
@@ -286,13 +207,6 @@ return {
       end,
       desc = "Buffer Diagnostics",
     },
-    -- {
-    --   "<leader>sh",
-    --   function()
-    --     Snacks.picker.help()
-    --   end,
-    --   desc = "Help Pages",
-    -- },
     {
       "<leader>sH",
       function()

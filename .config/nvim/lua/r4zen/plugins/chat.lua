@@ -73,6 +73,11 @@ return {
     cmd = "MCPHub",
     build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
     config = function()
+      -- Set the environment variable before loading the config
+      -- Used by MCP servers that require project's root path as an argument
+      local utils = require("r4zen.utils")
+      vim.fn.setenv("MCP_PROJECT_ROOT_PATH", utils.git_root())
+
       require("mcphub").setup({
         port = 3333,
         config = vim.fn.expand("~/.config/mcpservers.json"),

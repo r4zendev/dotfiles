@@ -90,3 +90,4 @@ brew install --cask brave-browser
 # System utils
 brew install --cask hammerspoon # advanced scripting & automation
 brew install jordanbaird-ice # toolbar
+brew install --cask keycastr # keylogger
