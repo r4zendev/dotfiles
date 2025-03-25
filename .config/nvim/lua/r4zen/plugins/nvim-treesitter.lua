@@ -51,4 +51,8 @@ return {
     },
   },
   main = "nvim-treesitter.configs",
+  config = function(_, opts)
+    require("nvim-treesitter.configs").setup(opts)
+    vim.filetype.add({ extension = { mdc = "markdown" } })
+  end,
 }

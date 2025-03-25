@@ -103,6 +103,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "ravitemer/mcphub.nvim",
+      "banjo/contextfiles.nvim",
     },
     opts = {
       adapters = supported_adapters,
@@ -171,6 +172,9 @@ return {
         ["Code review"] = {
           strategy = "chat",
           description = "Code review",
+          opts = {
+            short_name = "review",
+          },
           prompts = {
             {
               role = "system",
@@ -230,10 +234,58 @@ Format findings as markdown and with:
             },
           },
         },
+        -- ["default"] = {
+        --   strategy = "chat",
+        --   description = "Default prompt",
+        --   opts = {
+        --     short_name = "def",
+        --     auto_submit = false,
+        --     user_prompt = false,
+        --     is_slash_cmd = true,
+        --     ignore_system_prompt = false,
+        --     contains_code = true,
+        --   },
+        --   prompts = {
+        --     {
+        --       role = "user",
+        --       content = [[#buffer]],
+        --     },
+        --   },
+        -- },
+        ["With Context Files"] = {
+          strategy = "chat",
+          description = "Chat with context files",
+          opts = {
+            short_name = "context",
+          },
+          prompts = {
+            {
+              role = "user",
+              opts = { contains_code = true },
+              content = function(context)
+                local ctx = require("contextfiles.extensions.codecompanion")
+
+                local ctx_opts = {
+                  -- ...
+                }
+                local format_opts = {
+                  -- ...
+                }
+
+                return ctx.get(context.filename, ctx_opts, format_opts)
+              end,
+            },
+          },
+        },
       },
     },
     keys = {
       { "<leader>ac", ":CodeCompanionChat copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
+      {
+        "<leader>aC",
+        ":lua require('codecompanion').prompt('context')<CR>",
+        desc = "Codecompanion: With Context Files",
+      },
       { "<leader>ag", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
       { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
       { "<leader>ad", ":CodeCompanionChat openrouter_deepseek_r1<CR>", desc = "Codecompanion: DeepSeek R1" },

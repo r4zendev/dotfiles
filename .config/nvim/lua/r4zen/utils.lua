@@ -80,7 +80,7 @@ M.get_absolute_path = function(relative_path)
   end
 
   local handle = io.popen(command)
-  print(vim.inspect(handle))
+
   if not handle then
     return ""
   end
