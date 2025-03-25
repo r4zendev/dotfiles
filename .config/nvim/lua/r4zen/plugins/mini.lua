@@ -29,6 +29,9 @@ M.plugin = {
       require("mini.surround").setup()
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
+      require("mini.indentscope").setup({
+        symbol = "│",
+      })
       require("mini.notify").setup({
         -- Covered by noice.nvim
         lsp_progress = {

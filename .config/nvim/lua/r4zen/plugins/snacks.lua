@@ -74,7 +74,6 @@ return {
     rename = { enabled = true },
     explorer = { enabled = true },
     bigfile = { enabled = true },
-    indent = { enabled = true },
   },
   keys = {
     {
