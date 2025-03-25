@@ -29,8 +29,17 @@ M.plugin = {
       require("mini.surround").setup()
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
-      require("mini.indentscope").setup({
+      -- require("mini.operators").setup()
+
+      local mini_indentscope = require("mini.indentscope")
+      mini_indentscope.setup({
         symbol = "│",
+        draw = {
+          animation = mini_indentscope.gen_animation.linear({
+            easing = "out",
+            duration = 10,
+          }),
+        },
       })
       require("mini.notify").setup({
         -- Covered by noice.nvim
@@ -38,11 +47,11 @@ M.plugin = {
           enable = false,
         },
       })
-      -- require("mini.operators").setup()
 
-      require("mini.diff").setup()
+      local mini_diff = require("mini.diff")
+      mini_diff.setup()
       vim.keymap.set("n", "<leader>=", function()
-        MiniDiff.toggle_overlay()
+        mini_diff.toggle_overlay()
       end, { desc = "Toggle diff overlay" })
 
       require("mini.move").setup({

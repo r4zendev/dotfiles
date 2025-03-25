@@ -42,15 +42,15 @@ keymap({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 -- window management
 
 -- split window vertically
-keymap("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
+keymap("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
 -- split window horizontally
-keymap("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
+keymap("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })
 -- make splits equal width & height
-keymap("n", "<leader>s=", "<C-w>=", { desc = "Make splits equal size" })
+keymap("n", "<leader>w=", "<C-w>=", { desc = "Make splits equal size" })
 -- close current split
-keymap("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
+keymap("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
 -- open current split in a new tab (maximize), :q to de-maximize
-keymap("n", "<leader>sm", "<cmd>tab split<CR>", { desc = "Open split in new tab" })
+keymap("n", "<leader>wm", "<cmd>tab split<CR>", { desc = "Open split in new tab" })
 -- resize split
 keymap("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
 keymap("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })

@@ -188,6 +188,11 @@ return {
       select_valid_index("prev")
     end, { desc = "Harpoon previous" })
 
+    require("which-key").add({
+      { "<leader>j", icon = { icon = "-", color = "red" } },
+      { "<leader>k", icon = { icon = "+", color = "green" } },
+    })
+
     for i = 1, 9 do
       vim.keymap.set("n", "<c-t>" .. i, function()
         require("harpoon"):list():select(i)
