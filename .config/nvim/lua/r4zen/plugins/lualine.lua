@@ -44,8 +44,8 @@ return {
 
           local path = harpoon_item.value
 
-          if utils.is_relative_path(path) then
-            path = utils.get_full_path(root_dir, path)
+          if vim.uv.fs_realpath(path) == nil then
+            path = vim.fs.joinpath(root_dir, path)
           end
 
           if path == current_file_path then

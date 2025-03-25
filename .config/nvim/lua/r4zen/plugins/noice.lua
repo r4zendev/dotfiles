@@ -1,9 +1,25 @@
 return {
   "folke/noice.nvim",
-  lazy = true,
   dependencies = {
     "MunifTanjim/nui.nvim",
+    {
+      "rcarriga/nvim-notify",
+      opts = {
+        render = "compact",
+        stages = "fade",
+        fps = 60,
+      },
+      config = function(_, opts)
+        require("notify").setup(opts)
+
+        vim.api.nvim_set_hl(0, "NotifyERRORBorder", { fg = "#B31E1E" })
+        vim.api.nvim_set_hl(0, "NotifyWARNBorder", { fg = "#E37C1E" })
+        vim.api.nvim_set_hl(0, "NotifyINFOBorder", { fg = "#5CD3DB" })
+      end,
+    },
   },
+  lazy = true,
+  -- event = "VeryLazy",
   opts = {
     enabled = true,
     lsp = {

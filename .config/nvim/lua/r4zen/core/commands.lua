@@ -14,7 +14,7 @@ autocmd("TextYankPost", {
 })
 
 -- Reload the file if it changes externally
-vim.api.nvim_create_autocmd({ "FileChangedShell", "FocusGained" }, {
+autocmd({ "FileChangedShell", "FocusGained" }, {
   pattern = "*",
   callback = function()
     vim.cmd("silent! checktime")
@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd({ "FileChangedShell", "FocusGained" }, {
 -- Also reload after a short delay when saving.
 -- Some external tooling may modify it and the autocmd above won't work.
 -- Useful for working with likes of TanStack Router
-vim.api.nvim_create_autocmd("BufWritePost", {
+autocmd("BufWritePost", {
   pattern = "*",
   callback = function()
     -- Delay the reload to allow the external process to modify the file
@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 -- Kill daemons manually until core_d provides this functionality.
-vim.api.nvim_create_autocmd("VimLeavePre", {
+autocmd("VimLeavePre", {
   callback = function()
     vim.fn.jobstart("killall prettierd eslint_d", { detach = true })
   end,

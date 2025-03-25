@@ -37,9 +37,6 @@ return {
 
       opts.desc = "Restart LSP"
       vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
-
-      opts.desc = "Organize imports"
-      vim.keymap.set("n", "<leader>ci", ":LspOrganizeImports<CR>", opts) -- organize imports
     end
 
     -- Change the Diagnostic symbols in the sign column (gutter)
@@ -56,24 +53,33 @@ return {
       on_attach = on_attach,
     })
 
-    local function organize_imports()
-      local params = {
-        command = "_typescript.organizeImports",
-        arguments = { vim.api.nvim_buf_get_name(0) },
-        title = "",
-      }
-      vim.lsp.buf.execute_command(params)
-    end
-
     -- configure typescript server with plugin
     lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       commands = {
         LspOrganizeImports = {
-          organize_imports,
+          function()
+            local params = {
+              command = "_typescript.organizeImports",
+              arguments = { vim.api.nvim_buf_get_name(0) },
+            }
+            -- Get the client for the current buffer
+            local clients = vim.lsp.get_clients({ bufnr = 0, name = "ts_ls" })
+            if #clients > 0 then
+              clients[1]:request("workspace/executeCommand", params, nil, 0)
+            end
+          end,
           description = "Organize Imports",
         },
       },
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        -- Add the keybinding in on_attach to ensure it's buffer-local
+        vim.keymap.set("n", "<leader>ci", ":LspOrganizeImports<CR>", {
+          buffer = bufnr,
+          desc = "Organize Imports",
+        })
+      end,
     })
 
     lspconfig["jsonls"].setup({
@@ -237,19 +243,6 @@ return {
     lspconfig["lua_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
-      settings = {
-        Lua = {
-          diagnostics = {
-            globals = { "vim" },
-          },
-          workspace = {
-            library = {
-              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-              [vim.fn.stdpath("config") .. "/lua"] = true,
-            },
-          },
-        },
-      },
     })
   end,
 }

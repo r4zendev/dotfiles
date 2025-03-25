@@ -1,23 +1,14 @@
 local utils = require("r4zen.utils")
 
-local status_timer
-local status_window
-
-local disappear_delay = 1200
-
-local function close_status_window()
-  if status_window then
-    vim.api.nvim_win_close(status_window, true)
-    status_timer = nil
-  end
-end
-
+--------------------------------------------------
+-- Harpoon File Utilities
+--------------------------------------------------
 local function get_harpooned_files()
   local harpoon = require("harpoon")
   local file_list = {}
 
-  for idx, item in ipairs(utils.normalize_table(harpoon:list().items)) do
-    local item_fn, item_ext = utils.get_file_name(item.value)
+  for idx, item in ipairs(vim.tbl_values(harpoon:list().items)) do
+    local item_fn, item_ext = utils.get_fname_parts(item.value)
     table.insert(file_list, string.format("[%s] %s%s", idx, item_fn, item_ext))
   end
 
@@ -27,34 +18,31 @@ end
 local function get_current_index()
   local harpoon = require("harpoon")
   local current_file = vim.fn.bufname()
-  local root_dir = harpoon:list().config:get_root_dir()
 
-  for index, item in ipairs(utils.normalize_table(harpoon:list().items)) do
-    local path = item.value
-
-    if utils.is_relative_path(path) then
-      path = utils.get_full_path(root_dir, path)
-    end
-
-    if utils.is_relative_path(current_file) then
-      current_file = utils.get_full_path(root_dir, current_file)
-    end
-
-    if path == current_file then
+  for index, item in ipairs(vim.tbl_values(harpoon:list().items)) do
+    if vim.uv.fs_realpath(item.value) == vim.uv.fs_realpath(current_file) then
       return index
     end
   end
 end
 
+--------------------------------------------------
+-- UI Status Management
+--------------------------------------------------
+local status_timer
+local status_window
+local disappear_delay = 1200
+
+local function close_status_window()
+  if status_window then
+    vim.api.nvim_win_close(status_window, true)
+    status_timer = nil
+  end
+end
+
 local function show_status_ui()
   local buf = vim.api.nvim_create_buf(false, true)
-
   local content = get_harpooned_files()
-
-  -- if #content == 0 then
-  --     print("No harpooned files")
-  --     return
-  -- end
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
 
@@ -68,6 +56,7 @@ local function show_status_ui()
     end
   end
 
+  -- Calculate dimensions
   local height = math.max(1, math.min(#content, vim.o.lines - 3))
 
   local width = 0
@@ -75,13 +64,12 @@ local function show_status_ui()
     width = math.max(width, #line)
   end
   width = math.min(width + 2, vim.o.columns - 2)
-  local row = 2
 
   local opts = {
     relative = "win",
     anchor = "NE",
     col = vim.o.columns,
-    row = row,
+    row = 2,
     width = width,
     height = height,
     focusable = false,
@@ -89,8 +77,6 @@ local function show_status_ui()
   }
 
   status_window = vim.api.nvim_open_win(buf, false, opts)
-  -- vim.api.nvim_win_set_option(status_window, "winhl", uiInfoHighlightGroup)
-
   vim.api.nvim_win_set_option(status_window, "winhighlight", "Normal:" .. "HarpoonFilesPanelHL")
 end
 
@@ -104,6 +90,9 @@ local function trigger_status_ui()
   status_timer = vim.fn.timer_start(disappear_delay, close_status_window)
 end
 
+--------------------------------------------------
+-- Plugin Configuration
+--------------------------------------------------
 return {
   "ThePrimeagen/harpoon",
   branch = "harpoon2",
@@ -133,7 +122,7 @@ return {
       local idx = list._index
 
       -- Normalize the list only once
-      local normalized_list = utils.normalize_table(list.items)
+      local normalized_list = vim.tbl_values(list.items)
 
       -- Modify the original list to only contain valid items
       list.items = normalized_list
@@ -172,18 +161,23 @@ return {
       end
     end
 
+    -- Key mappings
     vim.keymap.set("n", "<leader>j", function()
       list:remove()
     end, { desc = "Harpoon remove" })
+
     vim.keymap.set("n", "<leader>k", function()
       list:add()
     end, { desc = "Harpoon add" })
+
     vim.keymap.set("n", "<C-e>", function()
       harpoon.ui:toggle_quick_menu(list)
     end, { desc = "Harpoon menu" })
+
     vim.keymap.set("n", "<M-]>", function()
       select_valid_index("next")
     end, { desc = "Harpoon next" })
+
     vim.keymap.set("n", "<M-[>", function()
       select_valid_index("prev")
     end, { desc = "Harpoon previous" })
@@ -193,12 +187,14 @@ return {
       { "<leader>k", icon = { icon = "+", color = "green" } },
     })
 
+    -- Number key mappings for quick access
     for i = 1, 9 do
       vim.keymap.set("n", "<c-t>" .. i, function()
         require("harpoon"):list():select(i)
       end, { desc = string.format("Harpoon: Go to %s", i) })
     end
 
+    -- Extend harpoon with custom hooks
     harpoon:extend({
       ADD = function()
         list._index = #list.items
@@ -214,7 +210,7 @@ return {
       NAVIGATE = function()
         trigger_status_ui()
       end,
-      -- extensions.builtins.navigate_with_number()
+      -- UI number key mappings
       UI_CREATE = function(cx)
         for i = 1, 9 do
           vim.keymap.set("n", "" .. i, function()
@@ -224,6 +220,7 @@ return {
       end,
     })
 
+    -- Show UI on startup
     vim.api.nvim_create_autocmd("VimEnter", {
       callback = function()
         trigger_status_ui()

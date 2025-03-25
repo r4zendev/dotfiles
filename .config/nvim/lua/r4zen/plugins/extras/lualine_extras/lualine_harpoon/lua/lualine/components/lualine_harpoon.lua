@@ -46,14 +46,14 @@ function M:update_status()
     local harpoon_path = harpoon_item.value
 
     local full_path = nil
-    if utils.is_relative_path(harpoon_path) then
-      full_path = utils.get_full_path(root_dir, harpoon_path)
+    if vim.uv.fs_realpath(harpoon_path) == nil then
+      full_path = vim.fs.joinpath(root_dir, harpoon_path)
     else
       full_path = harpoon_path
     end
 
     local active = full_path == current_file_path
-    local indicator = i .. " " .. utils.get_file_name(full_path)
+    local indicator = i .. " " .. utils.get_fname_parts(full_path)
     if active then
       indicator = "[" .. indicator .. "]"
     end

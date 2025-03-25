@@ -72,29 +72,29 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     cmd = "MCPHub",
     build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
-    config = function()
-      -- Set the environment variable before loading the config
-      -- Used by MCP servers that require project's root path as an argument
-      vim.fn.setenv("MCP_PROJECT_ROOT_PATH", require("r4zen.utils").workspace_root())
+    opts = {
+      port = 3333,
+      config = vim.fn.expand("~/.config/mcpservers.json"),
 
-      require("mcphub").setup({
-        port = 3333,
-        config = vim.fn.expand("~/.config/mcpservers.json"),
+      log = {
+        level = vim.log.levels.WARN,
+        to_file = false,
+        file_path = nil,
+        prefix = "MCPHub",
+      },
+    },
+    keys = {
+      { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
+    },
+    config = function(_, opts)
+      local root_dir = require("r4zen.utils").workspace_root()
+      if root_dir ~= nil then
+        -- Set the environment variable before loading the config
+        -- Used by MCP servers that require project's root path as an argument
+        vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
+      end
 
-        -- Below are optional
-        on_ready = function(hub)
-          -- Called when hub is ready
-        end,
-        on_error = function(err)
-          -- Called on errors
-        end,
-        log = {
-          level = vim.log.levels.WARN,
-          to_file = false,
-          file_path = nil,
-          prefix = "MCPHub",
-        },
-      })
+      require("mcphub").setup(opts)
     end,
   },
   {

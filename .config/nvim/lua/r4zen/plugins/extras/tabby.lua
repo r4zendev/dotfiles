@@ -32,7 +32,7 @@ return {
 
         for index, mark in ipairs(marks) do
           local is_current = current_buf_path:find(mark.value, 1, true)
-          local buf = utils.find_buffer_by_name(vim.fn.getcwd() .. "/" .. mark.value)
+          local buf = vim.fn.bufnr(vim.fn.getcwd() .. "/" .. mark.value, false)
           local buf_modified = buf > -1
               and vim.api.nvim_get_option_value("modified", {
                 buf = buf,
@@ -41,7 +41,7 @@ return {
 
           local hl = is_current and theme.current_tab or theme.tab
 
-          local mark_buf_fn, mark_buf_ext = utils.get_file_name(mark.value)
+          local mark_buf_fn, mark_buf_ext = utils.get_fname_parts(mark.value)
 
           if is_current then
             is_in_marks = true
@@ -73,7 +73,7 @@ return {
         then
           local hl = theme.external_tab -- Use a different theme style for unmarked tabs
 
-          local unpinned_buf_fn, unpinned_buf_ext = utils.get_file_name(current_buf_path)
+          local unpinned_buf_fn, unpinned_buf_ext = utils.get_fname_parts(current_buf_path)
           if string.len(unpinned_buf_fn) > 0 then
             table.insert(tabs, {
               line.sep("", hl, theme.fill),

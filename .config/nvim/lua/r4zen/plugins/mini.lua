@@ -41,17 +41,17 @@ M.plugin = {
           }),
         },
       })
-      require("mini.notify").setup({
-        -- Covered by noice.nvim
-        lsp_progress = {
-          enable = false,
-        },
-      })
+      -- Currently using noice with nvim-notify
+      -- require("mini.notify").setup({
+      --   lsp_progress = {
+      --     enable = false,
+      --   },
+      -- })
 
       local mini_diff = require("mini.diff")
       mini_diff.setup()
       vim.keymap.set("n", "<leader>=", function()
-        mini_diff.toggle_overlay()
+        mini_diff.toggle_overlay(0)
       end, { desc = "Toggle diff overlay" })
 
       require("mini.move").setup({
