@@ -4,7 +4,7 @@ return {
   init = function()
     require("which-key").add({
       { "<leader>a", group = "AI" },
-      { "<leader>A", group = "Augment" },
+      { "<leader>A", group = "Augment/Copilot" },
       { "<leader>s", group = "Search/Splits" },
       { "<leader>f", group = "Files" },
       { "<leader>g", group = "Git" },

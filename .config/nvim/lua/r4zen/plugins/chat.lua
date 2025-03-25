@@ -75,8 +75,7 @@ return {
     config = function()
       -- Set the environment variable before loading the config
       -- Used by MCP servers that require project's root path as an argument
-      local utils = require("r4zen.utils")
-      vim.fn.setenv("MCP_PROJECT_ROOT_PATH", utils.git_root())
+      vim.fn.setenv("MCP_PROJECT_ROOT_PATH", require("r4zen.utils").workspace_root())
 
       require("mcphub").setup({
         port = 3333,

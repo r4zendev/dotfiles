@@ -2,17 +2,19 @@ return {
   {
     "augmentcode/augment.vim",
     cmd = "Augment",
-    event = "InsertEnter",
+    event = { "BufReadPre", "BufNewFile" },
+    -- Cannot be called on InsertEnter, since plugin would not be loaded at that point.
+    -- It initializes and authenticates and only then starts to provide suggestions.
+    -- Hopefully will be fixed eventually, as this works as expected in copilot.
+    -- event = "InsertEnter",
     keys = {
       { "<leader>Ac", "<cmd>Augment chat<cr>", desc = "Augment: Ask", mode = { "n", "v" } },
       { "<leader>An", "<cmd>Augment chat-new<cr>", desc = "Augment: New Chat" },
       { "<leader>At", "<cmd>Augment chat-toggle<cr>", desc = "Augment: Toggle Chat" },
     },
     init = function()
-      local utils = require("r4zen.utils")
-
-      -- Add cwd to workspace for better Augment suggestions
-      vim.g.augment_workspace_folders = { utils.git_root() or vim.fn.getcwd() }
+      -- Add workspaces for better suggestions
+      vim.g.augment_workspace_folders = { require("r4zen.utils").workspace_root() }
 
       -- Disable completion in favor of copilot, but keep the chat available
       -- vim.g.augment_disable_completions = true
@@ -23,8 +25,7 @@ return {
     cmd = "Copilot",
     event = "InsertEnter",
     opts = {
-      -- Figure out how to use this properly
-      -- workspace_folders = { vim.fn.getcwd() },
+      -- workspace_folders = { require("r4zen.utils").workspace_root() },
       copilot_model = "gpt-4o-copilot", -- gpt-35-turbo | gpt-4o-copilot
 
       panel = {
@@ -170,5 +171,20 @@ return {
         },
       },
     },
+    init = function()
+      -- Wrapper around vim.lsp.get_clients that filters out Augment Server for completion requests only
+      local original_get_clients = vim.lsp.get_clients
+      vim.lsp.get_clients = function(opts)
+        local clients = original_get_clients(opts)
+
+        if opts and opts.method == "textDocument/completion" then
+          return vim.tbl_filter(function(client)
+            return client.name ~= "Augment Server"
+          end, clients)
+        end
+
+        return clients
+      end
+    end,
   },
 }

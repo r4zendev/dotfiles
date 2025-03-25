@@ -66,8 +66,8 @@ M.is_in_list = function(list, item)
   return false
 end
 
-M.git_root = function()
-  return vim.fs.root(0, { ".git" })
+M.workspace_root = function()
+  return vim.fs.root(0, { ".git" }) or vim.fn.getcwd()
 end
 
 M.get_absolute_path = function(relative_path)
