@@ -76,7 +76,7 @@ return {
       -- Load the colorscheme here
       vim.cmd([[colorscheme tokyonight]])
 
-      vim.highlight.priorities.semantic_tokens = 95
+      vim.hl.priorities.semantic_tokens = 95
 
       local comments = "#4682B4"
       vim.api.nvim_set_hl(0, "Comment", { fg = comments })

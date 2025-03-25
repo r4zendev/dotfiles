@@ -1,6 +1,6 @@
 {
   "augment.vim": { "branch": "main", "commit": "97418c9dfc1918fa9bdd23863ea3d2e49130727f" },
-  "blink.cmp": { "branch": "main", "commit": "485c03400608cb6534bbf84da8c1c471fc4808c0" },
+  "blink.cmp": { "branch": "main", "commit": "49f211fe5d729df53df4c042d7c3464cf47d199e" },
   "codecompanion.nvim": { "branch": "main", "commit": "57bc5689a64a15b12251a8cd3c28dddd0d52c0cc" },
   "colorful-menu.nvim": { "branch": "master", "commit": "0041037582353a2101f0ba8bd8cae21c064921dc" },
   "conform.nvim": { "branch": "master", "commit": "f9ef25a7ef00267b7d13bfc00b0dea22d78702d5" },
@@ -18,8 +18,8 @@
   "mason-tool-installer.nvim": { "branch": "main", "commit": "98767d37f8e5255a5111fc1e3163232d4dc07bda" },
   "mason.nvim": { "branch": "main", "commit": "fc98833b6da5de5a9c5b1446ac541577059555be" },
   "mcphub.nvim": { "branch": "main", "commit": "0755da600727746f1a315d81f16f73f4203862b0" },
-  "mini.icons": { "branch": "main", "commit": "910db5df9724d65371182948f921fce23c2c881e" },
-  "mini.nvim": { "branch": "main", "commit": "0420076298c4457f200c2de468f65d080597a347" },
+  "mini.icons": { "branch": "main", "commit": "ec61af6e606fc89ee3b1d8f2f20166a3ca917a36" },
+  "mini.nvim": { "branch": "main", "commit": "3ad46cdb7a51281e0024416023b56cf5c7909ae7" },
   "noice.nvim": { "branch": "main", "commit": "0427460c2d7f673ad60eb02b35f5e9926cf67c59" },
   "nui.nvim": { "branch": "main", "commit": "8d3bce9764e627b62b07424e0df77f680d47ffdb" },
   "nvim-autopairs": { "branch": "master", "commit": "6522027785b305269fa17088395dfc0f456cedd2" },

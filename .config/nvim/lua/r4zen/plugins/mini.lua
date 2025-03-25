@@ -6,7 +6,6 @@ M.plugin = {
   -- lualine still uses nvim-web-devicons, so it's being stubbed here
   {
     "echasnovski/mini.icons",
-    version = "*",
     lazy = true,
     specs = {
       { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
@@ -20,7 +19,6 @@ M.plugin = {
   },
   {
     "echasnovski/mini.nvim",
-    version = "*",
     lazy = true,
     config = function()
       require("mini.ai").setup()
