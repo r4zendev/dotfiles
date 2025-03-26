@@ -172,9 +172,9 @@ return {
         },
       },
       display = {
-        chat = {
-          show_settings = true,
-        },
+        -- chat = {
+        --   show_settings = true,
+        -- },
 
         action_palette = {
           provider = "default",
