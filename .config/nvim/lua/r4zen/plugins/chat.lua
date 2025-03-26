@@ -10,6 +10,23 @@ local supported_adapters = {
   end,
   gemini = function()
     return require("codecompanion.adapters").extend("gemini", {
+      schema = {
+        model = {
+          default = "gemini-2.5-pro-exp-03-25",
+        },
+      },
+      env = {
+        api_key = "GEMINI_API_KEY",
+      },
+    })
+  end,
+  gemini_flash = function()
+    return require("codecompanion.adapters").extend("gemini", {
+      schema = {
+        model = {
+          default = "models/gemini-2.0-flash",
+        },
+      },
       env = {
         api_key = "GEMINI_API_KEY",
       },
@@ -147,11 +164,11 @@ return {
             },
           },
 
-          adapter = "copilot",
+          adapter = "gemini",
         },
 
         inline = {
-          adapter = "copilot",
+          adapter = "gemini",
         },
       },
       display = {
@@ -286,7 +303,8 @@ Format findings as markdown and with:
         ":lua require('codecompanion').prompt('context')<CR>",
         desc = "Codecompanion: With Context Files",
       },
-      { "<leader>ag", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
+      { "<leader>ag", ":CodeCompanionChat gemini_flash<CR>", desc = "Codecompanion: Gemini Flash" },
+      { "<leader>aG", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
       { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
       { "<leader>ad", ":CodeCompanionChat openrouter_deepseek_r1<CR>", desc = "Codecompanion: DeepSeek R1" },
       { "<leader>ao", ":CodeCompanionChat openrouter_o3mini<CR>", desc = "Codecompanion: OpenAI o3-mini" },
