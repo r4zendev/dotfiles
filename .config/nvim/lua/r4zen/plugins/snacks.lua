@@ -5,6 +5,28 @@ return {
   opts = {
     picker = {
       matcher = { frecency = true },
+      sources = {
+        files = { hidden = true },
+        smart = { hidden = true },
+        grep = { hidden = true },
+        grep_word = { hidden = true },
+        recent = { hidden = true },
+        explorer = {
+          hidden = true,
+          ignored = true,
+          layout = {
+            layout = { position = "right" },
+          },
+          win = {
+            list = {
+              keys = {
+                -- Use o for picking a window to open the file in
+                ["o"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
+              },
+            },
+          },
+        },
+      },
       previewers = {
         diff = { builtin = true },
         git = { builtin = true },
@@ -72,21 +94,20 @@ return {
       },
     },
     rename = { enabled = true },
-    explorer = { enabled = true },
     bigfile = { enabled = true },
   },
   keys = {
     {
       "<leader><leader>",
       function()
-        Snacks.picker.smart({ hidden = true })
+        Snacks.picker.smart()
       end,
       desc = "Smart Find Files",
     },
     {
       "<leader>,",
       function()
-        Snacks.picker.grep({ hidden = true })
+        Snacks.picker.grep()
       end,
       desc = "Grep",
       mode = { "n" },
@@ -94,7 +115,7 @@ return {
     {
       "<leader>,",
       function()
-        Snacks.picker.grep_word({ hidden = true })
+        Snacks.picker.grep_word()
       end,
       desc = "Grep",
       mode = { "x" },
@@ -102,22 +123,14 @@ return {
     {
       "<leader>e",
       function()
-        Snacks.explorer({
-          hidden = true,
-          ignored = true,
-          layout = {
-            layout = {
-              position = "right",
-            },
-          },
-        })
+        Snacks.explorer()
       end,
       desc = "File Explorer",
     },
     {
       "<leader>ff",
       function()
-        Snacks.picker.recent({ hidden = true })
+        Snacks.picker.recent()
       end,
       desc = "Find Recent Files",
     },
@@ -125,7 +138,6 @@ return {
       "<leader>fc",
       function()
         Snacks.picker.files({
-          hidden = true,
           cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles",
         })
       end,
