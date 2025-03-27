@@ -8,7 +8,7 @@ else
 fi
 
 cd ~ && mkdir -p projects/r4zendotdev && cd projects/r4zendotdev
-git clone git@github.com:razenization/dotfiles.git dotfiles
+git clone git@github.com:r4zendev/dotfiles.git dotfiles
 
 # Terminal environment
 brew install --cask wezterm # terminal emulator

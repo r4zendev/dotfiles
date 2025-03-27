@@ -30,7 +30,7 @@ set -Ux EDITOR nvim # 'neovim/neovim' text editor
 # set -Ux FZF_DEFAULT_COMMAND "fd -H -E '.git'"
 
 
-set -x PNPM_HOME "/Users/razen/Library/pnpm"
+set -x PNPM_HOME "$HOME/Library/pnpm"
 fish_add_path $PNPM_HOME
 fish_add_path (pnpm --global bin)
 

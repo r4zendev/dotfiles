@@ -83,7 +83,7 @@ bindkey "^[[1;3D" backward-word
 eval "$(zoxide init --cmd cd zsh)"
 
 # pnpm
-export PNPM_HOME="/Users/razen/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 export PATH="$PATH:$(pnpm --global bin)"
 
