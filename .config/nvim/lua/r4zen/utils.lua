@@ -34,4 +34,16 @@ M.workspace_root = function()
   return vim.fs.root(0, { ".git" }) or vim.uv.cwd()
 end
 
+M.lazy_require = function(require_path)
+  return setmetatable({}, {
+    __index = function(_, key)
+      return require(require_path)[key]
+    end,
+
+    __newindex = function(_, key, value)
+      require(require_path)[key] = value
+    end,
+  })
+end
+
 return M

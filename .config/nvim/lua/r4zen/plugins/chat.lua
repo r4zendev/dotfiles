@@ -76,13 +76,6 @@ local supported_adapters = {
   end,
 }
 
-local function save_path()
-  local Path = require("plenary.path")
-  local p = Path:new(vim.fn.stdpath("data") .. "/codecompanion_chats")
-  p:mkdir({ parents = true })
-  return p
-end
-
 return {
   {
     "ravitemer/mcphub.nvim",
@@ -172,9 +165,9 @@ return {
         },
       },
       display = {
-        -- chat = {
-        --   show_settings = true,
-        -- },
+        chat = {
+          show_settings = true,
+        },
 
         action_palette = {
           provider = "default",
@@ -251,24 +244,6 @@ Format findings as markdown and with:
             },
           },
         },
-        -- ["default"] = {
-        --   strategy = "chat",
-        --   description = "Default prompt",
-        --   opts = {
-        --     short_name = "def",
-        --     auto_submit = false,
-        --     user_prompt = false,
-        --     is_slash_cmd = true,
-        --     ignore_system_prompt = false,
-        --     contains_code = true,
-        --   },
-        --   prompts = {
-        --     {
-        --       role = "user",
-        --       content = [[#buffer]],
-        --     },
-        --   },
-        -- },
         ["With Context Files"] = {
           strategy = "chat",
           description = "Chat with context files",
@@ -324,82 +299,192 @@ Format findings as markdown and with:
       { "<leader>aP", ":CodeCompanionActions<CR>", desc = "Codecompanion: Prompts" },
     },
     init = function()
-      --- Load a saved codecompanion.nvim chat file into a new CodeCompanion chat buffer.
-      --- Usage: CodeCompanionLoad
-      vim.api.nvim_create_user_command("CodeCompanionLoad", function()
-        local Snacks = require("snacks")
+      -- Initialize storage for CodeCompanion chats
+      local Path = require("plenary.path")
+      local save_folder = Path:new(vim.fn.stdpath("data"), "codecompanion_chats")
 
-        local function select_adapter(filepath)
-          local adapters = vim.tbl_keys(supported_adapters)
+      -- Ensure the save directory exists
+      if not save_folder:exists() then
+        save_folder:mkdir({ parents = true })
+      end
 
-          Snacks.picker(adapters, {
-            prompt = "Select CodeCompanion Adapter> ",
-            actions = {
-              ["default"] = function(selected)
-                local adapter = selected[1]
-                -- Open new CodeCompanion chat with selected adapter
-                vim.cmd("CodeCompanionChat " .. adapter)
+      -----------------------------------------------------------
+      -- Chat Management Functions
+      -----------------------------------------------------------
 
-                -- Read contents of saved chat file
-                local lines = vim.fn.readfile(filepath)
+      -- Common utility functions for codecompanion chat management
+      local chat_utils = {}
 
-                -- Get the current buffer (which should be the new CodeCompanion chat)
-                local current_buf = vim.api.nvim_get_current_buf()
-
-                -- Paste contents into the new chat buffer
-                vim.api.nvim_buf_set_lines(current_buf, 0, -1, false, lines)
-              end,
-            },
-          })
-        end
-
-        local function start_picker()
-          local files = vim.fn.glob(save_path() .. "/*", false, true)
-
-          Snacks.picker(files, {
-            prompt = "Saved CodeCompanion Chats | <c-r>: remove >",
-            previewer = "builtin",
-            actions = {
-              ["default"] = function(selected)
-                if #selected > 0 then
-                  local filepath = selected[1]
-                  select_adapter(filepath)
-                end
-              end,
-              ["ctrl-r"] = function(selected)
-                if #selected > 0 then
-                  local filepath = selected[1]
-                  os.remove(filepath)
-                  -- Refresh the picker
-                  start_picker()
-                end
-              end,
-            },
-          })
-        end
-
-        start_picker()
-      end, {})
-
-      --- Save the current codecompanion.nvim chat buffer to a file in the save_folder.
-      --- Usage: CodeCompanionSave <filename>.md
-      ---@param opts table
-      vim.api.nvim_create_user_command("CodeCompanionSave", function(opts)
+      --- Check if the current buffer is a CodeCompanion chat
+      --- @return table|nil chat The chat object if successful, nil otherwise
+      function chat_utils.get_current_chat()
         local codecompanion = require("codecompanion")
         local success, chat = pcall(function()
           return codecompanion.buf_get_chat(0)
         end)
+
         if not success or chat == nil then
+          return nil
+        end
+        return chat
+      end
+
+      --- Load chat content into a CodeCompanion window
+      --- @param file_path string Path to the chat file
+      function chat_utils.load_content(file_path)
+        local codecompanion = require("codecompanion")
+        local chat_content = Path:new(file_path):read()
+
+        -- Get current CodeCompanion window or open a new one
+        local current_win = vim.api.nvim_get_current_win()
+        local current_buf = vim.api.nvim_win_get_buf(current_win)
+        local success, chat = pcall(function()
+          return codecompanion.buf_get_chat(current_buf)
+        end)
+
+        if not success or chat == nil then
+          -- Not in a CodeCompanion window, open a new one
+          vim.cmd("CodeCompanionChat")
+          -- Wait a moment for the buffer to initialize
+          vim.defer_fn(function()
+            local lines = vim.split(chat_content, "\n")
+            vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+          end, 100)
+        else
+          -- Already in a CodeCompanion window
+          local lines = vim.split(chat_content, "\n")
+          vim.api.nvim_buf_set_lines(current_buf, 0, -1, false, lines)
+        end
+      end
+
+      --- Get all saved chat files
+      --- @return table List of file paths
+      function chat_utils.get_saved_chats()
+        return vim.fn.glob(save_folder:absolute() .. "/*.md", false, true)
+      end
+
+      --- Delete a chat file
+      --- @param file_path string Path to the chat file to delete
+      --- @return boolean success Whether the deletion was successful
+      function chat_utils.delete_chat(file_path)
+        local file_name = vim.fn.fnamemodify(file_path, ":t:r")
+        local success, err = pcall(function()
+          os.remove(file_path)
+        end)
+
+        if success then
+          vim.notify("Deleted: " .. file_name, vim.log.levels.INFO)
+          return true
+        else
+          vim.notify("Failed to delete: " .. file_name .. " (" .. err .. ")", vim.log.levels.ERROR)
+          return false
+        end
+      end
+
+      --- Display the chat selection UI
+      --- @param is_delete_mode boolean Whether the UI is in delete mode
+      function chat_utils.show_selection_ui(is_delete_mode)
+        local files = chat_utils.get_saved_chats()
+
+        if #files == 0 then
+          vim.notify("No saved chats found", vim.log.levels.INFO)
+          return
+        end
+
+        local chat_items = {}
+        local file_paths = {}
+
+        -- Add chats to the selection list
+        for _, file_path in ipairs(files) do
+          local file_name = vim.fn.fnamemodify(file_path, ":t:r")
+
+          if is_delete_mode then
+            table.insert(chat_items, "DELETE: " .. file_name)
+          else
+            table.insert(chat_items, file_name)
+          end
+
+          table.insert(file_paths, file_path)
+        end
+
+        -- Add manage/back option at the bottom
+        if is_delete_mode then
+          table.insert(chat_items, "== BACK TO CHAT LIST ==")
+          table.insert(file_paths, "back")
+        else
+          table.insert(chat_items, "== MANAGE SAVED CHATS ==")
+          table.insert(file_paths, "manage")
+        end
+
+        local prompt_text = is_delete_mode and "SELECT CHAT TO DELETE" or "CodeCompanion Saved Chats"
+
+        -- Show the selection menu
+        vim.ui.select(chat_items, {
+          prompt = prompt_text,
+        }, function(choice, idx)
+          if not choice then
+            return
+          end
+
+          if is_delete_mode then
+            -- Handle delete mode selections
+            if choice == "== BACK TO CHAT LIST ==" then
+              chat_utils.show_selection_ui(false)
+            else
+              -- Delete the selected chat
+              local file_path = file_paths[idx]
+              chat_utils.delete_chat(file_path)
+
+              -- Return to delete mode if there are still files
+              local remaining = chat_utils.get_saved_chats()
+              if #remaining > 0 then
+                chat_utils.show_selection_ui(true)
+              else
+                vim.notify("No more saved chats", vim.log.levels.INFO)
+              end
+            end
+          else
+            -- Handle regular mode selections
+            if choice == "== MANAGE SAVED CHATS ==" then
+              chat_utils.show_selection_ui(true)
+            else
+              -- Load the selected chat
+              chat_utils.load_content(file_paths[idx])
+            end
+          end
+        end)
+      end
+
+      -----------------------------------------------------------
+      -- User Commands
+      -----------------------------------------------------------
+
+      -- Command to load saved chats
+      vim.api.nvim_create_user_command("CodeCompanionLoad", function()
+        chat_utils.show_selection_ui(false)
+      end, {})
+
+      -- Command to save current chat
+      -- Usage: CodeCompanionSave foo bar baz -> saves as 'foo-bar-baz.md'
+      vim.api.nvim_create_user_command("CodeCompanionSave", function(opts)
+        local chat = chat_utils.get_current_chat()
+
+        if not chat then
           vim.notify("CodeCompanionSave should only be called from CodeCompanion chat buffers", vim.log.levels.ERROR)
           return
         end
+
         if #opts.fargs == 0 then
           vim.notify("CodeCompanionSave requires at least 1 arg to make a file name", vim.log.levels.ERROR)
+          return
         end
+
         local save_name = table.concat(opts.fargs, "-") .. ".md"
-        local save_file = save_path():joinpath(save_name)
+        local save_path = Path:new(save_folder, save_name)
         local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        save_file:write(table.concat(lines, "\n"), "w")
+
+        save_path:write(table.concat(lines, "\n"), "w")
+        vim.notify("Chat saved as: " .. save_name, vim.log.levels.INFO)
       end, { nargs = "*" })
     end,
   },

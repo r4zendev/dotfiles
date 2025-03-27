@@ -189,8 +189,7 @@ return {
     {
       "<leader>st",
       function()
-        Snacks.picker({
-          finder = "grep",
+        Snacks.picker.grep({
           search = "()TODO()|()FIXME()|()HACK()|()NOTE()",
         })
       end,

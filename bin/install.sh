@@ -19,7 +19,7 @@ brew install fish # daily driver
 brew install fisher # package manager for fish
 brew install aider # AI assistant
 # brew install zsh
-brew install --HEAD neovim # neovim nightly
+brew install neovim # neovim
 
 # Git
 brew install gh
