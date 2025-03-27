@@ -27,12 +27,12 @@ return {
   opts = {
     formatters = {
       ["biome-check"] = {
-        condition = function(self, ctx)
+        condition = function()
           return require("lspconfig.util").root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
         end,
       },
       ["biome-organize-imports"] = {
-        condition = function(self, ctx)
+        condition = function()
           return require("lspconfig.util").root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
         end,
       },
@@ -49,7 +49,7 @@ return {
       --   end,
       -- },
       prettierd = {
-        condition = function(self, ctx)
+        condition = function()
           local fname = vim.api.nvim_buf_get_name(0)
           local util = require("lspconfig.util")
           prettier_root_file = util.insert_package_json(prettier_root_file, "prettier", fname)

@@ -19,7 +19,6 @@ return {
     },
   },
   lazy = true,
-  -- event = "VeryLazy",
   opts = {
     enabled = true,
     lsp = {

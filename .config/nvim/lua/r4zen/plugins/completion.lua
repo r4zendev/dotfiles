@@ -192,8 +192,10 @@ return {
       },
     },
     init = function()
-      -- Wrapper around vim.lsp.get_clients that filters out Augment Server for completion requests only
+      -- Overriding vim.lsp.get_clients to filter out Augment Server for completion requests
       local original_get_clients = vim.lsp.get_clients
+
+      --- @diagnostic disable-next-line: duplicate-set-field
       vim.lsp.get_clients = function(opts)
         local clients = original_get_clients(opts)
 

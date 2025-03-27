@@ -52,7 +52,13 @@ local function show_status_ui()
     local color = "HarpoonOptionHL"
     if idx == current_index then
       color = "HarpoonSelectedOptionHL"
-      vim.api.nvim_buf_add_highlight(buf, -1, color, idx - 1, 0, -1)
+      vim.api.nvim_buf_set_extmark(
+        buf,
+        vim.api.nvim_create_namespace("HarpoonHighlights"),
+        idx - 1,
+        0,
+        { line_hl_group = color, end_row = idx - 1 }
+      )
     end
   end
 
@@ -77,7 +83,7 @@ local function show_status_ui()
   }
 
   status_window = vim.api.nvim_open_win(buf, false, opts)
-  vim.api.nvim_win_set_option(status_window, "winhighlight", "Normal:" .. "HarpoonFilesPanelHL")
+  vim.api.nvim_set_option_value("winhighlight", "Normal:" .. "HarpoonFilesPanelHL", { win = status_window })
 end
 
 local function trigger_status_ui()
