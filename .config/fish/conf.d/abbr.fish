@@ -20,13 +20,13 @@ abbr -a gdu "gdu-go"
 
 abbr -a gs "git status"
 
-abbr -a gd --position anywhere --set-cursor "nvim -c 'DiffviewOpen %'"
+abbr -a gd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
 abbr -a gl "git log"
 abbr -a gck "git checkout"
 
 abbr -a ga "git add ."
 abbr -a ga_ "git add"
-abbr -a gc --position anywhere --set-cursor "git commit -m '%'"
+abbr -a gc --position anywhere --set-cursor 'git commit -m "%"'
 abbr -a gp "git push origin HEAD"
 abbr -a gap "ga && gc wip && gp"
 
