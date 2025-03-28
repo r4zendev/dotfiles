@@ -9,7 +9,7 @@ autocmd("TextYankPost", {
   pattern = "*",
   desc = "Highlight text when yank",
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 

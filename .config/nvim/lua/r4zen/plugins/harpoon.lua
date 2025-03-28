@@ -83,7 +83,7 @@ local function show_status_ui()
   }
 
   status_window = vim.api.nvim_open_win(buf, false, opts)
-  vim.api.nvim_set_option_value("winhighlight", "Normal:" .. "HarpoonFilesPanelHL", { win = status_window })
+  vim.api.nvim_set_option_value("winhighlight", "Normal:HarpoonPanelHL", { win = status_window })
 end
 
 local function trigger_status_ui()

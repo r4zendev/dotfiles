@@ -50,4 +50,5 @@ set -Ux GOPATH (go env GOPATH)
 fish_add_path $GOPATH/bin # go
 
 # fish_config theme choose Dracula
-fish_config theme choose tokyonight
+# fish_config theme choose tokyonight
+fish_config theme choose catppuccin
