@@ -1,6 +1,6 @@
 return {
   "sindrets/diffview.nvim",
-  dependencies = "nvim-lua/plenary.nvim",
+  dependencies = { "nvim-lua/plenary.nvim" },
   cmd = {
     "DiffviewOpen",
     "DiffviewClose",
@@ -21,13 +21,9 @@ return {
     {
       "<leader>gd",
       function()
-        local lib = require("diffview.lib")
-        local view = lib.get_current_view()
-        if view then
-          -- Current tabpage is a Diffview; close it
+        if require("diffview.lib").get_current_view() then
           vim.cmd.DiffviewClose()
         else
-          -- No open Diffview exists: open a new one
           vim.cmd.DiffviewOpen()
         end
       end,
