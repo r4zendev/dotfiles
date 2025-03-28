@@ -157,11 +157,11 @@ return {
             },
           },
 
-          adapter = "gemini",
+          adapter = "copilot",
         },
 
         inline = {
-          adapter = "gemini",
+          adapter = "copilot",
         },
       },
       display = {
