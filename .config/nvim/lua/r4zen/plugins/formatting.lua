@@ -71,6 +71,9 @@ return {
       graphql = js_formatters,
       lua = { "stylua" },
       python = { "isort", "black" },
+      c = { "clang_format" },
+      cpp = { "clang_format" },
+      rust = { "rustfmt" },
     },
 
     format_on_save = function(bufnr)

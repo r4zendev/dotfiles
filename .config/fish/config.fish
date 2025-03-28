@@ -38,12 +38,7 @@ fish_add_path "$HOME/.bun/bin"
 
 set -x XDG_CONFIG_HOME "$HOME/.config"
 
-set -x PYENV_ROOT "$HOME/.pyenv"
-if not command -v pyenv > /dev/null
-  fish_add_path "$PYENV_ROOT/bin"
-end
-pyenv init - | source
-
+fish_add_path $HOME/.local/bin # local bin
 fish_add_path $HOME/.config/bin # my custom scripts
 fish_add_path $HOME/.cargo/bin # cargo
 set -Ux GOPATH (go env GOPATH)

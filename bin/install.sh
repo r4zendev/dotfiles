@@ -35,10 +35,13 @@ brew install docker-credential-helper
 brew install colima # docker driver
 brew install lazydocker # docker UI
 
-# Node ecosystem
+# Node
 brew install oven-sh/bun/bun # runtime
 brew install pnpm # package manager
 brew install fnm # node manager
+
+# Python
+brew install uv
 
 brew install curlie # curl alternative
 brew install xh # daily driver
