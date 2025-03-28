@@ -12,6 +12,7 @@
 .config/colima
 .config/gcloud
 .config/pgcli
+.config/tmux/plugins
 .config/fish/fish_variables
 .config/wezterm/images
 

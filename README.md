@@ -28,7 +28,7 @@ stow . -t ~
 - Git: [lazygit](https://github.com/jesseduffield/lazygit)
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)
 - Font: [Monaspace](https://monaspace.githubnext.com/)
-- Colors: [tokyonight](https://github.com/folke/tokyonight.nvim) mostly
+- Colors: [catppuccin](https://github.com/catppuccin/)
 - Hotkeys: [Hammerspoon](https://hammerspoon.org/)
 - Window manager: [yabai](https://github.com/koekeishiya/yabai)
 - See [`install.sh`](bin/install.sh) for other utils used

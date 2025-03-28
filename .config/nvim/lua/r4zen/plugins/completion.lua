@@ -71,16 +71,6 @@ return {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
       "echasnovski/mini.nvim",
-      {
-        "xzbdmw/colorful-menu.nvim",
-        opts = {
-          ls = {
-            ts_ls = {
-              extra_info_hl = "@comment.hint",
-            },
-          },
-        },
-      },
     },
     opts = {
       keymap = {
@@ -133,14 +123,6 @@ return {
                 highlight = function(ctx)
                   local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
                   return hl
-                end,
-              },
-              label = {
-                text = function(ctx)
-                  return require("colorful-menu").blink_components_text(ctx)
-                end,
-                highlight = function(ctx)
-                  return require("colorful-menu").blink_components_highlight(ctx)
                 end,
               },
             },
