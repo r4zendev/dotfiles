@@ -16,10 +16,7 @@ end
 return {
   "stevearc/oil.nvim",
   cmd = { "Oil" },
-  dependencies = {
-    "echasnovski/mini.icons",
-    "ThePrimeagen/harpoon",
-  },
+  dependencies = { "echasnovski/mini.icons" },
   opts = {
     view_options = {
       show_hidden = true,

@@ -107,13 +107,12 @@ return {
       require("mcphub").setup(opts)
     end,
   },
+  { "banjo/contextfiles.nvim", lazy = true },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      "ravitemer/mcphub.nvim",
-      "banjo/contextfiles.nvim",
     },
     opts = {
       adapters = supported_adapters,

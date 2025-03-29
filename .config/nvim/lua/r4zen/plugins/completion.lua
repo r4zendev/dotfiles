@@ -70,7 +70,6 @@ return {
     dependencies = {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
-      "echasnovski/mini.nvim",
     },
     opts = {
       keymap = {
