@@ -21,6 +21,7 @@ local bindings = {
 	{ "b", "Brave" },
 	{ "`", "WezTerm" },
 	{ "z", "zoom.us" },
+	{ "c", "Calendar" },
 	-- NOTE: reserved for arrow keys
 	-- { "h", "" },
 	-- { "j", "" },
