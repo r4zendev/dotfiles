@@ -1,21 +1,8 @@
 return {
-  "williamboman/mason.nvim",
-  event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "williamboman/mason-lspconfig.nvim",
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-  },
-  config = function()
-    -- import mason
-    local mason = require("mason")
-
-    -- import mason-lspconfig
-    local mason_lspconfig = require("mason-lspconfig")
-
-    local mason_tool_installer = require("mason-tool-installer")
-
-    -- enable mason and configure icons
-    mason.setup({
+  {
+    "williamboman/mason.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    opts = {
       ui = {
         icons = {
           package_installed = "✓",
@@ -23,37 +10,38 @@ return {
           package_uninstalled = "✗",
         },
       },
-    })
-
-    mason_lspconfig.setup({
-      -- list of servers for mason to install
+    },
+  },
+  { "williamboman/mason-lspconfig.nvim" },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = {
       ensure_installed = {
         "ts_ls",
+        "eslint",
+        "prettierd",
+        "tailwindcss",
+        "prismals",
+        "biome",
+
         "html",
         "cssls",
-        "tailwindcss",
         "svelte",
-        "lua_ls",
-        "graphql",
-        "prismals",
-        "pyright",
-        "eslint",
-        "typos_lsp",
-      },
-      -- auto-install configured servers (with lspconfig)
-      automatic_installation = true, -- not the same as ensure_installed
-    })
 
-    mason_tool_installer.setup({
-      ensure_installed = {
-        "prettier", -- prettier formatter
-        "biome", -- biome formatter
-        "stylua", -- lua formatter
-        "isort", -- python formatter
-        "black", -- python formatter
-        "pylint", -- python linter
-        "eslint_d", -- js linter
+        "jsonls",
+        "yamlls",
+
+        "pyright",
+        "black",
+        "pylint",
+
+        "lua_ls",
+        "stylua",
+
+        "clang-format",
+        "typos_lsp",
+        "graphql",
       },
-    })
-  end,
+    },
+  },
 }

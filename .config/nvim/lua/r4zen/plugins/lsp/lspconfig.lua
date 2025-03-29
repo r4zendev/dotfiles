@@ -80,6 +80,15 @@ return {
       on_attach = on_attach,
     })
 
+    lspconfig["yamlls"].setup({
+      settings = {
+        yaml = {
+          schemaStore = { enable = false, url = "" },
+          schemas = require("schemastore").yaml.schemas(),
+        },
+      },
+    })
+
     local eslint_alerted = false
 
     -- Default eslint root files
