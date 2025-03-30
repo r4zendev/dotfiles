@@ -1,61 +1,59 @@
-local keymap = vim.keymap.set
+local map = vim.keymap.set
 
--- set leader key to space
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- use jk to exit insert mode
-keymap("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
+map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
+
+-- center when scrolling
+map({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+map({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 
 -- re-enter visual after moving a visual block
-keymap("v", ">", ">gv")
-keymap("v", "<", "<gv")
+map("v", ">", ">gv")
+map("v", "<", "<gv")
 
--- remap arrows to hjkl
-keymap({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
-keymap({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
-keymap({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
-keymap({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
+-- delete char without polluting copy register
+map("n", "x", '"_x')
 
--- registers
-keymap("n", "x", '"_x') -- delete char without polluting copy register by default
-keymap("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" })
-keymap("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
-keymap("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
-keymap("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
+-- increment/decrement
+map("n", "<M-->", "<C-x>", { noremap = true, silent = true })
+map("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
+map("n", "<C-a>", "<Nop>", { noremap = true, silent = true })
+map("n", "<C-x>", "<Nop>", { noremap = true, silent = true })
+-- arrows -> hjkl
+map({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
+map({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
+map({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
+map({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
+
+-- Registers
+map("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" })
+map("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
+map("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
+map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
 
 -- repeat dot multiple times
-keymap("n", "<leader>.", function()
+map("n", "<leader>.", function()
   return "<esc>" .. string.rep(".", vim.v.count1)
 end, { expr = true, desc = "Repeat dot action" })
 
--- remap increment
--- <C-a> is a tmux prefix
-keymap("n", "<M-->", "<C-x>", { noremap = true, silent = true })
-keymap("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
-keymap("n", "<C-a>", "<Nop>", { noremap = true, silent = true })
-keymap("n", "<C-x>", "<Nop>", { noremap = true, silent = true })
+-- Splits
+map("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
+map("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })
 
--- center screen after paging
-keymap({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })
-keymap({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
+map("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close split" })
+map("n", "<leader>wm", "<cmd>tab split<CR>", { desc = "Maximize split" })
 
--- window management
+map("n", "<leader>w=", "<C-w>=", { desc = "Make splits equal size" })
+map("n", "<leader>wj", "<C-w>_", { desc = "Maximize split vertically" })
+map("n", "<leader>wk", "<C-w>|", { desc = "Maximize split horizontally" })
 
--- split window vertically
-keymap("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
--- split window horizontally
-keymap("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })
--- make splits equal width & height
-keymap("n", "<leader>w=", "<C-w>=", { desc = "Make splits equal size" })
--- close current split
-keymap("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
--- open current split in a new tab (maximize), :q to de-maximize
-keymap("n", "<leader>wm", "<cmd>tab split<CR>", { desc = "Open split in new tab" })
--- resize split
-keymap("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
-keymap("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
-keymap("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
-keymap("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
+map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
+map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
+map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
+map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 
 -- currently trying to use ZZ/ZQ instead
 --

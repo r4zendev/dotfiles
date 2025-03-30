@@ -42,8 +42,10 @@ opt.signcolumn = "yes:1" -- both sign & number
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
--- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+-- use system clipboard as default register
+vim.schedule(function()
+  opt.clipboard:append("unnamedplus")
+end)
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
