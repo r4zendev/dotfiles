@@ -32,6 +32,15 @@ local supported_adapters = {
       },
     })
   end,
+  copilot_4o = function()
+    return require("codecompanion.adapters").extend("copilot", {
+      schema = {
+        model = {
+          default = "gpt-4o-2024-11-20",
+        },
+      },
+    })
+  end,
   openrouter_o3mini = function()
     return require("codecompanion.adapters").extend("openai_compatible", {
       env = {
@@ -272,6 +281,7 @@ Format findings as markdown and with:
     },
     keys = {
       { "<leader>ac", ":CodeCompanionChat copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
+      { "<leader>ao", ":CodeCompanionChat copilot_4o<CR>", desc = "Codecompanion: Copilot (GPT-4o)" },
       {
         "<leader>aC",
         ":lua require('codecompanion').prompt('context')<CR>",
@@ -281,7 +291,7 @@ Format findings as markdown and with:
       { "<leader>aG", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
       { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
       { "<leader>ad", ":CodeCompanionChat openrouter_deepseek_r1<CR>", desc = "Codecompanion: DeepSeek R1" },
-      { "<leader>ao", ":CodeCompanionChat openrouter_o3mini<CR>", desc = "Codecompanion: OpenAI o3-mini" },
+      { "<leader>am", ":CodeCompanionChat openrouter_o3mini<CR>", desc = "Codecompanion: OpenAI o3-mini" },
 
       { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },
       {

@@ -64,9 +64,9 @@ return {
         -- MiniCursorword = { bg = colors.surface2, underline = false },
         -- MiniCursorwordCurrent = { bg = colors.surface2, underline = false },
 
-        MiniDiffOverAdd = { fg = colors.text, bg = colors.green },
-        MiniDiffOverChange = { fg = colors.text, bg = colors.yellow },
-        MiniDiffOverDelete = { fg = colors.text, bg = colors.red },
+        MiniDiffOverAdd = { fg = colors.mantle, bg = colors.green },
+        MiniDiffOverChange = { fg = colors.mantle, bg = colors.yellow },
+        MiniDiffOverDelete = { fg = colors.mantle, bg = colors.red },
 
         LineNr = { fg = colors.surface2 },
         CursorLineNr = { fg = colors.blue },
