@@ -20,7 +20,10 @@ local function get_current_index()
   local current_file = vim.fn.bufname()
 
   for index, item in ipairs(vim.tbl_values(harpoon:list().items)) do
-    if vim.uv.fs_realpath(item.value) == vim.uv.fs_realpath(current_file) then
+    local mark_path = vim.uv.fs_realpath(item.value)
+    local current_path = vim.uv.fs_realpath(current_file)
+
+    if mark_path and current_path and mark_path == current_path then
       return index
     end
   end

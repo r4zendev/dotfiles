@@ -9,7 +9,6 @@ return {
 !*.lock]],
     },
     keymaps = {
-      replace = { n = "<leader>r" },
       openNextLocation = { n = "<C-j>" },
       openPrevLocation = { n = "<C-k>" },
     },

@@ -297,7 +297,9 @@ Format findings as markdown and with:
       { "<leader>aL", ":CodeCompanionLoad<CR>", desc = "Codecompanion: Load chat" },
       { "<leader>aP", ":CodeCompanionActions<CR>", desc = "Codecompanion: Prompts" },
     },
-    init = function()
+    config = function(_, opts)
+      require("codecompanion").setup(opts)
+
       -- Initialize storage for CodeCompanion chats
       local Path = require("plenary.path")
       local save_folder = Path:new(vim.fn.stdpath("data"), "codecompanion_chats")
