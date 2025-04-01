@@ -59,6 +59,12 @@ return {
             action = ":DiffviewOpen",
           },
           {
+            icon = " ",
+            key = "T",
+            desc = "Select theme",
+            action = ":Themery",
+          },
+          {
             icon = "󰒲 ",
             key = "L",
             desc = "Lazy",
@@ -302,6 +308,15 @@ return {
         Snacks.picker.lsp_workspace_symbols()
       end,
       desc = "LSP Workspace Symbols",
+    },
+
+    -- preview colorscheme / switch temporarily
+    {
+      "<leader>uC",
+      function()
+        Snacks.picker.colorschemes()
+      end,
+      desc = "Colorschemes",
     },
   },
   init = function()
