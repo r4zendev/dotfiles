@@ -46,5 +46,12 @@ return {
       end,
       desc = "See messages history",
     },
+    {
+      "<leader>cd",
+      function()
+        vim.cmd("NoiceDismiss")
+      end,
+      desc = "Dismiss notifications",
+    },
   },
 }

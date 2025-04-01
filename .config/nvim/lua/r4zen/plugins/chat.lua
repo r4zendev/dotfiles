@@ -15,20 +15,14 @@ local supported_adapters = {
           default = "gemini-2.5-pro-exp-03-25",
         },
       },
-      env = {
-        api_key = "GEMINI_API_KEY",
-      },
     })
   end,
   gemini_flash = function()
     return require("codecompanion.adapters").extend("gemini", {
       schema = {
         model = {
-          default = "models/gemini-2.0-flash",
+          default = "gemini-2.0-flash",
         },
-      },
-      env = {
-        api_key = "GEMINI_API_KEY",
       },
     })
   end,
@@ -173,9 +167,9 @@ return {
         },
       },
       display = {
-        chat = {
-          show_settings = true,
-        },
+        -- chat = {
+        --   show_settings = true,
+        -- },
 
         action_palette = {
           provider = "default",
