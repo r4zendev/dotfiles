@@ -3,7 +3,7 @@ return {
   lazy = true,
   opts = {
     theme = "wave",
-    transparent = true,
+    transparent = false,
     compile = false,
 
     undercurl = true,

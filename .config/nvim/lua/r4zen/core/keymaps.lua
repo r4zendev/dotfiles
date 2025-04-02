@@ -5,6 +5,8 @@ vim.g.maplocalleader = " "
 
 -- use jk to exit insert mode
 map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
+map("n", "_", "o<ESC>", { noremap = true, silent = true })
+-- map("n", "=", "o<ESC>", { noremap = true, silent = true })
 
 -- center when scrolling
 map({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })

@@ -6,7 +6,7 @@ return {
     picker = {
       matcher = { frecency = true },
       sources = {
-        files = { hidden = true },
+        files = { hidden = true, ignored = true },
         smart = { hidden = true },
         grep = { hidden = true },
         grep_word = { hidden = true },
