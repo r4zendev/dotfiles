@@ -10,6 +10,7 @@ return {
         smart = { hidden = true },
         grep = { hidden = true },
         grep_word = { hidden = true },
+        git_status = { untracked = true },
         recent = { hidden = true },
         explorer = {
           hidden = true,
@@ -26,10 +27,6 @@ return {
             },
           },
         },
-      },
-      previewers = {
-        diff = { builtin = true },
-        git = { builtin = true },
       },
     },
     dashboard = {
@@ -103,6 +100,7 @@ return {
     bigfile = { enabled = true },
   },
   keys = {
+    -- NOTE: Files
     {
       "<leader><leader>",
       function()
@@ -111,20 +109,11 @@ return {
       desc = "Smart Find Files",
     },
     {
-      "<leader>,",
+      "<leader>.",
       function()
-        Snacks.picker.grep()
+        Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
       end,
-      desc = "Grep",
-      mode = { "n" },
-    },
-    {
-      "<leader>,",
-      function()
-        Snacks.picker.grep_word()
-      end,
-      desc = "Grep",
-      mode = { "x" },
+      desc = "Find in directory",
     },
     {
       "<leader>e",
@@ -156,28 +145,31 @@ return {
       end,
       desc = "Projects",
     },
+
+    -- NOTE: Grep
     {
-      "<leader>gb",
+      "<leader>,",
       function()
-        Snacks.picker.git_branches()
+        Snacks.picker.grep()
       end,
-      desc = "Git Branches",
+      desc = "Grep",
+      mode = { "n" },
     },
     {
-      "<leader>gl",
+      "<leader>/",
       function()
-        Snacks.picker.git_log()
+        Snacks.picker.grep({ cwd = vim.fn.expand("%:p:h") })
       end,
-      desc = "Git Log",
+      desc = "Grep in directory",
     },
     {
-      "<leader>gf",
+      "<leader>,",
       function()
-        Snacks.picker.git_log_file()
+        Snacks.picker.grep_word()
       end,
-      desc = "Git Log File",
+      desc = "Grep",
+      mode = { "x" },
     },
-    -- Grep
     {
       "<leader>sb",
       function()
@@ -201,7 +193,75 @@ return {
       end,
       desc = "Search TODOs",
     },
-    -- search
+
+    -- NOTE: Git
+    {
+      "<leader>gf",
+      function()
+        Snacks.picker.git_status()
+      end,
+      desc = "Find Git Files",
+    },
+    {
+      "<leader>gg",
+      function()
+        local changed_files = {}
+        require("plenary.job")
+          -- Weird error that doesn't make too much sense
+          ---@diagnostic disable-next-line: missing-fields
+          :new({
+            command = "git",
+            args = { "diff", "--name-only" },
+            on_stdout = function(_, line)
+              if line and #line > 0 then
+                table.insert(changed_files, line)
+              end
+            end,
+          })
+          :sync()
+
+        if #changed_files == 0 then
+          vim.notify("No changed files found", vim.log.levels.INFO)
+          return
+        end
+
+        local args = {}
+        for _, file in ipairs(changed_files) do
+          table.insert(args, "--glob")
+          table.insert(args, file)
+        end
+
+        Snacks.picker.grep({
+          title = "Grep in Changed Files",
+          need_search = true,
+          args = args,
+        })
+      end,
+      desc = "Grep Git Files",
+    },
+    {
+      "<leader>gb",
+      function()
+        Snacks.picker.git_branches()
+      end,
+      desc = "Git Branches",
+    },
+    {
+      "<leader>gl",
+      function()
+        Snacks.picker.git_log_file()
+      end,
+      desc = "Git Log File",
+    },
+    {
+      "<leader>gh",
+      function()
+        Snacks.picker.git_log()
+      end,
+      desc = "Git Log",
+    },
+
+    -- NOTE: Search
     {
       "<leader>sb",
       function()
@@ -258,7 +318,8 @@ return {
       end,
       desc = "Undo History",
     },
-    -- LSP
+
+    -- NOTE: LSP
     {
       "gd",
       function()
@@ -310,7 +371,7 @@ return {
       desc = "LSP Workspace Symbols",
     },
 
-    -- preview colorscheme / switch temporarily
+    -- NOTE: Colorscheme
     {
       "<leader>uC",
       function()

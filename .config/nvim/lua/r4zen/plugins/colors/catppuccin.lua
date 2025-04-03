@@ -33,8 +33,8 @@ return {
         CodeCompanionChatTool = { fg = colors.teal },
         CodeCompanionChatVariable = { fg = colors.teal },
 
-        -- MiniCursorword = { bg = colors.surface2, underline = false },
-        -- MiniCursorwordCurrent = { bg = colors.surface2, underline = false },
+        MiniCursorword = { bg = colors.surface2, style = {} },
+        MiniCursorwordCurrent = { bg = colors.surface2, style = {} },
 
         MiniDiffOverAdd = { fg = colors.mantle, bg = colors.green },
         MiniDiffOverChange = { fg = colors.mantle, bg = colors.yellow },
@@ -46,17 +46,6 @@ return {
       }
     end,
   },
-  config = function(_, opts)
-    require("catppuccin").setup(opts)
-    vim.cmd([[colorscheme catppuccin]])
-    vim.hl.priorities.semantic_tokens = 95
-
-    local colors = require("catppuccin.palettes").get_palette("mocha")
-
-    -- for some reason if declaring this in custom_highlights it does not remove underline
-    vim.api.nvim_set_hl(0, "MiniCursorword", { bg = colors.surface2, underline = false })
-    vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { bg = colors.surface2, underline = false })
-  end,
 }
 
 --  Catppuccin Mocha

@@ -36,11 +36,6 @@ map("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's pa
 map("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
 map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
 
--- repeat dot multiple times
-map("n", "<leader>.", function()
-  return "<esc>" .. string.rep(".", vim.v.count1)
-end, { expr = true, desc = "Repeat dot action" })
-
 -- Splits
 map("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
 map("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })
@@ -56,6 +51,11 @@ map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
 map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
 map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
+
+-- repeat dot multiple times, didn't use that often.
+-- map("n", "<leader>.", function()
+--   return "<esc>" .. string.rep(".", vim.v.count1)
+-- end, { expr = true, desc = "Repeat dot action" })
 
 -- currently trying to use ZZ/ZQ instead
 --

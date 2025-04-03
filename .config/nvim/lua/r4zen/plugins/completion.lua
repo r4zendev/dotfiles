@@ -55,7 +55,7 @@ return {
     "windwp/nvim-autopairs",
     event = { "InsertEnter" },
     opts = {
-      map_cr = false,
+      map_cr = true,
       check_ts = true, -- treesitter
       ts_config = {
         lua = { "string" }, -- avoid pairs in lua strings
@@ -70,6 +70,18 @@ return {
     dependencies = {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
+      {
+        "xzbdmw/colorful-menu.nvim",
+        opts = {
+          ls = {
+            ts_ls = {
+              -- false means do not include any extra info,
+              -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
+              extra_info_hl = "HarpoonSelectedOptionHL",
+            },
+          },
+        },
+      },
     },
     opts = {
       keymap = {
@@ -110,7 +122,7 @@ return {
         },
         menu = {
           draw = {
-            columns = { { "kind_icon" }, { "label", gap = 1 } },
+            columns = { { "kind_icon", "label", "label_description", gap = 1 } },
             components = {
               kind_icon = {
                 ellipsis = false,
@@ -122,6 +134,22 @@ return {
                 highlight = function(ctx)
                   local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
                   return hl
+                end,
+              },
+              label_description = {
+                width = { min = 20, max = 50 },
+
+                highlight = function(ctx)
+                  return ctx.deprecated and "BlinkCmpLabelDeprecated" or "BlinkCmpLabel"
+                end,
+              },
+              label = {
+                text = function(ctx)
+                  return require("colorful-menu").blink_components_text(ctx)
+                end,
+
+                highlight = function(ctx)
+                  return require("colorful-menu").blink_components_highlight(ctx)
                 end,
               },
             },
