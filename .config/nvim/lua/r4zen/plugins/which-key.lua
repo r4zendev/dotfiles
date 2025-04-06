@@ -21,13 +21,6 @@ return {
       { "<leader>p", group = "Paste (.)", icon = { icon = "", color = "green" } },
       { "<leader>w", group = "Splits", icon = { icon = "", color = "blue" } },
       { "<leader>.", icon = { icon = ".", color = "purple" } },
-      --
-      -- -- Marks
-      -- {
-      --   "<leader>k",
-      --   group = "Marks",
-      --   icon = { icon = Icons.get("lsp", "bookmark") and Icons.get("lsp", "bookmark"), color = "red" },
-      -- },
     })
     vim.o.timeout = true
     vim.o.timeoutlen = 500

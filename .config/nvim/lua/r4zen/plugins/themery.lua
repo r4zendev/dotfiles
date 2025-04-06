@@ -23,12 +23,15 @@ return {
   priority = 1000,
   opts = {
     themes = {
-      -- Mains
-      { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
-      { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
+      -- Main
       { name = "Tokyo Night", colorscheme = "tokyonight" },
 
-      -- Just some extra good ones
+      -- Alts
+      { name = "Rose Pine", colorscheme = "rose-pine" },
+      { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
+      { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
+
+      -- Some extra good ones
       { name = "Kanagawa Lotus", colorscheme = "kanagawa-lotus" },
       { name = "Kanagawa Dragon", colorscheme = "kanagawa-dragon" },
       { name = "Nightfly", colorscheme = "nightfly" },

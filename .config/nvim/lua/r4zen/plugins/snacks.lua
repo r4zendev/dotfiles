@@ -4,6 +4,15 @@ return {
   lazy = false,
   opts = {
     picker = {
+      marks = {
+        transform = function(item)
+          if item.label and item.label:match("^[A-I]$") and item then
+            item.label = "" .. string.byte(item.label) - string.byte("A") + 1 .. ""
+            return item
+          end
+          return false
+        end,
+      },
       matcher = { frecency = true },
       sources = {
         files = { hidden = true, ignored = true },
@@ -378,6 +387,15 @@ return {
         Snacks.picker.colorschemes()
       end,
       desc = "Colorschemes",
+    },
+
+    -- NOTE: Marks
+    {
+      "<C-e>",
+      function()
+        Snacks.picker.marks()
+      end,
+      desc = "Marks",
     },
   },
   init = function()

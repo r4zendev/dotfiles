@@ -180,8 +180,8 @@ config.background = {
 		horizontal_align = "Center",
 		repeat_x = "NoRepeat",
 
-		-- opacity = 0.6,
-		opacity = 1,
+		opacity = 0.6,
+		-- opacity = 1,
 		hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
 	},
 }
