@@ -1,6 +1,5 @@
 local M = {}
 
--- Define fold column function locally
 function M.fold_column()
   local lnum = vim.v.lnum
   local fold_level = vim.fn.foldlevel(lnum)

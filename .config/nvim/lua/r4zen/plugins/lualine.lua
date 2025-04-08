@@ -26,26 +26,15 @@ return {
       function harpoon_aware_fname:update_status()
         local data = harpoon_aware_fname.super.update_status(self)
 
-        local harpoon = require("harpoon")
         local current_file_path = vim.api.nvim_buf_get_name(0)
-        local root_dir = harpoon:list().config:get_root_dir()
-        local harpoon_items = harpoon:list().items
+        local harpoon_items = require("harpoon"):list().items
 
         local found = false
         for i = 1, #harpoon_items do
           local harpoon_item = harpoon_items[i]
-
-          if not harpoon_item then
-            break
-          end
-
           local path = harpoon_item.value
 
-          if vim.uv.fs_realpath(path) == nil then
-            path = vim.fs.joinpath(root_dir, path)
-          end
-
-          if path == current_file_path then
+          if vim.uv.fs_realpath(path) == vim.uv.fs_realpath(current_file_path) then
             found = true
             break
           end
@@ -75,11 +64,6 @@ return {
             },
           },
           lualine_x = {
-            {
-              require("noice").api.status.mode.get,
-              cond = require("noice").api.status.mode.has,
-              color = { fg = "#ff9e64" },
-            },
             { "encoding" },
             { "fileformat" },
             { "filetype" },

@@ -1,4 +1,6 @@
-return {
+local M = {}
+
+M.plugin = {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
@@ -20,6 +22,15 @@ return {
         grep = { hidden = true },
         grep_word = { hidden = true },
         git_status = { untracked = true },
+        git_branches = {
+          win = {
+            input = {
+              keys = {
+                ["<c-x>"] = { callback = M.git_branch_del, mode = { "n", "i" } },
+              },
+            },
+          },
+        },
         recent = { hidden = true },
         explorer = {
           hidden = true,
@@ -379,6 +390,13 @@ return {
       end,
       desc = "LSP Workspace Symbols",
     },
+    -- {
+    --   "<leader>sn",
+    --   function()
+    --     Snacks.picker.notifications()
+    --   end,
+    --   desc = "Notification History",
+    -- },
 
     -- NOTE: Colorscheme
     {
@@ -409,3 +427,34 @@ return {
     })
   end,
 }
+
+-- https://github.com/folke/snacks.nvim/blob/main/lua/snacks/picker/actions.lua#L392
+function M.git_branch_del(picker, item)
+  if not (item and item.branch) then
+    Snacks.notify.warn("No branch or commit found", { title = "Snacks Picker" })
+  end
+
+  local branch = item.branch
+  Snacks.picker.util.cmd({ "git", "rev-parse", "--abbrev-ref", "HEAD" }, function(data)
+    -- Check if we are on the same branch
+    if data[1]:match(branch) ~= nil then
+      Snacks.notify.error("Cannot delete the current branch.", { title = "Snacks Picker" })
+      return
+    end
+
+    Snacks.picker.select({ "Yes", "No" }, { prompt = ("Delete branch %q?"):format(branch) }, function(_, idx)
+      if idx == 1 then
+        -- NOTE: Modified only here to force delete the branch.
+        Snacks.picker.util.cmd({ "git", "branch", "-D", branch }, function()
+          Snacks.notify("Deleted Branch `" .. branch .. "`", { title = "Snacks Picker" })
+          vim.cmd.checktime()
+          picker.list:set_selected()
+          picker.list:set_target()
+          picker:find()
+        end, { cwd = picker:cwd() })
+      end
+    end)
+  end, { cwd = picker:cwd() })
+end
+
+return M.plugin

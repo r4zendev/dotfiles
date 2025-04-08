@@ -3,7 +3,7 @@ vim.o.updatetime = 100
 -- required to make `vim-tmux-navigator` work.
 -- if this affects my workflow in any way, i will remove it
 -- and find another way to integrate with tmux panes
-vim.o.shell = "/bin/bash"
+vim.o.shell = "/bin/zsh"
 
 local opt = vim.opt
 
@@ -52,3 +52,6 @@ opt.swapfile = false
 
 -- persistent undo
 opt.undofile = true
+
+-- update file on external changes
+opt.autoread = true

@@ -18,3 +18,8 @@
 
 [url "git@github.com:"]
   insteadOf = https://github.com/
+[pull]
+	rebase = false
+
+[advice]
+  forceDeleteBranch = false

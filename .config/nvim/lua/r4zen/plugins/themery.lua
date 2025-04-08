@@ -50,11 +50,16 @@ return {
       { name = "Poimandres", colorscheme = "poimandres" },
     },
     livePreview = true,
-    globalAfter = [[
-      vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "#000000" })
-    ]],
   },
   keys = {
     { "<leader>uc", "<cmd>Themery<cr>", desc = "Colorscheme (persist)" },
   },
+  init = function()
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "themery",
+      callback = function(event)
+        vim.b[event.buf].miniindentscope_disable = true
+      end,
+    })
+  end,
 }

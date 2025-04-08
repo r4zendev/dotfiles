@@ -1,5 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
+local usercmd = vim.api.nvim_create_user_command
 
 local HighlightOnYankGroup = augroup("HighlightOnYank", { clear = true })
 
@@ -40,6 +41,18 @@ autocmd("VimLeavePre", {
     vim.fn.jobstart("killall prettierd eslint_d", { detach = true })
   end,
 })
+
+-- Search the web
+usercmd("Google", function(o)
+  local escaped = vim.uri_encode(o.args)
+  local url = ("https://www.google.com/search?q=%s"):format(escaped)
+  vim.ui.open(url)
+end, { nargs = 1, desc = "Google it" })
+usercmd("DuckDuckGo", function(o)
+  local escaped = vim.uri_encode(o.args)
+  local url = ("https://duckduckgo.com/?q=%s"):format(escaped)
+  vim.ui.open(url)
+end, { nargs = 1, desc = "DuckDuckGo it" })
 
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.
