@@ -2,13 +2,13 @@ return {
   {
     "folke/ts-comments.nvim",
     version = "*",
-    ft = { "html", "javascript", "typescript", "jsx", "tsx" },
+    ft = { "html", "typescript", "typescriptreact", "javascript", "javascriptreact" },
     opts = {},
   },
   {
     "windwp/nvim-ts-autotag",
     version = "*",
-    ft = { "html", "javascript", "typescript", "jsx", "tsx" },
+    ft = { "html", "typescript", "typescriptreact", "javascript", "javascriptreact" },
     opts = {
       opts = {
         enable_close = true,

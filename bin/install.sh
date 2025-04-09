@@ -57,8 +57,12 @@ brew install zsh-autosuggestions
 brew install zsh-syntax-highlighting
 
 # Window management
+# brew install --cask nikitabobko/tap/aerospace
+# OR
 brew install yabai
-yabai --start-service
+yabai --install-sa
+# yabai --start-service
+# yabai --load-sa
 
 # Various utils (monitoring, peeking, searching, exploring, etc.)
 brew install bat # cat alternative
@@ -83,6 +87,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 brew install --cask font-inconsolata-lgc-nerd-font # cyrillic
 
 # Apps
+brew install th-ch/youtube-music/youtube-music
 brew install --cask 1password
 brew install --cask discord          
 brew install --cask obsidian         
@@ -94,3 +99,4 @@ brew install --cask brave-browser
 brew install --cask hammerspoon # advanced scripting & automation
 brew install jordanbaird-ice # toolbar
 brew install --cask keycastr # keylogger
+brew install --cask linearmouse # app to reverse external mouse scroll
