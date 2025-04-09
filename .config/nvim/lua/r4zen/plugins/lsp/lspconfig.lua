@@ -23,16 +23,17 @@ return {
       vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
     end
 
-    vim.diagnostic.config({
-      signs = {
-        text = {
-          [vim.diagnostic.severity.ERROR] = " ",
-          [vim.diagnostic.severity.WARN] = " ",
-          [vim.diagnostic.severity.HINT] = "󰠠 ",
-          [vim.diagnostic.severity.INFO] = " ",
-        },
-      },
-    })
+    -- Using custom statuscolumn that handles these on its own
+    -- vim.diagnostic.config({
+    --   signs = {
+    --     text = {
+    --       [vim.diagnostic.severity.ERROR] = " ",
+    --       [vim.diagnostic.severity.WARN] = " ",
+    --       [vim.diagnostic.severity.HINT] = "󰠠 ",
+    --       [vim.diagnostic.severity.INFO] = " ",
+    --     },
+    --   },
+    -- })
 
     -- configure html server
     lspconfig["html"].setup({

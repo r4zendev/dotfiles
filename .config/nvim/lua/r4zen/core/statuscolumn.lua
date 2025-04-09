@@ -4,20 +4,71 @@ function M.fold_column()
   local lnum = vim.v.lnum
   local fold_level = vim.fn.foldlevel(lnum)
   local fold_closed = vim.fn.foldclosed(lnum)
+  local fold_icon = " "
 
-  -- If line is part of a fold
   if fold_level > 0 then
-    -- If this line starts a fold and the fold is closed
     if fold_closed == lnum then
-      return vim.opt.fillchars:get().foldclose
-    -- If this line starts a fold and the fold is open
+      fold_icon = vim.opt.fillchars:get().foldclose or "+"
     elseif fold_level > vim.fn.foldlevel(lnum - 1) then
-      return vim.opt.fillchars:get().foldopen
+      fold_icon = vim.opt.fillchars:get().foldopen or "-"
     end
   end
 
-  -- Return empty space for all other cases
-  return " "
+  return fold_icon
+end
+
+function M.line_or_diagnostic()
+  local line = vim.v.lnum - 1
+  local diagnostics = vim.diagnostic.get(0, { lnum = line })
+
+  local line_count = vim.api.nvim_buf_line_count(0)
+  local width = math.max(3, #tostring(line_count))
+
+  if vim.v.virtnum > 0 then
+    return string.rep(" ", width)
+  end
+
+  local signs = {
+    [vim.diagnostic.severity.ERROR] = "",
+    [vim.diagnostic.severity.WARN] = "",
+    [vim.diagnostic.severity.HINT] = "󰠠",
+    [vim.diagnostic.severity.INFO] = "",
+  }
+
+  local hl_groups = {
+    [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+    [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+    [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+  }
+
+  if #diagnostics > 0 then
+    local max_severity = vim.diagnostic.severity.HINT
+    for _, diagnostic in ipairs(diagnostics) do
+      if diagnostic.severity < max_severity then
+        max_severity = diagnostic.severity
+      end
+    end
+
+    local sign = signs[max_severity] or " "
+    local hl_group = hl_groups[max_severity] or "Normal"
+
+    local sign_width = vim.fn.strdisplaywidth(sign)
+
+    local padding = string.rep(" ", width - sign_width)
+    return "%#" .. hl_group .. "#" .. padding .. sign .. "%*"
+  else
+    local num = vim.v.relnum ~= 0 and vim.v.relnum or vim.v.lnum
+    local num_str = tostring(num)
+    local hl_group = vim.v.relnum == 0 and "CursorLineNr" or "LineNr"
+
+    local padding = string.rep(" ", width - #num_str)
+    return "%#" .. hl_group .. "#" .. padding .. num_str .. "%*"
+  end
+end
+
+function M.get_statuscolumn()
+  return M.fold_column() .. M.line_or_diagnostic() .. "  "
 end
 
 return M

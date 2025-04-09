@@ -46,8 +46,8 @@ return {
       -- date_format = "%m-%d-%Y %H:%M:%S", -- template for the date, check Date format section for more options
     },
     keys = {
-      { "<leader>bx", "<cmd>GitBlameOpenCommitURL<cr>", desc = "Git Blame Open Commit URL" },
-      { "<leader>by", "<cmd>GitBlameCopySHA<cr>", desc = "Git Blame Copy SHA" },
+      { "<leader>bx", vim.cmd.GitBlameOpenCommitURL, desc = "Git Blame Open Commit URL" },
+      { "<leader>by", vim.cmd.GitBlameCopySHA, desc = "Git Blame Copy SHA" },
     },
   },
 }

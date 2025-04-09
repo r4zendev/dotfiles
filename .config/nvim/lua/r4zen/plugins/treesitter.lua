@@ -52,20 +52,4 @@ return {
     vim.filetype.add({ extension = { mdc = "markdown" } })
     vim.filetype.add({ extension = { kbd = "lisp" } })
   end,
-  -- config = function(_, opts)
-  --   require("nvim-treesitter.configs").setup(opts)
-  --   local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-  --   parser_config.kanata = {
-  --     install_info = {
-  --       url = "https://github.com/postsolar/tree-sitter-kanata",
-  --       files = { "src/parser.c" },
-  --       -- branch = "main",
-  --       -- generate_requires_npm = false,
-  --       -- requires_generate_from_grammar = false,
-  --     },
-  --     filetype = "kanata",
-  --   }
-  --
-  --   vim.filetype.add({ extension = { kbd = "kanata" } })
-  -- end,
 }

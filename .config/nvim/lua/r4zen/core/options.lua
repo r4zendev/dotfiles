@@ -1,11 +1,14 @@
-vim.o.updatetime = 100
+local o = vim.o
+local opt = vim.opt
+
+o.updatetime = 100
+o.timeout = true
+o.timeoutlen = 500
 
 -- required to make `vim-tmux-navigator` work.
 -- if this affects my workflow in any way, i will remove it
 -- and find another way to integrate with tmux panes
-vim.o.shell = "/bin/zsh"
-
-local opt = vim.opt
+o.shell = "/bin/zsh"
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
@@ -29,7 +32,7 @@ opt.cursorline = true -- highlight the current cursor line
 
 -- appearance
 -- vim.o.showtabline = 2 -- required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
-vim.o.showtabline = 0
+o.showtabline = 0
 opt.title = false
 opt.conceallevel = 2
 
@@ -55,3 +58,22 @@ opt.undofile = true
 
 -- update file on external changes
 opt.autoread = true
+
+-- sign column & folding
+opt.signcolumn = "number"
+-- opt.signcolumn = "yes:1" -- both sign & number
+
+o.foldenable = true
+o.foldlevel = 99
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+o.foldtext = ""
+opt.foldcolumn = "1"
+opt.fillchars:append({
+  fold = " ",
+  foldclose = "▶",
+  foldopen = "▼",
+  foldsep = " ",
+})
+
+o.statuscolumn = "%{%v:lua.require('r4zen.core.statuscolumn').get_statuscolumn()%}"

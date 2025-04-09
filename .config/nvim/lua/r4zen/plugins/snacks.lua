@@ -6,15 +6,6 @@ M.plugin = {
   lazy = false,
   opts = {
     picker = {
-      marks = {
-        transform = function(item)
-          if item.label and item.label:match("^[A-I]$") and item then
-            item.label = "" .. string.byte(item.label) - string.byte("A") + 1 .. ""
-            return item
-          end
-          return false
-        end,
-      },
       matcher = { frecency = true },
       sources = {
         files = { hidden = true, ignored = true },
@@ -390,13 +381,6 @@ M.plugin = {
       end,
       desc = "LSP Workspace Symbols",
     },
-    -- {
-    --   "<leader>sn",
-    --   function()
-    --     Snacks.picker.notifications()
-    --   end,
-    --   desc = "Notification History",
-    -- },
 
     -- NOTE: Colorscheme
     {
@@ -444,7 +428,8 @@ function M.git_branch_del(picker, item)
 
     Snacks.picker.select({ "Yes", "No" }, { prompt = ("Delete branch %q?"):format(branch) }, function(_, idx)
       if idx == 1 then
-        -- NOTE: Modified only here to force delete the branch.
+        -- Proceed with deletion
+        -- NOTE: Modified only here to force delete the branch using the -D flag.
         Snacks.picker.util.cmd({ "git", "branch", "-D", branch }, function()
           Snacks.notify("Deleted Branch `" .. branch .. "`", { title = "Snacks Picker" })
           vim.cmd.checktime()

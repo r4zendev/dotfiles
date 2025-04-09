@@ -6,24 +6,24 @@ vim.g.maplocalleader = " "
 -- use jk to exit insert mode
 map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
 map("n", "_", "o<ESC>", { noremap = true, silent = true })
--- map("n", "=", "o<ESC>", { noremap = true, silent = true })
 
 -- center when scrolling
 map({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 map({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 
 -- re-enter visual after moving a visual block
-map("v", ">", ">gv")
-map("v", "<", "<gv")
+map("v", ">", ">gv", { noremap = true, silent = true })
+map("v", "<", "<gv", { noremap = true, silent = true })
 
 -- delete char without polluting copy register
-map("n", "x", '"_x')
+map("n", "x", '"_x', { noremap = true, silent = true })
 
 -- increment/decrement
 map("n", "<M-->", "<C-x>", { noremap = true, silent = true })
 map("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
 map("n", "<C-a>", "<Nop>", { noremap = true, silent = true })
 map("n", "<C-x>", "<Nop>", { noremap = true, silent = true })
+
 -- arrows -> hjkl
 map({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
 map({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
@@ -86,16 +86,3 @@ map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 -- keymap("n", "j", function()
 --   return vim.v.count == 0 and "gj" or "j"
 -- end, { expr = true })
-
--- bufferline is currently not used, instead a custom UI tailored to harpoon is implemented
---
--- open new tab
--- keymap("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
--- close current tab
--- keymap("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
--- go to next tab
--- keymap("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
--- go to previous tab
--- keymap("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
--- move current buffer to new tab
--- keymap("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })

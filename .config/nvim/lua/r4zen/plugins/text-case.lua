@@ -1,16 +1,47 @@
-local function format_method_name(method)
+local M = {}
+
+M.plugin = {
+  "johmsalas/text-case.nvim",
+  event = { "BufRead", "BufNewFile" },
+  opts = { prefix = "<leader>C" },
+  keys = {
+    {
+      "<leader>Ct",
+      function()
+        M.show_picker(M.picker_items, "Text Case: Rename Word", {
+          current_word = require("textcase").current_word,
+          visual = require("textcase").visual,
+        })
+      end,
+      desc = "TextCase: Rename current word",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>CT",
+      function()
+        M.show_picker(M.picker_items, "Text Case: LSP Rename", {
+          current_word = require("textcase").lsp_rename,
+        })
+      end,
+      desc = "TextCase: LSP Rename",
+      mode = { "n", "v" },
+    },
+  },
+}
+
+M.format_method_name = function(method)
   return method:gsub("_", " "):gsub("to ", ""):gsub("case", ""):gsub("^%l", string.upper):gsub("%s+$", "")
 end
 
-local function generate_picker_items(methods)
+M.generate_picker_items = function(methods)
   local items = {}
   for _, method in ipairs(methods) do
-    table.insert(items, { text = format_method_name(method), method = method })
+    table.insert(items, { text = M.format_method_name(method), method = method })
   end
   return items
 end
 
-local function show_picker(items, title, callback_provider)
+M.show_picker = function(items, title, callback_provider)
   -- Save current mode
   local mode = vim.api.nvim_get_mode().mode
   local is_visual = mode:sub(1, 1) == "v" or mode:sub(1, 1) == "V"
@@ -53,7 +84,7 @@ local function show_picker(items, title, callback_provider)
   end)
 end
 
-local picker_items = generate_picker_items({
+M.picker_items = M.generate_picker_items({
   "to_snake_case",
   "to_dash_case",
   "to_camel_case",
@@ -66,31 +97,4 @@ local picker_items = generate_picker_items({
   "to_dot_case",
 })
 
-return {
-  "johmsalas/text-case.nvim",
-  event = { "BufRead", "BufNewFile" },
-  opts = { prefix = "<leader>C" },
-  keys = {
-    {
-      "<leader>Ct",
-      function()
-        show_picker(picker_items, "Text Case: Rename Word", {
-          current_word = require("textcase").current_word,
-          visual = require("textcase").visual,
-        })
-      end,
-      desc = "TextCase: Rename current word",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>CT",
-      function()
-        show_picker(picker_items, "Text Case: LSP Rename", {
-          current_word = require("textcase").lsp_rename,
-        })
-      end,
-      desc = "TextCase: LSP Rename",
-      mode = { "n", "v" },
-    },
-  },
-}
+return M.plugin

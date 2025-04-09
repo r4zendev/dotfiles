@@ -2,11 +2,9 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local usercmd = vim.api.nvim_create_user_command
 
-local HighlightOnYankGroup = augroup("HighlightOnYank", { clear = true })
-
 -- Highlight on yank
 autocmd("TextYankPost", {
-  group = HighlightOnYankGroup,
+  group = augroup("HighlightOnYank", { clear = true }),
   pattern = "*",
   desc = "Highlight text when yank",
   callback = function()
@@ -63,8 +61,3 @@ end, { nargs = 1, desc = "DuckDuckGo it" })
 --     vim.opt.formatoptions:remove({ "c", "r", "o" })
 --   end,
 -- })
-
--- load buffer into memory snippet
--- local bufnr = vim.api.nvim_create_buf(true, false)
--- vim.api.nvim_buf_set_name(bufnr, path)
--- vim.api.nvim_buf_call(bufnr, vim.cmd.edit)

@@ -2,8 +2,26 @@ return {
   "HawkinsT/pathfinder.nvim",
   opts = { remap_default_keys = false },
   keys = {
-    { "gf", "<cmd>lua require('pathfinder').gf()<CR>" },
-    { "gF", "<cmd>lua require('pathfinder').gF()<CR>" },
-    { "<leader>cp", "<cmd>lua require('pathfinder').select_file()<CR>", desc = "Pathfinder: Select file" },
+    {
+      "gf",
+      function()
+        require("pathfinder").gf()
+      end,
+      desc = "Goto next file entry",
+    },
+    {
+      "gF",
+      function()
+        require("pathfinder").gF()
+      end,
+      desc = "Goto file (line)",
+    },
+    {
+      "<leader>cp",
+      function()
+        require("pathfinder").select_file()
+      end,
+      desc = "Select file to goto",
+    },
   },
 }

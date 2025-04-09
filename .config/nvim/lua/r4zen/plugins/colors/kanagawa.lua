@@ -15,9 +15,9 @@ return {
     overrides = function(colors)
       local theme = colors.theme
       return {
-        NormalFloat = { bg = "NONE" },
-        FloatBorder = { bg = "NONE" },
-        FloatTitle = { bg = "NONE" },
+        NormalFloat = { bg = "NONE", fg = "NONE" },
+        FloatBorder = { bg = "NONE", fg = "NONE" },
+        FloatTitle = { bg = "NONE", fg = "NONE" },
 
         -- Save an hlgroup with dark background and dimmed foreground
         -- so that you can use it where your still want darker windows.
@@ -29,8 +29,11 @@ return {
         LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
         MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
 
-        -- Comment = { fg = theme.syn.comment },
         DiagnosticUnnecessary = { fg = theme.syn.comment, bg = theme.ui.bg_m3, underline = true },
+        DiagnosticSignInfo = { bg = "NONE" },
+        DiagnosticSignWarn = { bg = "NONE" },
+        DiagnosticSignError = { bg = "NONE" },
+        DiagnosticSignHint = { bg = "NONE" },
 
         BlinkCmpLabel = { fg = theme.ui.fg_dim },
         BlinkCmpLabelMatch = { fg = theme.syn.keyword },
@@ -44,6 +47,10 @@ return {
         MiniCursorword = { bg = theme.ui.bg_p2, underline = false },
         MiniCursorwordCurrent = { bg = theme.ui.bg_p2, underline = false },
 
+        MiniDiffSignAdd = { bg = "NONE" },
+        MiniDiffSignChange = { bg = "NONE" },
+        MiniDiffSignDelete = { bg = "NONE" },
+
         MiniDiffOverAdd = { fg = theme.ui.bg, bg = theme.vcs.added },
         MiniDiffOverChange = { fg = theme.ui.bg, bg = theme.vcs.changed },
         MiniDiffOverDelete = { fg = theme.ui.bg, bg = theme.vcs.removed },
@@ -51,10 +58,6 @@ return {
         LineNr = { fg = theme.ui.nontext, bg = "NONE" },
         CursorLineNr = { fg = theme.syn.fun },
         CursorLine = { bg = theme.ui.bg_p1 },
-
-        NoicePopupBorder = { bg = "NONE" },
-        NoicePopupmenuBorder = { bg = "NONE" },
-        NoiceCmdlinePopupBorder = { bg = "NONE" },
       }
     end,
   },

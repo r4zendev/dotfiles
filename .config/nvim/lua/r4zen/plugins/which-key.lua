@@ -32,7 +32,5 @@ return {
       { "<leader>.", icon = { icon = "󰍉", color = "blue" } },
       { "<leader>/", icon = { icon = "󰍉", color = "red" } },
     })
-    vim.o.timeout = true
-    vim.o.timeoutlen = 500
   end,
 }

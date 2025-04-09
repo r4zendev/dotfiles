@@ -8,9 +8,28 @@ return {
     -- Hopefully will be fixed eventually, as this works as expected in copilot.
     -- event = "InsertEnter",
     keys = {
-      { "<leader>Ac", "<cmd>Augment chat<cr>", desc = "Augment: Ask", mode = { "n", "v" } },
-      { "<leader>An", "<cmd>Augment chat-new<cr>", desc = "Augment: New Chat" },
-      { "<leader>At", "<cmd>Augment chat-toggle<cr>", desc = "Augment: Toggle Chat" },
+      {
+        "<leader>Ac",
+        function()
+          vim.cmd("Augment chat")
+        end,
+        desc = "Augment: Ask",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>An",
+        function()
+          vim.cmd("Augment chat-new")
+        end,
+        desc = "Augment: New Chat",
+      },
+      {
+        "<leader>At",
+        function()
+          vim.cmd("Augment chat-toggle")
+        end,
+        desc = "Augment: Toggle Chat",
+      },
     },
     init = function()
       -- Add workspaces for better suggestions
@@ -48,7 +67,13 @@ return {
       },
     },
     keys = {
-      { "<leader>Ap", "<cmd>Copilot panel<cr>", desc = "Copilot panel" },
+      {
+        "<leader>Ap",
+        function()
+          vim.cmd("Copilot panel")
+        end,
+        desc = "Copilot panel",
+      },
     },
   },
   {

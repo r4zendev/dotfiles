@@ -28,7 +28,11 @@ return {
 
       -- Alts
       { name = "Rose Pine", colorscheme = "rose-pine" },
-      { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
+      {
+        name = "Kanagawa Wave",
+        colorscheme = "kanagawa-wave",
+        after = transparent_background_hl_string,
+      },
       { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
 
       -- Some extra good ones
@@ -52,7 +56,7 @@ return {
     livePreview = true,
   },
   keys = {
-    { "<leader>uc", "<cmd>Themery<cr>", desc = "Colorscheme (persist)" },
+    { "<leader>uc", vim.cmd.Themery, desc = "Colorscheme (persist)" },
   },
   init = function()
     vim.api.nvim_create_autocmd("FileType", {

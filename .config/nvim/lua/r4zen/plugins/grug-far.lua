@@ -22,16 +22,5 @@ return {
       mode = { "n", "v" },
       desc = "Search and replace",
     },
-    -- Currently not used, due to it causing a weird bug that crashes Neovim
-    -- grug-far doesn't seem to untrack its window and keeps searching for its
-    -- window ID when it's not available anymore.
-    -- {
-    --   "<leader>fx",
-    --   function()
-    --     require("grug-far").close_instance("far")
-    --   end,
-    --   mode = { "n", "v" },
-    --   desc = "Close FAR instance",
-    -- },
   },
 }
