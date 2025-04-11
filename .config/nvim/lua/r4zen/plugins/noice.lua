@@ -26,16 +26,12 @@ return {
   keys = {
     {
       "<leader>cm",
-      function()
-        vim.cmd("NoiceAll")
-      end,
+      vim.cmd.NoiceAll,
       desc = "See messages history",
     },
     {
       "<leader>cd",
-      function()
-        vim.cmd("NoiceDismiss")
-      end,
+      vim.cmd.NoiceDismiss,
       desc = "Dismiss notifications",
     },
   },

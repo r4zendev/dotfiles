@@ -8,7 +8,7 @@
   "colorful-menu.nvim": { "branch": "master", "commit": "f80feb8a6706f965321aff24d0ed3849f02a7f77" },
   "conform.nvim": { "branch": "master", "commit": "eebc724d12c5579d733d1f801386e0ceb909d001" },
   "contextfiles.nvim": { "branch": "main", "commit": "f4e22673caa8363a3e17ff2a49a704298f7aa5f6" },
-  "copilot.lua": { "branch": "master", "commit": "2378a40e9cecbf3720b6f4f3d5d6b6d8994bd321" },
+  "copilot.lua": { "branch": "master", "commit": "41c39312c2707aa7b9f4a2c93ff94ff8661e13aa" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },
   "git-blame.nvim": { "branch": "master", "commit": "56c17cb28723abd637d8a5de005c4ffae48f3161" },
@@ -50,5 +50,6 @@
   "vim-nightfly-guicolors": { "branch": "master", "commit": "42db7bfdf8873e3b8046ef2516b76ae761788b31" },
   "vim-tmux-navigator": { "branch": "master", "commit": "791dacfcfc8ccb7f6eb1c853050883b03e5a22fe" },
   "which-key.nvim": { "branch": "main", "commit": "370ec46f710e058c9c1646273e6b225acf47cbed" },
-  "yanky.nvim": { "branch": "main", "commit": "98b9c21d3c06d79f68fd9d471dcc28fc6d2d72ef" }
+  "yanky.nvim": { "branch": "main", "commit": "98b9c21d3c06d79f68fd9d471dcc28fc6d2d72ef" },
+  "yazi.nvim": { "branch": "main", "commit": "dd59edc7a6af25b8daf497388621260ce9b5306c" }
 }
