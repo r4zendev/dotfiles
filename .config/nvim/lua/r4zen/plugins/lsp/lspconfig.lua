@@ -11,6 +11,10 @@ return {
 
     local opts = { noremap = true, silent = true }
     local on_attach = function(client, bufnr)
+      if client.server_capabilities.documentSymbolProvider then
+        require("nvim-navic").attach(client, bufnr)
+      end
+
       opts.buffer = bufnr
 
       opts.desc = "See available code actions"
@@ -57,7 +61,7 @@ return {
               clients[1]:request("workspace/executeCommand", params, nil, 0)
             end
           end,
-          description = "Organize Imports",
+          desc = "Organize Imports",
         },
       },
       on_attach = function(client, bufnr)

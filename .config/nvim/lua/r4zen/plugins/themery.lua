@@ -11,6 +11,11 @@ local default_harpoon_hl_string = [[
   vim.api.nvim_set_hl(0, "HarpoonSelectedOptionHL", { fg = "#5DE4C7" })
 ]]
 
+local transparent_winbar_hl_string = [[
+  vim.api.nvim_set_hl(0, "WinBar", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "WinBarNC", { bg = "NONE" })
+]]
+
 local transparent_float_hl_string = [[
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE" })
@@ -24,10 +29,10 @@ return {
   opts = {
     themes = {
       -- Main
-      { name = "Tokyo Night", colorscheme = "tokyonight" },
+      { name = "Tokyo Night", colorscheme = "tokyonight", after = transparent_winbar_hl_string },
 
       -- Alts
-      { name = "Rose Pine", colorscheme = "rose-pine" },
+      { name = "Rose Pine", colorscheme = "rose-pine", after = transparent_winbar_hl_string },
       {
         name = "Kanagawa Wave",
         colorscheme = "kanagawa-wave",

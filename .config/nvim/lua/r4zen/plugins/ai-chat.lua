@@ -99,15 +99,13 @@ return {
     keys = {
       { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
     },
-    config = function(_, opts)
+    init = function()
       local root_dir = require("r4zen.utils").workspace_root()
       if root_dir ~= nil then
         -- Set the environment variable before loading the config
         -- Used by MCP servers that require project's root path as an argument
         vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
       end
-
-      require("mcphub").setup(opts)
     end,
   },
   { "banjo/contextfiles.nvim", lazy = true },

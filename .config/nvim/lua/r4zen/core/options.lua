@@ -77,3 +77,4 @@ opt.fillchars:append({
 })
 
 o.statuscolumn = "%{%v:lua.require('r4zen.core.statuscolumn').get_statuscolumn()%}"
+o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"

@@ -4,22 +4,6 @@ local js_formatters = function()
   return { "biome-organize-imports", "biome-check", "prettierd" }
 end
 
-local prettier_root_file = {
-  -- https://prettier.io/docs/en/configuration.html
-  ".prettierrc",
-  ".prettierrc.json",
-  ".prettierrc.yml",
-  ".prettierrc.yaml",
-  ".prettierrc.json5",
-  ".prettierrc.js",
-  ".prettierrc.cjs",
-  ".prettierrc.mjs",
-  ".prettierrc.toml",
-  "prettier.config.js",
-  "prettier.config.cjs",
-  "prettier.config.mjs",
-}
-
 return {
   "stevearc/conform.nvim",
   lazy = true,
@@ -52,6 +36,23 @@ return {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)
           local util = require("lspconfig.util")
+
+          local prettier_root_file = {
+            -- https://prettier.io/docs/en/configuration.html
+            ".prettierrc",
+            ".prettierrc.json",
+            ".prettierrc.yml",
+            ".prettierrc.yaml",
+            ".prettierrc.json5",
+            ".prettierrc.js",
+            ".prettierrc.cjs",
+            ".prettierrc.mjs",
+            ".prettierrc.toml",
+            "prettier.config.js",
+            "prettier.config.cjs",
+            "prettier.config.mjs",
+          }
+
           prettier_root_file = util.insert_package_json(prettier_root_file, "prettier", fname)
           return util.root_pattern(prettier_root_file)(fname)
         end,
@@ -82,11 +83,7 @@ return {
         return
       end
 
-      return {
-        timeout_ms = 1500,
-        lsp_fallback = true,
-        -- lsp_format = "fallback",
-      }
+      return { timeout_ms = 1500, lsp_fallback = true }
     end,
   },
   keys = {

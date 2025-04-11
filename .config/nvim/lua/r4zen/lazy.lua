@@ -13,9 +13,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   { import = "r4zen.plugins" },
-  { import = "r4zen.plugins.colors" },
+  { import = "r4zen.plugins.themes" },
   { import = "r4zen.plugins.lsp" },
-  { import = "r4zen.plugins.langs" },
 }, {
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },

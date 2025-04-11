@@ -25,7 +25,9 @@ M.plugin = {
       require("mini.jump").setup()
       require("mini.jump2d").setup()
       require("mini.bracketed").setup()
-      require("mini.surround").setup()
+      require("mini.surround").setup({
+        n_lines = 400,
+      })
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
       -- require("mini.operators").setup()
@@ -78,7 +80,8 @@ M.plugin = {
           note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
           -- Highlight hex color strings (`#rrggbb`) using that color
-          hex_color = hipatterns.gen_highlighter.hex_color(),
+          -- Currently trying out `ccc.nvim`
+          -- hex_color = hipatterns.gen_highlighter.hex_color(),
 
           -- Highlight tailwind colors
           tailwind = {
