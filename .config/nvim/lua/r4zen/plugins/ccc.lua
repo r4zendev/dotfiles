@@ -26,7 +26,7 @@ return {
     },
   },
   keys = {
-    { "<leader>cc", vim.cmd.CccPick, desc = "Pick color" },
+    { "<leader>pc", vim.cmd.CccPick, desc = "Pick color" },
   },
   -- NOTE: for reference
   -- config = function(_, opts)

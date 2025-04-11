@@ -15,6 +15,10 @@ map({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 map("v", ">", ">gv", { noremap = true, silent = true })
 map("v", "<", "<gv", { noremap = true, silent = true })
 
+-- don't move cursor on pressing #/*
+map({ "n", "v" }, "*", "*``", { noremap = true, silent = true })
+map({ "n", "v" }, "#", "#``", { noremap = true, silent = true })
+
 -- delete char without polluting copy register
 map("n", "x", '"_x', { noremap = true, silent = true })
 
@@ -31,9 +35,10 @@ map({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
 map({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
 
 -- Registers
-map("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" })
+-- Not really needed anymore, since using vim-cool
+-- map("n", "<leader>sc", ':let @/ = ""<CR>', { desc = "Clear search" })
 map("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
-map("n", "<leader>yr", ':let @+ = expand("%")<CR>', { desc = "Copy relative path" })
+map("n", "<leader>yr", ':let @+ = expand("%:.")<CR>', { desc = "Copy relative path" })
 map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
 
 -- Splits
