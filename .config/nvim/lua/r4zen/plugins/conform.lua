@@ -7,7 +7,7 @@ end
 return {
   "stevearc/conform.nvim",
   lazy = true,
-  event = { "BufReadPre", "BufNewFile" }, -- to disable, comment this out
+  event = "LazyFile", -- to disable, comment this out
   opts = {
     formatters = {
       ["biome-check"] = {

@@ -1,7 +1,7 @@
 return {
   {
     "williamboman/mason.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     opts = {
       ui = {
         icons = {
@@ -14,11 +14,11 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     opts = {
       ensure_installed = {
         "ts_ls",

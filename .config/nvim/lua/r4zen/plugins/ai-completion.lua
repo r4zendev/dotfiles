@@ -32,7 +32,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     -- event = "VeryLazy",
     opts = {
       enable_cmp_source = false,
@@ -47,8 +47,10 @@ return {
         accept_fallback = nil,
         key_bindings = {
           accept = "<Tab>",
-          accept_word = false,
-          accept_line = false,
+          accept_line = "<C-l>",
+          accept_word = "<C-w>",
+          -- accept_word = false,
+          -- accept_line = false,
           clear = false,
           next = "]]",
           prev = "[[",
@@ -118,7 +120,7 @@ return {
   {
     "augmentcode/augment.vim",
     cmd = "Augment",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     -- Cannot be called on InsertEnter, since plugin would not be loaded at that point.
     -- It initializes and authenticates and only then starts to provide suggestions.
     -- Hopefully will be fixed eventually, as this works as expected in copilot.
@@ -159,120 +161,127 @@ return {
   {
     "milanglacier/minuet-ai.nvim",
     enabled = false,
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
+    event = "LazyFile",
+    opts = {
+      provider = "gemini",
+      notify = "error",
+      request_timeout = 2,
+      throttle = 2000,
+      -- blink = {
+      --   enable_auto_complete = true,
+      -- },
+      virtualtext = {
+        auto_trigger_ft = { "*" },
+        -- auto_trigger_ignore_ft = {},
+        keymap = {
+          accept = "<Tab>",
+          accept_line = "<C-l>",
+          -- accept n lines (prompts for number)
+          -- e.g. "C-w 2 CR" will accept 2 lines
+          accept_n_lines = "<C-w>",
+          prev = "[[",
+          next = "]]",
+        },
+        show_on_completion_menu = true,
+      },
+      provider_options = {
+        codestral = {
+          optional = {
+            stop = { "\n\n" },
+            max_tokens = 256,
+          },
+        },
+        gemini = {
+          model = "gemini-2.0-flash",
+          api_key = "GEMINI_API_KEY",
+          system = {
+            prompt = gemini_prompt,
+          },
+          chat_input = {
+            template = gemini_chat_input_template,
+          },
+          optional = {
+            generationConfig = {
+              maxOutputTokens = 256,
+              topP = 0.9,
+            },
+            safetySettings = {
+              {
+                category = "HARM_CATEGORY_DANGEROUS_CONTENT",
+                threshold = "BLOCK_NONE",
+              },
+              {
+                category = "HARM_CATEGORY_HATE_SPEECH",
+                threshold = "BLOCK_NONE",
+              },
+              {
+                category = "HARM_CATEGORY_HARASSMENT",
+                threshold = "BLOCK_NONE",
+              },
+              {
+                category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                threshold = "BLOCK_NONE",
+              },
+            },
+          },
+        },
+        openai = {
+          model = "gpt-4o-mini",
+          api_key = "OPENAI_API_KEY",
+          optional = {
+            max_tokens = 256,
+            top_p = 0.9,
+          },
+        },
+        openai_fim_compatible = {
+          model = "deepseek-chat",
+          end_point = "https://api.deepseek.com/beta/completions",
+          api_key = "DEEPSEEK_API_KEY",
+          -- template = {
+          --   prompt = "See [Prompt Section for default value]",
+          --   suffix = "See [Prompt Section for default value]",
+          -- },
+          optional = {
+            stop = { "\n\n" },
+            max_tokens = 256,
+          },
+        },
+        -- openai_compatible = {
+        --   api_key = "OPENROUTER_API_KEY",
+        --   end_point = "https://openrouter.ai/api/v1/chat/completions",
+        --   model = "meta-llama/llama-3.3-70b-instruct",
+        --   name = "Openrouter",
+        --   optional = {
+        --     max_tokens = 128,
+        --     top_p = 0.9,
+        --     provider = {
+        --       -- Prioritize throughput for faster completion
+        --       sort = "throughput",
+        --     },
+        --   },
+        -- },
+      },
+    },
+    config = function(_, opts)
       gemini_few_shots[2] = require("minuet.config").default_few_shots[2]
 
-      require("minuet").setup({
-        provider = "gemini",
-        notify = "error",
-        request_timeout = 2,
-        throttle = 2000,
-        -- blink = {
-        --   enable_auto_complete = true,
-        -- },
-        virtualtext = {
-          auto_trigger_ft = { "*" },
-          -- auto_trigger_ignore_ft = {},
-          keymap = {
-            accept = "<Tab>",
-            accept_line = "<C-l>",
-            -- accept n lines (prompts for number)
-            -- e.g. "C-w 2 CR" will accept 2 lines
-            accept_n_lines = "<C-w>",
-            prev = "[[",
-            next = "]]",
-          },
-          show_on_completion_menu = true,
-        },
+      require("minuet").setup(vim.tbl_extend("force", opts, {
         provider_options = {
-          codestral = {
-            optional = {
-              stop = { "\n\n" },
-              max_tokens = 256,
-            },
-          },
           gemini = {
-            model = "gemini-2.0-flash",
-            api_key = "GEMINI_API_KEY",
-            system = {
-              prompt = gemini_prompt,
-            },
             few_shots = gemini_few_shots,
-            chat_input = {
-              template = gemini_chat_input_template,
-            },
-            optional = {
-              generationConfig = {
-                maxOutputTokens = 256,
-                topP = 0.9,
-              },
-              safetySettings = {
-                {
-                  category = "HARM_CATEGORY_DANGEROUS_CONTENT",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_HATE_SPEECH",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_HARASSMENT",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                  threshold = "BLOCK_NONE",
-                },
-              },
-            },
           },
-          openai = {
-            model = "gpt-4o-mini",
-            api_key = "OPENAI_API_KEY",
-            optional = {
-              max_tokens = 256,
-              top_p = 0.9,
-            },
-          },
-          openai_fim_compatible = {
-            model = "deepseek-chat",
-            end_point = "https://api.deepseek.com/beta/completions",
-            api_key = "DEEPSEEK_API_KEY",
-            -- template = {
-            --   prompt = "See [Prompt Section for default value]",
-            --   suffix = "See [Prompt Section for default value]",
-            -- },
-            optional = {
-              stop = { "\n\n" },
-              max_tokens = 256,
-            },
-          },
-          -- openai_compatible = {
-          --   api_key = "OPENROUTER_API_KEY",
-          --   end_point = "https://openrouter.ai/api/v1/chat/completions",
-          --   model = "meta-llama/llama-3.3-70b-instruct",
-          --   name = "Openrouter",
-          --   optional = {
-          --     max_tokens = 128,
-          --     top_p = 0.9,
-          --     provider = {
-          --       -- Prioritize throughput for faster completion
-          --       sort = "throughput",
-          --     },
-          --   },
-          -- },
         },
-      })
-
-      local virtual_text = require("minuet.virtualtext").action
+      }))
 
       vim.keymap.set("i", "<Tab>", function()
+        local virtual_text = require("minuet.virtualtext").action
+
         if virtual_text.is_visible() then
           virtual_text.accept()
-        else
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+          return
         end
+
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
       end, { silent = true })
     end,
   },

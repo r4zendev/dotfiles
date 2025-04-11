@@ -16,8 +16,8 @@ map("v", ">", ">gv", { noremap = true, silent = true })
 map("v", "<", "<gv", { noremap = true, silent = true })
 
 -- don't move cursor on pressing #/*
-map({ "n", "v" }, "*", "*``", { noremap = true, silent = true })
-map({ "n", "v" }, "#", "#``", { noremap = true, silent = true })
+map({ "n", "v" }, "*", "*``zz", { noremap = true, silent = true })
+map({ "n", "v" }, "#", "#``zz", { noremap = true, silent = true })
 
 -- delete char without polluting copy register
 map("n", "x", '"_x', { noremap = true, silent = true })

@@ -3,7 +3,7 @@
 -- Use if needed.
 return {
   "jake-stewart/multicursor.nvim",
-  event = { "BufReadPre", "BufNewFile" },
+  event = "LazyFile",
   branch = "1.0",
   config = function()
     local mc = require("multicursor-nvim")

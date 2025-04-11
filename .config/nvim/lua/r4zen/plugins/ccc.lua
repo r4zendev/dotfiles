@@ -1,6 +1,6 @@
 return {
   "uga-rosa/ccc.nvim",
-  event = { "BufReadPre", "BufNewFile" },
+  event = "LazyFile",
   cmd = {
     "CccPick",
     "CccConvert",

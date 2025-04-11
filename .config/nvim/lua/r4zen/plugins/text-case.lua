@@ -2,7 +2,7 @@ local M = {}
 
 M.plugin = {
   "johmsalas/text-case.nvim",
-  event = { "BufRead", "BufNewFile" },
+  event = "LazyFile",
   opts = { prefix = "<leader>C" },
   keys = {
     {

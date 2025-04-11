@@ -1,4 +1,4 @@
 return {
   "romainl/vim-cool",
-  event = { "BufReadPre", "BufNewFile" },
+  event = "LazyFile",
 }

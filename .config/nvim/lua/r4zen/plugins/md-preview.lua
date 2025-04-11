@@ -12,7 +12,7 @@ return {
   },
   {
     "jmbuhr/otter.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },

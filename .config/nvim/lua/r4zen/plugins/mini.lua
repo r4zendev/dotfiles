@@ -18,7 +18,7 @@ M.plugin = {
   {
     "echasnovski/mini.nvim",
     lazy = true,
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     config = function()
       require("mini.ai").setup()
       require("mini.align").setup()

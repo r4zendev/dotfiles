@@ -1,6 +1,6 @@
 return {
   "gbprod/yanky.nvim",
-  event = { "BufReadPre", "BufNewFile" },
+  event = "LazyFile",
   opts = {
     highlight = {
       timer = 150,
