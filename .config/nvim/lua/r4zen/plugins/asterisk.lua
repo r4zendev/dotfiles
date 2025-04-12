@@ -1,6 +1,5 @@
 return {
   "haya14busa/vim-asterisk",
-  event = "LazyFile",
   init = function()
     vim.g["asterisk#keeppos"] = 1
   end,

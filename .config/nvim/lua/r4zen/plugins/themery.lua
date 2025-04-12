@@ -41,10 +41,7 @@ return {
       { name = "Kanagawa Lotus", colorscheme = "kanagawa-lotus" },
       { name = "Kanagawa Dragon", colorscheme = "kanagawa-dragon" },
       { name = "Nightfly", colorscheme = "nightfly" },
-
-      -- Nice to have themes, low amount of colors
       { name = "Default", colorscheme = "default", after = transparent_background_hl_string .. default_harpoon_hl_string },
-      { name = "Poimandres", colorscheme = "poimandres" },
     },
     livePreview = true,
   },
