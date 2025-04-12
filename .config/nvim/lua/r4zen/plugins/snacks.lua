@@ -109,6 +109,7 @@ M.plugin = {
     },
     rename = { enabled = true },
     bigfile = { enabled = true },
+    image = { enabled = true },
   },
   keys = {
     -- NOTE: Files

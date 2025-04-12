@@ -1,6 +1,5 @@
 return {
   "bluz71/vim-nightfly-guicolors",
-  lazy = true,
   config = function()
     vim.g.nightflyTransparent = true
 

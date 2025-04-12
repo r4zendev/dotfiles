@@ -27,6 +27,7 @@ return {
         "tailwindcss",
         "prismals",
         "biome",
+        "js-debug-adapter",
 
         "html",
         "cssls",
@@ -45,6 +46,9 @@ return {
         "clang-format",
         "typos_lsp",
         "graphql",
+
+        "rust_analyzer",
+        "codelldb",
       },
     },
   },

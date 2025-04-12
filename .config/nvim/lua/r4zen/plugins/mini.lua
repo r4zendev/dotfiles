@@ -1,23 +1,18 @@
 local M = {}
 
+M.icon_config = {
+  eslint = { glyph = "󰱺", hl = "MiniIconsYellow" },
+  prettier = { glyph = "", hl = "MiniIconsPurple" },
+  node = { glyph = "", hl = "MiniIconsGreen" },
+  yarn = { glyph = "", hl = "MiniIconsBlue" },
+  pnpm = { glyph = "", hl = "MiniIconsBlue" },
+  tsconfig_json = { glyph = "", hl = "MiniIconsAzure" },
+  env = { glyph = "", hl = "MiniIconsBlue" },
+}
+
 M.plugin = {
-  -- lualine still uses nvim-web-devicons, so it's being stubbed here
-  {
-    "echasnovski/mini.icons",
-    lazy = true,
-    specs = {
-      { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-    },
-    init = function()
-      package.preload["nvim-web-devicons"] = function()
-        require("mini.icons").mock_nvim_web_devicons()
-        return package.loaded["nvim-web-devicons"]
-      end
-    end,
-  },
   {
     "echasnovski/mini.nvim",
-    lazy = true,
     event = "LazyFile",
     config = function()
       require("mini.ai").setup()
@@ -120,46 +115,63 @@ M.plugin = {
       })
     end,
   },
-}
+  -- lualine still uses nvim-web-devicons, so it's being stubbed here
+  -- https://www.reddit.com/r/neovim/comments/1duf3w7/comment/lbgbc6a
+  {
+    "echasnovski/mini.icons",
+    specs = {
+      { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
+    },
+    opts = {
+      file = {
+        [".eslintignore"] = M.icon_config.eslint,
+        [".eslintrc.js"] = M.icon_config.eslint,
+        [".eslintrc.cjs"] = M.icon_config.eslint,
+        [".eslintrc.mjs"] = M.icon_config.eslint,
 
--- M.open_notifications_history = function(notifications)
---   local buf = vim.api.nvim_create_buf(false, true)
---
---   local width = math.floor(vim.o.columns * 0.8)
---   local height = math.floor(vim.o.lines * 0.8)
---   local col = math.floor((vim.o.columns - width) / 2)
---   local row = math.floor((vim.o.lines - height) / 2)
---
---   local win = vim.api.nvim_open_win(buf, true, {
---     relative = "editor",
---     width = width,
---     height = height,
---     col = col,
---     row = row,
---     style = "minimal",
---     border = "rounded",
---     title = " Notification History ",
---     title_pos = "center",
---   })
---
---   local lines = {}
---   for _, notif in ipairs(notifications) do
---     local msg = type(notif.msg) == "string" and notif.msg or vim.inspect(notif.msg)
---     msg = msg:gsub("%%", "%%%%") -- Escape literal '%'
---     msg = msg:gsub("\n", " ") -- Replace newlines with spaces
---     table.insert(lines, string.format("[%s] %s", notif.level, msg))
---   end
---
---   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
---
---   vim.bo[buf].modifiable = false
---   vim.bo[buf].filetype = "log"
---   vim.bo[buf].bufhidden = "wipe"
---
---   vim.keymap.set("n", "q", function()
---     vim.api.nvim_win_close(win, true)
---   end, { buffer = buf, silent = true, nowait = true, desc = "Close notification history" })
--- end
+        ["eslint.config.js"] = M.icon_config.eslint,
+        ["eslint.config.cjs"] = M.icon_config.eslint,
+        ["eslint.config.mjs"] = M.icon_config.eslint,
+
+        [".prettierignore"] = M.icon_config.prettier,
+        [".prettierrc"] = M.icon_config.prettier,
+        [".prettierrc.js"] = M.icon_config.prettier,
+        [".prettierrc.cjs"] = M.icon_config.prettier,
+        [".prettierrc.mjs"] = M.icon_config.prettier,
+
+        ["prettier.config.js"] = M.icon_config.prettier,
+        ["prettier.config.cjs"] = M.icon_config.prettier,
+        ["prettier.config.mjs"] = M.icon_config.prettier,
+
+        [".node-version"] = M.icon_config.node,
+        [".npmrc"] = M.icon_config.node,
+        [".nvmrc"] = M.icon_config.node,
+        ["package.json"] = M.icon_config.node,
+
+        [".yarnrc.yml"] = M.icon_config.yarn,
+        ["yarn.lock"] = M.icon_config.yarn,
+
+        ["pnpm-lock.yaml"] = M.icon_config.pnpm,
+        ["pnpm-workspace.yaml"] = M.icon_config.pnpm,
+
+        ["tsconfig.json"] = M.icon_config.tsconfig_json,
+        ["tsconfig.build.json"] = M.icon_config.tsconfig_json,
+
+        [".env"] = M.icon_config.env,
+        [".env.example"] = M.icon_config.env,
+        [".env.development"] = M.icon_config.env,
+        [".env.test"] = M.icon_config.env,
+        [".env.production"] = M.icon_config.env,
+      },
+    },
+    init = function()
+      package.preload["nvim-web-devicons"] = function()
+        require("mini.icons").mock_nvim_web_devicons()
+        return package.loaded["nvim-web-devicons"]
+      end
+    end,
+  },
+}
 
 M.hl = {}
 
@@ -489,5 +501,44 @@ M.tailwind_colors = {
     [950] = "4c0519",
   },
 }
+
+-- M.open_notifications_history = function(notifications)
+--   local buf = vim.api.nvim_create_buf(false, true)
+--
+--   local width = math.floor(vim.o.columns * 0.8)
+--   local height = math.floor(vim.o.lines * 0.8)
+--   local col = math.floor((vim.o.columns - width) / 2)
+--   local row = math.floor((vim.o.lines - height) / 2)
+--
+--   local win = vim.api.nvim_open_win(buf, true, {
+--     relative = "editor",
+--     width = width,
+--     height = height,
+--     col = col,
+--     row = row,
+--     style = "minimal",
+--     border = "rounded",
+--     title = " Notification History ",
+--     title_pos = "center",
+--   })
+--
+--   local lines = {}
+--   for _, notif in ipairs(notifications) do
+--     local msg = type(notif.msg) == "string" and notif.msg or vim.inspect(notif.msg)
+--     msg = msg:gsub("%%", "%%%%") -- Escape literal '%'
+--     msg = msg:gsub("\n", " ") -- Replace newlines with spaces
+--     table.insert(lines, string.format("[%s] %s", notif.level, msg))
+--   end
+--
+--   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+--
+--   vim.bo[buf].modifiable = false
+--   vim.bo[buf].filetype = "log"
+--   vim.bo[buf].bufhidden = "wipe"
+--
+--   vim.keymap.set("n", "q", function()
+--     vim.api.nvim_win_close(win, true)
+--   end, { buffer = buf, silent = true, nowait = true, desc = "Close notification history" })
+-- end
 
 return M.plugin

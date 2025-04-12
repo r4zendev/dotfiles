@@ -18,6 +18,18 @@ end
 
 return {
   {
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = "mason.nvim",
+    cmd = { "DapInstall", "DapUninstall" },
+    opts = {
+      automatic_installation = true,
+
+      handlers = {},
+
+      ensure_installed = {},
+    },
+  },
+  {
     "stevearc/overseer.nvim",
     cmd = {
       "OverseerOpen",
@@ -73,8 +85,6 @@ return {
   },
   {
     "mfussenegger/nvim-dap",
-    recommended = true,
-    desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras)",
 
     dependencies = {
       "rcarriga/nvim-dap-ui",
@@ -133,6 +143,7 @@ return {
           },
         }
       end
+
       if not dap.adapters["node"] then
         dap.adapters["node"] = function(cb, config)
           if config.type == "node" then
@@ -236,29 +247,5 @@ return {
         dapui.close({})
       end
     end,
-  },
-
-  -- mason.nvim integration
-  {
-    "jay-babu/mason-nvim-dap.nvim",
-    dependencies = "mason.nvim",
-    cmd = { "DapInstall", "DapUninstall" },
-    opts = {
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
-      automatic_installation = true,
-
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
-
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
-      ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
-      },
-    },
-    -- mason-nvim-dap is loaded when nvim-dap loads
-    config = function() end,
   },
 }

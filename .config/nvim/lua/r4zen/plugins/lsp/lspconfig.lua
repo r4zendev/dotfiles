@@ -245,5 +245,22 @@ return {
       capabilities = capabilities,
       on_attach = on_attach,
     })
+
+    lspconfig["rust_analyzer"].setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        vim.keymap.set("n", "<leader>a", function()
+          vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
+          -- or vim.lsp.buf.codeAction() if you don't want grouping.
+        end, { silent = true, buffer = bufnr })
+
+        -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
+        vim.keymap.set("n", "K", function()
+          vim.cmd.RustLsp({ "hover", "actions" })
+        end, { silent = true, buffer = bufnr })
+      end,
+    })
   end,
 }

@@ -100,3 +100,4 @@ brew install --cask hammerspoon # advanced scripting & automation
 brew install jordanbaird-ice # toolbar
 brew install --cask keycastr # keylogger
 brew install --cask linearmouse # app to reverse external mouse scroll
+brew install imagemagick # image processing

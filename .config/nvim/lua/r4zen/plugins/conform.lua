@@ -6,8 +6,7 @@ end
 
 return {
   "stevearc/conform.nvim",
-  lazy = true,
-  event = "LazyFile", -- to disable, comment this out
+  event = "LazyFile",
   opts = {
     formatters = {
       ["biome-check"] = {

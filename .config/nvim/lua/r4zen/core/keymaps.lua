@@ -16,8 +16,8 @@ map("v", ">", ">gv", { noremap = true, silent = true })
 map("v", "<", "<gv", { noremap = true, silent = true })
 
 -- don't move cursor on pressing #/*
-map({ "n", "v" }, "*", "*``zz", { noremap = true, silent = true })
-map({ "n", "v" }, "#", "#``zz", { noremap = true, silent = true })
+-- map({ "n", "v" }, "*", "*``zz", { noremap = true, silent = true })
+-- map({ "n", "v" }, "#", "#``zz", { noremap = true, silent = true })
 
 -- delete char without polluting copy register
 map("n", "x", '"_x', { noremap = true, silent = true })
@@ -56,6 +56,24 @@ map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
 map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
 map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
+
+-- Search the web
+local function search_web(engine, url_template)
+  vim.ui.input({ prompt = "Search " .. engine .. ": " }, function(query)
+    if query and query ~= "" then
+      local escaped = vim.uri_encode(query)
+      local url = url_template:format(escaped)
+      vim.ui.open(url)
+    end
+  end)
+end
+
+map("n", "<leader>go", function()
+  search_web("Google", "https://www.google.com/search?q=%s")
+end, { desc = "Google it" })
+map("n", "<leader>gp", function()
+  search_web("DuckDuckGo", "https://duckduckgo.com/?q=%s")
+end, { desc = "DuckDuckGo it" })
 
 -- repeat dot multiple times, didn't use that often.
 -- map("n", "<leader>.", function()

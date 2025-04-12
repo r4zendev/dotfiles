@@ -108,7 +108,7 @@ return {
       end
     end,
   },
-  { "banjo/contextfiles.nvim", lazy = true },
+  { "banjo/contextfiles.nvim" },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {

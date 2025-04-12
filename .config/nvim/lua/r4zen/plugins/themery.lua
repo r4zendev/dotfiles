@@ -47,11 +47,6 @@ return {
 
       -- Nice to have themes, low amount of colors
       {
-        name = "Nord",
-        colorscheme = "nord",
-        after = transparent_background_hl_string .. default_harpoon_hl_string,
-      },
-      {
         name = "Default",
         colorscheme = "default",
         after = transparent_background_hl_string .. default_harpoon_hl_string,
