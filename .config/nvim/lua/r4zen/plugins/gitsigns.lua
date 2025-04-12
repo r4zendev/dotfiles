@@ -39,6 +39,7 @@ return {
           gs.nav_hunk("prev")
         end
       end, "Prev Hunk")
+
       map("n", "]H", function() gs.nav_hunk("last") end, "Last Hunk")
       map("n", "[H", function() gs.nav_hunk("first") end, "First Hunk")
       map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
@@ -52,6 +53,10 @@ return {
       map("n", "<leader>ghd", gs.diffthis, "Diff This")
       map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
       map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+
+      require("which-key").add({
+        { "<leader>gh", group = "Gitsigns", icon = { icon = "", color = "cyan" } },
+      })
     end,
   },
 }

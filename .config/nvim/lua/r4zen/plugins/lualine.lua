@@ -33,11 +33,14 @@ return {
         local found = false
         for i = 1, #harpoon_items do
           local harpoon_item = harpoon_items[i]
-          local path = harpoon_item.value
 
-          if vim.uv.fs_realpath(path) == vim.uv.fs_realpath(current_file_path) then
-            found = true
-            break
+          if harpoon_item ~= nil then
+            local path = harpoon_item.value
+
+            if vim.uv.fs_realpath(path) == vim.uv.fs_realpath(current_file_path) then
+              found = true
+              break
+            end
           end
         end
 

@@ -1,38 +1,22 @@
 local supported_adapters = {
   copilot = function()
     return require("codecompanion.adapters").extend("copilot", {
-      schema = {
-        model = {
-          default = "claude-3.7-sonnet",
-        },
-      },
+      schema = { model = { default = "claude-3.7-sonnet" } },
     })
   end,
   gemini = function()
     return require("codecompanion.adapters").extend("gemini", {
-      schema = {
-        model = {
-          default = "gemini-2.5-pro-exp-03-25",
-        },
-      },
+      schema = { model = { default = "gemini-2.5-pro-exp-03-25" } },
     })
   end,
   gemini_flash = function()
     return require("codecompanion.adapters").extend("gemini", {
-      schema = {
-        model = {
-          default = "gemini-2.0-flash",
-        },
-      },
+      schema = { model = { default = "gemini-2.0-flash" } },
     })
   end,
   copilot_4o = function()
     return require("codecompanion.adapters").extend("copilot", {
-      schema = {
-        model = {
-          default = "gpt-4o-2024-11-20",
-        },
-      },
+      schema = { model = { default = "gpt-4o-2024-11-20" } },
     })
   end,
   openrouter_o3mini = function()
@@ -42,11 +26,7 @@ local supported_adapters = {
         api_key = "OPENROUTER_API_KEY",
         chat_url = "/v1/chat/completions",
       },
-      schema = {
-        model = {
-          default = "openai/o3-mini-high",
-        },
-      },
+      schema = { model = { default = "openai/o3-mini-high" } },
     })
   end,
   openrouter_claude = function()
@@ -56,11 +36,7 @@ local supported_adapters = {
         api_key = "OPENROUTER_API_KEY",
         chat_url = "/v1/chat/completions",
       },
-      schema = {
-        model = {
-          default = "anthropic/claude-3.7-sonnet",
-        },
-      },
+      schema = { model = { default = "anthropic/claude-3.7-sonnet" } },
     })
   end,
   openrouter_deepseek_r1 = function()
@@ -70,11 +46,7 @@ local supported_adapters = {
         api_key = "OPENROUTER_API_KEY",
         chat_url = "/v1/chat/completions",
       },
-      schema = {
-        model = {
-          default = "deepseek/deepseek-r1:free",
-        },
-      },
+      schema = { model = { default = "deepseek/deepseek-r1:free" } },
     })
   end,
 }
@@ -271,14 +243,11 @@ Format findings as markdown and with:
         },
       },
     },
+    -- stylua: ignore
     keys = {
       { "<leader>ac", ":CodeCompanionChat copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
       { "<leader>ao", ":CodeCompanionChat copilot_4o<CR>", desc = "Codecompanion: Copilot (GPT-4o)" },
-      {
-        "<leader>aC",
-        ":lua require('codecompanion').prompt('context')<CR>",
-        desc = "Codecompanion: With Context Files",
-      },
+      { "<leader>aC", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },
       { "<leader>ag", ":CodeCompanionChat gemini_flash<CR>", desc = "Codecompanion: Gemini Flash" },
       { "<leader>aG", ":CodeCompanionChat gemini<CR>", desc = "Codecompanion: Gemini" },
       { "<leader>aa", ":CodeCompanionChat openrouter_claude<CR>", desc = "Codecompanion: Claude 3.7" },
@@ -299,9 +268,7 @@ Format findings as markdown and with:
       { "<leader>aL", ":CodeCompanionLoad<CR>", desc = "Codecompanion: Load chat" },
       { "<leader>aP", ":CodeCompanionActions<CR>", desc = "Codecompanion: Prompts" },
     },
-    config = function(_, opts)
-      require("codecompanion").setup(opts)
-
+    init = function()
       -- Initialize storage for CodeCompanion chats
       local Path = require("plenary.path")
       local save_folder = Path:new(vim.fn.stdpath("data"), "codecompanion_chats")

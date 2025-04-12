@@ -11,75 +11,16 @@ M.plugin = {
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  config = function()
-    local harpoon = require("harpoon")
-
-    harpoon:setup()
-
-    local list = harpoon:list()
-
-    local function select_valid_index(direction)
-      if #list.items == 0 then
-        return
-      end
-
-      local idx = list._index
-
-      local normalized_list = vim.tbl_values(list.items)
-      list.items = normalized_list
-
-      local step = direction == "prev" and -1 or 1
-      local total_items = #normalized_list
-      local start_idx = (idx - 1 + step) % total_items + 1
-
-      local i = start_idx
-      local loop_start_idx = start_idx
-
-      while true do
-        local item = normalized_list[i]
-
-        if item then
-          list:select(i)
-          M.trigger_status_ui()
-
-          list._index = i
-          return
-        end
-
-        i = (i + step - 1) % total_items + 1
-
-        if i == loop_start_idx then
-          break
-        end
-      end
-    end
-
+  -- stylua: ignore
+  keys = {
+    { "<leader>j", function() require("harpoon"):list():remove() end },
+    { "<leader>k", function() require("harpoon"):list():add() end },
+    { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end },
+    { "<M-[>", function() M.select_valid_index("prev") end },
+    { "<M-]>", function() M.select_valid_index("next") end },
+  },
+  init = function()
     local map = vim.keymap.set
-
-    map("n", "<leader>j", function()
-      list:remove()
-    end, { desc = "Harpoon remove" })
-
-    map("n", "<leader>k", function()
-      list:add()
-    end, { desc = "Harpoon add" })
-
-    map("n", "<C-e>", function()
-      harpoon.ui:toggle_quick_menu(list)
-    end, { desc = "Harpoon menu" })
-
-    map("n", "<M-]>", function()
-      select_valid_index("next")
-    end, { desc = "Harpoon next" })
-
-    map("n", "<M-[>", function()
-      select_valid_index("prev")
-    end, { desc = "Harpoon previous" })
-
-    require("which-key").add({
-      { "<leader>j", icon = { icon = "-", color = "red" } },
-      { "<leader>k", icon = { icon = "+", color = "green" } },
-    })
 
     -- Number key mappings for quick access
     for i = 1, 9 do
@@ -88,9 +29,16 @@ M.plugin = {
       end, { desc = string.format("Harpoon: Go to %s", i) })
     end
 
-    -- Extend harpoon with custom hooks
-    harpoon:extend({
+    -- Show UI on startup
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        M.trigger_status_ui()
+      end,
+    })
+
+    require("harpoon"):extend({
       ADD = function()
+        local list = require("harpoon"):list()
         list._index = #list.items
         M.trigger_status_ui()
       end,
@@ -98,6 +46,7 @@ M.plugin = {
         M.trigger_status_ui()
       end,
       SELECT = function(cx)
+        local list = require("harpoon"):list()
         list._index = cx.idx
         vim.api.nvim_feedkeys("zz", "n", false)
       end,
@@ -113,15 +62,46 @@ M.plugin = {
         end
       end,
     })
-
-    -- Show UI on startup
-    vim.api.nvim_create_autocmd("VimEnter", {
-      callback = function()
-        M.trigger_status_ui()
-      end,
-    })
   end,
 }
+
+M.select_valid_index = function(direction)
+  local list = require("harpoon"):list()
+
+  if #list.items == 0 then
+    return
+  end
+
+  local idx = list._index
+
+  local normalized_list = vim.tbl_values(list.items)
+  list.items = normalized_list
+
+  local step = direction == "prev" and -1 or 1
+  local total_items = #normalized_list
+  local start_idx = (idx - 1 + step) % total_items + 1
+
+  local i = start_idx
+  local loop_start_idx = start_idx
+
+  while true do
+    local item = normalized_list[i]
+
+    if item then
+      list:select(i)
+      M.trigger_status_ui()
+
+      list._index = i
+      return
+    end
+
+    i = (i + step - 1) % total_items + 1
+
+    if i == loop_start_idx then
+      break
+    end
+  end
+end
 
 M.get_harpooned_files = function()
   local harpoon = require("harpoon")

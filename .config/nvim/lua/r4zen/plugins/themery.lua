@@ -27,17 +27,14 @@ return {
   lazy = false,
   priority = 1000,
   opts = {
+    -- stylua: ignore
     themes = {
       -- Main
       { name = "Tokyo Night", colorscheme = "tokyonight", after = transparent_winbar_hl_string },
 
       -- Alts
       { name = "Rose Pine", colorscheme = "rose-pine", after = transparent_winbar_hl_string },
-      {
-        name = "Kanagawa Wave",
-        colorscheme = "kanagawa-wave",
-        after = transparent_background_hl_string,
-      },
+      { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
       { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
 
       -- Some extra good ones
@@ -46,11 +43,7 @@ return {
       { name = "Nightfly", colorscheme = "nightfly" },
 
       -- Nice to have themes, low amount of colors
-      {
-        name = "Default",
-        colorscheme = "default",
-        after = transparent_background_hl_string .. default_harpoon_hl_string,
-      },
+      { name = "Default", colorscheme = "default", after = transparent_background_hl_string .. default_harpoon_hl_string },
       { name = "Poimandres", colorscheme = "poimandres" },
     },
     livePreview = true,

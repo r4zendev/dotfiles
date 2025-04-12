@@ -47,44 +47,14 @@ M.plugin = {
         { section = "startup" },
       },
       preset = {
+        -- stylua: ignore
         keys = {
-          {
-            icon = " ",
-            key = "f",
-            desc = "Find Files",
-            action = ":lua Snacks.dashboard.pick('smart', {hidden = true})",
-          },
-          {
-            icon = " ",
-            key = "g",
-            desc = "Find Text",
-            action = ":lua Snacks.dashboard.pick('live_grep', {hidden = true})",
-          },
-          {
-            icon = " ",
-            key = "d",
-            desc = "View Diff",
-            action = ":DiffviewOpen",
-          },
-          {
-            icon = " ",
-            key = "T",
-            desc = "Select theme",
-            action = ":Themery",
-          },
-          {
-            icon = "󰒲 ",
-            key = "L",
-            desc = "Lazy",
-            action = ":Lazy",
-            enabled = package.loaded.lazy ~= nil,
-          },
-          {
-            icon = " ",
-            key = "q",
-            desc = "Quit",
-            action = ":qa",
-          },
+          { icon = " ", key = "f", desc = "Find Files", action = ":lua Snacks.dashboard.pick('smart', {hidden = true})" },
+          { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', {hidden = true})" },
+          { icon = " ", key = "d", desc = "View Diff", action = ":DiffviewOpen" },
+          { icon = " ", key = "T", desc = "Select theme", action = ":Themery" },
+          { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         },
         header = [[⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⣠⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
@@ -111,109 +81,25 @@ M.plugin = {
     bigfile = { enabled = true },
     image = { enabled = true },
   },
+  -- stylua: ignore
   keys = {
     -- NOTE: Files
-    {
-      "<leader><leader>",
-      function()
-        Snacks.picker.smart()
-      end,
-      desc = "Smart Find Files",
-    },
-    {
-      "<leader>.",
-      function()
-        Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
-      end,
-      desc = "Find in directory",
-    },
-    {
-      "<leader>e",
-      function()
-        Snacks.explorer()
-      end,
-      desc = "File Explorer",
-    },
-    {
-      "<leader>ff",
-      function()
-        Snacks.picker.recent()
-      end,
-      desc = "Find Recent Files",
-    },
-    {
-      "<leader>fc",
-      function()
-        Snacks.picker.files({
-          cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles",
-        })
-      end,
-      desc = "Find Under Dotfiles",
-    },
-    {
-      "<leader>fp",
-      function()
-        Snacks.picker.projects()
-      end,
-      desc = "Projects",
-    },
+    { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+    { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
+    { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },
+    { "<leader>fc", function() Snacks.picker.files({ cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles" }) end, desc = "Find Under Dotfiles" },
+    { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
 
     -- NOTE: Grep
-    {
-      "<leader>,",
-      function()
-        Snacks.picker.grep()
-      end,
-      desc = "Grep",
-      mode = { "n" },
-    },
-    {
-      "<leader>/",
-      function()
-        Snacks.picker.grep({ cwd = vim.fn.expand("%:p:h") })
-      end,
-      desc = "Grep in directory",
-    },
-    {
-      "<leader>,",
-      function()
-        Snacks.picker.grep_word()
-      end,
-      desc = "Grep",
-      mode = { "x" },
-    },
-    {
-      "<leader>sb",
-      function()
-        Snacks.picker.lines()
-      end,
-      desc = "Buffer Lines",
-    },
-    {
-      "<leader>sB",
-      function()
-        Snacks.picker.grep_buffers()
-      end,
-      desc = "Grep Open Buffers",
-    },
-    {
-      "<leader>st",
-      function()
-        Snacks.picker.grep({
-          search = "()TODO()|()FIXME()|()HACK()|()NOTE()",
-        })
-      end,
-      desc = "Search TODOs",
-    },
+    { "<leader>,", function() Snacks.picker.grep() end, desc = "Grep", mode = { "n" } },
+    { "<leader>/", function() Snacks.picker.grep({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Grep in directory" },
+    { "<leader>,", function() Snacks.picker.grep_word() end, desc = "Grep", mode = { "x" } },
+    { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+    { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
+    { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search TODOs" },
 
     -- NOTE: Git
-    {
-      "<leader>gf",
-      function()
-        Snacks.picker.git_status()
-      end,
-      desc = "Find Git Files",
-    },
     {
       "<leader>gg",
       function()
@@ -251,164 +137,38 @@ M.plugin = {
       end,
       desc = "Grep Git Files",
     },
-    {
-      "<leader>gb",
-      function()
-        Snacks.picker.git_branches()
-      end,
-      desc = "Git Branches",
-    },
-    {
-      "<leader>gl",
-      function()
-        Snacks.picker.git_log_file()
-      end,
-      desc = "Git Log File",
-    },
-    {
-      "<leader>gh",
-      function()
-        Snacks.picker.git_log()
-      end,
-      desc = "Git Log",
-    },
+    { "<leader>gf", function() Snacks.picker.git_status() end, desc = "Find Git Files" },
+    { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+    { "<leader>gl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+    { "<leader>g\\", function() Snacks.picker.git_log() end, desc = "Git Log" },
 
     -- NOTE: Search
-    {
-      "<leader>sb",
-      function()
-        Snacks.picker.lines()
-      end,
-      desc = "Buffer Lines",
-    },
-    {
-      "<leader>sd",
-      function()
-        Snacks.picker.diagnostics_buffer()
-      end,
-      desc = "Buffer Diagnostics",
-    },
-    {
-      "<leader>sD",
-      function()
-        Snacks.picker.diagnostics()
-      end,
-      desc = "Diagnostics",
-    },
-    {
-      "<leader>sH",
-      function()
-        Snacks.picker.highlights()
-      end,
-      desc = "Highlights",
-    },
-    {
-      "<leader>sk",
-      function()
-        Snacks.picker.keymaps()
-      end,
-      desc = "Keymaps",
-    },
-    {
-      "<leader>sq",
-      function()
-        Snacks.picker.qflist()
-      end,
-      desc = "Quickfix List",
-    },
-    {
-      "<leader>sR",
-      function()
-        Snacks.picker.resume()
-      end,
-      desc = "Resume",
-    },
-    {
-      "<leader>su",
-      function()
-        Snacks.picker.undo()
-      end,
-      desc = "Undo History",
-    },
+    { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+    { "<leader>sd", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
+    { "<leader>sD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
+    { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
+    { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
+    { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
+    { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
+    { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
 
     -- NOTE: LSP
-    {
-      "gd",
-      function()
-        Snacks.picker.lsp_definitions()
-      end,
-      desc = "Goto Definition",
-    },
-    {
-      "gD",
-      function()
-        Snacks.picker.lsp_declarations()
-      end,
-      desc = "Goto Declaration",
-    },
-    {
-      "gr",
-      function()
-        Snacks.picker.lsp_references()
-      end,
-      nowait = true,
-      desc = "References",
-    },
-    {
-      "gI",
-      function()
-        Snacks.picker.lsp_implementations()
-      end,
-      desc = "Goto Implementation",
-    },
-    {
-      "gy",
-      function()
-        Snacks.picker.lsp_type_definitions()
-      end,
-      desc = "Goto T[y]pe Definition",
-    },
-    {
-      "<leader>ss",
-      function()
-        Snacks.picker.lsp_symbols()
-      end,
-      desc = "LSP Symbols",
-    },
-    {
-      "<leader>sS",
-      function()
-        Snacks.picker.lsp_workspace_symbols()
-      end,
-      desc = "LSP Workspace Symbols",
-    },
+    { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
+    { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
+    { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+    { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
+    { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+    { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
+    { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
 
     -- NOTE: Colorscheme
-    {
-      "<leader>uC",
-      function()
-        Snacks.picker.colorschemes()
-      end,
-      desc = "Colorschemes",
-    },
+    { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
 
-    -- NOTE: Registers
-    {
-      '<leader>s"',
-      function()
-        Snacks.picker.registers()
-      end,
-      desc = "Registers",
-    },
-
-    -- NOTE: Marks
-    {
-      "<C-e>",
-      function()
-        Snacks.picker.marks()
-      end,
-      desc = "Marks",
-    },
+    -- NOTE: Misc
+    { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
+    { "<leader>s/", function() Snacks.picker.search_history() end, desc = "Search history" },
+    { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
+    { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command History" },
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {

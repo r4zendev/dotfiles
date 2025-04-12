@@ -71,29 +71,11 @@ return {
     -- It initializes and authenticates and only then starts to provide suggestions.
     -- Hopefully will be fixed eventually, as this works as expected in copilot.
     -- event = "InsertEnter",
+    -- stylua: ignore
     keys = {
-      {
-        "<leader>au",
-        function()
-          vim.cmd("Augment chat")
-        end,
-        desc = "Augment Chat",
-        mode = { "n", "v" },
-      },
-      -- {
-      --   "<leader>an",
-      --   function()
-      --     vim.cmd("Augment chat-new")
-      --   end,
-      --   desc = "Augment: New Chat",
-      -- },
-      -- {
-      --   "<leader>at",
-      --   function()
-      --     vim.cmd("Augment chat-toggle")
-      --   end,
-      --   desc = "Augment: Toggle Chat",
-      -- },
+      { "<leader>au", function() vim.cmd("Augment chat") end, desc = "Augment Chat", mode = { "n", "v" } },
+      -- { "<leader>an", function() vim.cmd("Augment chat-new") end, desc = "Augment: New Chat" },
+      -- { "<leader>at", function() vim.cmd("Augment chat-toggle") end, desc = "Augment: Toggle Chat" },
     },
     init = function()
       -- Add workspaces for better suggestions
@@ -122,7 +104,8 @@ return {
           auto_trigger_ft = { "*" },
           -- auto_trigger_ignore_ft = {},
           keymap = {
-            accept = "<Tab>",
+            -- remapped in `init`
+            accept = false,
             accept_line = "<C-l>",
             -- accept n lines (prompts for number)
             -- e.g. "C-w 2 CR" will accept 2 lines
@@ -155,22 +138,10 @@ return {
                 topP = 0.9,
               },
               safetySettings = {
-                {
-                  category = "HARM_CATEGORY_DANGEROUS_CONTENT",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_HATE_SPEECH",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_HARASSMENT",
-                  threshold = "BLOCK_NONE",
-                },
-                {
-                  category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                  threshold = "BLOCK_NONE",
-                },
+                { category = "HARM_CATEGORY_DANGEROUS_CONTENT", threshold = "BLOCK_NONE" },
+                { category = "HARM_CATEGORY_HATE_SPEECH", threshold = "BLOCK_NONE" },
+                { category = "HARM_CATEGORY_HARASSMENT", threshold = "BLOCK_NONE" },
+                { category = "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold = "BLOCK_NONE" },
               },
             },
           },

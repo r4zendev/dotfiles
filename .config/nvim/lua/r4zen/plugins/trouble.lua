@@ -2,6 +2,7 @@ return {
   "folke/trouble.nvim",
   -- event = "LazyFile",
   cmd = "Trouble",
+  -- stylua: ignore
   keys = {
     {
       "<leader>xw",
@@ -19,30 +20,10 @@ return {
       desc = "Trouble: Workspace diagnostics",
       silent = true,
     },
-    {
-      "<leader>xd",
-      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-      desc = "Trouble: Document diagnostics",
-      silent = true,
-    },
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Trouble: Toggle loclist",
-      silent = true,
-    },
-    {
-      "<leader>xQ",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Trouble: Toggle quickfix",
-      silent = true,
-    },
-    {
-      "<leader>xr",
-      "<cmd>Trouble lsp toggle focus=false win.position=bottom<cr>",
-      desc = "Trouble: LSP references",
-      silent = true,
-    },
+    { "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Trouble: Document diagnostics", silent = true },
+    { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Trouble: Toggle loclist", silent = true },
+    { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Trouble: Toggle quickfix", silent = true },
+    { "<leader>xr", "<cmd>Trouble lsp toggle focus=false win.position=bottom<cr>", desc = "Trouble: LSP references", silent = true },
   },
   opts = {
     -- NOTE: for reference

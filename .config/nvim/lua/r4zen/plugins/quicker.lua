@@ -19,20 +19,9 @@ return {
       },
     },
   },
+  -- stylua: ignore
   keys = {
-    {
-      "<leader>xq",
-      function()
-        require("quicker").toggle()
-      end,
-      desc = "Quicker: Toggle quickfix",
-    },
-    {
-      "<leader>xl",
-      function()
-        require("quicker").toggle({ loclist = true })
-      end,
-      desc = "Quicker: Toggle loclist",
-    },
+    { "<leader>xq", function() require("quicker").toggle() end, desc = "Quicker: Toggle quickfix" },
+    { "<leader>xl", function() require("quicker").toggle({ loclist = true }) end, desc = "Quicker: Toggle loclist" },
   },
 }

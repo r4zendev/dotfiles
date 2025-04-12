@@ -1,4 +1,5 @@
 return {
+  -- Beneficial for plugins that want nvim-cmp, like obsidian.nvim
   {
     "saghen/blink.compat",
     version = "*",

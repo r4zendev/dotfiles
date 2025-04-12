@@ -4,19 +4,17 @@ return {
   init = function()
     vim.g["asterisk#keeppos"] = 1
   end,
-  config = function()
-    -- vim.keymap.set({ "n", "x", "o" }, "*", "<Plug>(asterisk-*)")
-    -- vim.keymap.set({ "n", "x", "o" }, "#", "<Plug>(asterisk-#)")
+  keys = {
+    { "*", "<Plug>(asterisk-z*)", silent = true },
+    { "#", "<Plug>(asterisk-z#)", silent = true },
 
-    vim.keymap.set({ "n", "x", "o" }, "g*", "<Plug>(asterisk-g*)")
-    vim.keymap.set({ "n", "x", "o" }, "g#", "<Plug>(asterisk-g#)")
+    { "g*", "<Plug>(asterisk-g*)", silent = true },
+    { "g#", "<Plug>(asterisk-g#)", silent = true },
 
-    vim.keymap.set({ "n", "x", "o" }, "*", "<Plug>(asterisk-z*)")
-    vim.keymap.set({ "n", "x", "o" }, "#", "<Plug>(asterisk-z#)")
-    -- vim.keymap.set({ "n", "x", "o" }, "z*", "<Plug>(asterisk-z*)")
-    -- vim.keymap.set({ "n", "x", "o" }, "z#", "<Plug>(asterisk-z#)")
+    { "z*", "<Plug>(asterisk-*)", silent = true },
+    { "z#", "<Plug>(asterisk-#)", silent = true },
 
-    vim.keymap.set({ "n", "x", "o" }, "gz*", "<Plug>(asterisk-gz*)")
-    vim.keymap.set({ "n", "x", "o" }, "gz#", "<Plug>(asterisk-gz#)")
-  end,
+    { "gz*", "<Plug>(asterisk-gz*)", silent = true },
+    { "gz#", "<Plug>(asterisk-gz#)", silent = true },
+  },
 }
