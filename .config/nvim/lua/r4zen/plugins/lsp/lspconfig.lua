@@ -25,6 +25,8 @@ return {
       opts.desc = "Populate qflist with diagnostics"
       map({ "n", "v" }, "<leader>cq", function()
         vim.diagnostic.setqflist({ open = false })
+
+        -- require("quicker").toggle()
         require("trouble").open({ mode = "quickfix", focus = false })
       end, opts)
 

@@ -7,6 +7,6 @@ autocmd("FileType", {
   group = "JSLogMacro",
   pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
   callback = function()
-    vim.fn.setreg("l", "yoconsole.log('" .. esc .. "pa: ', " .. esc .. "pa);")
+    vim.fn.setreg("l", "yoconsole.log('" .. esc .. "pa: ', " .. esc .. "pa);" .. esc)
   end,
 })
