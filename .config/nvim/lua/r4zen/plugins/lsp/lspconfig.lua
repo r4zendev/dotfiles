@@ -9,7 +9,9 @@ return {
     local lspconfig = require("lspconfig")
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+    local map = vim.keymap.set
     local opts = { noremap = true, silent = true }
+
     local on_attach = function(client, bufnr)
       if client.server_capabilities.documentSymbolProvider then
         require("nvim-navic").attach(client, bufnr)
@@ -18,13 +20,19 @@ return {
       opts.buffer = bufnr
 
       opts.desc = "See available code actions"
-      vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+      map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+
+      opts.desc = "Populate qflist with diagnostics"
+      map({ "n", "v" }, "<leader>cq", function()
+        vim.diagnostic.setqflist({ open = false })
+        require("trouble").open({ mode = "quickfix", focus = false })
+      end, opts)
 
       opts.desc = "Smart rename"
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+      map("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
       opts.desc = "Restart LSP"
-      vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+      map("n", "<leader>rs", ":LspRestart<CR>", opts)
     end
 
     -- Using custom statuscolumn that handles these on its own
@@ -67,7 +75,7 @@ return {
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
         -- Add the keybinding in on_attach to ensure it's buffer-local
-        vim.keymap.set("n", "<leader>ci", ":LspOrganizeImports<CR>", {
+        map("n", "<leader>ci", ":LspOrganizeImports<CR>", {
           buffer = bufnr,
           desc = "Organize Imports",
         })
@@ -173,7 +181,7 @@ return {
           end,
         })
 
-        vim.keymap.set("n", "<leader>ce", ":EslintFixAll<CR>", {
+        map("n", "<leader>ce", ":EslintFixAll<CR>", {
           desc = "Fix all ESLint issues",
           buffer = bufnr,
         })
@@ -251,13 +259,13 @@ return {
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
 
-        vim.keymap.set("n", "<leader>a", function()
+        map("n", "<leader>a", function()
           vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
           -- or vim.lsp.buf.codeAction() if you don't want grouping.
         end, { silent = true, buffer = bufnr })
 
         -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
-        vim.keymap.set("n", "K", function()
+        map("n", "K", function()
           vim.cmd.RustLsp({ "hover", "actions" })
         end, { silent = true, buffer = bufnr })
       end,

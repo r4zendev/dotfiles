@@ -22,7 +22,7 @@ return {
       },
     },
     right = {
-      { ft = "grug-far", size = { width = 0.3 } },
+      { ft = "grug-far", size = { width = 0.4 } },
     },
     -- left = {
     --   -- Neo-tree filesystem always takes half the screen height
