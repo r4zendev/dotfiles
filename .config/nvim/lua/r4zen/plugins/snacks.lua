@@ -392,6 +392,15 @@ M.plugin = {
       desc = "Colorschemes",
     },
 
+    -- NOTE: Registers
+    {
+      '<leader>s"',
+      function()
+        Snacks.picker.registers()
+      end,
+      desc = "Registers",
+    },
+
     -- NOTE: Marks
     {
       "<C-e>",
