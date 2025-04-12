@@ -1,8 +1,12 @@
 # Dotfiles
 
-![setup](./setup.jpg)
+![setup](./preview.jpg)
 
-This is the home of all my dotfiles. These are files that add custom configurations to my computer and applications, primarily the terminal.
+These are files that add custom configurations to my computer and applications, primarily the terminal.
+
+## Neovim startup benchmark
+
+![startup](./startup-time.jpg)
 
 ## Installation
 
@@ -40,7 +44,10 @@ stow . -t ~
 
 ## Future
 
+- [ ] Try out [vtsls](https://github.com/yioneko/vtsls) for TypeScript-based projects
+- [ ] Improve [DAP](.config/nvim/lua/r4zen/plugins/dap.lua), [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua) & [yarepl](.config/nvim/lua/r4zen/plugins/yarepl.lua)+Aider usage/workflows
 - [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace) (currently happy with [`yabai`](https://github.com/koekeishiya/yabai))
+- [ ] Build the same kind of configuration for my CachyOS (Arch-based) rig using Hyprland/AutoHotkey etc.
 
 ## 🎉 Acknowledgment
 
