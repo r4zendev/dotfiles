@@ -1,0 +1,37 @@
+root = true
+
+[*]
+charset = utf-8
+# js, lua, json, css, html, yaml...
+indent_size = 2
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+# go
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# python
+[*.{ini,py,py.tpl,rst}]
+indent_size = 4
+
+# rust
+[*.rs]
+indent_style = tab
+indent_size = 4
+
+# c++
+[*.{c,h,cpp,hpp,cxx,hxx,cc,hh}]
+indent_size = 4
+
+# documentation, utils
+[*.{md,mdx,diff}]
+trim_trailing_whitespace = false
+
+# windows shell scripts
+[*.{cmd,bat,ps1}]
+end_of_line = crlf
