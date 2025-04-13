@@ -21,6 +21,7 @@ return {
     event = "LazyFile",
     opts = {
       ensure_installed = {
+        "vtsls",
         "ts_ls",
         "eslint",
         "prettierd",
@@ -45,6 +46,7 @@ return {
 
         "clang-format",
         "typos_lsp",
+        "harper_ls",
         "graphql",
 
         "rust_analyzer",

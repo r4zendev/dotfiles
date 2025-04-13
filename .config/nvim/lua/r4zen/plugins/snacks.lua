@@ -105,8 +105,6 @@ M.plugin = {
       function()
         local changed_files = {}
         require("plenary.job")
-          -- Weird error that doesn't make too much sense
-          ---@diagnostic disable-next-line: missing-fields
           :new({
             command = "git",
             args = { "diff", "--name-only" },

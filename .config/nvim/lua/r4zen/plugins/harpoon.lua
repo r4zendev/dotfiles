@@ -13,11 +13,11 @@ M.plugin = {
   },
   -- stylua: ignore
   keys = {
-    { "<leader>j", function() require("harpoon"):list():remove() end },
-    { "<leader>k", function() require("harpoon"):list():add() end },
-    { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end },
-    { "<M-[>", function() M.select_valid_index("prev") end },
-    { "<M-]>", function() M.select_valid_index("next") end },
+    { "<leader>j", function() require("harpoon"):list():remove() end, desc = "Harpoon: Remove" },
+    { "<leader>k", function() require("harpoon"):list():add() end, desc = "Harpoon: Add" },
+    { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon: Toggle UI" },
+    { "<M-[>", function() M.select_valid_index("prev") end, desc = "Harpoon: Previous" },
+    { "<M-]>", function() M.select_valid_index("next") end, desc = "Harpoon: Next" },
   },
   init = function()
     local map = vim.keymap.set

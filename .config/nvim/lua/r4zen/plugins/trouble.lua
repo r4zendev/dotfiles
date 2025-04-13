@@ -7,7 +7,6 @@ return {
     {
       "<leader>xw",
       function()
-        ---@diagnostic disable-next-line: missing-fields
         require("trouble").toggle({
           mode = "diagnostics",
           filter = function(items)
