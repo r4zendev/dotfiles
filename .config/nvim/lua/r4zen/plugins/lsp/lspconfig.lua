@@ -119,6 +119,16 @@ M.plugin = {
       capabilities = capabilities,
       on_attach = M.on_attach,
     })
+
+    lspconfig["tailwindcss"].setup({
+      capabilities = capabilities,
+      on_attach = M.on_attach,
+    })
+
+    lspconfig["astro"].setup({
+      capabilities = capabilities,
+      on_attach = M.on_attach,
+    })
   end,
 }
 
@@ -293,13 +303,13 @@ M.servers = {
       })
     end,
   },
-  -- NOTE: ESLint and Biome were not added after nvim-lspconfig migrated to new lsp setup in Neovim 0.11
+  -- NOTE: These were not added after nvim-lspconfig migrated to new lsp setup in Neovim 0.11
   -- So, instead I still have to use lspconfig.eslint.setup instead of vim.lsp.config()
   -- because otherwise the default configuration from nvim-lspconfig is not applied
   -- eslint = {}
   -- biome = {}
+  -- tailwindcss = {},
   cssls = {},
-  tailwindcss = {},
   prismals = { filetypes = { "prisma" } },
 
   -- Rust
