@@ -44,8 +44,7 @@ stow . -t ~
 
 ## Future
 
-- [ ] Try out [vtsls](https://github.com/yioneko/vtsls) for TypeScript-based projects
-- [ ] Improve [DAP](.config/nvim/lua/r4zen/plugins/dap.lua), [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua) & [yarepl](.config/nvim/lua/r4zen/plugins/yarepl.lua)+Aider usage/workflows
+- [ ] Improve [DAP](.config/nvim/lua/r4zen/plugins/dap.lua), [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua) & [yarepl](.config/nvim/lua/r4zen/plugins/yarepl.lua)+Aider usage/workflows & configs
 - [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace) (currently happy with [`yabai`](https://github.com/koekeishiya/yabai))
 - [ ] Build the same kind of configuration for my CachyOS (Arch-based) rig using Hyprland/AutoHotkey etc.
 

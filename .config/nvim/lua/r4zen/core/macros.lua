@@ -10,3 +10,12 @@ autocmd("FileType", {
     vim.fn.setreg("l", "yoconsole.log('" .. esc .. "pa: ', " .. esc .. "pa);" .. esc)
   end,
 })
+
+augroup("LuaMacro", { clear = true })
+autocmd("FileType", {
+  group = "LuaMacro",
+  pattern = { "lua" },
+  callback = function()
+    vim.fn.setreg("v", "yoprint(vim.inspect(" .. esc .. "pa))" .. esc)
+  end,
+})

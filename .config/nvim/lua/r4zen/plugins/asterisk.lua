@@ -4,16 +4,16 @@ return {
     vim.g["asterisk#keeppos"] = 1
   end,
   keys = {
-    { "*", "<Plug>(asterisk-z*)", silent = true },
-    { "#", "<Plug>(asterisk-z#)", silent = true },
+    { "*", "<Plug>(asterisk-z*)", silent = true, mode = { "n", "v" } },
+    { "#", "<Plug>(asterisk-z#)", silent = true, mode = { "n", "v" } },
 
-    { "g*", "<Plug>(asterisk-g*)", silent = true },
-    { "g#", "<Plug>(asterisk-g#)", silent = true },
+    { "g*", "<Plug>(asterisk-g*)", silent = true, mode = { "n", "v" } },
+    { "g#", "<Plug>(asterisk-g#)", silent = true, mode = { "n", "v" } },
 
-    { "z*", "<Plug>(asterisk-*)", silent = true },
-    { "z#", "<Plug>(asterisk-#)", silent = true },
+    { "z*", "<Plug>(asterisk-*)", silent = true, mode = { "n", "v" } },
+    { "z#", "<Plug>(asterisk-#)", silent = true, mode = { "n", "v" } },
 
-    { "gz*", "<Plug>(asterisk-gz*)", silent = true },
-    { "gz#", "<Plug>(asterisk-gz#)", silent = true },
+    { "gz*", "<Plug>(asterisk-gz*)", silent = true, mode = { "n", "v" } },
+    { "gz#", "<Plug>(asterisk-gz#)", silent = true, mode = { "n", "v" } },
   },
 }
