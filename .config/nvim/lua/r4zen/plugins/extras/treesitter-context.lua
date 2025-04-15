@@ -1,3 +1,4 @@
+-- A good nvim-navic alternative
 return {
   "nvim-treesitter/nvim-treesitter-context",
   event = "LazyFile",

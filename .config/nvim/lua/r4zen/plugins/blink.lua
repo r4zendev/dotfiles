@@ -143,9 +143,9 @@ return {
       },
       signature = {
         enabled = true,
-        trigger = {
-          enabled = true,
-        },
+        -- trigger = {
+        --   enabled = true,
+        -- },
       },
     },
     init = function()

@@ -19,18 +19,6 @@ return {
           return require("lspconfig.util").root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
         end,
       },
-      -- Handled using LSP capabilities
-      -- eslint_d = {
-      --   condition = function(self, ctx)
-      --     return require("lspconfig.util").root_pattern(
-      --       ".eslintrc.js",
-      --       ".eslintrc.cjs",
-      --       ".eslintrc.yaml",
-      --       ".eslintrc.yml",
-      --       ".eslintrc.json"
-      --     )(vim.api.nvim_buf_get_name(0))
-      --   end,
-      -- },
       prettierd = {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)

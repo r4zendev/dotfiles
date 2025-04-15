@@ -9,7 +9,7 @@
 # https://fishshell.com/
 
 eval (/opt/homebrew/bin/brew shellenv)
-set -x HOMEBREW_AUTOREMOVE 1 
+set -x HOMEBREW_AUTOREMOVE 1
 # eval (/opt/homebrew/bin/brew shellenv fish)
 
 # TODO: waiting for fish support

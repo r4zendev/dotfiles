@@ -1,7 +1,5 @@
 return {
   "SmiteshP/nvim-navic",
+  lazy = false,
   event = "VeryLazy",
-  opts = {
-    highlight = true,
-  },
 }

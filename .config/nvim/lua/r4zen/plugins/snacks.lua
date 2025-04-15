@@ -41,6 +41,7 @@ M.plugin = {
       },
     },
     dashboard = {
+      enabled = true,
       sections = {
         { section = "header", padding = 2 },
         { section = "keys", gap = 1, padding = 1 },
@@ -138,6 +139,7 @@ M.plugin = {
     { "<leader>gf", function() Snacks.picker.git_status() end, desc = "Find Git Files" },
     { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
     { "<leader>gl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+    { "<leader>gD", function() M.grep_modified_files() end, desc = "Grep Modified Files" },
     { "<leader>g\\", function() Snacks.picker.git_log() end, desc = "Git Log" },
 
     -- NOTE: Search
@@ -208,6 +210,38 @@ function M.git_branch_del(picker, item)
       end
     end)
   end, { cwd = picker:cwd() })
+end
+
+function M.grep_modified_files()
+  local modified_files = {}
+  require("plenary.job")
+    :new({
+      command = "git",
+      args = { "ls-files", "--modified" },
+      on_stdout = function(_, line)
+        if line and #line > 0 then
+          table.insert(modified_files, line)
+        end
+      end,
+    })
+    :sync()
+
+  if #modified_files == 0 then
+    vim.notify("No modified files found", vim.log.levels.INFO)
+    return
+  end
+
+  local args = {}
+  for _, file in ipairs(modified_files) do
+    table.insert(args, "--glob")
+    table.insert(args, file)
+  end
+
+  Snacks.picker.grep({
+    title = "Grep in Modified Files",
+    need_search = true,
+    args = args,
+  })
 end
 
 return M.plugin

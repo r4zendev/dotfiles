@@ -38,8 +38,14 @@ M.plugin = {
     })
 
     for server, settings in pairs(M.servers) do
-      vim.lsp.config(server, vim.tbl_extend("force", { on_attach = M.on_attach }, settings))
+      if settings.enabled == false then
+        goto continue
+      end
+
+      vim.lsp.config(server, vim.tbl_deep_extend("force", { on_attach = M.on_attach }, settings))
       vim.lsp.enable(server)
+
+      ::continue::
     end
 
     -- NOTE: Below are the servers that were not migrated to the new nvim 0.11 lsp setup (ESLint, Biome)
@@ -180,7 +186,16 @@ end
 
 M.servers = {
   -- TypeScript / JavaScript
+  ts_ls = {
+    enabled = false,
+    on_attach = function(client, bufnr)
+      M.on_attach(client, bufnr)
+
+      map("n", "<leader>ci", M.lsp_action["source.organizeImports"], { buffer = bufnr, desc = "Organize Imports" })
+    end,
+  },
   vtsls = {
+    enabled = true,
     settings = {
       complete_function_calls = true,
       vtsls = {
@@ -208,6 +223,8 @@ M.servers = {
       },
     },
     on_attach = function(client, bufnr)
+      M.on_attach(client, bufnr)
+
       local opts = function(desc)
         return { desc = desc, buffer = bufnr, silent = true, noremap = true }
       end
@@ -317,7 +334,7 @@ M.servers = {
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
-      map("n", "<leader>a", function()
+      map("n", "<leader>ca", function()
         vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
         -- or vim.lsp.buf.codeAction() if you don't want grouping.
       end, { silent = true, buffer = bufnr })

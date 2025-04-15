@@ -2,6 +2,7 @@ local M = {}
 
 M.plugin = {
   "stevearc/oil.nvim",
+  event = "VeryLazy",
   cmd = { "Oil" },
   dependencies = { "echasnovski/mini.icons" },
   opts = {

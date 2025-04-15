@@ -1,4 +1,5 @@
 .DS_Store
+cursortablogs
 .rgignore
 node_modules
 dist

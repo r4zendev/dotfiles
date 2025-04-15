@@ -75,6 +75,17 @@ map("n", "<leader>gp", function()
   search_web("DuckDuckGo", "https://duckduckgo.com/?q=%s")
 end, { desc = "DuckDuckGo it" })
 
+vim.keymap.set("n", "<leader>ym", function()
+  local path = vim.fn.expand("%:p")
+  local stat = vim.uv.fs_stat(path)
+
+  if stat then
+    vim.notify(string.format("Last modified: %s", os.date("%c", stat.mtime.sec)))
+  else
+    vim.notify("File not found.")
+  end
+end, { desc = "Print file's last modified time" })
+
 -- repeat dot multiple times, didn't use that often.
 -- map("n", "<leader>.", function()
 --   return "<esc>" .. string.rep(".", vim.v.count1)

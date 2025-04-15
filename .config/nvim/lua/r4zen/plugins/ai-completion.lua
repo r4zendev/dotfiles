@@ -1,4 +1,13 @@
 return {
+  -- A very interesting plugin, but not yet ready to use
+  -- {
+  --   "reachingforthejack/cursortab.nvim",
+  --   build = "go install .",
+  --   event = "LazyFile",
+  --   config = function(_, opts)
+  --     require("cursortab").setup(opts)
+  --   end,
+  -- },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
