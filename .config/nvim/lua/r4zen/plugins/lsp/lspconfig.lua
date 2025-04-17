@@ -48,7 +48,7 @@ M.plugin = {
       ::continue::
     end
 
-    -- NOTE: Below are the servers that were not migrated to the new nvim 0.11 lsp setup (ESLint, Biome)
+    -- NOTE: Below are the servers that were not migrated to the new nvim 0.11 lsp setup
 
     local lspconfig = require("lspconfig")
     local capabilities = require("blink.cmp").get_lsp_capabilities()
@@ -121,10 +121,10 @@ M.plugin = {
     })
 
     -- Auto-formatting is handled in conform using lsp_fallback flag
-    lspconfig["biome"].setup({
-      capabilities = capabilities,
-      on_attach = M.on_attach,
-    })
+    -- lspconfig["biome"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = M.on_attach,
+    -- })
 
     lspconfig["tailwindcss"].setup({
       capabilities = capabilities,
@@ -320,12 +320,7 @@ M.servers = {
       })
     end,
   },
-  -- NOTE: These were not added after nvim-lspconfig migrated to new lsp setup in Neovim 0.11
-  -- So, instead I still have to use lspconfig.eslint.setup instead of vim.lsp.config()
-  -- because otherwise the default configuration from nvim-lspconfig is not applied
-  -- eslint = {}
-  -- biome = {}
-  -- tailwindcss = {},
+  biome = {},
   cssls = {},
   prismals = { filetypes = { "prisma" } },
 

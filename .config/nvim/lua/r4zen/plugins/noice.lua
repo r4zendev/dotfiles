@@ -24,7 +24,7 @@ return {
     },
   },
   keys = {
-    { "<leader>cm", vim.cmd.NoiceAll, desc = "See messages history" },
-    { "<leader>cd", vim.cmd.NoiceDismiss, desc = "Dismiss notifications" },
+    { "<leader>cm", vim.cmd.NoiceAll, desc = "See messages history", mode = { "n", "v" } },
+    { "<leader>cd", vim.cmd.NoiceDismiss, desc = "Dismiss notifications", mode = { "n", "v" } },
   },
 }

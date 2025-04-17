@@ -1,13 +1,9 @@
 return {
-  -- A very interesting plugin, but not yet ready to use
-  -- {
-  --   "reachingforthejack/cursortab.nvim",
-  --   build = "go install .",
-  --   event = "LazyFile",
-  --   config = function(_, opts)
-  --     require("cursortab").setup(opts)
-  --   end,
-  -- },
+  {
+    "reachingforthejack/cursortab.nvim",
+    build = "go install .",
+    event = "InsertEnter",
+  },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -24,7 +20,7 @@ return {
       suggestion = {
         -- Trying out other completion plugins, keeping the copilot panel for now
         -- Copilot is also used in codecompanion for access to its chat models
-        enabled = true,
+        enabled = false,
         auto_trigger = true,
         keymap = {
           accept = "<Tab>",
