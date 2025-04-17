@@ -18,6 +18,7 @@
 .config/linearmouse
 
 .config/fish/conf.d/env.fish
+.config/nvim/lua/r4zen/plugins/extras/browser-tabs
 .config/mcpservers.json
 
 dist

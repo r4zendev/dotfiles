@@ -130,11 +130,6 @@ M.plugin = {
       capabilities = capabilities,
       on_attach = M.on_attach,
     })
-
-    lspconfig["astro"].setup({
-      capabilities = capabilities,
-      on_attach = M.on_attach,
-    })
   end,
 }
 
@@ -322,6 +317,7 @@ M.servers = {
   },
   biome = {},
   cssls = {},
+  astro = {},
   prismals = { filetypes = { "prisma" } },
 
   -- Rust

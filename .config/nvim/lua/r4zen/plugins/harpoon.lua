@@ -1,4 +1,5 @@
 local utils = require("r4zen.utils")
+local map = vim.keymap.set
 
 local M = {}
 
@@ -10,6 +11,7 @@ M.plugin = {
   -- event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",
+    "folke/snacks.nvim",
   },
   -- stylua: ignore
   keys = {
@@ -20,8 +22,6 @@ M.plugin = {
     { "<M-]>", function() M.select_valid_index("next") end, desc = "Harpoon: Next" },
   },
   init = function()
-    local map = vim.keymap.set
-
     -- Number key mappings for quick access
     for i = 1, 9 do
       map("n", "<c-t>" .. i, function()
@@ -62,6 +62,25 @@ M.plugin = {
         end
       end,
     })
+
+    -- Toggle permanent UI
+    vim.g.force_harpoon_ui = false
+    require("snacks")
+      .toggle({
+        name = "Force Harpoon UI",
+        get = function()
+          return vim.g.force_harpoon_ui
+        end,
+        set = function(state)
+          vim.g.force_harpoon_ui = state
+          if state then
+            M.show_status_ui()
+          else
+            M.close_status_window()
+          end
+        end,
+      })
+      :map("<leader>mm", { desc = "Toggle Force Harpoon UI" })
   end,
 }
 
@@ -134,13 +153,21 @@ local status_window
 local disappear_delay = 1200
 
 M.close_status_window = function()
-  if status_window then
+  if status_window and vim.api.nvim_win_is_valid(status_window) then
     vim.api.nvim_win_close(status_window, true)
+    status_window = nil
+  end
+
+  if status_timer then
+    vim.fn.timer_stop(status_timer)
     status_timer = nil
   end
 end
 
 M.show_status_ui = function()
+  -- Close existing window to prevent stacking
+  M.close_status_window()
+
   local buf = vim.api.nvim_create_buf(false, true)
   local content = M.get_harpooned_files()
 
@@ -186,9 +213,13 @@ M.show_status_ui = function()
 end
 
 M.trigger_status_ui = function()
+  if vim.g.force_harpoon_ui then
+    M.show_status_ui()
+    return
+  end
+
   if status_timer then
     vim.fn.timer_stop(status_timer)
-    M.close_status_window()
   end
 
   M.show_status_ui()
