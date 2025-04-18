@@ -4,7 +4,7 @@ M.plugin = {
   "stevearc/oil.nvim",
   event = "VeryLazy",
   cmd = { "Oil" },
-  dependencies = { "echasnovski/mini.icons" },
+  dependencies = { "echasnovski/mini.nvim" },
   opts = {
     view_options = {
       show_hidden = true,

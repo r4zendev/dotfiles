@@ -1,24 +1,17 @@
 local M = {}
 
-M.icon_config = {
-  eslint = { glyph = "󰱺", hl = "MiniIconsYellow" },
-  prettier = { glyph = "", hl = "MiniIconsPurple" },
-  node = { glyph = "", hl = "MiniIconsGreen" },
-  yarn = { glyph = "", hl = "MiniIconsBlue" },
-  pnpm = { glyph = "", hl = "MiniIconsBlue" },
-  tsconfig_json = { glyph = "", hl = "MiniIconsAzure" },
-  env = { glyph = "", hl = "MiniIconsBlue" },
-}
-
 M.plugin = {
   {
     "echasnovski/mini.nvim",
     event = "LazyFile",
     config = function()
+      require("mini.icons").setup({
+        file = M.file_icon_config,
+      })
+      MiniIcons.mock_nvim_web_devicons()
+
       require("mini.ai").setup()
       require("mini.align").setup()
-      require("mini.jump").setup()
-      require("mini.jump2d").setup()
       require("mini.bracketed").setup()
       require("mini.surround").setup({
         n_lines = 400,
@@ -26,6 +19,14 @@ M.plugin = {
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
       -- require("mini.operators").setup()
+
+      require("mini.jump").setup()
+      -- Don't start jump2d if using through `man` cmd, because it will break `gO` quickfix window
+      -- with table of contents and make it unusable through <cr>
+      local utils = require("r4zen.utils")
+      if not utils.check_arg("+Man!") then
+        require("mini.jump2d").setup()
+      end
 
       local mini_indentscope = require("mini.indentscope")
       mini_indentscope.setup({
@@ -115,62 +116,86 @@ M.plugin = {
       })
     end,
   },
-  -- lualine still uses nvim-web-devicons, so it's being stubbed here
-  -- https://www.reddit.com/r/neovim/comments/1duf3w7/comment/lbgbc6a
-  {
-    "echasnovski/mini.icons",
-    specs = {
-      { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-    },
-    opts = {
-      file = {
-        [".eslintignore"] = M.icon_config.eslint,
-        [".eslintrc.js"] = M.icon_config.eslint,
-        [".eslintrc.cjs"] = M.icon_config.eslint,
-        [".eslintrc.mjs"] = M.icon_config.eslint,
+}
 
-        ["eslint.config.js"] = M.icon_config.eslint,
-        ["eslint.config.cjs"] = M.icon_config.eslint,
-        ["eslint.config.mjs"] = M.icon_config.eslint,
+M.icons = {
+  eslint = { glyph = "󰱺", hl = "MiniIconsPurple" },
+  prettier = { glyph = "", hl = "MiniIconsPurple" },
+  node = { glyph = "", hl = "MiniIconsGreen" },
+  npm = { glyph = "", hl = "MiniIconsRed" },
+  yarn = { glyph = "", hl = "MiniIconsBlue" },
+  pnpm = { glyph = "", hl = "MiniIconsOrange" },
+  tsconfig_json = { glyph = "", hl = "MiniIconsAzure" },
+  env = { glyph = "", hl = "MiniIconsWhite" },
+  vite = { glyph = "", hl = "MiniIconsPurple" },
+  vitest = { glyph = "", hl = "MiniIconsYellow" },
+  playwright = { glyph = "", hl = "MiniIconsCyan" },
+  postcss = { glyph = "", hl = "MiniIconsRed" },
+  tailwind = { glyph = "", hl = "MiniIconsAzure" },
+}
 
-        [".prettierignore"] = M.icon_config.prettier,
-        [".prettierrc"] = M.icon_config.prettier,
-        [".prettierrc.js"] = M.icon_config.prettier,
-        [".prettierrc.cjs"] = M.icon_config.prettier,
-        [".prettierrc.mjs"] = M.icon_config.prettier,
+M.file_icon_config = {
+  [".eslintignore"] = M.icons.eslint,
+  [".eslintrc.js"] = M.icons.eslint,
+  [".eslintrc.cjs"] = M.icons.eslint,
+  [".eslintrc.mjs"] = M.icons.eslint,
 
-        ["prettier.config.js"] = M.icon_config.prettier,
-        ["prettier.config.cjs"] = M.icon_config.prettier,
-        ["prettier.config.mjs"] = M.icon_config.prettier,
+  ["eslint.config.js"] = M.icons.eslint,
+  ["eslint.config.cjs"] = M.icons.eslint,
+  ["eslint.config.mjs"] = M.icons.eslint,
 
-        [".node-version"] = M.icon_config.node,
-        [".npmrc"] = M.icon_config.node,
-        [".nvmrc"] = M.icon_config.node,
-        ["package.json"] = M.icon_config.node,
+  [".prettierignore"] = M.icons.prettier,
+  [".prettierrc"] = M.icons.prettier,
+  [".prettierrc.js"] = M.icons.prettier,
+  [".prettierrc.cjs"] = M.icons.prettier,
+  [".prettierrc.mjs"] = M.icons.prettier,
 
-        [".yarnrc.yml"] = M.icon_config.yarn,
-        ["yarn.lock"] = M.icon_config.yarn,
+  ["prettier.config.js"] = M.icons.prettier,
+  ["prettier.config.cjs"] = M.icons.prettier,
+  ["prettier.config.mjs"] = M.icons.prettier,
 
-        ["pnpm-lock.yaml"] = M.icon_config.pnpm,
-        ["pnpm-workspace.yaml"] = M.icon_config.pnpm,
+  [".npmrc"] = M.icons.npm,
+  [".node-version"] = M.icons.node,
+  [".nvmrc"] = M.icons.node,
+  ["package.json"] = M.icons.node,
 
-        ["tsconfig.json"] = M.icon_config.tsconfig_json,
-        ["tsconfig.build.json"] = M.icon_config.tsconfig_json,
+  [".yarnrc.yml"] = M.icons.yarn,
+  ["yarn.lock"] = M.icons.yarn,
 
-        [".env"] = M.icon_config.env,
-        [".env.example"] = M.icon_config.env,
-        [".env.development"] = M.icon_config.env,
-        [".env.test"] = M.icon_config.env,
-        [".env.production"] = M.icon_config.env,
-      },
-    },
-    init = function()
-      package.preload["nvim-web-devicons"] = function()
-        require("mini.icons").mock_nvim_web_devicons()
-        return package.loaded["nvim-web-devicons"]
-      end
-    end,
-  },
+  ["pnpm-lock.yaml"] = M.icons.pnpm,
+  ["pnpm-workspace.yaml"] = M.icons.pnpm,
+
+  ["tsconfig.json"] = M.icons.tsconfig_json,
+  ["tsconfig.build.json"] = M.icons.tsconfig_json,
+
+  [".env"] = M.icons.env,
+  [".env.example"] = M.icons.env,
+  [".env.development"] = M.icons.env,
+  [".env.test"] = M.icons.env,
+  [".env.production"] = M.icons.env,
+
+  ["vite.config.ts"] = M.icons.vite,
+  ["vite.config.js"] = M.icons.vite,
+
+  ["vitest.config.ts"] = M.icons.vite,
+  ["vitest.config.js"] = M.icons.vite,
+
+  ["playwright.config.ts"] = M.icons.playwright,
+  ["playwright.config.js"] = M.icons.playwright,
+
+  ["postcss.config.js"] = M.icons.postcss,
+  ["postcss.config.ts"] = M.icons.postcss,
+  ["postcss.config.mjs"] = M.icons.postcss,
+  ["postcss.config.cjs"] = M.icons.postcss,
+  ["postcss.config.mts"] = M.icons.postcss,
+  ["postcss.config.cts"] = M.icons.postcss,
+
+  ["tailwind.config.js"] = M.icons.tailwind,
+  ["tailwind.config.ts"] = M.icons.tailwind,
+  ["tailwind.config.mjs"] = M.icons.tailwind,
+  ["tailwind.config.cjs"] = M.icons.tailwind,
+  ["tailwind.config.mts"] = M.icons.tailwind,
+  ["tailwind.config.cts"] = M.icons.tailwind,
 }
 
 M.hl = {}

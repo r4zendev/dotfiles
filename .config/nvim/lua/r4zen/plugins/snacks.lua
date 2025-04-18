@@ -80,7 +80,8 @@ M.plugin = {
     },
     rename = { enabled = true },
     bigfile = { enabled = true },
-    image = { enabled = true },
+    image = { enabled = false },
+    input = { enabled = true },
   },
   -- stylua: ignore
   keys = {

@@ -46,4 +46,20 @@ M.lazy_require = function(require_path)
   })
 end
 
+---@param arg string
+M.check_arg = function(arg)
+  -- local args = vim.fn.argv()
+  local cmd = vim.v.argv
+
+  local found = false
+  for _, a in ipairs(cmd) do
+    if a == arg then
+      found = true
+      break
+    end
+  end
+
+  return found
+end
+
 return M

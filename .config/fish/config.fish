@@ -44,6 +44,9 @@ fish_add_path $HOME/.cargo/bin # cargo
 set -Ux GOPATH (go env GOPATH)
 fish_add_path $GOPATH/bin # go
 
+# view man pages using Neovim
+set -Ux MANPAGER "nvim +Man!"
+
 # fish_config theme choose Dracula
 # fish_config theme choose tokyonight
 fish_config theme choose catppuccin
