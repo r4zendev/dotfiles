@@ -32,6 +32,7 @@ return {
 
         "html",
         "cssls",
+        "astro",
         "svelte",
 
         "jsonls",

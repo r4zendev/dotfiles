@@ -48,88 +48,7 @@ M.plugin = {
       ::continue::
     end
 
-    -- NOTE: Below are the servers that were not migrated to the new nvim 0.11 lsp setup
-
-    local lspconfig = require("lspconfig")
-    local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-    lspconfig["eslint"].setup({
-      -- Makes ESLint work in monorepos (???)
-      -- settings = { workingDirectory = { mode = "auto" } },
-      -- root_dir = lspconfig.util.find_git_ancestor,
-
-      capabilities = capabilities,
-
-      root_dir = function(fname)
-        local ignored_dirs = {
-          os.getenv("HOME") .. "/projects/ballerine/oss",
-        }
-
-        for _, dir in ipairs(ignored_dirs) do
-          if string.find(fname, dir) then
-            -- Don't load ESLint for projects where it is broken
-            return nil
-          end
-        end
-
-        -- Default lspconfig root_dir function
-        -- Taken from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/eslint.lua
-        local util = require("lspconfig.util")
-        local root_file = util.insert_package_json(M.eslint_root_file, "eslintConfig", fname)
-        return util.root_pattern(root_file)(fname)
-      end,
-
-      handlers = {
-        ["textDocument/diagnostic"] = function(...)
-          local data, _, evt, _ = ...
-
-          if data and data.code and data.code < 0 then
-            if not M.eslint_alerted then
-              vim.notify(
-                string.format("ESLint failed due to an error: \n%s", data.message),
-                vim.log.levels.WARN,
-                { title = "ESLint" }
-              )
-              M.eslint_alerted = true
-            end
-
-            return
-          end
-
-          return vim.lsp.diagnostic.on_diagnostic(...)
-        end,
-      },
-
-      on_attach = function(client, bufnr)
-        M.on_attach(client, bufnr)
-
-        -- Auto-format with LSP
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          buffer = bufnr,
-          callback = function()
-            if not vim.g.disable_autoformat then
-              vim.cmd("EslintFixAll")
-            end
-          end,
-        })
-
-        map("n", "<leader>ce", ":EslintFixAll<CR>", {
-          desc = "Fix all ESLint issues",
-          buffer = bufnr,
-        })
-      end,
-    })
-
-    -- Auto-formatting is handled in conform using lsp_fallback flag
-    -- lspconfig["biome"].setup({
-    --   capabilities = capabilities,
-    --   on_attach = M.on_attach,
-    -- })
-
-    lspconfig["tailwindcss"].setup({
-      capabilities = capabilities,
-      on_attach = M.on_attach,
-    })
+    M.setup_deprecated_servers()
   end,
 }
 
@@ -315,7 +234,20 @@ M.servers = {
       })
     end,
   },
-  biome = {},
+  biome = {
+    -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/biome.lua#L29
+    -- NOTE: This is a workaround for an issue of biome instantiating itself for files
+    -- that do not have biome installed in the project. As per docs, this should help:
+    -- workspace_required = false, but it doesn't, so I had to do this. Another option is
+    -- to use old `lspconfig.biome.setup {}`, but I want to eventually migrate to v0.11 lsp anyways.
+    root_dir = function(bufnr, on_dir)
+      local fname = vim.api.nvim_buf_get_name(bufnr)
+      local root_files = { "biome.json", "biome.jsonc" }
+      root_files = require("lspconfig.util").insert_package_json(root_files, "biome", fname)
+      local root_dir = vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1])
+      return root_dir and on_dir(root_dir)
+    end,
+  },
   cssls = {},
   astro = {},
   prismals = { filetypes = { "prisma" } },
@@ -373,6 +305,85 @@ M.servers = {
   --   },
   -- },
 }
+
+M.setup_deprecated_servers = function()
+  -- NOTE: Below are the servers that were not migrated to the new nvim 0.11 lsp setup
+
+  local lspconfig = require("lspconfig")
+  local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+  lspconfig["eslint"].setup({
+    -- Makes ESLint work in monorepos (???)
+    -- settings = { workingDirectory = { mode = "auto" } },
+    -- root_dir = lspconfig.util.find_git_ancestor,
+
+    capabilities = capabilities,
+
+    root_dir = function(fname)
+      local ignored_dirs = {
+        os.getenv("HOME") .. "/projects/ballerine/oss",
+      }
+
+      for _, dir in ipairs(ignored_dirs) do
+        if string.find(fname, dir) then
+          -- Don't load ESLint for projects where it is broken
+          return nil
+        end
+      end
+
+      -- Default lspconfig root_dir function
+      -- Taken from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/eslint.lua
+      local util = require("lspconfig.util")
+      local root_file = util.insert_package_json(M.eslint_root_file, "eslintConfig", fname)
+      return util.root_pattern(root_file)(fname)
+    end,
+
+    handlers = {
+      ["textDocument/diagnostic"] = function(...)
+        local data, _, evt, _ = ...
+
+        if data and data.code and data.code < 0 then
+          if not M.eslint_alerted then
+            vim.notify(
+              string.format("ESLint failed due to an error: \n%s", data.message),
+              vim.log.levels.WARN,
+              { title = "ESLint" }
+            )
+            M.eslint_alerted = true
+          end
+
+          return
+        end
+
+        return vim.lsp.diagnostic.on_diagnostic(...)
+      end,
+    },
+
+    on_attach = function(client, bufnr)
+      M.on_attach(client, bufnr)
+
+      -- Auto-format with LSP
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = bufnr,
+        callback = function()
+          if not vim.g.disable_autoformat then
+            vim.cmd("EslintFixAll")
+          end
+        end,
+      })
+
+      map("n", "<leader>ce", ":EslintFixAll<CR>", {
+        desc = "Fix all ESLint issues",
+        buffer = bufnr,
+      })
+    end,
+  })
+
+  lspconfig["tailwindcss"].setup({
+    capabilities = capabilities,
+    on_attach = M.on_attach,
+  })
+end
 
 M.eslint_alerted = false
 
