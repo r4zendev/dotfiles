@@ -27,7 +27,6 @@ return {
   lazy = false,
   priority = 1000,
   opts = {
-    -- stylua: ignore
     themes = {
       -- Main
       { name = "Tokyo Night", colorscheme = "tokyonight", after = transparent_winbar_hl_string },
@@ -38,10 +37,8 @@ return {
       { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
 
       -- Some extra good ones
-      { name = "Kanagawa Lotus", colorscheme = "kanagawa-lotus" },
-      { name = "Kanagawa Dragon", colorscheme = "kanagawa-dragon" },
       { name = "Nightfly", colorscheme = "nightfly" },
-      { name = "Default", colorscheme = "default", after = transparent_background_hl_string .. default_harpoon_hl_string },
+      { name = "Default", colorscheme = "default" },
     },
     livePreview = true,
   },

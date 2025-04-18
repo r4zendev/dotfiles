@@ -63,11 +63,11 @@ opt.autoread = true
 opt.signcolumn = "number"
 -- opt.signcolumn = "yes:1" -- both sign & number
 
-o.foldenable = true
-o.foldlevel = 99
-o.foldmethod = "expr"
-o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-o.foldtext = ""
+opt.foldenable = true
+opt.foldlevel = 99
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldtext = ""
 opt.foldcolumn = "1"
 opt.fillchars:append({
   fold = " ",
@@ -76,6 +76,6 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
-o.statuscolumn = "%{%v:lua.require('r4zen.core.statuscolumn').get_statuscolumn()%}"
-o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+opt.statuscolumn = "%{%v:lua.require('r4zen.core.statuscolumn').get_statuscolumn()%}"
+opt.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 -- o.qftf = "{info -> v:lua.require('r4zen.core.qftf').qftf(info)}"

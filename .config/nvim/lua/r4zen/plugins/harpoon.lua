@@ -67,7 +67,7 @@ M.plugin = {
     vim.g.force_harpoon_ui = false
     require("snacks")
       .toggle({
-        name = "Force Harpoon UI",
+        name = "persistent harpoon UI",
         get = function()
           return vim.g.force_harpoon_ui
         end,
@@ -80,7 +80,7 @@ M.plugin = {
           end
         end,
       })
-      :map("<leader>mm", { desc = "Toggle Force Harpoon UI" })
+      :map("<leader>mm")
   end,
 }
 

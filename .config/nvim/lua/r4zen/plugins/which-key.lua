@@ -29,8 +29,6 @@ return {
         { "<leader>n", group = "Notes (Obsidian)", icon = { icon = "", color = "cyan" } },
         { "<leader>o", group = "Overseer", icon = { icon = "", color = "green" } },
         { "<leader>p", group = "Paste/Pick Color", icon = { icon = "", color = "green" } },
-        { "<leader>r", group = "Refactoring", icon = { icon = "", color = "green" } },
-        { "<leader>rb", group = "Refactoring: Block", icon = { icon = "", color = "green" } },
         { "<leader>s", group = "Search/Splits", icon = { icon = "󰍉", color = "yellow" } },
         { "<leader>t", group = "Testing", icon = { icon = "󰙨", color = "yellow" } },
         { "<leader>u", group = "Undotree/Colors", icon = { icon = "←", color = "red" } },

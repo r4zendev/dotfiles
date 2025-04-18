@@ -104,4 +104,10 @@ return {
       mode = { "n", "x" },
     },
   },
+  init = function()
+    require("which-key").add({
+      { "<leader>r", group = "Refactoring", icon = { icon = "", color = "green" } },
+      { "<leader>rb", group = "Refactoring: Block", icon = { icon = "", color = "green" } },
+    })
+  end,
 }

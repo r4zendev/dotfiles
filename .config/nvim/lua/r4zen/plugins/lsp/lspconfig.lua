@@ -88,8 +88,8 @@ M.on_attach = function(client, bufnr)
   end
 
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
-  map("n", "<leader>rn", vim.lsp.buf.rename, opts("Smart rename"))
-  map("n", "<leader>rs", vim.cmd.LspRestart, opts("Restart LSP"))
+  map("n", "<leader>r", vim.lsp.buf.rename, opts("Smart rename"))
+  map("n", "<leader>cr", vim.cmd.LspRestart, opts("Restart LSP"))
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
 

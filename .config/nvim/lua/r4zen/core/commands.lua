@@ -40,6 +40,29 @@ autocmd("VimLeavePre", {
   end,
 })
 
+-- Close some windows with q
+autocmd("FileType", {
+  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "codecompanion" },
+  callback = function()
+    vim.bo.buflisted = false
+    vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true, silent = true })
+  end,
+})
+autocmd("FileType", {
+  pattern = { "help", "qf", "copilot" },
+  callback = function()
+    -- Move to bottom (hJkl)
+    -- vim.cmd("wincmd J")
+    vim.cmd("horizontal resize 14")
+  end,
+})
+autocmd("FileType", {
+  pattern = { "grug-far" },
+  callback = function()
+    vim.cmd("vertical resize 50")
+  end,
+})
+
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.
 -- autocmd("BufEnter", {

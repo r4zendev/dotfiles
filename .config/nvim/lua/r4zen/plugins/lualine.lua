@@ -16,7 +16,6 @@ return {
       local git_blame = require("gitblame")
       vim.g.gitblame_display_virtual_text = 0
 
-      -- Harpooned files special icon extension
       local harpoon_aware_fname = require("lualine.components.filename"):extend()
 
       function harpoon_aware_fname:init(options)

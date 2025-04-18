@@ -7,7 +7,6 @@ function fdev
   ffmpeg -f avfoundation -list_devices true -i ''
 end
 
-
 function fish_title
   echo (basename $PWD)
   # if [ $_ = "fish" ]
