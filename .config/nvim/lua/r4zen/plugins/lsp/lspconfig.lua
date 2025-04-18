@@ -1,4 +1,5 @@
 local map = vim.keymap.set
+local autocmd = vim.api.nvim_create_autocmd
 
 local M = {}
 
@@ -71,11 +72,12 @@ function M.execute_command(opts)
     command = opts.command,
     arguments = opts.arguments,
   }
+
   if opts.open then
-    require("trouble").open({ mode = "lsp_command", params = params })
-  else
-    return vim.lsp.buf_request(0, "workspace/executeCommand", params, opts.handler)
+    return require("trouble").open({ mode = "lsp_command", params = params })
   end
+
+  return vim.lsp.buf_request(0, "workspace/executeCommand", params, opts.handler)
 end
 
 M.on_attach = function(client, bufnr)
@@ -224,7 +226,7 @@ M.servers = {
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
-      vim.api.nvim_create_autocmd("BufWritePost", {
+      autocmd("BufWritePost", {
         pattern = { "*.js", "*.ts" },
         callback = function(ctx)
           if client.name == "svelte" then
@@ -246,6 +248,21 @@ M.servers = {
       root_files = require("lspconfig.util").insert_package_json(root_files, "biome", fname)
       local root_dir = vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1])
       return root_dir and on_dir(root_dir)
+    end,
+    on_attach = function(client, bufnr)
+      M.on_attach(client, bufnr)
+
+      map("n", "<leader>cl", function()
+        local biome_executable = client.config.cmd[1]
+        local cmd = { biome_executable, "check", vim.api.nvim_buf_get_name(bufnr), "--fix", "--unsafe" }
+
+        vim.system(cmd, { detach = true }, function(obj)
+          vim.notify(obj.stdout, vim.log.levels.INFO)
+          vim.schedule(function()
+            vim.cmd("silent! checktime")
+          end)
+        end)
+      end, { buffer = bufnr, desc = "Biome: Fix Unsafe" })
     end,
   },
   cssls = {},
@@ -362,8 +379,7 @@ M.setup_deprecated_servers = function()
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
-      -- Auto-format with LSP
-      vim.api.nvim_create_autocmd("BufWritePre", {
+      autocmd("BufWritePre", {
         buffer = bufnr,
         callback = function()
           if not vim.g.disable_autoformat then
@@ -372,7 +388,7 @@ M.setup_deprecated_servers = function()
         end,
       })
 
-      map("n", "<leader>ce", ":EslintFixAll<CR>", {
+      map("n", "<leader>cl", ":EslintFixAll<CR>", {
         desc = "Fix all ESLint issues",
         buffer = bufnr,
       })
