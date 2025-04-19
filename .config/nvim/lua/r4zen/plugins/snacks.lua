@@ -99,7 +99,8 @@ M.plugin = {
     { "<leader>,", function() Snacks.picker.grep_word() end, desc = "Grep", mode = { "x" } },
     { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
     { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-    { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search TODOs" },
+    { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()", }) end, desc = "Search TODOs" },
+    { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
 
     -- NOTE: Git
     {
