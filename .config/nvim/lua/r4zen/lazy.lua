@@ -18,7 +18,6 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 require("lazy").setup({
   { import = "r4zen.plugins" },
   { import = "r4zen.plugins.themes" },
-  { import = "r4zen.plugins.lsp" },
 }, {
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },

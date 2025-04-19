@@ -3,6 +3,7 @@
 local js_formatters = function()
   return { "biome-organize-imports", "biome-check", "prettierd" }
 end
+local util = require("r4zen.lsp_utils")
 
 return {
   "stevearc/conform.nvim",
@@ -11,18 +12,17 @@ return {
     formatters = {
       ["biome-check"] = {
         condition = function()
-          return require("lspconfig.util").root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
+          return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
         end,
       },
       ["biome-organize-imports"] = {
         condition = function()
-          return require("lspconfig.util").root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
+          return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
         end,
       },
       prettierd = {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)
-          local util = require("lspconfig.util")
 
           local prettier_root_file = {
             -- https://prettier.io/docs/en/configuration.html

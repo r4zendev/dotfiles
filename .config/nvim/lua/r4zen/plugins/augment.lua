@@ -1,7 +1,5 @@
 return {
-  -- "augmentcode/augment.vim",
-  -- TODO: Fixes nightly warning locally until it's fixed upstream
-  dir = vim.fn.stdpath("data") .. "/lazy/augment.vim",
+  "augmentcode/augment.vim",
   cmd = "Augment",
   event = "LazyFile",
   keys = {

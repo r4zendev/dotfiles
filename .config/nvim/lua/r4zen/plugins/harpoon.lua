@@ -43,6 +43,8 @@ M.plugin = {
         M.trigger_status_ui()
       end,
       REMOVE = function()
+        local list = require("harpoon"):list()
+        list.items = vim.tbl_values(list.items)
         M.trigger_status_ui()
       end,
       SELECT = function(cx)

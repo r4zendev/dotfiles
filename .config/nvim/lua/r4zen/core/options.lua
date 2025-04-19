@@ -76,6 +76,6 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
-opt.statuscolumn = "%{%v:lua.require('r4zen.core.statuscolumn').get_statuscolumn()%}"
+opt.statuscolumn = "%{%v:lua.require('r4zen.statuscolumn').get_statuscolumn()%}"
 opt.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 -- o.qftf = "{info -> v:lua.require('r4zen.core.qftf').qftf(info)}"

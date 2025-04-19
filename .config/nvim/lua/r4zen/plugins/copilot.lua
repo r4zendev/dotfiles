@@ -30,7 +30,7 @@ return {
       })
       :map("<leader>a-")
 
-    -- FIXME: Hacky workaround to prevent Copilot LSP from hanging
+    -- NOTE: Hacky workaround to prevent Copilot LSP from hanging
     -- and noice.nvim showing lsp progress forever.
     -- It seemed to me that the panel feature in copilot.lua
     -- is even more broken, so I'm still using tpope

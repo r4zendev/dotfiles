@@ -1,7 +1,5 @@
 return {
-  -- "folke/lazydev.nvim",
-  -- TODO: Fixes nightly warning locally until it's fixed upstream
-  dir = vim.fn.stdpath("data") .. "/lazy/lazydev.nvim",
+  "folke/lazydev.nvim",
   ft = "lua",
   opts = {
     library = {

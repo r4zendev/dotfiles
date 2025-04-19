@@ -1,16 +1,4 @@
 local autocmd = vim.api.nvim_create_autocmd
-local usercmd = vim.api.nvim_create_user_command
--- local augroup = vim.api.nvim_create_augroup
-
--- Highlight on yank
--- autocmd("TextYankPost", {
---   -- group = augroup("HighlightOnYank", { clear = true }),
---   pattern = "*",
---   desc = "Highlight text when yank",
---   callback = function()
---     vim.hl.on_yank()
---   end,
--- })
 
 -- Reload the file if it changes externally
 autocmd({ "FileChangedShell", "FocusGained" }, {
@@ -42,12 +30,14 @@ autocmd("VimLeavePre", {
 
 -- Close some windows with q
 autocmd("FileType", {
-  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "codecompanion" },
+  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far" },
   callback = function()
     vim.bo.buflisted = false
     vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true, silent = true })
   end,
 })
+
+-- Window layout
 autocmd("FileType", {
   pattern = { "help", "qf", "copilot" },
   callback = function()
@@ -62,6 +52,16 @@ autocmd("FileType", {
     vim.cmd("vertical resize 50")
   end,
 })
+
+-- Highlight on yank, currently handled by yanky.nvim
+-- autocmd("TextYankPost", {
+--   -- group = augroup("HighlightOnYank", { clear = true }),
+--   pattern = "*",
+--   desc = "Highlight text when yank",
+--   callback = function()
+--     vim.hl.on_yank()
+--   end,
+-- })
 
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.

@@ -12,10 +12,6 @@ eval (/opt/homebrew/bin/brew shellenv)
 set -x HOMEBREW_AUTOREMOVE 1
 # eval (/opt/homebrew/bin/brew shellenv fish)
 
-# TODO: waiting for fish support
-# https://github.com/pkgxdev/pkgx/issues/845
-# source (pkgx --shellcode)
-
 starship init fish | source # https://starship.rs/
 zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
 fnm --log-level quiet env --use-on-cd | source # "Schniz/fnm"

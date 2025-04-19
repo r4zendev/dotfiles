@@ -15,9 +15,7 @@ return {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
       {
-        -- "xzbdmw/colorful-menu.nvim",
-        -- TODO: Fixes nightly warning locally until it's fixed upstream
-        dir = vim.fn.stdpath("data") .. "/lazy/colorful-menu.nvim",
+        "xzbdmw/colorful-menu.nvim",
         opts = {
           ls = {
             ts_ls = {
