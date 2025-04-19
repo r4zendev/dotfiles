@@ -38,21 +38,13 @@ M.plugin = {
     })
 
     for server, settings in pairs(M.servers) do
-      if settings.enabled == false then
-        goto continue
-      end
-
       -- TODO: Until these are merged, defaults have to stay.
       -- https://github.com/neovim/nvim-lspconfig/pull/3731
       -- https://github.com/neovim/nvim-lspconfig/pull/3751
-      if M.defaults[server] then
-        settings = vim.tbl_deep_extend("force", M.defaults[server], settings)
-      end
-
-      vim.lsp.config(server, vim.tbl_extend("keep", settings, { on_attach = M.on_attach }))
-      vim.lsp.enable(server)
-
-      ::continue::
+      local config =
+        vim.tbl_deep_extend("force", M.defaults[server] or {}, { enabled = true, on_attach = M.on_attach }, settings)
+      vim.lsp.config(server, config)
+      vim.lsp.enable(server, config.enabled)
     end
   end,
 }
@@ -60,11 +52,19 @@ M.plugin = {
 M.servers = {
   -- TypeScript / JavaScript
   ts_ls = {
+    -- NOTE: When vtsls is slow, switching to ts_ls is useful
     enabled = false,
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
-      map("n", "<leader>ci", M.lsp_action["source.organizeImports"], { buffer = bufnr, desc = "Organize Imports" })
+      local opts = function(desc)
+        return { desc = desc, buffer = bufnr, silent = true, noremap = true }
+      end
+
+      map("n", "<leader>ci", M.lsp_action["source.organizeImports"], opts("Organize Imports"))
+      map("n", "<leader>cT", function()
+        M.toggle_ts_server(client)
+      end, opts("Toggle vtsls"))
     end,
   },
   vtsls = {
@@ -101,6 +101,10 @@ M.servers = {
       local opts = function(desc)
         return { desc = desc, buffer = bufnr, silent = true, noremap = true }
       end
+
+      map("n", "<leader>cT", function()
+        M.toggle_ts_server(client)
+      end, opts("Toggle ts_ls"))
 
       map("n", "gD", function()
         -- Works without args
@@ -359,6 +363,27 @@ M.servers = {
   -- },
 }
 
+---@param client vim.lsp.Client
+M.toggle_ts_server = function(client)
+  local new_server_name = client.name == "vtsls" and "ts_ls" or "vtsls"
+  vim.lsp.enable("vtsls", new_server_name == "vtsls")
+  vim.lsp.enable("ts_ls", new_server_name == "ts_ls")
+
+  for buf_id, _ in pairs(client.attached_buffers) do
+    vim.lsp.buf_detach_client(buf_id, client.id)
+    vim.b[buf_id].navic_client_id = nil
+  end
+
+  vim.cmd("silent! e")
+
+  vim.defer_fn(function()
+    local new_server_id = vim.lsp.get_clients({ name = new_server_name })[1].id
+    for buf_id, _ in pairs(client.attached_buffers) do
+      vim.lsp.buf_attach_client(buf_id, new_server_id)
+    end
+  end, 1000)
+end
+
 M.lsp_action = setmetatable({}, {
   __index = function(_, action)
     return function()
@@ -406,7 +431,16 @@ M.on_attach = function(client, bufnr)
 
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
   map("n", "<leader>cn", vim.lsp.buf.rename, opts("Smart rename"))
-  map("n", "<leader>cr", vim.cmd.LspRestart, opts("Restart LSP"))
+  map("n", "<leader>cr", function()
+    for _, buf_client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+      for buf_id, _ in pairs(buf_client.attached_buffers) do
+        vim.lsp.buf_detach_client(buf_id, buf_client.id)
+        vim.defer_fn(function()
+          vim.lsp.buf_attach_client(buf_id, buf_client.id)
+        end, 500)
+      end
+    end
+  end, opts("Restart LSP"))
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
 

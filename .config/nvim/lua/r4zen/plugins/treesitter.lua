@@ -48,6 +48,18 @@ return {
     },
   },
   main = "nvim-treesitter.configs",
+  keys = {
+    {
+      "<leader>ut",
+      function()
+        vim.cmd("TSDisable highlight")
+        vim.defer_fn(function()
+          vim.cmd("TSEnable highlight")
+        end, 150)
+      end,
+      desc = "Toggle Treesitter",
+    },
+  },
   init = function()
     vim.filetype.add({ extension = { mdc = "markdown" } })
     vim.filetype.add({ extension = { kbd = "lisp" } })

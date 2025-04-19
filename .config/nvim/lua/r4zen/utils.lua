@@ -62,4 +62,22 @@ M.check_arg = function(arg)
   return found
 end
 
+M.includes = function(tbl, val)
+  for _, v in ipairs(tbl) do
+    if v == val then
+      return true
+    end
+  end
+  return false
+end
+
+M.js_filetypes = {
+  "javascript",
+  "javascriptreact",
+  "javascript.jsx",
+  "typescript",
+  "typescriptreact",
+  "typescript.tsx",
+}
+
 return M
