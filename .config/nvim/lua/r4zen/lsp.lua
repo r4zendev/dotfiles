@@ -52,7 +52,7 @@ for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
     goto continue
   end
 
-  local config = config_or_err -- Assign the valid config table
+  local config = config_or_err
 
   local schema_settings = schema_settings_map[server_name]
   if schema_settings then

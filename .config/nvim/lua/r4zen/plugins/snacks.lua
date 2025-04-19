@@ -138,7 +138,9 @@ M.plugin = {
       end,
     })
 
-    Snacks.picker.actions.git_branch_del = M.git_branch_del
+    vim.schedule(function()
+      Snacks.picker.actions.git_branch_del = M.git_branch_del
+    end)
   end,
 }
 

@@ -30,7 +30,7 @@ autocmd("VimLeavePre", {
 
 -- Close some windows with q
 autocmd("FileType", {
-  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far" },
+  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "vim" },
   callback = function()
     vim.bo.buflisted = false
     vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true, silent = true })
@@ -39,7 +39,7 @@ autocmd("FileType", {
 
 -- Window layout
 autocmd("FileType", {
-  pattern = { "help", "qf", "copilot" },
+  pattern = { "help", "qf", "copilot", "vim" },
   callback = function()
     -- Move to bottom (hJkl)
     -- vim.cmd("wincmd J")
