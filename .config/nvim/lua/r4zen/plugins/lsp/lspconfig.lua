@@ -198,18 +198,6 @@ M.servers = {
     end,
   },
   biome = {
-    -- NOTE: This is a workaround for an issue of biome instantiating itself for files
-    -- that do not have biome installed in the project.
-    -- Upgrading to nightly solves this, but I want to stay on 0.11 for now.
-    -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/biome.lua#L29
-    root_dir = function(bufnr, on_dir)
-      local fname = vim.api.nvim_buf_get_name(bufnr)
-      local root_files = { "biome.json", "biome.jsonc" }
-      root_files = require("lspconfig.util").insert_package_json(root_files, "biome", fname)
-      local root_dir = vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1])
-      -- Modified only here to prevent on_dir from executing when root_dir is not found
-      return root_dir and on_dir(root_dir)
-    end,
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
@@ -331,7 +319,6 @@ M.servers = {
     settings = {
       Lua = {
         telemetry = { enable = false },
-        -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
         diagnostics = { disable = { "missing-fields" } },
         hint = { enable = true },
       },
@@ -549,6 +536,7 @@ M.defaults = {
         config.settings.editor.tabSize = vim.lsp.util.get_effective_tabstop()
       end
     end,
+    workspace_required = true,
     root_markers = {
       "tailwind.config.js",
       "tailwind.config.cjs",
