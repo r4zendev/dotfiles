@@ -5,7 +5,12 @@ vim.g.maplocalleader = " "
 
 -- use jk to exit insert mode
 map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
+
+-- insert newline
 map("n", "_", "o<ESC>", { noremap = true, silent = true })
+
+-- JSON format anywhere
+map({ "n", "v" }, "<leader>cj", ":%!jq '.'<cr>", { desc = "Format JSON" })
 
 -- center when scrolling
 map({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true })

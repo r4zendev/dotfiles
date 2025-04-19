@@ -4,8 +4,6 @@ return {
   event = "LazyFile",
   keys = {
     {
-      -- A precautionary measure to ensure that visually selected text
-      -- is always sent to the `Augment chat` command
       "<leader>au",
       function()
         local mode = vim.api.nvim_get_mode().mode
@@ -16,6 +14,7 @@ return {
           end_line = vim.fn.line("'>")
         end
 
+        -- Use vim.ui.input
         vim.ui.input({ prompt = "Augment Chat: " }, function(input)
           if not input or input == "" then
             return

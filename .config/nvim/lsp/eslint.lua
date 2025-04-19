@@ -3,7 +3,7 @@ local lsp = vim.lsp
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 
-local eslint_alerted = false
+local diagnostic_err_alerted = false
 
 return {
   cmd = { "vscode-eslint-language-server", "--stdio" },
@@ -18,6 +18,7 @@ return {
     "svelte",
     "astro",
   },
+  workspace_required = true,
   on_init = function(client)
     vim.api.nvim_create_user_command("EslintFixAll", function()
       local bufnr = vim.api.nvim_get_current_buf()
@@ -164,13 +165,13 @@ return {
       local data, _, evt, _ = ...
 
       if data and data.code and data.code < 0 then
-        if not eslint_alerted then
+        if not diagnostic_err_alerted then
           vim.notify(
             string.format("ESLint failed due to an error: \n%s", data.message),
             vim.log.levels.WARN,
             { title = "ESLint" }
           )
-          eslint_alerted = true
+          diagnostic_err_alerted = true
         end
 
         return
