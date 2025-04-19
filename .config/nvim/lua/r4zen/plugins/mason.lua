@@ -23,9 +23,9 @@ return {
     "MasonToolsClean",
   },
   opts = {
-    auto_update = false,
     -- Done manually via custom approach
     run_on_start = false,
+    auto_update = false,
     ensure_installed = {
       "vtsls",
       "biome",

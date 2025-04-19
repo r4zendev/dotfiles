@@ -1,8 +1,6 @@
 local map = vim.keymap.set
 
-local M = {}
-
-M.lang_config = {
+local lang_config = {
   updateImportsOnFileMove = { enabled = "always" },
   suggest = {
     completeFunctionCalls = true,
@@ -17,7 +15,7 @@ M.lang_config = {
   },
 }
 
-M.server = {
+return {
   enabled = true,
   cmd = { "vtsls", "--stdio" },
   filetypes = {
@@ -41,8 +39,8 @@ M.server = {
       },
     },
     ["js/ts"] = { implicitProjectConfig = { checkJs = true } },
-    typescript = M.lang_config,
-    javascript = M.lang_config,
+    typescript = lang_config,
+    javascript = lang_config,
   },
   on_attach = function(client, bufnr)
     local lsp_utils = require("r4zen.lsp_utils")
@@ -134,5 +132,3 @@ M.server = {
     end
   end,
 }
-
-return M.server

@@ -3,11 +3,9 @@ local lsp = vim.lsp
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 
-local M = {}
+local eslint_alerted = false
 
-M.eslint_alerted = false
-
-M.server = {
+return {
   cmd = { "vscode-eslint-language-server", "--stdio" },
   filetypes = {
     "javascript",
@@ -166,13 +164,13 @@ M.server = {
       local data, _, evt, _ = ...
 
       if data and data.code and data.code < 0 then
-        if not M.eslint_alerted then
+        if not eslint_alerted then
           vim.notify(
             string.format("ESLint failed due to an error: \n%s", data.message),
             vim.log.levels.WARN,
             { title = "ESLint" }
           )
-          M.eslint_alerted = true
+          eslint_alerted = true
         end
 
         return
@@ -202,5 +200,3 @@ M.server = {
     end,
   },
 }
-
-return M.server

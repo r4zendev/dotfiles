@@ -52,6 +52,7 @@ local supported_adapters = {
 }
 
 return {
+  { "banjo/contextfiles.nvim" },
   {
     "ravitemer/mcphub.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -80,7 +81,6 @@ return {
       end
     end,
   },
-  { "banjo/contextfiles.nvim" },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {

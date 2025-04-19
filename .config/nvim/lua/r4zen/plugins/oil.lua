@@ -1,6 +1,19 @@
-local M = {}
+local get_path_under_cursor = function(relative)
+  local oil = require("oil")
+  local entry = oil.get_cursor_entry()
+  local dir = oil.get_current_dir()
+  if not entry or not dir then
+    error("Could not get path under cursor")
+  end
 
-M.plugin = {
+  if relative then
+    return vim.fn.fnamemodify(dir .. entry.name, ":.")
+  end
+
+  return dir .. entry.name
+end
+
+return {
   "stevearc/oil.nvim",
   event = "VeryLazy",
   cmd = { "Oil" },
@@ -13,20 +26,20 @@ M.plugin = {
       ["<leader>yy"] = {
         desc = "Copy path of file under cursor",
         callback = function()
-          vim.fn.setreg(vim.v.register, M.get_path_under_cursor())
+          vim.fn.setreg(vim.v.register, get_path_under_cursor())
         end,
       },
       ["<leader>yr"] = {
         desc = "Copy relative path of file under cursor",
         callback = function()
-          vim.fn.setreg(vim.v.register, M.get_path_under_cursor(true))
+          vim.fn.setreg(vim.v.register, get_path_under_cursor(true))
         end,
       },
 
       -- Don't trigger harpoon mark keymaps in oil
       ["<leader>k"] = {
         callback = function()
-          local path = M.get_path_under_cursor(true)
+          local path = get_path_under_cursor(true)
 
           require("harpoon"):list():add({
             context = { col = 0, row = 1 },
@@ -37,7 +50,7 @@ M.plugin = {
       },
       ["<leader>j"] = {
         callback = function()
-          local path = M.get_path_under_cursor(true)
+          local path = get_path_under_cursor(true)
 
           local list = require("harpoon"):list()
 
@@ -68,20 +81,3 @@ M.plugin = {
     { "-", vim.cmd.Oil, mode = "n", desc = "Open parent directory" },
   },
 }
-
-M.get_path_under_cursor = function(relative)
-  local oil = require("oil")
-  local entry = oil.get_cursor_entry()
-  local dir = oil.get_current_dir()
-  if not entry or not dir then
-    error("Could not get path under cursor")
-  end
-
-  if relative then
-    return vim.fn.fnamemodify(dir .. entry.name, ":.")
-  end
-
-  return dir .. entry.name
-end
-
-return M.plugin

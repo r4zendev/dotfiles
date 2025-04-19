@@ -13,15 +13,6 @@ M.plugin = {
         grep = { hidden = true },
         grep_word = { hidden = true },
         git_status = { untracked = true },
-        git_branches = {
-          win = {
-            input = {
-              keys = {
-                ["<c-x>"] = { callback = M.git_branch_del, mode = { "n", "i" } },
-              },
-            },
-          },
-        },
         recent = { hidden = true },
         explorer = {
           hidden = true,
@@ -103,45 +94,10 @@ M.plugin = {
     { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
 
     -- NOTE: Git
-    {
-      "<leader>gg",
-      function()
-        local changed_files = {}
-        require("plenary.job")
-          :new({
-            command = "git",
-            args = { "diff", "--name-only" },
-            on_stdout = function(_, line)
-              if line and #line > 0 then
-                table.insert(changed_files, line)
-              end
-            end,
-          })
-          :sync()
-
-        if #changed_files == 0 then
-          vim.notify("No changed files found", vim.log.levels.INFO)
-          return
-        end
-
-        local args = {}
-        for _, file in ipairs(changed_files) do
-          table.insert(args, "--glob")
-          table.insert(args, file)
-        end
-
-        Snacks.picker.grep({
-          title = "Grep in Changed Files",
-          need_search = true,
-          args = args,
-        })
-      end,
-      desc = "Grep Git Files",
-    },
+    { "<leader>gg", function() M.grep_modified_files() end, desc = "Grep Git Files" },
     { "<leader>gf", function() Snacks.picker.git_status() end, desc = "Find Git Files" },
     { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
     { "<leader>gl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
-    { "<leader>gD", function() M.grep_modified_files() end, desc = "Grep Modified Files" },
     { "<leader>g\\", function() Snacks.picker.git_log() end, desc = "Git Log" },
 
     -- NOTE: Search
@@ -181,6 +137,8 @@ M.plugin = {
         end
       end,
     })
+
+    Snacks.picker.actions.git_branch_del = M.git_branch_del
   end,
 }
 
@@ -219,7 +177,7 @@ function M.grep_modified_files()
   require("plenary.job")
     :new({
       command = "git",
-      args = { "ls-files", "--modified" },
+      args = { "diff", "--name-only" },
       on_stdout = function(_, line)
         if line and #line > 0 then
           table.insert(modified_files, line)

@@ -1,6 +1,10 @@
 local o = vim.o
 local opt = vim.opt
 
+-- TODO: remove this when authors update their plugins
+---@diagnostic disable-next-line: duplicate-set-field
+vim.deprecate = function() end
+
 o.updatetime = 100
 o.timeout = true
 o.timeoutlen = 500

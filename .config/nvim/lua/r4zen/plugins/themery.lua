@@ -38,7 +38,7 @@ return {
 
       -- Some extra good ones
       { name = "Nightfly", colorscheme = "nightfly" },
-      { name = "Default", colorscheme = "default" },
+      { name = "Default", colorscheme = "default", after = default_harpoon_hl_string },
     },
     livePreview = true,
   },

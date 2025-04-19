@@ -18,4 +18,5 @@ return {
     "selene.yml",
     ".git",
   },
+  on_attach = require("r4zen.lsp_utils").on_attach,
 }
