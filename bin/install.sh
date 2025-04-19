@@ -89,8 +89,8 @@ brew install --cask font-inconsolata-lgc-nerd-font # cyrillic
 # Apps
 brew install th-ch/youtube-music/youtube-music
 brew install --cask 1password
-brew install --cask discord          
-brew install --cask obsidian         
+brew install --cask discord
+brew install --cask obsidian
 brew install --cask slack
 brew install --cask telegram
 brew install --cask brave-browser

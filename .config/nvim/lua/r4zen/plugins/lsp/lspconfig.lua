@@ -80,6 +80,15 @@ function M.execute_command(opts)
   return vim.lsp.buf_request(0, "workspace/executeCommand", params, opts.handler)
 end
 
+M.execute_system_cmd_and_sync_buf = function(cmd)
+  vim.system(cmd, { detach = true }, function(obj)
+    vim.notify(obj.stdout, vim.log.levels.INFO)
+    vim.schedule(function()
+      vim.cmd("silent! checktime")
+    end)
+  end)
+end
+
 M.on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     require("nvim-navic").attach(client, bufnr)
@@ -90,7 +99,7 @@ M.on_attach = function(client, bufnr)
   end
 
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
-  map("n", "<leader>r", vim.lsp.buf.rename, opts("Smart rename"))
+  map("n", "<leader>cn", vim.lsp.buf.rename, opts("Smart rename"))
   map("n", "<leader>cr", vim.cmd.LspRestart, opts("Restart LSP"))
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
@@ -237,32 +246,32 @@ M.servers = {
     end,
   },
   biome = {
-    -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/biome.lua#L29
     -- NOTE: This is a workaround for an issue of biome instantiating itself for files
-    -- that do not have biome installed in the project. As per docs, this should help:
-    -- workspace_required = false, but it doesn't, so I had to do this. Another option is
-    -- to use old `lspconfig.biome.setup {}`, but I want to eventually migrate to v0.11 lsp anyways.
+    -- that do not have biome installed in the project. Upgrading to nightly solves this,
+    -- but I want to stay on 0.11 for now.
+    -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/biome.lua#L29
     root_dir = function(bufnr, on_dir)
       local fname = vim.api.nvim_buf_get_name(bufnr)
       local root_files = { "biome.json", "biome.jsonc" }
       root_files = require("lspconfig.util").insert_package_json(root_files, "biome", fname)
       local root_dir = vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1])
+      -- Modified only here to prevent on_dir from executing when root_dir is not found
       return root_dir and on_dir(root_dir)
     end,
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
-      map("n", "<leader>cl", function()
-        local biome_executable = client.config.cmd[1]
-        local cmd = { biome_executable, "check", vim.api.nvim_buf_get_name(bufnr), "--fix", "--unsafe" }
+      local biome_executable = client.config.cmd[1]
 
-        vim.system(cmd, { detach = true }, function(obj)
-          vim.notify(obj.stdout, vim.log.levels.INFO)
-          vim.schedule(function()
-            vim.cmd("silent! checktime")
-          end)
-        end)
+      map("n", "<leader>cl", function()
+        local cmd = { biome_executable, "check", vim.api.nvim_buf_get_name(bufnr), "--fix", "--unsafe" }
+        M.execute_system_cmd_and_sync_buf(cmd)
       end, { buffer = bufnr, desc = "Biome: Fix Unsafe" })
+
+      map("n", "<leader>cL", function()
+        local cmd = { biome_executable, "check", ".", "--fix", "--unsafe" }
+        M.execute_system_cmd_and_sync_buf(cmd)
+      end, { buffer = bufnr, desc = "Biome: Fix Unsafe (Workspace)" })
     end,
   },
   cssls = {},
