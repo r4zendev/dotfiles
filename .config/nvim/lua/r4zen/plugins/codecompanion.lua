@@ -93,9 +93,6 @@ return {
       strategies = {
         chat = {
           keymaps = {
-            send = {
-              modes = { n = "<cr>", i = "<C-s>" },
-            },
             close = {
               modes = { n = "q", i = "<C-c>" },
             },

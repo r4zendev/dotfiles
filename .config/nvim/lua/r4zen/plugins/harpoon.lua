@@ -18,22 +18,6 @@ M.plugin = {
     { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon: Toggle UI" },
     { "<M-[>", function() M.select_valid_index("prev") end, desc = "Harpoon: Previous" },
     { "<M-]>", function() M.select_valid_index("next") end, desc = "Harpoon: Next" },
-    {
-      "<c-o>",
-      function()
-        M.location_aware_jump("back")
-      end,
-      desc = "Harpoon: Show UI on Jump Back",
-      silent = true,
-    },
-    {
-      "<c-i>",
-      function()
-        M.location_aware_jump("forward")
-      end,
-      desc = "Harpoon: Show UI on Jump Forward",
-      silent = true,
-    },
   },
   init = function()
     -- Number key mappings for quick access
@@ -47,6 +31,13 @@ M.plugin = {
     vim.api.nvim_create_autocmd("VimEnter", {
       callback = function()
         vim.schedule(M.trigger_status_ui)
+      end,
+    })
+    vim.api.nvim_create_autocmd("BufEnter", {
+      callback = function()
+        if M.harpoon_list_includes(vim.fn.bufname()) then
+          vim.schedule(M.trigger_status_ui)
+        end
       end,
     })
 
@@ -66,9 +57,9 @@ M.plugin = {
         list._index = cx.idx
         vim.api.nvim_feedkeys("zz", "n", false)
       end,
-      NAVIGATE = function()
-        M.trigger_status_ui()
-      end,
+      -- NAVIGATE = function()
+      --   M.trigger_status_ui()
+      -- end,
       -- UI number key mappings
       UI_CREATE = function(cx)
         for i = 1, 9 do
@@ -100,30 +91,36 @@ M.plugin = {
   end,
 }
 
-M.harpoon_list_includes = function(file_path)
-  local harpoon = require("harpoon")
-
-  for _, item in ipairs(vim.tbl_values(harpoon:list().items)) do
-    if item.value == file_path then
-      return true
-    end
-  end
-
-  return false
-end
+-- NOTE: Alternative to BufEnter event (in case it causes perf issues (it shouldn't))
+-- {
+--   "<c-o>",
+--   function()
+--     M.location_aware_jump("back")
+--   end,
+--   desc = "Harpoon: Show UI on Jump Back",
+--   silent = true,
+-- },
+-- {
+--   "<c-i>",
+--   function()
+--     M.location_aware_jump("forward")
+--   end,
+--   desc = "Harpoon: Show UI on Jump Forward",
+--   silent = true,
+-- }
 
 ---@param direction ("back" | "forward")
-M.location_aware_jump = function(direction)
-  local original_bufnr = vim.api.nvim_get_current_buf()
-  local keycode = direction == "back" and "<C-o>" or "<C-i>"
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keycode, true, false, true), "n", false)
-  vim.schedule(function()
-    local new_bufnr = vim.api.nvim_get_current_buf()
-    if new_bufnr ~= original_bufnr and M.harpoon_list_includes(vim.fn.bufname(new_bufnr)) then
-      M.trigger_status_ui()
-    end
-  end)
-end
+-- M.location_aware_jump = function(direction)
+--   local original_bufnr = vim.api.nvim_get_current_buf()
+--   local keycode = direction == "back" and "<C-o>" or "<C-i>"
+--   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keycode, true, false, true), "n", false)
+--   vim.schedule(function()
+--     local new_bufnr = vim.api.nvim_get_current_buf()
+--     if new_bufnr ~= original_bufnr and M.harpoon_list_includes(vim.fn.bufname(new_bufnr)) then
+--       M.trigger_status_ui()
+--     end
+--   end)
+-- end
 
 M.select_valid_index = function(direction)
   local list = require("harpoon"):list()
@@ -173,6 +170,18 @@ M.get_harpooned_files = function()
   end
 
   return file_list
+end
+
+M.harpoon_list_includes = function(file_path)
+  local harpoon = require("harpoon")
+
+  for _, item in ipairs(vim.tbl_values(harpoon:list().items)) do
+    if vim.uv.fs_realpath(item.value) == vim.uv.fs_realpath(file_path) then
+      return true
+    end
+  end
+
+  return false
 end
 
 M.get_current_index = function()

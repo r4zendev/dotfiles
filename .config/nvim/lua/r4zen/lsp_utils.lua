@@ -14,20 +14,8 @@ M.on_attach = function(client, bufnr)
 
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
   map("n", "<leader>cn", vim.lsp.buf.rename, opts("Smart rename"))
-  map("n", "<leader>cr", function()
-    for _, buf_client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
-      for buf_id, _ in pairs(buf_client.attached_buffers) do
-        vim.lsp.buf_detach_client(buf_id, buf_client.id)
-        vim.defer_fn(function()
-          vim.lsp.buf_attach_client(buf_id, buf_client.id)
-        end, 500)
-      end
-    end
-  end, opts("Restart LSP"))
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
-
-    -- require("quicker").toggle()
     require("trouble").open({ mode = "quickfix", focus = false })
   end, opts("Populate qflist with diagnostics"))
 end

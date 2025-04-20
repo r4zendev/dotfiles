@@ -11,6 +11,8 @@ return {
     local yarepl = require("yarepl")
     local aider = require("yarepl.extensions.aider")
 
+    require("which-key").add({ "<leader>b", group = "REPL", icon = { icon = "", color = "red" } })
+
     yarepl.setup({
       metas = {
         aider = aider.create_aider_meta(),

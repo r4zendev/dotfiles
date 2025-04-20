@@ -29,7 +29,11 @@ return {
   opts = {
     themes = {
       -- Main
-      { name = "Tokyo Night", colorscheme = "tokyonight", after = transparent_winbar_hl_string },
+      {
+        name = "Tokyo Night",
+        colorscheme = "tokyonight",
+        after = transparent_winbar_hl_string .. transparent_float_hl_string,
+      },
 
       -- Alts
       { name = "Rose Pine", colorscheme = "rose-pine", after = transparent_winbar_hl_string },

@@ -17,7 +17,6 @@ return {
         { "<leader>A", group = "Aider REPL", icon = { icon = "", color = "green" } },
         { "<leader>Am", group = "Toggle Aider Mode", icon = { icon = "", color = "green" } },
         { "<leader>a", group = "AI", icon = { icon = "", color = "orange" } },
-        { "<leader>b", group = "REPL", icon = { icon = "", color = "red" } },
         { "<leader>c", group = "LSP/Format", icon = { icon = "", color = "blue" } },
         { "<leader>d", group = "Debug", icon = { icon = "", color = "red" } },
         { "<leader>f", group = "Files", icon = { icon = "󰈔", color = "blue" } },

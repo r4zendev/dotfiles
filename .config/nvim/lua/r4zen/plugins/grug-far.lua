@@ -1,6 +1,7 @@
 return {
   "MagicDuck/grug-far.nvim",
   opts = {
+    windowCreationCommand = "vsplit | vertical resize 50",
     prefills = {
       flags = "--multiline --smart-case --hidden --sortr=modified --fixed-strings",
       filesFilter = [[

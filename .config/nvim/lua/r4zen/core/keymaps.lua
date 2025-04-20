@@ -9,6 +9,9 @@ map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
 -- insert newline
 map("n", "_", "o<ESC>", { noremap = true, silent = true })
 
+-- remap indent
+map({ "n", "v" }, "<leader>-", "=", { desc = "Indent Lines" })
+
 -- JSON format anywhere
 map({ "n", "v" }, "<leader>cj", ":%!jq '.'<cr>", { desc = "Format JSON" })
 
@@ -56,6 +59,11 @@ map("n", "<leader>wm", "<cmd>tab split<CR>", { desc = "Maximize split" })
 map("n", "<leader>w=", "<C-w>=", { desc = "Make splits equal size" })
 map("n", "<leader>wj", "<C-w>_", { desc = "Maximize split vertically" })
 map("n", "<leader>wk", "<C-w>|", { desc = "Maximize split horizontally" })
+
+map("n", "<leader>wH", "<C-w>H", { desc = "Move split to left" })
+map("n", "<leader>wJ", "<C-w>J", { desc = "Move split to bottom" })
+map("n", "<leader>wK", "<C-w>K", { desc = "Move split to top" })
+map("n", "<leader>wL", "<C-w>L", { desc = "Move split to right" })
 
 map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
 map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
