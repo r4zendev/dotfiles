@@ -71,6 +71,22 @@ M.includes = function(tbl, val)
   return false
 end
 
+---@param str string
+---@param start string
+M.startswith = function(str, start)
+  return str:sub(1, #start) == start
+end
+
+M.file_exists = function(path)
+  local f = io.open(path, "r")
+  if f then
+    f:close()
+    return true
+  else
+    return false
+  end
+end
+
 M.js_filetypes = {
   "javascript",
   "javascriptreact",

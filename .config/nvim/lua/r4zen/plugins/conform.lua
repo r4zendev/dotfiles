@@ -58,9 +58,10 @@ return {
       markdown = js_formatters,
       graphql = js_formatters,
       lua = { "stylua" },
-      python = { "isort", "black" },
+      -- python = { "isort", "black" },
       c = { "clang_format" },
       cpp = { "clang_format" },
+      go = { "gofmt" },
       rust = { "rustfmt" },
     },
 

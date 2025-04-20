@@ -10,25 +10,14 @@ return {
     { "]]", "<Plug>(copilot-next)", mode = "i", desc = "Copilot: Next Suggestion" },
   },
   init = function()
+    -- Currently using augment
+    vim.g.copilot_enabled = false
+
     -- Workspace folders
     vim.g.copilot_workspace_folders = { require("r4zen.utils").workspace_root() }
     -- Use gpt-4o model
     vim.g.copilot_settings = { selectedCompletionModel = "gpt-4o-copilot" }
     -- vim.g.copilot_integration_id = "vscode-chat"
-
-    -- Toggle suggestions
-    vim.g.copilot_enabled = false
-    require("snacks")
-      .toggle({
-        name = "GitHub Copilot",
-        get = function()
-          return vim.g.copilot_enabled
-        end,
-        set = function(state)
-          vim.g.copilot_enabled = state
-        end,
-      })
-      :map("<leader>a-")
 
     -- NOTE: Hacky workaround to prevent Copilot LSP from hanging
     -- and noice.nvim showing lsp progress forever.

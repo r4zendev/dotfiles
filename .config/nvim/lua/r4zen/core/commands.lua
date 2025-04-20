@@ -1,4 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
+local usercmd = vim.api.nvim_create_user_command
+local utils = require("r4zen.utils")
 
 -- Reload the file if it changes externally
 autocmd({ "FileChangedShell", "FocusGained" }, {
@@ -46,6 +48,36 @@ autocmd("FileType", {
     vim.cmd("horizontal resize 14")
   end,
 })
+
+-- LspInfo cmd from nvim-lspconfig
+usercmd("LspInfo", function()
+  vim.cmd("checkhealth vim.lsp")
+end, { desc = "Show lsp info" })
+
+-- Command to print open buffers and their filenames
+usercmd("ShowBufs", function()
+  local bufs = {}
+  local bufnums = vim.api.nvim_list_bufs()
+  for _, bufnum in ipairs(bufnums) do
+    local bufname = vim.api.nvim_buf_get_name(bufnum)
+    -- if vim.api.nvim_buf_is_loaded(bufnum) and bufname ~= "" and vim.bo[bufnum].buftype ~= "nofile" then
+    if vim.api.nvim_buf_is_loaded(bufnum) and bufname ~= "" and utils.file_exists(bufname) then
+      local home = os.getenv("HOME")
+      if not home or bufname:sub(1, #home) == home then
+        bufs[bufnum] = bufname
+      end
+    end
+  end
+
+  vim.schedule(function()
+    local lines = {}
+    for bufnum, bufname in pairs(bufs) do
+      table.insert(lines, string.format("%d: %s", bufnum, bufname))
+    end
+    local message = table.concat(lines, "\n")
+    vim.notify("Loaded file buffers:\n" .. message, vim.log.levels.INFO)
+  end)
+end, { desc = "Show open buffers" })
 
 -- Highlight on yank, currently handled by yanky.nvim
 -- autocmd("TextYankPost", {

@@ -138,7 +138,34 @@ M.plugin = {
       end,
     })
 
+    -- AI completion toggle. Putting it here, since using multiple providers
+    -- First, check if enabled by default to omit toggling disabled tools
+    local is_augment_enabled_by_default = vim.g.augment_disable_completions == nil
+      or not vim.g.augment_disable_completions
+    local is_copilot_enabled_by_default = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
+    vim.g.enable_ai_completion = true
     vim.schedule(function()
+      Snacks.toggle({
+        name = "AI Completion",
+        get = function()
+          return vim.g.enable_ai_completion
+        end,
+        set = function(state)
+          vim.g.enable_ai_completion = state
+
+          -- Augment
+          if is_augment_enabled_by_default then
+            vim.g.augment_disable_completions = not state
+            vim.g.augment_disable_tab_mapping = not state
+          end
+
+          -- Copilot
+          if is_copilot_enabled_by_default then
+            vim.g.copilot_enabled = state
+          end
+        end,
+      }):map("<leader>a-")
+
       Snacks.picker.actions.git_branch_del = M.git_branch_del
     end)
   end,

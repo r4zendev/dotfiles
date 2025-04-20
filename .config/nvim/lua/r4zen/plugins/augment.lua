@@ -34,8 +34,7 @@ return {
   init = function()
     vim.g.augment_workspace_folders = { require("r4zen.utils").workspace_root() }
 
-    -- Disable completion, but keep the chat available
-    -- vim.g.augment_disable_completions = true
-    -- vim.g.augment_disable_tab_mapping = true
+    vim.g.augment_disable_completions = false
+    vim.g.augment_disable_tab_mapping = false
   end,
 }
