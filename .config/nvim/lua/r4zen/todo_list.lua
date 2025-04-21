@@ -1,4 +1,9 @@
+local api = vim.api
+local map = vim.keymap.set
+local autocmd = api.nvim_create_autocmd
+
 local M = {}
+local todo_win_id = nil
 
 local function float_win_config()
   local width = math.min(math.floor(vim.o.columns * 0.8), 100)
@@ -25,22 +30,58 @@ local function ensure_and_open_todo_window(filepath)
   local buf = vim.fn.bufadd(path)
 
   if not vim.fn.bufloaded(buf) then
-    vim.api.nvim_buf_call(buf, function()
+    api.nvim_buf_call(buf, function()
       vim.cmd("edit " .. vim.fn.fnameescape(path))
     end)
   end
 
   vim.bo[buf].buflisted = false
 
-  vim.api.nvim_open_win(buf, true, float_win_config())
+  todo_win_id = api.nvim_open_win(buf, true, float_win_config())
 
-  vim.api.nvim_buf_set_keymap(
-    buf,
-    "n",
-    "q",
-    "<cmd>close<CR>",
-    { silent = true, noremap = true, desc = "Close Todo Window" }
-  )
+  local augroup = api.nvim_create_augroup("TodoWindowGroup" .. todo_win_id, { clear = true })
+
+  autocmd("BufEnter", {
+    group = augroup,
+    callback = function()
+      if api.nvim_get_current_win() == todo_win_id then
+        map("n", "q", function()
+          if api.nvim_win_is_valid(todo_win_id) then
+            api.nvim_win_close(todo_win_id, true)
+            todo_win_id = nil
+          end
+          pcall(api.nvim_del_augroup_by_id, augroup)
+        end, { buffer = 0, silent = true, noremap = true, desc = "Close Todo Window" })
+      end
+    end,
+  })
+
+  autocmd("WinClosed", {
+    group = augroup,
+    pattern = tostring(todo_win_id),
+    callback = function()
+      todo_win_id = nil
+      pcall(api.nvim_del_augroup_by_id, augroup)
+    end,
+    once = true,
+  })
+
+  map("n", "q", function()
+    if api.nvim_win_is_valid(todo_win_id) then
+      api.nvim_win_close(todo_win_id, true)
+      todo_win_id = nil
+    end
+    pcall(api.nvim_del_augroup_by_id, augroup)
+  end, { buffer = 0, silent = true, noremap = true, desc = "Close Todo Window" })
+end
+
+local function toggle_todo_window(filepath)
+  if todo_win_id and api.nvim_win_is_valid(todo_win_id) then
+    api.nvim_win_close(todo_win_id, true)
+    todo_win_id = nil
+  else
+    ensure_and_open_todo_window(filepath)
+  end
 end
 
 local function setup_user_commands(opts)
@@ -52,33 +93,24 @@ local function setup_user_commands(opts)
   local final_filepath = vim.fn.expand(opts.target_file)
   if vim.fn.filereadable(final_filepath) == 0 then
     vim.notify("Todo file not found or not readable: " .. final_filepath, vim.log.levels.ERROR)
-    return -- Stop setup if file is invalid
+    return
   end
 
-  vim.api.nvim_create_user_command("Td", function()
-    local buf = vim.fn.bufadd(final_filepath)
-    local existing_win = nil
-
-    for _, winid in ipairs(vim.api.nvim_list_wins()) do
-      if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == buf then
-        local config = vim.api.nvim_win_get_config(winid)
-        if config.relative ~= "" then
-          existing_win = winid
-          break
-        end
-      end
-    end
-
-    if existing_win then
-      vim.api.nvim_win_close(existing_win, true) -- 'true' forces close without saving
-    else
-      ensure_and_open_todo_window(final_filepath)
-    end
+  api.nvim_create_user_command("Td", function()
+    toggle_todo_window(final_filepath)
   end, {})
+
+  M.target_file = final_filepath
 end
 
 local function setup_keymaps()
-  vim.keymap.set("n", "<leader>td", ":Td<CR>", { desc = "Todo List", silent = true })
+  map("n", "<leader>td", function()
+    if M.target_file then
+      toggle_todo_window(M.target_file)
+    else
+      vim.notify("Todo target file not configured", vim.log.levels.ERROR)
+    end
+  end, { desc = "Toggle Todo List", silent = true })
 end
 
 M.setup = function(opts)
