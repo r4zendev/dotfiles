@@ -4,7 +4,9 @@ if not schemastore_ok then
   schemastore = nil
 end
 
-local server_configs = {}
+local M = {}
+
+M.server_configs = {}
 
 local schema_settings_map = {}
 if schemastore then
@@ -59,12 +61,12 @@ for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
     config.settings = vim.tbl_deep_extend("force", config.settings or {}, schema_settings.settings)
   end
 
-  server_configs[server_name] = config
+  M.server_configs[server_name] = config
 
   ::continue::
 end
 
-for name, config in pairs(server_configs) do
+for name, config in pairs(M.server_configs) do
   vim.lsp.config(name, config)
 
   -- If not explicitly disabled
@@ -73,3 +75,4 @@ for name, config in pairs(server_configs) do
   end
 end
 
+return M
