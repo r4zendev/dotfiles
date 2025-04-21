@@ -96,14 +96,20 @@ return {
     end
   end,
   workspace_required = true,
-  root_markers = {
-    "tailwind.config.js",
-    "tailwind.config.cjs",
-    "tailwind.config.mjs",
-    "tailwind.config.ts",
-    "postcss.config.js",
-    "postcss.config.cjs",
-    "postcss.config.mjs",
-    "postcss.config.ts",
-  },
+  root_dir = function(fname)
+    local root_file = {
+      "tailwind.config.js",
+      "tailwind.config.cjs",
+      "tailwind.config.mjs",
+      "tailwind.config.ts",
+      "postcss.config.js",
+      "postcss.config.cjs",
+      "postcss.config.mjs",
+      "postcss.config.ts",
+    }
+
+    local utils = require("r4zen.lsp_utils")
+    root_file = utils.insert_package_json(root_file, "tailwindcss", fname)
+    return utils.root_pattern(unpack(root_file))(fname)
+  end,
 }
