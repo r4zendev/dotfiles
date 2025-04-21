@@ -92,11 +92,6 @@ return {
       adapters = supported_adapters,
       strategies = {
         chat = {
-          keymaps = {
-            close = {
-              modes = { n = "q", i = "<C-c>" },
-            },
-          },
           tools = {
             ["mcp"] = {
               -- calling it in a function would prevent mcphub from being loaded before it's needed

@@ -35,7 +35,9 @@ autocmd("FileType", {
   pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "vim", "codecompanion" },
   callback = function()
     vim.bo.buflisted = false
-    vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true, silent = true })
+    vim.schedule(function()
+      vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true, silent = true })
+    end)
   end,
 })
 

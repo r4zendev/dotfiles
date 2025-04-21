@@ -14,62 +14,66 @@ local function float_win_config()
   }
 end
 
-local function open_floating_file(filepath)
+local function ensure_and_open_todo_window(filepath)
   local path = vim.fn.expand(filepath)
 
-  -- Check if the file exists
   if not path or vim.fn.filereadable(path) == 0 then
     vim.notify("File does not exist: " .. filepath, vim.log.levels.ERROR)
     return
   end
 
-  -- Look for an existing buffer with this file
-  local buf = vim.fn.bufnr(path, true)
+  local buf = vim.fn.bufadd(path)
 
-  -- If the buffer doesn't exist, create one and edit the file
-  if buf == -1 then
-    buf = vim.api.nvim_create_buf(false, false)
-    vim.api.nvim_buf_set_name(buf, path)
+  if not vim.fn.bufloaded(buf) then
     vim.api.nvim_buf_call(buf, function()
       vim.cmd("edit " .. vim.fn.fnameescape(path))
     end)
   end
 
-  local win = vim.api.nvim_open_win(buf, true, float_win_config())
-  vim.cmd("setlocal nospell")
+  vim.bo[buf].buflisted = false
 
-  vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
-    noremap = true,
-    silent = true,
-    callback = function()
-      -- Check if the buffer has unsaved changes
-      if vim.api.nvim_get_option_value("modified", { buf = buf }) then
-        vim.notify("save your changes bro", vim.log.levels.WARN)
-      else
-        vim.api.nvim_win_close(0, true)
-      end
-    end,
-  })
+  vim.api.nvim_open_win(buf, true, float_win_config())
 
-  vim.api.nvim_create_autocmd("VimResized", {
-    callback = function()
-      vim.api.nvim_win_set_config(win, float_win_config())
-    end,
-    once = false,
-  })
+  vim.api.nvim_buf_set_keymap(
+    buf,
+    "n",
+    "q",
+    "<cmd>close<CR>",
+    { silent = true, noremap = true, desc = "Close Todo Window" }
+  )
 end
 
 local function setup_user_commands(opts)
-  local target_file = opts.target_file or "todo.md"
-  local resolved_target_file = vim.fn.resolve(target_file)
-
-  if vim.fn.filereadable(resolved_target_file) == true then
-    opts.target_file = resolved_target_file
-  else
-    opts.target_file = opts.global_file
+  if not opts or not opts.target_file then
+    vim.notify("Todo plugin setup error: 'target_file' option is missing.", vim.log.levels.ERROR)
+    return
   end
+
+  local final_filepath = vim.fn.expand(opts.target_file)
+  if vim.fn.filereadable(final_filepath) == 0 then
+    vim.notify("Todo file not found or not readable: " .. final_filepath, vim.log.levels.ERROR)
+    return -- Stop setup if file is invalid
+  end
+
   vim.api.nvim_create_user_command("Td", function()
-    open_floating_file(opts.target_file)
+    local buf = vim.fn.bufadd(final_filepath)
+    local existing_win = nil
+
+    for _, winid in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == buf then
+        local config = vim.api.nvim_win_get_config(winid)
+        if config.relative ~= "" then
+          existing_win = winid
+          break
+        end
+      end
+    end
+
+    if existing_win then
+      vim.api.nvim_win_close(existing_win, true) -- 'true' forces close without saving
+    else
+      ensure_and_open_todo_window(final_filepath)
+    end
   end, {})
 end
 

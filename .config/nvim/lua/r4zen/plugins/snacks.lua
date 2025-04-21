@@ -44,7 +44,6 @@ M.plugin = {
           { icon = " ", key = "f", desc = "Find Files", action = ":lua Snacks.dashboard.pick('smart', { hidden = true })" },
           { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true })" },
           { icon = " ", key = "d", desc = "View Diff", action = ":DiffviewOpen" },
-          { icon = " ", key = "T", desc = "Select theme", action = ":Themery" },
           { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
           { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         },

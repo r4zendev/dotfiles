@@ -40,13 +40,12 @@ stow . -t ~
 ## Hardware
 
 - Laptop: 13-inch MacBook Air, Apple M2 Chip, 16GB RAM, Late 2022
-- During free time, I practice my [MoErgo Glove80](https://www.moergo.com/collections/glove80-keyboards/products/glove80-split-ergonomic-keyboard-revision-2) and [Piantor Pro](https://shop.beekeeb.com/product/pre-soldered-piantor-split-keyboard/) with [my own layout](https://github.com/r4zendev/glophite) based on Graphite keyboard layout
+- During free time, I practice my [MoErgo Glove80](https://www.moergo.com/collections/glove80-keyboards/products/glove80-split-ergonomic-keyboard-revision-2) with [my own layout](https://github.com/r4zendev/glophite) based on Graphite keyboard layout
 
 ## Future
 
-- [ ] Improve [DAP](.config/nvim/lua/r4zen/plugins/dap.lua), [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua) & [yarepl](.config/nvim/lua/r4zen/plugins/yarepl.lua)+Aider usage/workflows & configs
-- [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace) (currently happy with [`yabai`](https://github.com/koekeishiya/yabai))
-- [ ] Build the same kind of configuration for my CachyOS (Arch-based) rig using Hyprland/AutoHotkey etc.
+- [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace)
+- [ ] Setup [DAP](.config/nvim/lua/r4zen/plugins/dap.lua) & [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua)
 
 ## 🎉 Acknowledgment
 
