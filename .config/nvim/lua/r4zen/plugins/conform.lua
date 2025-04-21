@@ -24,6 +24,10 @@ return {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)
 
+          if vim.bo.filetype == "markdown" then
+            return true
+          end
+
           local prettier_root_file = {
             -- https://prettier.io/docs/en/configuration.html
             ".prettierrc",
@@ -55,8 +59,8 @@ return {
       html = js_formatters,
       json = js_formatters,
       yaml = js_formatters,
-      markdown = js_formatters,
       graphql = js_formatters,
+      markdown = { "prettierd" },
       lua = { "stylua" },
       -- python = { "isort", "black" },
       c = { "clang_format" },
