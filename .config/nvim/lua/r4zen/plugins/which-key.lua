@@ -24,6 +24,7 @@ return {
         { "<leader>gB", group = "Git Blame", icon = { icon = "󰊢", color = "orange" } },
         { "<leader>go", desc = "Google it", icon = { icon = "󰊯", color = "blue" } },
         { "<leader>gp", desc = "DuckDuckGo it", icon = { icon = "󰊯", color = "red" } },
+        { "<leader>i", group = "Icon picker", icon = { icon = "󰱨", color = "green" } },
         { "<leader>m", group = "Markdown", icon = { icon = "󰍔", color = "grey" } },
         { "<leader>n", group = "Notes (Obsidian)", icon = { icon = "", color = "cyan" } },
         { "<leader>o", group = "Overseer", icon = { icon = "", color = "green" } },

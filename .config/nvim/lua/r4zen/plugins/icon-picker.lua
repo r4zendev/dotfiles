@@ -9,8 +9,8 @@ return {
     disable_legacy_commands = true,
   },
   keys = {
-    { "<leader>ip", vim.cmd.IconPickerNormal },
-    { "<leader>iy", vim.cmd.IconPickerYank },
-    { "<C-h>", vim.cmd.IconPickerInsert, mode = "i" },
+    { "<leader>ip", vim.cmd.IconPickerNormal, desc = "Icon Picker" },
+    { "<leader>iy", vim.cmd.IconPickerYank, desc = "Icon Picker Yank" },
+    { "<C-h>", vim.cmd.IconPickerInsert, mode = "i", desc = "Icon Picker Insert" },
   },
 }
