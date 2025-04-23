@@ -4,9 +4,7 @@ if not schemastore_ok then
   schemastore = nil
 end
 
-local M = {}
-
-M.server_configs = {}
+local server_configs = require("r4zen.lsp_utils").get_servers_with_configs()
 
 local schema_settings_map = {}
 if schemastore then
@@ -24,49 +22,17 @@ if schemastore then
   }
 end
 
-for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
-  local server_name = vim.fn.fnamemodify(filepath, ":t:r")
-
-  if server_name == "utils" then
-    goto continue
-  end
-
-  local chunk, load_err = loadfile(filepath)
-  if not chunk then
-    vim.notify(
-      string.format("Failed to load LSP config file: %s\nError: %s", filepath, load_err or "Unknown error"),
-      vim.log.levels.ERROR
+for _, server_name in ipairs({ "jsonls", "yamlls" }) do
+  if server_configs[server_name] and schema_settings_map[server_name] then
+    server_configs[server_name].settings = vim.tbl_deep_extend(
+      "force",
+      server_configs[server_name].settings or {},
+      schema_settings_map[server_name].settings
     )
-    goto continue
   end
-
-  local exec_ok, config_or_err = pcall(chunk)
-  if not exec_ok then
-    vim.notify(
-      string.format("Failed to execute LSP config file: %s\nError: %s", filepath, tostring(config_or_err)),
-      vim.log.levels.ERROR
-    )
-    goto continue
-  end
-
-  if type(config_or_err) ~= "table" then
-    vim.notify(string.format("LSP config file did not return a table: %s", filepath), vim.log.levels.WARN)
-    goto continue
-  end
-
-  local config = config_or_err
-
-  local schema_settings = schema_settings_map[server_name]
-  if schema_settings then
-    config.settings = vim.tbl_deep_extend("force", config.settings or {}, schema_settings.settings)
-  end
-
-  M.server_configs[server_name] = config
-
-  ::continue::
 end
 
-for name, config in pairs(M.server_configs) do
+for name, config in pairs(server_configs) do
   vim.lsp.config(name, config)
 
   -- If not explicitly disabled
@@ -74,5 +40,3 @@ for name, config in pairs(M.server_configs) do
     vim.lsp.enable(name)
   end
 end
-
-return M

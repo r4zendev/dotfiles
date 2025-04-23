@@ -1,22 +1,22 @@
 local usercmd = vim.api.nvim_create_user_command
 local utils = require("r4zen.utils")
-local lsp_configs_util = require("r4zen.lsp")
+local lsp_configs_util = require("r4zen.lsp_utils")
 
 usercmd("LspInfo", function()
   vim.cmd("checkhealth vim.lsp")
 end, { desc = "Show lsp info" })
 
 usercmd("LspStop", function()
-  local server_configs = lsp_configs_util.server_configs
+  local servers = lsp_configs_util.get_servers()
   local stopped_clients_count = 0
   local stopped_client_names = {}
 
-  if not server_configs then
+  if not servers then
     vim.notify("LSP server configurations could not be loaded.", vim.log.levels.ERROR)
     return
   end
 
-  for server_name, _ in pairs(server_configs) do
+  for _, server_name in pairs(servers) do
     local clients = vim.lsp.get_clients({ name = server_name })
     for _, client in ipairs(clients) do
       local stop_ok, stop_err = pcall(vim.lsp.stop_client, client.id)

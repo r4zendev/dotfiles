@@ -3,6 +3,58 @@ local map = vim.keymap.set
 local M = {}
 local iswin = vim.uv.os_uname().version:match("Windows")
 
+M.get_servers =function ()
+  local server_configs = {}
+  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
+    if server_name ~= "utils" then
+      server_configs[#server_configs + 1] = server_name
+    end
+  end
+  return server_configs
+end
+
+M.get_servers_with_configs = function()
+  local server_configs = {}
+
+  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
+
+    if server_name == "utils" then
+      goto continue
+    end
+
+    local chunk, load_err = loadfile(filepath)
+    if not chunk then
+      vim.notify(
+        string.format("Failed to load LSP config file: %s\nError: %s", filepath, load_err or "Unknown error"),
+        vim.log.levels.ERROR
+      )
+      goto continue
+    end
+
+    local exec_ok, config_or_err = pcall(chunk)
+    if not exec_ok then
+      vim.notify(
+        string.format("Failed to execute LSP config file: %s\nError: %s", filepath, tostring(config_or_err)),
+        vim.log.levels.ERROR
+      )
+      goto continue
+    end
+
+    if type(config_or_err) ~= "table" then
+      vim.notify(string.format("LSP config file did not return a table: %s", filepath), vim.log.levels.WARN)
+      goto continue
+    end
+
+    server_configs[server_name] = config_or_err
+
+    ::continue::
+  end
+
+  return server_configs
+end
+
 M.on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     require("nvim-navic").attach(client, bufnr)

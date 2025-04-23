@@ -66,6 +66,15 @@ local function ensure_and_open_todo_window(filepath)
     once = true,
   })
 
+  autocmd("VimResized", {
+    group = augroup,
+    callback = function()
+      if todo_win_id and api.nvim_win_is_valid(todo_win_id) then
+        pcall(api.nvim_win_set_config, todo_win_id, float_win_config())
+      end
+    end,
+  })
+
   map("n", "q", function()
     if api.nvim_win_is_valid(todo_win_id) then
       api.nvim_win_close(todo_win_id, true)

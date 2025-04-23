@@ -10,12 +10,10 @@ M.plugin = {
       })
       MiniIcons.mock_nvim_web_devicons()
 
-      require("mini.ai").setup()
+      require("mini.ai").setup({ n_lines = 9999 })
       require("mini.align").setup()
       require("mini.bracketed").setup()
-      require("mini.surround").setup({
-        n_lines = 400,
-      })
+      require("mini.surround").setup({ n_lines = 9999 })
       require("mini.splitjoin").setup()
       require("mini.cursorword").setup()
       -- require("mini.operators").setup()
