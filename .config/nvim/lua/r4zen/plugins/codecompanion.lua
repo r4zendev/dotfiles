@@ -88,6 +88,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "ravitemer/mcphub.nvim",
     },
+    cmd = { "CodeCompanion", "CodeCompanionChat" },
     opts = {
       adapters = supported_adapters,
       strategies = {
@@ -134,7 +135,7 @@ return {
         },
 
         inline = {
-          adapter = "copilot",
+          adapter = "gemini",
         },
       },
       display = {
@@ -246,6 +247,12 @@ Format findings as markdown and with:
     },
     -- stylua: ignore
     keys = {
+      {
+        "<leader>ai",
+        require("r4zen.utils").create_input_cmd_visual_callback("CodeCompanion"),
+        desc = "Codecompanion: Inline assistant",
+        mode = { "n", "v" },
+      },
       { "<leader>ac", ":CodeCompanionChat copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
       { "<leader>ao", ":CodeCompanionChat copilot_4o<CR>", desc = "Codecompanion: Copilot (GPT-4o)" },
       { "<leader>aC", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },

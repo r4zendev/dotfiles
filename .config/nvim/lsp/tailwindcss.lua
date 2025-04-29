@@ -72,9 +72,8 @@ return {
       classAttributes = {
         "class",
         "className",
-        "class:list",
-        "classList",
-        "ngClass",
+        ".*ClassName",
+        ".*:class",
       },
       includeLanguages = {
         eelixir = "html-eex",
@@ -96,8 +95,8 @@ return {
     end
   end,
   workspace_required = true,
-  root_dir = function(fname)
-    local root_file = {
+  root_dir = function(bufnr, on_dir)
+    local root_files = {
       "tailwind.config.js",
       "tailwind.config.cjs",
       "tailwind.config.mjs",
@@ -107,9 +106,10 @@ return {
       "postcss.config.mjs",
       "postcss.config.ts",
     }
+    local fname = vim.api.nvim_buf_get_name(bufnr)
 
     local utils = require("r4zen.lsp_utils")
-    root_file = utils.insert_package_json(root_file, "tailwindcss", fname)
-    return utils.root_pattern(unpack(root_file))(fname)
+    root_files = utils.insert_package_json(root_files, "tailwindcss", fname)
+    on_dir(vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1]))
   end,
 }

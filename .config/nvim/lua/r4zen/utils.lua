@@ -87,6 +87,30 @@ M.file_exists = function(path)
   end
 end
 
+M.create_input_cmd_visual_callback = function(cmd)
+  return function()
+    local mode = vim.api.nvim_get_mode().mode
+    local start_line, end_line
+
+    if mode == "v" or mode == "V" then
+      start_line = vim.fn.line("'<")
+      end_line = vim.fn.line("'>")
+    end
+
+    vim.ui.input({ prompt = cmd .. " : " }, function(input)
+      if not input or input == "" then
+        return
+      end
+
+      if start_line and end_line then
+        vim.cmd(string.format("%d,%d%s %s", start_line, end_line, cmd, input))
+      else
+        vim.cmd(cmd .. " " .. input)
+      end
+    end)
+  end
+end
+
 M.js_filetypes = {
   "javascript",
   "javascriptreact",

@@ -6,7 +6,7 @@ return {
   },
   -- stylua: ignore
   keys = {
-    { "=", vim.cmd.Yazi, desc = "Yazi: Current file", mode = { "n", "v" },  },
+    { "<leader>-", vim.cmd.Yazi, desc = "Yazi: Current file", mode = { "n", "v" },  },
     { "<leader>fw", function() vim.cmd("Yazi cwd") end, desc = "Yazi: Working directory" },
     -- { "<c-up>", "<cmd>Yazi toggle<cr>", desc = "Resume the last yazi session" },
   },

@@ -10,7 +10,7 @@ return {
     { "]]", "<Plug>(copilot-next)", mode = "i", desc = "Copilot: Next Suggestion" },
   },
   init = function()
-    -- Currently using augment
+    -- Currently using copilot
     vim.g.copilot_enabled = false
 
     -- Workspace folders

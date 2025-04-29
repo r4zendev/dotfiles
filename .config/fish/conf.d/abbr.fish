@@ -21,6 +21,7 @@ abbr -a gdu "gdu-go"
 abbr -a gs "git status"
 
 abbr -a gd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
+abbr -a gd1 --position anywhere --set-cursor 'nvim -c "DiffviewOpen HEAD~1%..HEAD"'
 abbr -a gl "git log"
 abbr -a gck "git checkout"
 

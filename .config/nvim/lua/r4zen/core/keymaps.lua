@@ -10,7 +10,7 @@ map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
 map("n", "_", "o<ESC>", { noremap = true, silent = true })
 
 -- remap indent
-map({ "n", "v" }, "<leader>-", "=", { desc = "Indent Lines" })
+-- map({ "n", "v" }, "<leader>-", "=", { desc = "Indent Lines" })
 
 -- JSON format anywhere
 map({ "n", "v" }, "<leader>cj", ":%!jq '.'<cr>", { desc = "Format JSON" })

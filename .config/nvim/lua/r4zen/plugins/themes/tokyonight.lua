@@ -49,8 +49,8 @@ return {
       hl.HarpoonSelectedOptionHL = { fg = selected_hl }
       hl.HarpoonOptionHL = { fg = option_hl }
 
-      local diff_over_change_colors = { fg = "#E4F0FB", bg = "#5FB3A1" }
-      hl.MiniDiffOverChange = diff_over_change_colors
+      -- local diff_over_change_colors = { fg = "#E4F0FB", bg = "#5FB3A1" }
+      -- hl.MiniDiffOverChange = diff_over_change_colors
 
       hl.AugmentSuggestionHighlight = { fg = colors.blue1 }
 
