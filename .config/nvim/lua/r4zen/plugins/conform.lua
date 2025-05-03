@@ -75,7 +75,22 @@ return {
         return
       end
 
-      return { timeout_ms = 1500, lsp_fallback = true }
+      -- {lsp_format}       `nil|conform.LspFormatOpts`    Defaults to "never".
+      --     `"never"`    never use the LSP for formatting (default)
+      --     `"fallback"` LSP formatting is used when no other formatters are available
+      --     `"prefer"`   use only LSP formatting when available
+      --     `"first"`    LSP formatting is used when available and then other formatters
+      --     `"last"`     other formatters are used then LSP formatting when available
+      -- {stop_after_first} `nil|boolean` Only run the first available formatter in the list. Defaults to false.
+      -- {filter}           `nil|fun(client: table): boolean` Passed to |vim.lsp.buf.format| when using LSP formatting
+      return {
+        timeout_ms = 1500,
+        lsp_format = "fallback",
+        filter = function(client)
+          -- Disable native vtsls formatter
+          return client.name ~= "vtsls"
+        end,
+      }
     end,
   },
   keys = {

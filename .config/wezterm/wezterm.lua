@@ -168,7 +168,7 @@ config.background = {
     source = { Color = config.colors.background or "black" },
     width = "100%",
     height = "100%",
-    opacity = 0.8,
+    opacity = 0.6,
   },
   {
     source = { File = images[math.random(#images)] },
@@ -180,7 +180,7 @@ config.background = {
     horizontal_align = "Center",
     repeat_x = "NoRepeat",
 
-    opacity = 0.6,
+    opacity = 0.8,
     -- opacity = 1,
     hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
   },
