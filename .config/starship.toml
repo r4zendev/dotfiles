@@ -1,19 +1,7 @@
 palette = "catppuccin_mocha"
 
-format = """
-$directory\
-[](fg:blue bg:surface0)\
-$git_branch\
-$git_status\
-[](fg:surface0 bg:mantle)\
-$nodejs\
-$lua\
-$rust\
-$golang\
-$python\
-$zig\
-[](fg:mantle)\
-\n$character"""
+# Minimal single-line format for small tmux panes
+format = "$directory$git_branch$git_status$nodejs$rust$golang$python$lua$zig$time\n$character"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
@@ -44,64 +32,68 @@ mantle = "#181825"
 crust = "#11111b"
 
 [character]
-success_symbol = "[(green)❯](peach)"
-error_symbol = "[(red)❯](peach)"
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](subtext1)"
-# success_symbol = "[[󰄛](green) ❯](peach)"
-# error_symbol = "[[󰄛](red) ❯](peach)"
-# vimcmd_symbol = "[󰄛 ❮](subtext1)"
 
 [directory]
-style = "fg:text bg:blue"
-format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
+style = "bold blue"
+format = "[$path]($style) "
+truncation_length = 1
+# truncation_symbol = "…/"
+truncation_symbol = "/"
 
 [directory.substitutions]
-"Documents" = "󰈙 "
+"Documents" = " "
 "Downloads" = " "
 "dotfiles" = " "
 "nvim" = " "
 # "projects" = " "
-# "other" = " 󰈔                        ⚡ 🌙         "
+# "other" = "                         ⚡️ 🌙         "
 
 [git_branch]
 symbol = ""
-style = "bg:surface0"
-format = '[[ $symbol $branch ](fg:blue bg:surface0)]($style)'
+style = "purple"
+format = '[$symbol $branch]($style) '
 
 [git_status]
-style = "bg:surface0"
-format = '[[($all_status$ahead_behind )](fg:blue bg:surface0)]($style)'
+style = "red"
+format = '[$all_status$ahead_behind]($style) '
 
 [nodejs]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol ($version) ](fg:blue bg:mantle)]($style)'
+format = '[$symbol ($version)]($style) '
+disabled = false
+detect_extensions = ["js", "mjs", "cjs", "jsx", "tsx", "ts"]
 
 [rust]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol ($version) ](fg:blue bg:mantle)]($style)'
+format = '[$symbol ($version)]($style) '
+disabled = false
 
 [golang]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol ($version) ](fg:blue bg:mantle)]($style)'
+format = '[$symbol ($version)]($style) '
+disabled = false
+
+[python]
+symbol = ""
+format = '[$symbol ($version)]($style) '
+disabled = false
 
 [lua]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol ($version)](fg:blue bg:mantle)]($style)'
+format = '[$symbol ($version)]($style) '
 detect_folders = ["lua", "nvim"]
+disabled = false
 
 [zig]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol ($version) ](fg:blue bg:mantle)]($style)'
+format = '[$symbol ($version)]($style) '
+disabled = false
 
 [time]
-disabled = true
+disabled = false
 time_format = "%R" # Hour:Minute Format
 style = "bg:base"
-format = '[[  $time ](fg:subtext0 bg:base)]($style)'
+format = '[[  $time ](fg:white)]($style)'

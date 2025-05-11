@@ -35,13 +35,14 @@ return {
         after = transparent_winbar_hl_string .. transparent_float_hl_string,
       },
 
-      -- Alts
+      -- Alts that are nice to the eye
+      { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
       { name = "Rose Pine", colorscheme = "rose-pine", after = transparent_winbar_hl_string },
       { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
-      { name = "Catppuccin", colorscheme = "catppuccin-mocha" },
 
-      -- Some extra good ones
+      -- Darker themes for late nights
       { name = "Nightfly", colorscheme = "nightfly" },
+      { name = "Kanso Zen", colorscheme = "kanso-zen" },
       { name = "Default", colorscheme = "default", after = default_harpoon_hl_string },
     },
     livePreview = true,

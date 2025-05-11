@@ -23,7 +23,7 @@ M.plugin = {
       -- with table of contents and make it unusable through <cr>
       local utils = require("r4zen.utils")
       if not utils.check_arg("+Man!") then
-        require("mini.jump2d").setup()
+        require("mini.jump2d").setup({ view = { n_steps_ahead = 9999 } })
       end
 
       local mini_indentscope = require("mini.indentscope")
@@ -75,7 +75,7 @@ M.plugin = {
 
           -- Highlight hex color strings (`#rrggbb`) using that color
           -- Currently trying out `ccc.nvim`
-          -- hex_color = hipatterns.gen_highlighter.hex_color(),
+          hex_color = hipatterns.gen_highlighter.hex_color(),
 
           -- Highlight tailwind colors
           tailwind = {

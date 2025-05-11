@@ -10,7 +10,7 @@ return {
   },
   opts = {
     highlighter = {
-      auto_enable = true,
+      auto_enable = false,
       filetypes = {
         "css",
         "javascript",

@@ -34,7 +34,8 @@ return {
   init = function()
     vim.g.augment_workspace_folders = { require("r4zen.utils").workspace_root() }
 
-    vim.g.augment_disable_completions = false
-    vim.g.augment_disable_tab_mapping = false
+    local disable_augment = true
+    vim.g.augment_disable_completions = disable_augment
+    vim.g.augment_disable_tab_mapping = disable_augment
   end,
 }

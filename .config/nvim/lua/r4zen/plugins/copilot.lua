@@ -10,8 +10,7 @@ return {
     { "]]", "<Plug>(copilot-next)", mode = "i", desc = "Copilot: Next Suggestion" },
   },
   init = function()
-    -- Currently using copilot
-    vim.g.copilot_enabled = false
+    vim.g.copilot_enabled = true
 
     -- Workspace folders
     vim.g.copilot_workspace_folders = { require("r4zen.utils").workspace_root() }

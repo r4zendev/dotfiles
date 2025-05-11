@@ -1,6 +1,14 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
+-- Use persistent state to store NSFW mode
+local allow_nsfw = wezterm.GLOBAL.allow_nsfw
+if allow_nsfw == nil then
+  -- Initialize the state if it doesn't exist yet
+  allow_nsfw = false
+  wezterm.GLOBAL.allow_nsfw = allow_nsfw
+end
+
 local config = {}
 if wezterm.config_builder then
   config = wezterm.config_builder()
@@ -114,6 +122,7 @@ config.keys = {
   { key = "9", mods = "CTRL", action = act.SendString("\x14\x39") },
   -- { key = "b", mods = "CMD", action = act.EmitEvent("toggle-opacity-blur") },
   { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
+  { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
 }
 
 -- config.window_background_opacity = 0.8
@@ -158,8 +167,69 @@ local function get_background_images()
     end
   end
 
+  -- Include NSFW images if allowed
+  if allow_nsfw then
+    local nsfw_dir = images_dir .. "/nsfw"
+    local nsfw_success, _, _ = wezterm.run_child_process({ "test", "-d", nsfw_dir })
+    if nsfw_success then
+      local nsfw_success, nsfw_stdout, _ = wezterm.run_child_process({ "ls", nsfw_dir })
+      if nsfw_success then
+        for filename in string.gmatch(nsfw_stdout, "[^\r\n]+") do
+          if
+            filename:match("%.jpg$")
+            or filename:match("%.jpeg$")
+            or filename:match("%.png$")
+            or filename:match("%.gif$")
+          then
+            table.insert(images, nsfw_dir .. "/" .. filename)
+          end
+        end
+      end
+    else
+      wezterm.log_warn("NSFW directory doesn't exist: " .. nsfw_dir)
+    end
+  end
+
   return images
 end
+-- Function to update background images for a window
+local function update_background_images(window)
+  local images = get_background_images()
+  if #images > 0 then
+    local overrides = window:get_config_overrides() or {}
+    if not overrides.background then
+      overrides.background = wezterm.copy_and_reset(config.background)
+    end
+    overrides.background[2].source = { File = images[math.random(#images)] }
+    window:set_config_overrides(overrides)
+    wezterm.log_info("Updated background with " .. #images .. " possible images")
+  else
+    wezterm.log_warn("No background images found!")
+  end
+end
+
+wezterm.on("toggle-nsfw", function(window, _)
+  allow_nsfw = not allow_nsfw
+
+  wezterm.GLOBAL.allow_nsfw = allow_nsfw
+
+  local status_message = "NSFW mode: " .. (allow_nsfw and "ON" or "OFF")
+  wezterm.log_info(status_message)
+
+  window:toast_notification("WezTerm", status_message, {
+    level = allow_nsfw and "Warning" or "Info",
+    duration_ms = 1500,
+  })
+
+  -- Update the background with new set of images
+  update_background_images(window)
+end)
+
+-- Initialize new windows with the correct background based on current NSFW mode
+wezterm.on("window-config-reloaded", function(window, _)
+  wezterm.log_info("Window config reloaded, applying background settings...")
+  update_background_images(window)
+end)
 
 local images = get_background_images()
 
