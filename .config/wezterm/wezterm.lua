@@ -1,13 +1,21 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
--- Use persistent state to store NSFW mode
+-- Use persistent state to store NSFW mode and current background image
+local background_image = wezterm.GLOBAL.minimal_mode
+if background_image == nil then
+  background_image = true
+  wezterm.GLOBAL.minimal_mode = background_image
+end
+
 local allow_nsfw = wezterm.GLOBAL.allow_nsfw
 if allow_nsfw == nil then
-  -- Initialize the state if it doesn't exist yet
   allow_nsfw = false
   wezterm.GLOBAL.allow_nsfw = allow_nsfw
 end
+
+-- Store current background image path
+local current_background_image = wezterm.GLOBAL.current_background_image
 
 local config = {}
 if wezterm.config_builder then
@@ -106,8 +114,6 @@ config.hide_mouse_cursor_when_typing = true
 
 config.selection_word_boundary = " \t\n{}[]()\"'`,;:│"
 
-config.mouse_bindings = {}
-
 -- send <c-t>N on ctrl-N
 -- nvim config has bindings for harpoon tab using these
 config.keys = {
@@ -123,25 +129,17 @@ config.keys = {
   -- { key = "b", mods = "CMD", action = act.EmitEvent("toggle-opacity-blur") },
   { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
+  { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
+  { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
 }
 
--- config.window_background_opacity = 0.8
--- config.macos_window_background_blur = 40
+-----------------------------------------------------------
+-- Background image
+-----------------------------------------------------------
 
--- Has no effect when using config.background
--- wezterm.on("toggle-opacity-blur", function(window, _)
--- 	local overrides = window:get_config_overrides() or {}
---
--- 	if overrides.window_background_opacity or overrides.macos_window_background_blur then
--- 		overrides.window_background_opacity = nil
--- 		overrides.macos_window_background_blur = nil
--- 	else
--- 		overrides.window_background_opacity = 0.2
--- 		overrides.macos_window_background_blur = 10
--- 	end
---
--- 	window:set_config_overrides(overrides)
--- end)
+local BACKGROUND_IMAGE_WIDTH = "Cover"
+local BACKGROUND_COLOR_OPACITY = 0.9
+local BACKGROUND_IMAGE_OPACITY = 0.9
 
 local function get_background_images()
   local images = {}
@@ -167,7 +165,6 @@ local function get_background_images()
     end
   end
 
-  -- Include NSFW images if allowed
   if allow_nsfw then
     local nsfw_dir = images_dir .. "/nsfw"
     local nsfw_success, _, _ = wezterm.run_child_process({ "test", "-d", nsfw_dir })
@@ -192,21 +189,6 @@ local function get_background_images()
 
   return images
 end
--- Function to update background images for a window
-local function update_background_images(window)
-  local images = get_background_images()
-  if #images > 0 then
-    local overrides = window:get_config_overrides() or {}
-    if not overrides.background then
-      overrides.background = wezterm.copy_and_reset(config.background)
-    end
-    overrides.background[2].source = { File = images[math.random(#images)] }
-    window:set_config_overrides(overrides)
-    wezterm.log_info("Updated background with " .. #images .. " possible images")
-  else
-    wezterm.log_warn("No background images found!")
-  end
-end
 
 wezterm.on("toggle-nsfw", function(window, _)
   allow_nsfw = not allow_nsfw
@@ -216,42 +198,135 @@ wezterm.on("toggle-nsfw", function(window, _)
   local status_message = "NSFW mode: " .. (allow_nsfw and "ON" or "OFF")
   wezterm.log_info(status_message)
 
-  window:toast_notification("WezTerm", status_message, {
-    level = allow_nsfw and "Warning" or "Info",
-    duration_ms = 1500,
-  })
-
-  -- Update the background with new set of images
-  update_background_images(window)
+  window:toast_notification("WezTerm", status_message, nil, 1000)
 end)
 
--- Initialize new windows with the correct background based on current NSFW mode
-wezterm.on("window-config-reloaded", function(window, _)
-  wezterm.log_info("Window config reloaded, applying background settings...")
-  update_background_images(window)
+wezterm.on("refresh-background-image", function(window, _)
+  if not background_image then
+    window:toast_notification("WezTerm", "Background image is OFF", nil, 1500)
+    return
+  end
+
+  local images = get_background_images()
+
+  if #images == 0 then
+    window:toast_notification("WezTerm", "No background images found", nil, 3000)
+    return
+  end
+
+  local image_path = images[math.random(#images)]
+  current_background_image = image_path
+  wezterm.GLOBAL.current_background_image = image_path
+
+  window:set_config_overrides({
+    background = {
+      {
+        source = { Color = config.colors.background or "black" },
+        width = "100%",
+        height = "100%",
+        opacity = BACKGROUND_COLOR_OPACITY,
+      },
+      {
+        source = { File = image_path },
+        width = BACKGROUND_IMAGE_WIDTH,
+        height = "100%",
+        horizontal_align = "Center",
+        repeat_x = "NoRepeat",
+        opacity = BACKGROUND_IMAGE_OPACITY,
+        hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
+      },
+    },
+  })
+
+  -- window:toast_notification("WezTerm", "Background refreshed", nil, 1500)
+end)
+
+wezterm.on("toggle-background-image", function(window, _)
+  background_image = not background_image
+  wezterm.GLOBAL.minimal_mode = background_image
+
+  local status_message = "Background image: " .. (background_image and "ON" or "OFF")
+  wezterm.log_info(status_message)
+
+  window:toast_notification("WezTerm", status_message, nil, 3000)
+
+  if not background_image then
+    window:set_config_overrides({
+      background = {
+        {
+          source = { Color = "#000000" },
+          width = "100%",
+          height = "100%",
+          opacity = 1.0,
+        },
+      },
+    })
+  else
+    -- Ensure we have a current background image set
+    if not current_background_image then
+      local images = get_background_images()
+      if #images > 0 then
+        current_background_image = images[math.random(#images)]
+        wezterm.GLOBAL.current_background_image = current_background_image
+      end
+    end
+
+    -- Always use the stored current_background_image when toggling back on
+    if current_background_image then
+      window:set_config_overrides({
+        background = {
+          {
+            source = { Color = config.colors.background or "black" },
+            width = "100%",
+            height = "100%",
+            opacity = BACKGROUND_COLOR_OPACITY,
+          },
+          {
+            source = { File = current_background_image },
+            width = BACKGROUND_IMAGE_WIDTH,
+            height = "100%",
+            horizontal_align = "Center",
+            repeat_x = "NoRepeat",
+            opacity = BACKGROUND_IMAGE_OPACITY,
+            hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
+          },
+        },
+      })
+    end
+  end
 end)
 
 local images = get_background_images()
+
+if not current_background_image and #images > 0 then
+  current_background_image = images[math.random(#images)]
+  wezterm.GLOBAL.current_background_image = current_background_image
+end
+
+local image_to_use = current_background_image
+if not image_to_use and #images > 0 then
+  image_to_use = images[math.random(#images)]
+
+  current_background_image = image_to_use
+  wezterm.GLOBAL.current_background_image = current_background_image
+end
 
 config.background = {
   {
     source = { Color = config.colors.background or "black" },
     width = "100%",
     height = "100%",
-    opacity = 0.6,
+    opacity = BACKGROUND_COLOR_OPACITY,
   },
   {
-    source = { File = images[math.random(#images)] },
+    source = { File = image_to_use },
 
-    -- Stretching makes some images look ugly
-    width = "Cover",
-    -- width = "Contain",
+    width = BACKGROUND_IMAGE_WIDTH,
     height = "100%",
     horizontal_align = "Center",
     repeat_x = "NoRepeat",
 
-    opacity = 0.8,
-    -- opacity = 1,
+    opacity = BACKGROUND_IMAGE_OPACITY,
     hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
   },
 }
