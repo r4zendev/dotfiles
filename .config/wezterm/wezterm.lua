@@ -126,7 +126,6 @@ config.keys = {
   { key = "7", mods = "CTRL", action = act.SendString("\x14\x37") },
   { key = "8", mods = "CTRL", action = act.SendString("\x14\x38") },
   { key = "9", mods = "CTRL", action = act.SendString("\x14\x39") },
-  -- { key = "b", mods = "CMD", action = act.EmitEvent("toggle-opacity-blur") },
   { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
@@ -138,8 +137,8 @@ config.keys = {
 -----------------------------------------------------------
 
 local BACKGROUND_IMAGE_WIDTH = "Cover"
-local BACKGROUND_COLOR_OPACITY = 0.9
-local BACKGROUND_IMAGE_OPACITY = 0.9
+local BACKGROUND_COLOR_OPACITY = 1
+local BACKGROUND_IMAGE_OPACITY = 1
 
 local function get_background_images()
   local images = {}
