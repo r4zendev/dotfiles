@@ -130,6 +130,7 @@ config.keys = {
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
   { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
+  { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
 }
 
 -----------------------------------------------------------
@@ -139,6 +140,13 @@ config.keys = {
 local BACKGROUND_IMAGE_WIDTH = "Cover"
 local BACKGROUND_COLOR_OPACITY = 1
 local BACKGROUND_IMAGE_OPACITY = 1
+
+local function is_image(filename)
+  return filename:match("%.jpg$")
+    or filename:match("%.jpeg$")
+    or filename:match("%.png$")
+    or filename:match("%.gif$")
+end
 
 local function get_background_images()
   local images = {}
@@ -153,12 +161,7 @@ local function get_background_images()
   local success, stdout, _ = wezterm.run_child_process({ "ls", images_dir })
   if success then
     for filename in string.gmatch(stdout, "[^\r\n]+") do
-      if
-        filename:match("%.jpg$")
-        or filename:match("%.jpeg$")
-        or filename:match("%.png$")
-        or filename:match("%.gif$")
-      then
+      if is_image(filename) then
         table.insert(images, images_dir .. "/" .. filename)
       end
     end
@@ -171,12 +174,7 @@ local function get_background_images()
       local nsfw_success, nsfw_stdout, _ = wezterm.run_child_process({ "ls", nsfw_dir })
       if nsfw_success then
         for filename in string.gmatch(nsfw_stdout, "[^\r\n]+") do
-          if
-            filename:match("%.jpg$")
-            or filename:match("%.jpeg$")
-            or filename:match("%.png$")
-            or filename:match("%.gif$")
-          then
+          if is_image(filename) then
             table.insert(images, nsfw_dir .. "/" .. filename)
           end
         end
@@ -293,6 +291,36 @@ wezterm.on("toggle-background-image", function(window, _)
       })
     end
   end
+end)
+
+wezterm.on("show-background-image-path", function(window, _)
+  if not background_image then
+    window:toast_notification("WezTerm", "Background image is OFF", nil, 2000)
+    return
+  end
+
+  if not current_background_image then
+    window:toast_notification("WezTerm", "No background image set", nil, 2000)
+    return
+  end
+
+  -- Extract just the filename from the path
+  local _, filename = string.match(current_background_image, "(.-)([^\\/]-%.?[^%.\\/]*)$")
+
+  -- Copy the full path to clipboard
+  local success, _, _ = wezterm.run_child_process({
+    "bash",
+    "-c",
+    "echo -n '" .. current_background_image .. "' | pbcopy",
+  })
+  local clipboard_message = success and " (copied to clipboard)" or ""
+
+  window:toast_notification(
+    "Current Background",
+    (filename or current_background_image) .. clipboard_message,
+    nil,
+    4000
+  )
 end)
 
 local images = get_background_images()
