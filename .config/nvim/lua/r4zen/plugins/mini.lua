@@ -51,11 +51,11 @@ M.plugin = {
         },
       })
 
-      require("mini.notify").setup({
-        lsp_progress = {
-          enable = false,
-        },
-      })
+      -- require("mini.notify").setup({
+      --   lsp_progress = {
+      --     enable = false,
+      --   },
+      -- })
       -- vim.notify = MiniNotify.make_notify()
       -- vim.keymap.set("n", "<leader>cm", function()
       --   MiniNotify.clear()
