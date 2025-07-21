@@ -6,4 +6,5 @@ dist
 .aider*
 .lazy.lua
 .augmentignore
+.claude
 Session.vim

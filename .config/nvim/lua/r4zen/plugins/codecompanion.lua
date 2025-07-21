@@ -58,10 +58,13 @@ return {
     "ravitemer/mcphub.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     cmd = "MCPHub",
-    build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+    build = "npm install -g mcp-hub@latest",
     opts = {
-      port = 3333,
+      port = 37373,
       config = vim.fn.expand("~/.config/mcpservers.json"),
+
+      auto_approve = false,
+      auto_toggle_mcp_servers = false,
 
       log = {
         level = vim.log.levels.WARN,
@@ -91,20 +94,19 @@ return {
     },
     cmd = { "CodeCompanion", "CodeCompanionChat" },
     opts = {
+      extensions = {
+        mcphub = {
+          callback = "mcphub.extensions.codecompanion",
+          opts = {
+            show_result_in_chat = true, -- Show mcp tool results in chat
+            make_vars = true, -- Convert resources to #variables
+            make_slash_commands = true, -- Add prompts as /slash commands
+          },
+        },
+      },
       adapters = supported_adapters,
       strategies = {
         chat = {
-          tools = {
-            ["mcp"] = {
-              -- calling it in a function would prevent mcphub from being loaded before it's needed
-              callback = function()
-                return require("mcphub.extensions.codecompanion")
-              end,
-              description = "Call tools and resources from the MCP Servers",
-              opts = { requires_approval = true },
-            },
-          },
-
           slash_commands = {
             ["file"] = {
               opts = {
@@ -132,11 +134,34 @@ return {
             },
           },
 
-          adapter = "copilot",
-        },
+          tools = {
+            ["edit"] = {
+              callback = "strategies.chat.agents.tools.insert_edit_into_file",
+              description = "Insert code into an existing file",
+              opts = {
+                requires_approval = { -- Require approval before the tool is executed?
+                  buffer = false, -- For editing buffers in Neovim
+                  file = true, -- For editing files in the current working directory
+                },
+                user_confirmation = true, -- Require confirmation from the user?
+              },
+            },
 
-        inline = {
-          adapter = "gemini_flash",
+            opts = {
+              auto_submit_errors = false,
+              auto_submit_success = true,
+
+              ---Tools and/or groups that are always loaded in a chat buffer
+              ---@type string[]
+              default_tools = { "edit" },
+            },
+
+            adapter = "copilot",
+          },
+
+          inline = {
+            adapter = "gemini_flash",
+          },
         },
       },
       display = {

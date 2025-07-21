@@ -12,6 +12,14 @@ map("n", "_", "o<ESC>", { noremap = true, silent = true })
 -- remap indent
 -- map({ "n", "v" }, "<leader>-", "=", { desc = "Indent Lines" })
 
+-- Create a new file in current directory
+map("n", "<leader>fn", function()
+  local filename = vim.fn.input("New file name: ")
+  if filename ~= "" then
+    vim.cmd("edit %:p:h/" .. filename)
+  end
+end, { desc = "Create new file" })
+
 -- JSON format anywhere
 map({ "n", "v" }, "<leader>cj", ":%!jq '.'<cr>", { desc = "Format JSON" })
 
@@ -124,14 +132,13 @@ end, { desc = "Print file's last modified time" })
 -- end, { noremap = true, silent = true, desc = "Jump to current" })
 
 -- move in wrapped line, useful when vim.opt.wrap is set to true.
+map("n", "k", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true })
+map("n", "j", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true })
 -- may break plugins if they rely on default j,k behavior.
 -- in that case, it is better to map "gk" and "gj" to other keys:
 -- keymap("n", "<Down>", "gj", { noremap = true, silent = true })
 -- keymap("n", "<Up>", "gk", { noremap = true, silent = true })
---
--- keymap("n", "k", function()
---   return vim.v.count == 0 and "gk" or "k"
--- end, { expr = true })
--- keymap("n", "j", function()
---   return vim.v.count == 0 and "gj" or "j"
--- end, { expr = true })

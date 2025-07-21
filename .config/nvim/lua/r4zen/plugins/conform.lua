@@ -1,7 +1,9 @@
 -- `biome` & `eslint` are used from LSP,
 -- every other formatter is here in conform.
 local js_formatters = function()
-  return { "biome-organize-imports", "biome-check", "prettierd" }
+  return { "prettierd" }
+  -- return { "biome-organize-imports", "prettierd" }
+  -- return { "biome-organize-imports", "biome-check", "biome", "prettierd" }
 end
 local util = require("r4zen.lsp_utils")
 
@@ -10,16 +12,21 @@ return {
   event = "LazyFile",
   opts = {
     formatters = {
-      ["biome-check"] = {
-        condition = function()
-          return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
-        end,
-      },
-      ["biome-organize-imports"] = {
-        condition = function()
-          return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
-        end,
-      },
+      -- ["biome"] = {
+      --   condition = function()
+      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
+      --   end,
+      -- },
+      -- ["biome-check"] = {
+      --   condition = function()
+      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
+      --   end,
+      -- },
+      -- ["biome-organize-imports"] = {
+      --   condition = function()
+      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
+      --   end,
+      -- },
       prettierd = {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)

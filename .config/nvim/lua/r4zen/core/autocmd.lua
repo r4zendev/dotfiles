@@ -30,7 +30,7 @@ autocmd("VimLeavePre", {
 
 -- Close windows with q
 autocmd("FileType", {
-  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "vim", "codecompanion" },
+  pattern = { "help", "man", "qf", "lspinfo", "git", "copilot", "grug-far", "vim" },
   callback = function()
     vim.bo.buflisted = false
     vim.schedule(function()
