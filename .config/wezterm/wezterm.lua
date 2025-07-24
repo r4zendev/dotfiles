@@ -17,6 +17,13 @@ end
 -- Store current background image path
 local current_background_image = wezterm.GLOBAL.current_background_image
 
+-- Store background brightness
+local background_brightness = wezterm.GLOBAL.background_brightness
+if background_brightness == nil then
+  background_brightness = 0.05
+  wezterm.GLOBAL.background_brightness = background_brightness
+end
+
 local config = {}
 if wezterm.config_builder then
   config = wezterm.config_builder()
@@ -131,6 +138,8 @@ config.keys = {
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
   { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
   { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
+  { key = ".", mods = "CMD", action = act.EmitEvent("increase-background-brightness") },
+  { key = ",", mods = "CMD", action = act.EmitEvent("decrease-background-brightness") },
 }
 
 -----------------------------------------------------------
@@ -323,6 +332,60 @@ wezterm.on("show-background-image-path", function(window, _)
   )
 end)
 
+wezterm.on("increase-background-brightness", function(window, _)
+  background_brightness = math.min(1.0, background_brightness + 0.05)
+  wezterm.GLOBAL.background_brightness = background_brightness
+
+  if background_image and current_background_image then
+    window:set_config_overrides({
+      background = {
+        {
+          source = { Color = config.colors.background or "black" },
+          width = "100%",
+          height = "100%",
+          opacity = BACKGROUND_COLOR_OPACITY,
+        },
+        {
+          source = { File = current_background_image },
+          width = BACKGROUND_IMAGE_WIDTH,
+          height = "100%",
+          horizontal_align = "Center",
+          repeat_x = "NoRepeat",
+          opacity = BACKGROUND_IMAGE_OPACITY,
+          hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
+        },
+      },
+    })
+  end
+end)
+
+wezterm.on("decrease-background-brightness", function(window, _)
+  background_brightness = math.max(0.0, background_brightness - 0.05)
+  wezterm.GLOBAL.background_brightness = background_brightness
+
+  if background_image and current_background_image then
+    window:set_config_overrides({
+      background = {
+        {
+          source = { Color = config.colors.background or "black" },
+          width = "100%",
+          height = "100%",
+          opacity = BACKGROUND_COLOR_OPACITY,
+        },
+        {
+          source = { File = current_background_image },
+          width = BACKGROUND_IMAGE_WIDTH,
+          height = "100%",
+          horizontal_align = "Center",
+          repeat_x = "NoRepeat",
+          opacity = BACKGROUND_IMAGE_OPACITY,
+          hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
+        },
+      },
+    })
+  end
+end)
+
 local images = get_background_images()
 
 if not current_background_image and #images > 0 then
@@ -354,7 +417,7 @@ config.background = {
     repeat_x = "NoRepeat",
 
     opacity = BACKGROUND_IMAGE_OPACITY,
-    hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
+    hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
   },
 }
 
