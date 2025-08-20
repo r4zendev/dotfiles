@@ -136,7 +136,7 @@ return {
 
           tools = {
             ["edit"] = {
-              callback = "strategies.chat.agents.tools.insert_edit_into_file",
+              callback = "strategies.chat.tools.catalog.insert_edit_into_file",
               description = "Insert code into an existing file",
               opts = {
                 requires_approval = { -- Require approval before the tool is executed?

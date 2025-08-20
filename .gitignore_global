@@ -8,3 +8,4 @@ dist
 .augmentignore
 .claude
 Session.vim
+.mcp.json

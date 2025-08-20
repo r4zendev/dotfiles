@@ -239,7 +239,7 @@ wezterm.on("refresh-background-image", function(window, _)
         horizontal_align = "Center",
         repeat_x = "NoRepeat",
         opacity = BACKGROUND_IMAGE_OPACITY,
-        hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
+        hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
       },
     },
   })
