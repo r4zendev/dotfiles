@@ -35,7 +35,17 @@ M.plugin = {
     })
     vim.api.nvim_create_autocmd("BufEnter", {
       callback = function()
-        if M.harpoon_list_includes(vim.fn.bufname()) then
+        local current_file = vim.fn.bufname()
+
+        if M.harpoon_list_includes(current_file) then
+          local list = require("harpoon"):list()
+          for index, item in ipairs(vim.tbl_values(list.items)) do
+            if item.value == current_file then
+              list._index = index
+              break
+            end
+          end
+
           vim.schedule(M.trigger_status_ui)
         end
       end,
@@ -61,13 +71,13 @@ M.plugin = {
       --   M.trigger_status_ui()
       -- end,
       -- UI number key mappings
-      UI_CREATE = function(cx)
-        for i = 1, 9 do
-          map("n", tostring(i), function()
-            require("harpoon"):list():select(i)
-          end, { buffer = cx.bufnr })
-        end
-      end,
+      -- UI_CREATE = function(cx)
+      --   for i = 1, 9 do
+      --     map("n", tostring(i), function()
+      --       require("harpoon"):list():select(i)
+      --     end, { buffer = cx.bufnr })
+      --   end
+      -- end,
     })
 
     -- Toggle permanent UI

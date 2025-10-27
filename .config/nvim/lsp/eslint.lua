@@ -22,9 +22,10 @@ return {
   on_init = function(client)
     vim.api.nvim_create_user_command("EslintFixAll", function()
       local bufnr = vim.api.nvim_get_current_buf()
+      -- local lsp_utils = require("r4zen.lsp_utils")
+      -- lsp_utils.lsp_action["eslint.executeAutofix"]()
 
-      client:exec_cmd({
-        title = "Fix all Eslint errors for current buffer",
+      client:request_sync("workspace/executeCommand", {
         command = "eslint.applyAllFixes",
         arguments = {
           {
@@ -32,7 +33,18 @@ return {
             version = lsp.util.buf_versions[bufnr],
           },
         },
-      }, { bufnr = bufnr })
+      }, nil, bufnr)
+
+      -- client:exec_cmd({
+      --   title = "Fix all Eslint errors for current buffer",
+      --   command = "eslint.applyAllFixes",
+      --   arguments = {
+      --     {
+      --       uri = vim.uri_from_bufnr(bufnr),
+      --       version = lsp.util.buf_versions[bufnr],
+      --     },
+      --   },
+      -- }, { bufnr = bufnr })
     end, {})
   end,
   -- https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-file-formats
