@@ -186,7 +186,9 @@ M.harpoon_list_includes = function(file_path)
   local harpoon = require("harpoon")
 
   for _, item in ipairs(vim.tbl_values(harpoon:list().items)) do
-    if vim.uv.fs_realpath(item.value) == vim.uv.fs_realpath(file_path) then
+    local item_path = vim.uv.fs_realpath(item.value)
+    local fp = vim.uv.fs_realpath(file_path)
+    if item_path and fp and item_path == fp then
       return true
     end
   end

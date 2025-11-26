@@ -10,7 +10,7 @@ return {
   {
     "saghen/blink.cmp",
     version = "*",
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",

@@ -1,6 +1,9 @@
 local map = vim.keymap.set
 
 local lang_config = {
+  preferences = {
+    importModuleSpecifier = "non-relative",
+  },
   updateImportsOnFileMove = { enabled = "always" },
   suggest = {
     completeFunctionCalls = true,

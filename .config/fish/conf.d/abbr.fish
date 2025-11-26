@@ -12,6 +12,7 @@ bind -k nul expand-abbr
 
 abbr -a b "bun"
 abbr -a v "nvim"
+abbr -a t "nvim ~/notes/todo.md"
 abbr -a p "pnpm"
 abbr -a g "lazygit"
 abbr -a d "lazydocker"

@@ -1,4 +1,6 @@
 return {
+  -- using biome
+  enabled = false,
   cmd = { "vscode-json-language-server", "--stdio" },
   filetypes = { "json", "jsonc" },
   init_options = {

@@ -38,6 +38,9 @@ map("v", "<", "<gv", { noremap = true, silent = true })
 -- delete char without polluting copy register
 map("n", "x", '"_x', { noremap = true, silent = true })
 
+-- remap = to \ since = is used for Fyler
+-- map({ "n", "v", "o" }, "\\", "=", { noremap = true, silent = true })
+
 -- increment/decrement
 map("n", "<M-->", "<C-x>", { noremap = true, silent = true })
 map("n", "<M-=>", "<C-a>", { noremap = true, silent = true })

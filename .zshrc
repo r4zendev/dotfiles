@@ -79,8 +79,8 @@ eval "$(fnm env --use-on-cd)"
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
-# init zoxide to add "z" command
-eval "$(zoxide init --cmd cd zsh)"
+# init zoxide to add "z" command (only for interactive shells)
+[[ $- == *i* ]] && eval "$(zoxide init --cmd cd zsh)"
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
@@ -114,3 +114,6 @@ source ~/.zsh_env_vars
 # export OPENAI_API_KEY="OPENAI_API_KEY"
 # export DEEPSEEK_API_KEY="DEEPSEEK_API_KEY"
 # export ANTHROPIC_API_KEY="ANTHROPIC_API_KEY"
+
+# bun completions
+[ -s "/Users/razen/.bun/_bun" ] && source "/Users/razen/.bun/_bun"

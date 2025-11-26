@@ -1,7 +1,7 @@
 palette = "catppuccin_mocha"
 
 # Minimal single-line format for small tmux panes
-format = "$directory$git_branch$git_status$nodejs$rust$golang$python$lua$zig$time\n$character"
+format = "$directory$git_branch$git_status$nodejs$bun$rust$golang$python$lua$zig$time\n$character"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
@@ -65,6 +65,11 @@ symbol = ""
 format = '[$symbol ($version)]($style) '
 disabled = false
 detect_extensions = ["js", "mjs", "cjs", "jsx", "tsx", "ts"]
+
+[bun]
+symbol = '🥟'
+format = '[$symbol ($version)]($style) '
+disabled = false
 
 [rust]
 symbol = ""
