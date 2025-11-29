@@ -256,6 +256,17 @@ M.plugin = {
         end,
       }):map("<leader>a-")
 
+      vim.g.gitblame_display_virtual_text = false
+      Snacks.toggle({
+        name = "Inline git blame",
+        get = function()
+          return vim.g.gitblame_display_virtual_text
+        end,
+        set = function(state)
+          vim.g.gitblame_display_virtual_text = state
+        end,
+      }):map("<leader>gv", { desc = "Toggle Git blame" })
+
       Snacks.picker.actions.git_branch_del = M.git_branch_del
     end)
   end,

@@ -13,7 +13,6 @@ return {
   },
   config = function()
     local git_blame = require("gitblame")
-    vim.g.gitblame_display_virtual_text = 0
 
     local harpoon_aware_fname = require("lualine.components.filename"):extend()
 

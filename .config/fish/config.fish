@@ -25,7 +25,6 @@ set -U fish_greeting # disable fish greeting
 set -Ux EDITOR nvim # 'neovim/neovim' text editor
 # set -Ux FZF_DEFAULT_COMMAND "fd -H -E '.git'"
 
-
 set -x PNPM_HOME "$HOME/Library/pnpm"
 fish_add_path $PNPM_HOME
 fish_add_path (pnpm --global bin)
@@ -39,6 +38,9 @@ fish_add_path $HOME/.config/bin # my custom scripts
 fish_add_path $HOME/.cargo/bin # cargo
 set -Ux GOPATH (go env GOPATH)
 fish_add_path $GOPATH/bin # go
+
+fish_add_path (uv python dir)/cpython-3.13.2-macos-aarch64-none/bin # python
+fish_add_path ~/.global-python/bin # python global installs using uv
 
 # view man pages using Neovim
 set -Ux MANPAGER "nvim +Man!"
