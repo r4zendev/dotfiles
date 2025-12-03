@@ -61,15 +61,12 @@ return {
     on_dir(project_root)
   end,
   on_attach = function(client, bufnr)
+    util.on_attach(client, bufnr)
+
     vim.api.nvim_buf_create_user_command(bufnr, "LspEslintFixAll", function()
       client:request_sync("workspace/executeCommand", {
         command = "eslint.applyAllFixes",
-        arguments = {
-          {
-            uri = vim.uri_from_bufnr(bufnr),
-            version = lsp.util.buf_versions[bufnr],
-          },
-        },
+        arguments = { { uri = vim.uri_from_bufnr(bufnr), version = lsp.util.buf_versions[bufnr] } },
       }, nil, bufnr)
     end, {})
 
@@ -82,7 +79,7 @@ return {
       end,
     })
 
-    map("n", "<leader>cl", ":LspEslintFixAll<CR>", {
+    map("n", "<leader>cl", vim.cmd.LspEslintFixAll, {
       desc = "Fix all ESLint issues",
       buffer = bufnr,
     })

@@ -6,7 +6,7 @@ return {
       exclude = {
         "ts_ls",
         -- "vtsls",
-        -- "tsgo",
+        "tsgo",
         "harper_ls",
       },
     },
