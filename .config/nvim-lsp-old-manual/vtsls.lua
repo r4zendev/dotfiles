@@ -19,6 +19,17 @@ local lang_config = {
 }
 
 return {
+  enabled = true,
+  cmd = { "vtsls", "--stdio" },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+  },
+  root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" },
   settings = {
     complete_function_calls = true,
     vtsls = {
@@ -43,9 +54,9 @@ return {
       return { desc = desc, buffer = bufnr, silent = true, noremap = true }
     end
 
-    -- map("n", "<leader>cT", function()
-    --   lsp_utils.toggle_ts_server(client)
-    -- end, opts("Toggle ts_ls"))
+    map("n", "<leader>cT", function()
+      lsp_utils.toggle_ts_server(client)
+    end, opts("Toggle ts_ls"))
 
     map("n", "gD", function()
       -- Works without args

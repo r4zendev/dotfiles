@@ -1,9 +1,21 @@
+local schemastore_ok, schemastore = pcall(require, "schemastore")
+if not schemastore_ok then
+  vim.notify("schemastore plugin not found, cannot apply schemas.", vim.log.levels.WARN)
+  schemastore = nil
+end
+
+local settings = {
+  -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
+  redhat = { telemetry = { enabled = false } },
+}
+
+if schemastore then
+  settings.yaml = {
+    schemas = schemastore.yaml.schemas(),
+    schemaStore = { enable = false, url = "" },
+  }
+end
+
 return {
-  cmd = { "yaml-language-server", "--stdio" },
-  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
-  root_markers = { ".git" },
-  settings = {
-    -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
-    redhat = { telemetry = { enabled = false } },
-  },
+  settings = settings,
 }

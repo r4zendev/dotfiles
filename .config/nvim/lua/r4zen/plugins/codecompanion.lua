@@ -69,8 +69,7 @@ return {
             auto_generate_title = true,
             title_generation_opts = {
               adapter = "copilot",
-              -- Should be enabled in Github Copilot settings
-              -- model = "claude-4.5-sonnet",
+              model = "claude-sonnet-4.5",
               refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
               max_refreshes = 3,
               format_title = function(original_title)
@@ -110,12 +109,11 @@ return {
         },
       },
       adapters = {
-        -- Should be enabled in Github Copilot settings
-        -- copilot = function()
-        --   return require("codecompanion.adapters").extend("copilot", {
-        --     schema = { model = { default = "claude-4.5-opus" } },
-        --   })
-        -- end,
+        copilot = function()
+          return require("codecompanion.adapters").extend("copilot", {
+            schema = { model = { default = "claude-opus-4.5" } },
+          })
+        end,
         openrouter_grok = function()
           return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
@@ -136,6 +134,53 @@ return {
       },
       strategies = {
         chat = {
+          slash_commands = {
+            ["file"] = {
+              opts = {
+                default_params = "watch",
+                provider = "snacks",
+                contains_code = true,
+              },
+            },
+
+            ["buffer"] = {
+              opts = {
+                default_params = "watch",
+                provider = "snacks",
+              },
+            },
+          },
+
+          tools = {
+            -- ["edit"] = {
+            --   callback = "strategies.chat.tools.catalog.insert_edit_into_file",
+            --   description = "Insert code into an existing file",
+            --   opts = {
+            --     requires_approval = { -- Require approval before the tool is executed?
+            --       buffer = false, -- For editing buffers in Neovim
+            --       file = true, -- For editing files in the current working directory
+            --     },
+            --     user_confirmation = true, -- Require confirmation from the user?
+            --   },
+            -- },
+
+            -- opts = {
+            --   auto_submit_errors = false,
+            --   auto_submit_success = true,
+            --
+            --   ---Tools and/or groups that are always loaded in a chat buffer
+            --   ---@type string[]
+            --   default_tools = { "edit" },
+            -- },
+          },
+
+          variables = {
+            ["buffer"] = {
+              opts = {
+                default_params = "watch", -- or 'pin'
+              },
+            },
+          },
           adapter = "claude_code",
         },
         inline = {
@@ -259,8 +304,7 @@ Format findings as markdown and with:
       },
       { "<leader>aa", ":CodeCompanionChat adapter=auggie<CR>", desc = "Codecompanion: Auggie" },
       { "<leader>ac", ":CodeCompanionChat adapter=claude_code<CR>", desc = "Codecompanion: Claude Code" },
-      -- Should be enabled in Github Copilot settings
-      -- { "<leader>aC", ":CodeCompanionChat adapter=copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
+      { "<leader>aC", ":CodeCompanionChat adapter=copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
       { "<leader>ag", ":CodeCompanionChat adapter=openrouter_grok<CR>", desc = "Codecompanion: Grok 4.1 Fast" },
       -- { "<leader>af", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },
       { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },

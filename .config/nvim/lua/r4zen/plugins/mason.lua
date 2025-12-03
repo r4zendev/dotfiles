@@ -14,20 +14,23 @@ return {
       },
     },
   },
-  event = "LazyFile",
-  cmd = {
-    "MasonToolsInstall",
-    "MasonToolsInstallSync",
-    "MasonToolsUpdate",
-    "MasonToolsUpdateSync",
-    "MasonToolsClean",
-  },
+  lazy = false,
+  -- event = "VimEnter",
+  -- cmd = {
+  --   "MasonToolsInstall",
+  --   "MasonToolsInstallSync",
+  --   "MasonToolsUpdate",
+  --   "MasonToolsUpdateSync",
+  --   "MasonToolsClean",
+  -- },
   opts = {
-    -- Done manually via custom approach
-    run_on_start = false,
-    auto_update = false,
+    -- Can be done manually via custom approach (see init function below)
+    -- For that to work properly disable two of the options below
+    run_on_start = true,
+    auto_update = true,
     ensure_installed = {
       "vtsls",
+      "tsgo",
       "biome",
       "eslint-lsp",
       "prettierd",
@@ -54,6 +57,7 @@ return {
       "typos-lsp",
       "harper-ls",
 
+      "gopls",
       "bash-language-server",
       "rust-analyzer",
       "clangd",
@@ -61,13 +65,13 @@ return {
       "codelldb",
     },
   },
-  init = function()
-    -- Check once when opening a file
-    vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufWritePre" }, {
-      once = true,
-      callback = function()
-        vim.cmd("MasonToolsInstall")
-      end,
-    })
-  end,
+  -- init = function()
+  --   -- Check once when opening a file
+  --   vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufWritePre" }, {
+  --     once = true,
+  --     callback = function()
+  --       vim.cmd("MasonToolsInstall")
+  --     end,
+  --   })
+  -- end,
 }

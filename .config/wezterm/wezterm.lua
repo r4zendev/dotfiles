@@ -1,33 +1,21 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
--- Use persistent state to store NSFW mode and current background image
-local background_image = wezterm.GLOBAL.minimal_mode
-if background_image == nil then
-  background_image = true
-  wezterm.GLOBAL.minimal_mode = background_image
+local function init_global(key, default)
+  if wezterm.GLOBAL[key] == nil then
+    wezterm.GLOBAL[key] = default
+  end
+  return wezterm.GLOBAL[key]
 end
 
-local allow_nsfw = wezterm.GLOBAL.allow_nsfw
-if allow_nsfw == nil then
-  allow_nsfw = false
-  wezterm.GLOBAL.allow_nsfw = allow_nsfw
-end
-
--- Store current background image path
+local background_enabled = init_global("minimal_mode", true)
+local allow_nsfw = init_global("allow_nsfw", false)
+local allow_restricted = init_global("allow_restricted", false)
+local allow_explicit = init_global("allow_explicit", false)
 local current_background_image = wezterm.GLOBAL.current_background_image
+local background_brightness = init_global("background_brightness", 0.05)
 
--- Store background brightness
-local background_brightness = wezterm.GLOBAL.background_brightness
-if background_brightness == nil then
-  background_brightness = 0.05
-  wezterm.GLOBAL.background_brightness = background_brightness
-end
-
-local config = {}
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
+local config = wezterm.config_builder and wezterm.config_builder() or {}
 
 config.default_prog = { "/opt/homebrew/bin/fish" }
 config.term = "xterm-256color"
@@ -35,7 +23,6 @@ config.term = "xterm-256color"
 config.colors = {
   foreground = "#a6accd",
   background = "#252b37",
-
   ansi = {
     "#252b37",
     "#d0679d",
@@ -46,7 +33,6 @@ config.colors = {
     "#add7ff",
     "#ffffff",
   },
-
   brights = {
     "#a6accd",
     "#d0679d",
@@ -57,11 +43,9 @@ config.colors = {
     "#89ddff",
     "#ffffff",
   },
-
   cursor_bg = "#a6accd",
   cursor_fg = "#252b37",
   cursor_border = "#a6accd",
-
   selection_fg = "none",
   selection_bg = "#303340",
 }
@@ -73,9 +57,9 @@ config.font = wezterm.font_with_fallback({
     weight = "Medium",
     harfbuzz_features = { "calt", "ss01", "ss02", "ss03", "ss04" },
   },
-  -- Monaspace не поддерживает кириллицу.
   { family = "JetBrains Mono", scale = 1.2, weight = "Bold" },
 })
+
 config.font_rules = {
   {
     italic = true,
@@ -93,36 +77,20 @@ config.font_rules = {
 
 config.font_size = 16.0
 config.adjust_window_size_when_changing_font_size = false
-
 config.cursor_blink_rate = 0
-
+config.hide_mouse_cursor_when_typing = true
 config.send_composed_key_when_right_alt_is_pressed = false
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = "NeverPrompt"
 config.scrollback_lines = 3000
 config.default_workspace = "main"
-config.window_padding = {
-  left = 18,
-  right = 18,
-  top = 16,
-  bottom = 16,
-}
-
+config.window_padding = { left = 18, right = 18, top = 16, bottom = 16 }
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
-
-config.inactive_pane_hsb = {
-  saturation = 0.24,
-  brightness = 0.5,
-}
-
-config.hide_mouse_cursor_when_typing = true
-
+config.inactive_pane_hsb = { saturation = 0.24, brightness = 0.5 }
 config.selection_word_boundary = " \t\n{}[]()\"'`,;:│"
 
--- send <c-t>N on ctrl-N
--- nvim config has bindings for harpoon tab using these
 config.keys = {
   { key = "1", mods = "CTRL", action = act.SendString("\x14\x31") },
   { key = "2", mods = "CTRL", action = act.SendString("\x14\x32") },
@@ -135,6 +103,8 @@ config.keys = {
   { key = "9", mods = "CTRL", action = act.SendString("\x14\x39") },
   { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
+  { key = "t", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-restricted") },
+  { key = "e", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-explicit") },
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
   { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
   { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
@@ -142,13 +112,8 @@ config.keys = {
   { key = ",", mods = "CMD", action = act.EmitEvent("decrease-background-brightness") },
 }
 
------------------------------------------------------------
--- Background image
------------------------------------------------------------
-
-local BACKGROUND_IMAGE_WIDTH = "Cover"
-local BACKGROUND_COLOR_OPACITY = 1
-local BACKGROUND_IMAGE_OPACITY = 1
+local IMAGES_DIR = wezterm.home_dir .. "/.config/wezterm/images"
+local BRIGHTNESS_STEP = 0.05
 
 local function is_image(filename)
   return filename:match("%.jpg$")
@@ -157,64 +122,108 @@ local function is_image(filename)
     or filename:match("%.gif$")
 end
 
-local function get_background_images()
+local function load_images_from_dir(dir)
   local images = {}
-  local images_dir = wezterm.home_dir .. "/.config/wezterm/images"
-
-  local success, _, _ = wezterm.run_child_process({ "test", "-d", images_dir })
-  if not success then
-    wezterm.log_warn("Images directory doesn't exist: " .. images_dir)
-    return images
-  end
-
-  local success, stdout, _ = wezterm.run_child_process({ "ls", images_dir })
+  local success, stdout = wezterm.run_child_process({ "ls", dir })
   if success then
     for filename in string.gmatch(stdout, "[^\r\n]+") do
       if is_image(filename) then
-        table.insert(images, images_dir .. "/" .. filename)
+        table.insert(images, dir .. "/" .. filename)
+      end
+    end
+  end
+  return images
+end
+
+local function get_background_images()
+  local images = {}
+  local success = wezterm.run_child_process({ "test", "-d", IMAGES_DIR })
+  if not success then
+    return images
+  end
+
+  images = load_images_from_dir(IMAGES_DIR)
+
+  if allow_nsfw then
+    local nsfw_dir = IMAGES_DIR .. "/nsfw"
+    if wezterm.run_child_process({ "test", "-d", nsfw_dir }) then
+      for _, img in ipairs(load_images_from_dir(nsfw_dir)) do
+        table.insert(images, img)
       end
     end
   end
 
-  if allow_nsfw then
-    local nsfw_dir = images_dir .. "/nsfw"
-    local nsfw_success, _, _ = wezterm.run_child_process({ "test", "-d", nsfw_dir })
-    if nsfw_success then
-      local nsfw_success, nsfw_stdout, _ = wezterm.run_child_process({ "ls", nsfw_dir })
-      if nsfw_success then
-        for filename in string.gmatch(nsfw_stdout, "[^\r\n]+") do
-          if is_image(filename) then
-            table.insert(images, nsfw_dir .. "/" .. filename)
-          end
-        end
+  if allow_restricted then
+    local restricted_dir = IMAGES_DIR .. "/restricted"
+    if wezterm.run_child_process({ "test", "-d", restricted_dir }) then
+      for _, img in ipairs(load_images_from_dir(restricted_dir)) do
+        table.insert(images, img)
       end
-    else
-      wezterm.log_warn("NSFW directory doesn't exist: " .. nsfw_dir)
+    end
+  end
+
+  if allow_explicit then
+    local explicit_dir = IMAGES_DIR .. "/explicit"
+    if wezterm.run_child_process({ "test", "-d", explicit_dir }) then
+      for _, img in ipairs(load_images_from_dir(explicit_dir)) do
+        table.insert(images, img)
+      end
     end
   end
 
   return images
 end
 
-wezterm.on("toggle-nsfw", function(window, _)
-  allow_nsfw = not allow_nsfw
+local function create_background_layers(image_path, brightness)
+  return {
+    { source = { Color = config.colors.background }, width = "100%", height = "100%", opacity = 1 },
+    {
+      source = { File = image_path },
+      width = "Cover",
+      height = "100%",
+      horizontal_align = "Center",
+      repeat_x = "NoRepeat",
+      opacity = 1,
+      hsb = { brightness = brightness, hue = 1.0, saturation = 1.0 },
+    },
+  }
+end
 
-  wezterm.GLOBAL.allow_nsfw = allow_nsfw
+local function apply_background(window, image_path, brightness)
+  window:set_config_overrides({ background = create_background_layers(image_path, brightness) })
+end
 
-  local status_message = "NSFW mode: " .. (allow_nsfw and "ON" or "OFF")
-  wezterm.log_info(status_message)
+local function toggle_category(category_name, global_key)
+  return function(window, _)
+    local new_value = not wezterm.GLOBAL[global_key]
+    wezterm.GLOBAL[global_key] = new_value
+    if global_key == "allow_nsfw" then
+      allow_nsfw = new_value
+    elseif global_key == "allow_restricted" then
+      allow_restricted = new_value
+    elseif global_key == "allow_explicit" then
+      allow_explicit = new_value
+    end
+    window:toast_notification(
+      "WezTerm",
+      category_name .. ": " .. (new_value and "ON" or "OFF"),
+      nil,
+      1000
+    )
+  end
+end
 
-  window:toast_notification("WezTerm", status_message, nil, 1000)
-end)
+wezterm.on("toggle-nsfw", toggle_category("NSFW mode", "allow_nsfw"))
+wezterm.on("toggle-restricted", toggle_category("Restricted mode", "allow_restricted"))
+wezterm.on("toggle-explicit", toggle_category("Explicit mode", "allow_explicit"))
 
 wezterm.on("refresh-background-image", function(window, _)
-  if not background_image then
+  if not background_enabled then
     window:toast_notification("WezTerm", "Background image is OFF", nil, 1500)
     return
   end
 
   local images = get_background_images()
-
   if #images == 0 then
     window:toast_notification("WezTerm", "No background images found", nil, 3000)
     return
@@ -223,52 +232,26 @@ wezterm.on("refresh-background-image", function(window, _)
   local image_path = images[math.random(#images)]
   current_background_image = image_path
   wezterm.GLOBAL.current_background_image = image_path
-
-  window:set_config_overrides({
-    background = {
-      {
-        source = { Color = config.colors.background or "black" },
-        width = "100%",
-        height = "100%",
-        opacity = BACKGROUND_COLOR_OPACITY,
-      },
-      {
-        source = { File = image_path },
-        width = BACKGROUND_IMAGE_WIDTH,
-        height = "100%",
-        horizontal_align = "Center",
-        repeat_x = "NoRepeat",
-        opacity = BACKGROUND_IMAGE_OPACITY,
-        hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
-      },
-    },
-  })
-
-  -- window:toast_notification("WezTerm", "Background refreshed", nil, 1500)
+  apply_background(window, image_path, background_brightness)
 end)
 
 wezterm.on("toggle-background-image", function(window, _)
-  background_image = not background_image
-  wezterm.GLOBAL.minimal_mode = background_image
+  background_enabled = not background_enabled
+  wezterm.GLOBAL.minimal_mode = background_enabled
+  window:toast_notification(
+    "WezTerm",
+    "Background image: " .. (background_enabled and "ON" or "OFF"),
+    nil,
+    3000
+  )
 
-  local status_message = "Background image: " .. (background_image and "ON" or "OFF")
-  wezterm.log_info(status_message)
-
-  window:toast_notification("WezTerm", status_message, nil, 3000)
-
-  if not background_image then
+  if not background_enabled then
     window:set_config_overrides({
       background = {
-        {
-          source = { Color = "#000000" },
-          width = "100%",
-          height = "100%",
-          opacity = 1.0,
-        },
+        { source = { Color = "#000000" }, width = "100%", height = "100%", opacity = 1.0 },
       },
     })
   else
-    -- Ensure we have a current background image set
     if not current_background_image then
       local images = get_background_images()
       if #images > 0 then
@@ -276,149 +259,57 @@ wezterm.on("toggle-background-image", function(window, _)
         wezterm.GLOBAL.current_background_image = current_background_image
       end
     end
-
-    -- Always use the stored current_background_image when toggling back on
     if current_background_image then
-      window:set_config_overrides({
-        background = {
-          {
-            source = { Color = config.colors.background or "black" },
-            width = "100%",
-            height = "100%",
-            opacity = BACKGROUND_COLOR_OPACITY,
-          },
-          {
-            source = { File = current_background_image },
-            width = BACKGROUND_IMAGE_WIDTH,
-            height = "100%",
-            horizontal_align = "Center",
-            repeat_x = "NoRepeat",
-            opacity = BACKGROUND_IMAGE_OPACITY,
-            hsb = { brightness = 0.05, hue = 1.0, saturation = 1.0 },
-          },
-        },
-      })
+      apply_background(window, current_background_image, background_brightness)
     end
   end
 end)
 
 wezterm.on("show-background-image-path", function(window, _)
-  if not background_image then
-    window:toast_notification("WezTerm", "Background image is OFF", nil, 2000)
-    return
-  end
-
-  if not current_background_image then
+  if not background_enabled or not current_background_image then
     window:toast_notification("WezTerm", "No background image set", nil, 2000)
     return
   end
 
-  -- Extract just the filename from the path
   local _, filename = string.match(current_background_image, "(.-)([^\\/]-%.?[^%.\\/]*)$")
-
-  -- Copy the full path to clipboard
-  local success, _, _ = wezterm.run_child_process({
+  local success = wezterm.run_child_process({
     "bash",
     "-c",
     "echo -n '" .. current_background_image .. "' | pbcopy",
   })
-  local clipboard_message = success and " (copied to clipboard)" or ""
 
   window:toast_notification(
     "Current Background",
-    (filename or current_background_image) .. clipboard_message,
+    (filename or current_background_image) .. (success and " (copied to clipboard)" or ""),
     nil,
     4000
   )
 end)
 
-wezterm.on("increase-background-brightness", function(window, _)
-  background_brightness = math.min(1.0, background_brightness + 0.05)
+local function adjust_brightness(window, delta)
+  background_brightness = math.max(0.0, math.min(1.0, background_brightness + delta))
   wezterm.GLOBAL.background_brightness = background_brightness
-
-  if background_image and current_background_image then
-    window:set_config_overrides({
-      background = {
-        {
-          source = { Color = config.colors.background or "black" },
-          width = "100%",
-          height = "100%",
-          opacity = BACKGROUND_COLOR_OPACITY,
-        },
-        {
-          source = { File = current_background_image },
-          width = BACKGROUND_IMAGE_WIDTH,
-          height = "100%",
-          horizontal_align = "Center",
-          repeat_x = "NoRepeat",
-          opacity = BACKGROUND_IMAGE_OPACITY,
-          hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
-        },
-      },
-    })
+  if background_enabled and current_background_image then
+    apply_background(window, current_background_image, background_brightness)
   end
+end
+
+wezterm.on("increase-background-brightness", function(window, _)
+  adjust_brightness(window, BRIGHTNESS_STEP)
 end)
 
 wezterm.on("decrease-background-brightness", function(window, _)
-  background_brightness = math.max(0.0, background_brightness - 0.05)
-  wezterm.GLOBAL.background_brightness = background_brightness
-
-  if background_image and current_background_image then
-    window:set_config_overrides({
-      background = {
-        {
-          source = { Color = config.colors.background or "black" },
-          width = "100%",
-          height = "100%",
-          opacity = BACKGROUND_COLOR_OPACITY,
-        },
-        {
-          source = { File = current_background_image },
-          width = BACKGROUND_IMAGE_WIDTH,
-          height = "100%",
-          horizontal_align = "Center",
-          repeat_x = "NoRepeat",
-          opacity = BACKGROUND_IMAGE_OPACITY,
-          hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
-        },
-      },
-    })
-  end
+  adjust_brightness(window, -BRIGHTNESS_STEP)
 end)
 
 local images = get_background_images()
-
 if not current_background_image and #images > 0 then
   current_background_image = images[math.random(#images)]
   wezterm.GLOBAL.current_background_image = current_background_image
 end
 
-local image_to_use = current_background_image
-if not image_to_use and #images > 0 then
-  image_to_use = images[math.random(#images)]
-
-  current_background_image = image_to_use
-  wezterm.GLOBAL.current_background_image = current_background_image
+if current_background_image then
+  config.background = create_background_layers(current_background_image, background_brightness)
 end
-
-config.background = {
-  {
-    source = { Color = config.colors.background or "black" },
-    width = "100%",
-    height = "100%",
-    opacity = BACKGROUND_COLOR_OPACITY,
-  },
-  {
-    source = { File = image_to_use },
-
-    width = BACKGROUND_IMAGE_WIDTH,
-    height = "100%",
-    horizontal_align = "Center",
-    repeat_x = "NoRepeat",
-
-    opacity = BACKGROUND_IMAGE_OPACITY,
-    hsb = { brightness = background_brightness, hue = 1.0, saturation = 1.0 },
-  },
-}
 
 return config
