@@ -39,6 +39,7 @@ autocmd("FileType", {
     "copilot",
     "grug-far",
     "vim",
+    "fugitive",
     -- "codecompanion"
   },
   callback = function()

@@ -110,7 +110,7 @@ M.plugin = {
     { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
 
     -- NOTE: Git
-    { "<leader>gg", function() M.grep_modified_files() end, desc = "Grep Git Files" },
+    { "<leader>gm", function() M.grep_git_files() end, desc = "Grep Git Files" },
     { "<leader>gf", function() Snacks.picker.git_status() end, desc = "Find Git Files" },
     { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
     { "<leader>gl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
@@ -302,35 +302,90 @@ function M.git_branch_del(picker, item)
   end, { cwd = picker:cwd() })
 end
 
-function M.grep_modified_files()
-  local modified_files = {}
+function M.grep_git_files()
+  local files = {}
+  local git_root = nil
+
+  local git_root_job = require("plenary.job"):new({
+    command = "git",
+    args = { "rev-parse", "--show-toplevel" },
+    on_exit = function(job)
+      local result = job:result()
+      if result and #result > 0 then
+        git_root = result[1]
+      end
+    end,
+  })
+
+  git_root_job:sync()
+  if not git_root or #git_root == 0 then
+    vim.notify("Could not find git root", vim.log.levels.ERROR)
+    return
+  end
+
+  -- Staged files (added/modified and staged for commit)
   require("plenary.job")
     :new({
       command = "git",
-      args = { "diff", "--name-only" },
+      args = { "diff", "--cached", "--name-only" },
+      cwd = git_root,
       on_stdout = function(_, line)
         if line and #line > 0 then
-          table.insert(modified_files, line)
+          files[line] = true
         end
       end,
     })
     :sync()
 
-  if #modified_files == 0 then
-    vim.notify("No modified files found", vim.log.levels.INFO)
+  -- Modified but unstaged files
+  require("plenary.job")
+    :new({
+      command = "git",
+      args = { "diff", "--name-only" },
+      cwd = git_root,
+      on_stdout = function(_, line)
+        if line and #line > 0 then
+          files[line] = true
+        end
+      end,
+    })
+    :sync()
+
+  -- Untracked files
+  -- require("plenary.job")
+  --   :new({
+  --     command = "git",
+  --     args = { "ls-files", "--others", "--exclude-standard" },
+  --     cwd = git_root,
+  --     on_stdout = function(_, line)
+  --       if line and #line > 0 then
+  --         files[line] = true
+  --       end
+  --     end,
+  --   })
+  --   :sync()
+
+  local file_list = {}
+  for file, _ in pairs(files) do
+    table.insert(file_list, file)
+  end
+
+  if #file_list == 0 then
+    vim.notify("No git files found", vim.log.levels.INFO)
     return
   end
 
   local args = {}
-  for _, file in ipairs(modified_files) do
+  for _, file in ipairs(file_list) do
     table.insert(args, "--glob")
     table.insert(args, file)
   end
 
   Snacks.picker.grep({
-    title = "Grep in Modified Files",
+    title = "Grep in Git Files",
     need_search = true,
     args = args,
+    cwd = git_root,
   })
 end
 
