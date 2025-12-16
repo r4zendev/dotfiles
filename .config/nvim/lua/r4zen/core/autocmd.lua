@@ -70,6 +70,23 @@ autocmd("FileType", {
 --   end,
 -- })
 
+-- Create parent directories on save, currently handled by custom 'W' command
+-- autocmd("BufWritePre", {
+--   group = vim.api.nvim_create_augroup("MkdirOnSave", { clear = true }),
+--   callback = function(args)
+--     local dir = vim.fn.fnamemodify(args.file, ":p:h")
+--
+--     -- skip URLs (netrw)
+--     if dir:find("%l+://") == 1 then
+--       return
+--     end
+--
+--     if vim.fn.isdirectory(dir) == 0 then
+--       vim.fn.mkdir(dir, "p")
+--     end
+--   end,
+-- })
+
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.
 -- autocmd("BufEnter", {

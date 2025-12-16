@@ -73,3 +73,19 @@ usercmd("ShowBufs", function()
     vim.notify("Loaded file buffers:\n" .. message, vim.log.levels.INFO)
   end)
 end, { desc = "Show open buffers" })
+
+-- Write file, creating parent directories if needed
+usercmd("W", function(opts)
+  if opts.args == "" then
+    vim.cmd("write")
+    return
+  end
+
+  local dir = vim.fn.fnamemodify(opts.args, ":h")
+
+  if vim.fn.isdirectory(dir) == 0 then
+    vim.fn.mkdir(dir, "p")
+  end
+
+  vim.cmd("write " .. opts.args)
+end, { desc = "Write recursively" })

@@ -1,10 +1,5 @@
 -- `biome` & `eslint` are used from LSP,
--- every other formatter is here in conform.
-local js_formatters = function()
-  return { "prettierd" }
-  -- return { "biome-organize-imports", "prettierd" }
-  -- return { "biome-organize-imports", "biome-check", "biome", "prettierd" }
-end
+
 local util = require("r4zen.lsp_utils")
 
 return {
@@ -12,21 +7,6 @@ return {
   event = "LazyFile",
   opts = {
     formatters = {
-      -- ["biome"] = {
-      --   condition = function()
-      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
-      --   end,
-      -- },
-      -- ["biome-check"] = {
-      --   condition = function()
-      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
-      --   end,
-      -- },
-      -- ["biome-organize-imports"] = {
-      --   condition = function()
-      --     return util.root_pattern("biome.json")(vim.api.nvim_buf_get_name(0))
-      --   end,
-      -- },
       prettierd = {
         condition = function()
           local fname = vim.api.nvim_buf_get_name(0)
@@ -57,16 +37,16 @@ return {
       },
     },
     formatters_by_ft = {
-      javascript = js_formatters,
-      typescript = js_formatters,
-      javascriptreact = js_formatters,
-      typescriptreact = js_formatters,
-      svelte = js_formatters,
-      css = js_formatters,
-      html = js_formatters,
-      json = js_formatters,
-      yaml = js_formatters,
-      graphql = js_formatters,
+      javascript = { "prettierd" },
+      typescript = { "prettierd" },
+      javascriptreact = { "prettierd" },
+      typescriptreact = { "prettierd" },
+      svelte = { "prettierd" },
+      css = { "prettierd" },
+      html = { "prettierd" },
+      json = { "prettierd" },
+      yaml = { "prettierd" },
+      graphql = { "prettierd" },
       markdown = { "prettierd" },
       lua = { "stylua" },
       -- python = { "isort", "black" },

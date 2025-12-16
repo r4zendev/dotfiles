@@ -1,6 +1,7 @@
 return {
   "gbprod/yanky.nvim",
   event = "LazyFile",
+  dependencies = { "folke/snacks.nvim" },
   opts = {
     highlight = {
       timer = 150,
@@ -9,17 +10,21 @@ return {
       enabled = true,
     },
   },
-  -- stylua: ignore
   keys = {
-    { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put after" },
-    { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put before" },
-    { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put after (with global register)" },
-    { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put before (with global register)" },
-
-    { "<c-p>", "<Plug>(YankyPreviousEntry)", mode = "n", desc = "Previous entry" },
-    { "<c-n>", "<Plug>(YankyNextEntry)", mode = "n", desc = "Next entry" },
-
-    { "iy", function() require("yanky.textobj").last_put() end, mode = { "o", "x" }, desc = "In put (yank)" },
-    { "ay", function() require("yanky.textobj").last_put() end, mode = { "o", "x" }, desc = "At put (yank)" },
+    {
+      "<leader>py",
+      function()
+        Snacks.picker.yanky()
+      end,
+      mode = { "n", "x" },
+      desc = "Open Yank History",
+    },
+    { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
+    { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },
+    { "=p", "<Plug>(YankyPutAfterLinewise)", desc = "Put yanked text in line below" },
+    { "=P", "<Plug>(YankyPutBeforeLinewise)", desc = "Put yanked text in line above" },
+    { "[y", "<Plug>(YankyCycleForward)", desc = "Cycle forward through yank history" },
+    { "]y", "<Plug>(YankyCycleBackward)", desc = "Cycle backward through yank history" },
+    { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yanky yank" },
   },
 }
