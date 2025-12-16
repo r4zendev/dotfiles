@@ -3,6 +3,7 @@
 -- Use if needed.
 return {
   "jake-stewart/multicursor.nvim",
+  enabled = false,
   event = "LazyFile",
   branch = "1.0",
   config = function()

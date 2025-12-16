@@ -12,6 +12,7 @@ local background_enabled = init_global("minimal_mode", true)
 local allow_nsfw = init_global("allow_nsfw", false)
 local allow_restricted = init_global("allow_restricted", false)
 local allow_explicit = init_global("allow_explicit", false)
+local exclude_default = init_global("exclude_default", false)
 local current_background_image = wezterm.GLOBAL.current_background_image
 local background_brightness = init_global("background_brightness", 0.05)
 
@@ -105,6 +106,7 @@ config.keys = {
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
   { key = "t", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-restricted") },
   { key = "e", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-explicit") },
+  { key = "d", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-default") },
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
   { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
   { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
@@ -142,7 +144,9 @@ local function get_background_images()
     return images
   end
 
-  images = load_images_from_dir(IMAGES_DIR)
+  if not exclude_default then
+    images = load_images_from_dir(IMAGES_DIR)
+  end
 
   if allow_nsfw then
     local nsfw_dir = IMAGES_DIR .. "/nsfw"
@@ -203,6 +207,8 @@ local function toggle_category(category_name, global_key)
       allow_restricted = new_value
     elseif global_key == "allow_explicit" then
       allow_explicit = new_value
+    elseif global_key == "exclude_default" then
+      exclude_default = new_value
     end
     window:toast_notification(
       "WezTerm",
@@ -216,6 +222,7 @@ end
 wezterm.on("toggle-nsfw", toggle_category("NSFW mode", "allow_nsfw"))
 wezterm.on("toggle-restricted", toggle_category("Restricted mode", "allow_restricted"))
 wezterm.on("toggle-explicit", toggle_category("Explicit mode", "allow_explicit"))
+wezterm.on("toggle-default", toggle_category("Exclude default", "exclude_default"))
 
 wezterm.on("refresh-background-image", function(window, _)
   if not background_enabled then
