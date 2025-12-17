@@ -29,18 +29,6 @@ M.plugin = {
   },
 }
 
-M.format_method_name = function(method)
-  return method:gsub("_", " "):gsub("to ", ""):gsub("case", ""):gsub("^%l", string.upper):gsub("%s+$", "")
-end
-
-M.generate_picker_items = function(methods)
-  local items = {}
-  for _, method in ipairs(methods) do
-    table.insert(items, { text = M.format_method_name(method), method = method })
-  end
-  return items
-end
-
 M.show_picker = function(items, title, callback_provider)
   -- Save current mode
   local mode = vim.api.nvim_get_mode().mode
@@ -82,6 +70,17 @@ M.show_picker = function(items, title, callback_provider)
       callback(choice.method)
     end
   end)
+end
+
+M.generate_picker_items = function(methods)
+  local items = {}
+  for _, method in ipairs(methods) do
+    table.insert(items, {
+      text = method:gsub("_", " "):gsub("to ", ""):gsub("case", ""):gsub("^%l", string.upper):gsub("%s+$", ""),
+      method = method,
+    })
+  end
+  return items
 end
 
 M.picker_items = M.generate_picker_items({

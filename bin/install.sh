@@ -67,16 +67,16 @@ yabai --install-sa
 brew install bat      # cat alternative
 brew install btop     # system monitor
 brew install duti     # default app handler -> `duti -s net.imput.helium .md all`
+brew install fd       # find alternative
+brew install ffmpeg   # multimedia processing
+brew install fzf      # fuzzy finder
 brew install gdu      # disk usage analyzer
 brew install jq       # JSON processor
-brew install fd       # find alternative
-brew install fzf      # fuzzy finder
-brew install ffmpeg   # multimedia processing
-brew install tealdeer # quick man-pages extracts
-brew install ripgrep  # search engine
-brew install pgcli    # postgres client
-brew install neofetch # system info
 brew install lsd      # ls alternative
+brew install neofetch # system info
+brew install pgcli    # postgres client
+brew install ripgrep  # search engine
+brew install tealdeer # quick man-pages extracts
 brew install yt-dlp   # youtube downloader
 pnpm i -g fkill-cli   # kill processes
 

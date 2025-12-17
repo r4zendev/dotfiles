@@ -1,5 +1,4 @@
 return {
-  -- Beneficial for plugins that want nvim-cmp, like obsidian.nvim
   {
     "saghen/blink.compat",
     version = "*",
@@ -12,20 +11,8 @@ return {
     version = "*",
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      -- "fang2hou/blink-copilot",
       "rafamadriz/friendly-snippets",
-      {
-        "xzbdmw/colorful-menu.nvim",
-        opts = {
-          ls = {
-            ts_ls = {
-              -- false means do not include any extra info,
-              -- see https://github.com/xzbdmw/colorful-menu.nvim/issues/42
-              extra_info_hl = "HarpoonSelectedOptionHL",
-            },
-          },
-        },
-      },
+      "xzbdmw/colorful-menu.nvim",
     },
     opts = {
       keymap = {

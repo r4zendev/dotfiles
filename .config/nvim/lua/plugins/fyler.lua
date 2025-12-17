@@ -3,7 +3,7 @@ return {
   event = "LazyFile",
   cmd = { "Fyler" },
   dependencies = { "echasnovski/mini.nvim" },
-  branch = "stable",
+  branch = "main",
   opts = {
     views = {
       finder = {
@@ -44,14 +44,14 @@ return {
             shiftwidth = 2,
           },
           -- float | replace | split_left | split_left_most | split_above | split_above_all | split_right | split_right_most | split_below | split_below_all
-          kind = "split_right_most",
+          kind = "float",
           kinds = {
             -- height | width | top | bottom | left | right | win_opts
             float = {
-              height = "70%",
-              width = "70%",
-              top = "10%",
-              left = "15%",
+              height = "85%",
+              width = "35%",
+              top = "20%",
+              left = "100%",
             },
             split_right_most = {
               width = "30%",
@@ -59,9 +59,6 @@ return {
                 winfixwidth = true,
               },
             },
-          },
-          win_opts = {
-            statuscolumn = "",
           },
         },
       },

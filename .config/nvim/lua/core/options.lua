@@ -1,13 +1,17 @@
 local o = vim.o
 local opt = vim.opt
 
--- TODO: remove this when authors update their plugins
+-- NOTE: use in case authors don't update their plugins in time to suppress deprecation warnings
 ---@diagnostic disable-next-line: duplicate-set-field
-vim.deprecate = function() end
+-- vim.deprecate = function() end
 
 o.updatetime = 100
 o.timeout = true
 o.timeoutlen = 500
+
+-- whitespaces
+o.list = false -- Disabled by default, can be toggled using :set list!
+o.listchars = "tab:▸ ,lead:·,trail:·,nbsp:␣,extends:▶,precedes:◀,eol:↲" -- bigger dot if desired: •
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers

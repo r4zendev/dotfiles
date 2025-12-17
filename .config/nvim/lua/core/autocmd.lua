@@ -50,6 +50,14 @@ autocmd("FileType", {
   end,
 })
 
+-- Add empty winbar to align with main window (useful for comparable views)
+autocmd("FileType", {
+  pattern = { "fugitiveblame" },
+  callback = function()
+    vim.wo.winbar = " "
+  end,
+})
+
 -- Window layout
 autocmd("FileType", {
   pattern = { "help", "qf", "copilot", "vim" },

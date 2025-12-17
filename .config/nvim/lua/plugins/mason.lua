@@ -1,5 +1,14 @@
 return {
   "WhoIsSethDaniel/mason-tool-installer.nvim",
+  lazy = false,
+  -- event = "VimEnter",
+  -- cmd = {
+  --   "MasonToolsInstall",
+  --   "MasonToolsInstallSync",
+  --   "MasonToolsUpdate",
+  --   "MasonToolsUpdateSync",
+  --   "MasonToolsClean",
+  -- },
   dependencies = {
     {
       "williamboman/mason.nvim",
@@ -14,15 +23,6 @@ return {
       },
     },
   },
-  lazy = false,
-  -- event = "VimEnter",
-  -- cmd = {
-  --   "MasonToolsInstall",
-  --   "MasonToolsInstallSync",
-  --   "MasonToolsUpdate",
-  --   "MasonToolsUpdateSync",
-  --   "MasonToolsClean",
-  -- },
   opts = {
     -- Can be done manually via custom approach (see init function below)
     -- For that to work properly disable two of the options below

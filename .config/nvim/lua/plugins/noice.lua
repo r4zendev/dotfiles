@@ -13,13 +13,7 @@ return {
       fps = 60,
       top_down = false,
       merge_duplicates = true,
-      icons = {
-        ERROR = "",
-        WARN = "",
-        INFO = "",
-        DEBUG = "",
-        TRACE = "✎",
-      },
+      icons = require("icons").diagnostics,
     },
   },
   {
