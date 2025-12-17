@@ -1,4 +1,4 @@
-local util = require("r4zen.lsp_utils")
+local util = require("lsp_utils")
 local lsp = vim.lsp
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
@@ -22,7 +22,7 @@ return {
   on_init = function(client)
     vim.api.nvim_create_user_command("EslintFixAll", function()
       local bufnr = vim.api.nvim_get_current_buf()
-      -- local lsp_utils = require("r4zen.lsp_utils")
+      -- local lsp_utils = require("lsp_utils")
       -- lsp_utils.lsp_action["eslint.executeAutofix"]()
 
       client:request_sync("workspace/executeCommand", {

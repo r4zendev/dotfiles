@@ -1,4 +1,4 @@
-local utils = require("r4zen.utils")
+local utils = require("utils")
 local map = vim.keymap.set
 
 local M = {}

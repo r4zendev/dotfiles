@@ -101,7 +101,7 @@ map("n", "<leader>gp", function()
   search_web("DuckDuckGo", "https://duckduckgo.com/?q=%s")
 end, { desc = "DuckDuckGo it" })
 
-vim.keymap.set("n", "<leader>ym", function()
+map("n", "<leader>ym", function()
   local path = vim.fn.expand("%:p")
   local stat = vim.uv.fs_stat(path)
 

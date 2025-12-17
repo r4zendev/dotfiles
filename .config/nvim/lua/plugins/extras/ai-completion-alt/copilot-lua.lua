@@ -4,7 +4,7 @@ return {
   event = "InsertEnter",
   opts = {
     -- default
-    -- workspace_folders = { require("r4zen.utils").workspace_root() },
+    -- workspace_folders = { require("utils").workspace_root() },
     copilot_model = "gpt-4o-copilot", -- gpt-35-turbo | gpt-4o-copilot
 
     panel = {

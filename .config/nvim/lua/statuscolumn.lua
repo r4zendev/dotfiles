@@ -19,7 +19,7 @@ end
 
 function M.line_or_diagnostic()
   local line = vim.v.lnum - 1
-  local diagnostics = vim.diagnostic.get(0, { lnum = line })
+  local bufnr = vim.api.nvim_get_current_buf()
 
   local line_count = vim.api.nvim_buf_line_count(0)
   local width = math.max(3, #tostring(line_count))
@@ -28,11 +28,29 @@ function M.line_or_diagnostic()
     return string.rep(" ", width)
   end
 
+  -- Check for marks first (they have priority)
+  local marks_ns = vim.api.nvim_create_namespace("r4zen/marks")
+  local marks = vim.api.nvim_buf_get_extmarks(bufnr, marks_ns, { line, 0 }, { line, -1 }, { details = true })
+
+  if #marks > 0 then
+    -- Get the first mark on this line
+    local mark = marks[1][4]
+    local sign = mark.sign_text or " "
+    local hl_group = mark.sign_hl_group or "DiagnosticSignOk"
+
+    local sign_width = vim.fn.strdisplaywidth(sign)
+    local padding = string.rep(" ", width - sign_width)
+    return "%#" .. hl_group .. "#" .. padding .. sign .. "%*"
+  end
+
+  -- If no marks, check diagnostics
+  local diagnostics = vim.diagnostic.get(0, { lnum = line })
+
   local signs = {
-    [vim.diagnostic.severity.ERROR] = "",
-    [vim.diagnostic.severity.WARN] = "",
+    [vim.diagnostic.severity.ERROR] = "",
+    [vim.diagnostic.severity.WARN] = "",
     [vim.diagnostic.severity.HINT] = "󰠠",
-    [vim.diagnostic.severity.INFO] = "",
+    [vim.diagnostic.severity.INFO] = "",
   }
 
   local hl_groups = {

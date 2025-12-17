@@ -23,7 +23,7 @@ return {
       { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
     },
     init = function()
-      local root_dir = require("r4zen.utils").workspace_root()
+      local root_dir = require("utils").workspace_root()
       if root_dir ~= nil then
         -- Set the environment variable before loading the config
         -- Used by MCP servers that require project's root path as an argument
@@ -174,13 +174,6 @@ return {
             -- },
           },
 
-          variables = {
-            ["buffer"] = {
-              opts = {
-                default_params = "watch", -- or 'pin'
-              },
-            },
-          },
           adapter = "claude_code",
         },
         inline = {
@@ -298,7 +291,7 @@ Format findings as markdown and with:
     keys = {
       {
         "<leader>ai",
-        require("r4zen.utils").create_input_cmd_visual_callback("CodeCompanion"),
+        require("utils").create_input_cmd_visual_callback("CodeCompanion"),
         desc = "Codecompanion: Inline assistant",
         mode = { "n", "v" },
       },

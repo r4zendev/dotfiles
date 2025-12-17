@@ -80,5 +80,5 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
-opt.statuscolumn = "%{%v:lua.require('r4zen.statuscolumn').get_statuscolumn()%}"
--- o.qftf = "{info -> v:lua.require('r4zen.core.qftf').qftf(info)}"
+opt.statuscolumn = "%{%v:lua.require('statuscolumn').get_statuscolumn()%}"
+-- o.qftf = "{info -> v:lua.require('core.qftf').qftf(info)}"

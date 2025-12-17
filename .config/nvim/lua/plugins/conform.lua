@@ -1,6 +1,6 @@
 -- `biome` & `eslint` are used from LSP,
 
-local util = require("r4zen.lsp_utils")
+local util = require("lsp_utils")
 
 return {
   "stevearc/conform.nvim",

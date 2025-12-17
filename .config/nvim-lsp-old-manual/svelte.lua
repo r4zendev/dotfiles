@@ -16,7 +16,7 @@ return {
   filetypes = { "svelte" },
   root_markers = { "package.json", ".git" },
   on_attach = function(client, bufnr)
-    require("r4zen.lsp_utils").on_attach(client, bufnr)
+    require("lsp_utils").on_attach(client, bufnr)
 
     vim.api.nvim_buf_create_user_command(
       0,

@@ -1,6 +1,6 @@
 local usercmd = vim.api.nvim_create_user_command
-local utils = require("r4zen.utils")
-local lsp_configs_util = require("r4zen.lsp_utils")
+local utils = require("utils")
+local lsp_configs_util = require("lsp_utils")
 
 usercmd("LspInfo", function()
   vim.cmd("checkhealth vim.lsp")

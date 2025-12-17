@@ -6,6 +6,6 @@ return {
   -- config = function()
   --   -- Make sure this loads after schemastore to ensure that
   --   -- it's available for configuring jsonls and yamlls
-  --   require("r4zen.lsp")
+  --   require("lsp")
   -- end,
 }

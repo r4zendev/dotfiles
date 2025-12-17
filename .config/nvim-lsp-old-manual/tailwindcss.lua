@@ -108,7 +108,7 @@ return {
     }
     local fname = vim.api.nvim_buf_get_name(bufnr)
 
-    local utils = require("r4zen.lsp_utils")
+    local utils = require("lsp_utils")
     root_files = utils.insert_package_json(root_files, "tailwindcss", fname)
     on_dir(vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1]))
   end,

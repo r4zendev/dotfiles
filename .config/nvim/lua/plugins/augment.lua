@@ -32,7 +32,7 @@ return {
     },
   },
   init = function()
-    vim.g.augment_workspace_folders = { require("r4zen.utils").workspace_root() }
+    vim.g.augment_workspace_folders = { require("utils").workspace_root() }
 
     local disable_augment = true
     vim.g.augment_disable_completions = disable_augment

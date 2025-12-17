@@ -1,4 +1,4 @@
-local utils = require("r4zen.utils")
+local utils = require("utils")
 
 local lualine_require = require("lualine_require")
 local highlight = require("lualine.highlight")

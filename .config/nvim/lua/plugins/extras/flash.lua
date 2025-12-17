@@ -1,7 +1,7 @@
 -- A good alternative to mini.jump and mini.jump2d
 return {
   "folke/flash.nvim",
-  enabled = not require("r4zen.utils").check_arg("+Man!"),
+  enabled = not require("utils").check_arg("+Man!"),
   event = "VeryLazy",
   ---@type Flash.Config
   opts = {

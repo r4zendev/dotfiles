@@ -1,4 +1,4 @@
-local util = require("r4zen.lsp_utils")
+local util = require("lsp_utils")
 local lsp = vim.lsp
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd

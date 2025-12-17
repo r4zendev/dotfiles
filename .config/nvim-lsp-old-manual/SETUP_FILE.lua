@@ -4,7 +4,7 @@ if not schemastore_ok then
   schemastore = nil
 end
 
-local server_configs = require("r4zen.lsp_utils").get_servers_with_configs()
+local server_configs = require("lsp_utils").get_servers_with_configs()
 
 local schema_settings_map = {}
 if schemastore then

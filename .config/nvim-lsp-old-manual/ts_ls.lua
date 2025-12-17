@@ -14,7 +14,7 @@ return {
   },
   root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
   on_attach = function(client, bufnr)
-    local lsp_utils = require("r4zen.lsp_utils")
+    local lsp_utils = require("lsp_utils")
     lsp_utils.on_attach(client, bufnr)
 
     local opts = function(desc)

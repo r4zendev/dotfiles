@@ -1,0 +1,6 @@
+require("core.keymaps")
+require("core.options")
+require("core.autocmd")
+require("core.usercmd")
+require("core.macros")
+require("core.marks")

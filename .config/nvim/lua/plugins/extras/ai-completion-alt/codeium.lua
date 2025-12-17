@@ -31,7 +31,7 @@ return {
     },
     workspace_root = {
       use_lsp = true,
-      find_root = require("r4zen.utils").workspace_root,
+      find_root = require("utils").workspace_root,
       paths = {
         ".bzr",
         ".git",

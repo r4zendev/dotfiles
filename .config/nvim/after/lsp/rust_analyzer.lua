@@ -20,7 +20,7 @@ return {
       reload_workspace(bufnr)
     end, { desc = "Reload current cargo workspace" })
 
-    require("r4zen.lsp_utils").on_attach(client, bufnr)
+    require("lsp_utils").on_attach(client, bufnr)
 
     map("n", "<leader>ca", function()
       vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping

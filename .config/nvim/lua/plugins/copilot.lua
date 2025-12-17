@@ -12,7 +12,7 @@ return {
   init = function()
     vim.g.copilot_enabled = true
     -- Workspace folders
-    vim.g.copilot_workspace_folders = { require("r4zen.utils").workspace_root() }
+    vim.g.copilot_workspace_folders = { require("utils").workspace_root() }
 
     -- Supply custom settings
     -- vim.g.copilot_settings = { selectedCompletionModel = "gpt-41-copilot" }
