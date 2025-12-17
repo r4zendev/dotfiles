@@ -183,6 +183,7 @@ M.plugin = {
     { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
     { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
     { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+    { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
 
     -- NOTE: LSP
     { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
@@ -200,7 +201,7 @@ M.plugin = {
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
     { "<leader>s/", function() Snacks.picker.search_history() end, desc = "Search history" },
     { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
-    { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command History" },
+    { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command List" },
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {

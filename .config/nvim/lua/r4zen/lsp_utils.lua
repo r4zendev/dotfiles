@@ -55,11 +55,7 @@ M.get_servers_with_configs = function()
   return server_configs
 end
 
-M.on_attach = function(client, bufnr)
-  if client.server_capabilities.documentSymbolProvider then
-    require("nvim-navic").attach(client, bufnr)
-  end
-
+M.on_attach = function(_, bufnr)
   local opts = function(desc)
     return { desc = desc, noremap = true, silent = true, buffer = bufnr }
   end
@@ -84,7 +80,6 @@ M.toggle_ts_server = function(client)
 
   for buf_id, _ in pairs(client.attached_buffers) do
     vim.lsp.buf_detach_client(buf_id, client.id)
-    vim.b[buf_id].navic_client_id = nil
   end
 
   vim.cmd("silent! e")

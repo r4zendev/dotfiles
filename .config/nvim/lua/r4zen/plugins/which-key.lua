@@ -33,6 +33,7 @@ return {
         { "<leader>t", group = "Testing", icon = { icon = "󰙨", color = "yellow" } },
         { "<leader>u", group = "Undotree/Colors", icon = { icon = "←", color = "red" } },
         { "<leader>w", group = "Splits", icon = { icon = "", color = "blue" } },
+        { "<leader>W", group = "Debug diagnostics", icon = { icon = "", color = "blue" } },
         { "<leader>x", group = "Trouble/Quickfix", icon = { icon = "!", color = "red" } },
         { "<leader>y", group = "Path", icon = { icon = "", color = "yellow" } },
         { "gx", desc = "Open with system app" },

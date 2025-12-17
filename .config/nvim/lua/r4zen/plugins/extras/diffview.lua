@@ -1,3 +1,4 @@
+-- More capable alternative to lightweight vscode-diff.nvim (which is enough for me)
 return {
   "sindrets/diffview.nvim",
   dependencies = { "nvim-lua/plenary.nvim" },

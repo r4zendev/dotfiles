@@ -97,7 +97,7 @@ M.plugin = {
           end
         end,
       })
-      :map("<leader>mm")
+      :map("<leader>uh")
   end,
 }
 
