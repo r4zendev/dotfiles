@@ -18,7 +18,6 @@
   "git-blame.nvim": { "branch": "master", "commit": "54da04264ec5313d602aebea7c5dc90141696ad7" },
   "gitsigns.nvim": { "branch": "main", "commit": "5813e4878748805f1518cee7abb50fd7205a3a48" },
   "grug-far.nvim": { "branch": "main", "commit": "b58b2d65863f4ebad88b10a1ddd519e5380466e0" },
-  "icon-picker.nvim": { "branch": "master", "commit": "3ee9a0ea9feeef08ae35e40c8be6a2fa2c20f2d3" },
   "kanagawa.nvim": { "branch": "master", "commit": "aef7f5cec0a40dbe7f3304214850c472e2264b10" },
   "kanso.nvim": { "branch": "main", "commit": "2aaecdc66e03f85b73ccad47cf2d837312d5bf6a" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
@@ -55,9 +54,9 @@
   "vim-cool": { "branch": "master", "commit": "9ea940c0d537e55de0de4c0298c04b976960fb12" },
   "vim-fugitive": { "branch": "master", "commit": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4" },
   "vim-nightfly-guicolors": { "branch": "master", "commit": "35b7292334eba451f9f94252c7df1509570f864b" },
-  "vscode-diff.nvim": { "branch": "next", "commit": "7ade58156e12077faa9fe932000c4b1e75d64a0b" },
+  "vscode-diff.nvim": { "branch": "next", "commit": "e4f3d48f7b3498d590109c9187f6de992900b25f" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" },
   "wtf.nvim": { "branch": "main", "commit": "a50e7ae1eafe0a7c1b2871ac4185cad33bc94393" },
   "yanky.nvim": { "branch": "main", "commit": "04fc42b94305d94948c9c197f679336668af3292" },
-  "yazi.nvim": { "branch": "main", "commit": "d34cbb3778fc92aa0954bda0ce5f32cac842d4a9" }
+  "yazi.nvim": { "branch": "main", "commit": "31fa1c0752e03b7af978aad81a730e2a8dc48b24" }
 }

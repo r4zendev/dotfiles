@@ -2,6 +2,7 @@ return {
   "lewis6991/gitsigns.nvim",
   event = "LazyFile",
   opts = {
+    signcolumn = true, -- Keep enabled for statuscolumn integration
     signs = {
       add = { text = "▎" },
       change = { text = "▎" },

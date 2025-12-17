@@ -38,7 +38,7 @@ M.plugin = {
       draw = {
         animation = mini_indentscope.gen_animation.linear({
           easing = "out",
-          duration = 25,
+          duration = 10,
         }),
       },
     })

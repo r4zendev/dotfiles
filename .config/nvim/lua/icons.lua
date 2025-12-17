@@ -6,6 +6,8 @@ M.diagnostics = {
   INFO = "",
   DEBUG = "",
   TRACE = "✎",
+  HINT = "󰠠",
+  -- HINT = "",
 }
 
 return M

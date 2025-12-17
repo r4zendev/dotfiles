@@ -78,7 +78,7 @@ autocmd("FileType", {
 --   end,
 -- })
 
--- Create parent directories on save, currently handled by custom 'W' command
+-- Create parent directories on save, currently handled by custom 'W' usercmd
 -- autocmd("BufWritePre", {
 --   group = vim.api.nvim_create_augroup("MkdirOnSave", { clear = true }),
 --   callback = function(args)
@@ -97,6 +97,7 @@ autocmd("FileType", {
 
 -- <C-u> in insert mode to remove appended comment seems to work okay,
 -- since there are still cases where auto-appended comments would be nice.
+-- Thing below disables extending comments on new lines.
 -- autocmd("BufEnter", {
 --   pattern = "*",
 --   desc = "Disable auto comment",

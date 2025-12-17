@@ -177,13 +177,14 @@ M.plugin = {
     { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
     { "<leader>sd", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
     { "<leader>sD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
-    { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
-    { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
+    { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
     { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
-    { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
-    { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
-    { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+    { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
     { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
+    { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
+    { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+    { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
+    { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
 
     -- NOTE: LSP
     { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
@@ -251,6 +252,17 @@ M.plugin = {
           vim.g.gitblame_display_virtual_text = state
         end,
       }):map("<leader>gv", { desc = "Toggle Git blame" })
+
+      vim.g.statuscolumn_show_signs = true
+      Snacks.toggle({
+        name = "Statuscolumn Signs",
+        get = function()
+          return vim.g.statuscolumn_show_signs
+        end,
+        set = function(state)
+          vim.g.statuscolumn_show_signs = state
+        end,
+      }):map("<leader>us")
 
       Snacks.picker.actions.git_branch_del = M.git_branch_del
     end)

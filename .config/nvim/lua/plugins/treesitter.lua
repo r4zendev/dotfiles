@@ -7,32 +7,6 @@ return {
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = false,
-      -- additional_vim_regex_highlighting = {
-      --   "just",
-      -- },
-
-      -- disable = function(lang, bufnr)
-      --   local HIGHLIGHTING_DISABLED = {
-      --     -- treesitter language, not ft
-      --     "javascript",
-      --     "tsx",
-      --     "sh",
-      --   }
-      --
-      --   if vim.tbl_contains(HIGHLIGHTING_DISABLED, lang) then
-      --     vim.b[bufnr].ts_highlight = {
-      --       enabled = false,
-      --       reason = "blacklisted",
-      --     }
-      --     return false
-      --   end
-      --
-      --   vim.b[bufnr].ts_highlight = {
-      --     enabled = true,
-      --     reason = "default",
-      --   }
-      --   return true
-      -- end,
     },
     indent = { enable = true },
     matchup = { enable = true },
