@@ -6,8 +6,8 @@ return {
     transparent_background = true,
     no_italic = true,
     integrations = {
-      noice = true,
-      notify = true,
+      -- noice = true,
+      -- notify = true,
       mason = true,
       which_key = true,
       mini = {

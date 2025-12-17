@@ -68,7 +68,11 @@ M.on_attach = function(_, bufnr)
   end, opts("Go inside diagnostic window"))
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
-    require("trouble").open({ mode = "quickfix", focus = false })
+
+    local trouble_ok, _ = pcall(require, "trouble")
+    if trouble_ok then
+      require("trouble").open({ mode = "quickfix", focus = false })
+    end
   end, opts("Populate qflist with diagnostics"))
 end
 
@@ -112,7 +116,9 @@ function M.execute_command(opts)
     arguments = opts.arguments,
   }
 
-  if opts.open then
+  local trouble_ok, _ = pcall(require, "trouble")
+
+  if opts.open and trouble_ok then
     return require("trouble").open({ mode = "lsp_command", params = params })
   end
 

@@ -12,12 +12,12 @@ return {
   },
   keys = {
     {
-      "<leader>py",
+      "<leader>sy",
       function()
         Snacks.picker.yanky()
       end,
       mode = { "n", "x" },
-      desc = "Open Yank History",
+      desc = "Yank History",
     },
     { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
     { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },

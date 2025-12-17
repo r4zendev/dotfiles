@@ -9,11 +9,6 @@ o.updatetime = 100
 o.timeout = true
 o.timeoutlen = 500
 
--- required to make `vim-tmux-navigator` work.
--- if this affects my workflow in any way, i will remove it
--- and find another way to integrate with tmux panes
-o.shell = "/bin/zsh"
-
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
 opt.number = true -- shows absolute line number on cursor line (when relative number is on)

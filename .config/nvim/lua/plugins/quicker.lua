@@ -1,6 +1,5 @@
 return {
   "stevearc/quicker.nvim",
-  enabled = false,
   event = "FileType qf",
   opts = {
     keys = {
