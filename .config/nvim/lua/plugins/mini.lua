@@ -10,18 +10,21 @@ M.plugin = {
     MiniIcons.mock_nvim_web_devicons()
 
     require("mini.ai").setup({ n_lines = 9999 })
+
     require("mini.align").setup()
+
     require("mini.bracketed").setup()
+    map("n", "[t", vim.cmd.tabprev, { desc = "Previous tabpage" })
+    map("n", "]t", vim.cmd.tabnext, { desc = "Next tabpage" })
+
     require("mini.surround").setup({ n_lines = 9999 })
+
     require("mini.splitjoin").setup()
+
     require("mini.cursorword").setup()
 
-    require("mini.visits").setup()
-    map("n", "<c-e>", function()
-      MiniVisits.select_path()
-    end, { desc = "Open visits list" })
-
     require("mini.jump").setup()
+
     -- Don't start jump2d if using through `man` cmd, because it will break `gO` quickfix window
     -- with table of contents and make it unusable through <cr>
     local utils = require("utils")

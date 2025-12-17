@@ -1,14 +1,12 @@
 return {
   "WhoIsSethDaniel/mason-tool-installer.nvim",
-  lazy = false,
-  -- event = "VimEnter",
-  -- cmd = {
-  --   "MasonToolsInstall",
-  --   "MasonToolsInstallSync",
-  --   "MasonToolsUpdate",
-  --   "MasonToolsUpdateSync",
-  --   "MasonToolsClean",
-  -- },
+  cmd = {
+    "MasonToolsInstall",
+    "MasonToolsInstallSync",
+    "MasonToolsUpdate",
+    "MasonToolsUpdateSync",
+    "MasonToolsClean",
+  },
   dependencies = {
     {
       "williamboman/mason.nvim",
@@ -24,10 +22,11 @@ return {
     },
   },
   opts = {
-    -- Can be done manually via custom approach (see init function below)
-    -- For that to work properly disable two of the options below
-    run_on_start = true,
-    auto_update = true,
+    -- Done manually via custom approach (see init function below).
+    -- That is to avoid having to disable lazy-load for mason-tool-installer
+    -- which increases startup time significantly at times.
+    run_on_start = false,
+    auto_update = false,
     ensure_installed = {
       "vtsls",
       "tsgo",
@@ -47,6 +46,7 @@ return {
       "json-lsp",
       "yaml-language-server",
 
+      "pylsp",
       "pyright",
       "black",
       "pylint",
@@ -65,13 +65,14 @@ return {
       "codelldb",
     },
   },
-  -- init = function()
-  --   -- Check once when opening a file
-  --   vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufWritePre" }, {
-  --     once = true,
-  --     callback = function()
-  --       vim.cmd("MasonToolsInstall")
-  --     end,
-  --   })
-  -- end,
+  init = function()
+    -- Check once when opening a file
+    vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufWritePre" }, {
+      once = true,
+      callback = function()
+        vim.cmd("MasonToolsUpdate")
+        vim.cmd("MasonToolsInstall")
+      end,
+    })
+  end,
 }

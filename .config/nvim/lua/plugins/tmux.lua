@@ -1,5 +1,12 @@
 return {
   "numToStr/Navigator.nvim",
+  cmd = {
+    "NavigatorLeft",
+    "NavigatorDown",
+    "NavigatorUp",
+    "NavigatorRight",
+    "NavigatorPrevious",
+  },
   opts = {
     auto_save = nil,
   },

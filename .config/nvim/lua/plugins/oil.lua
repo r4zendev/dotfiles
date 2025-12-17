@@ -36,44 +36,12 @@ return {
         end,
       },
 
-      -- Don't trigger harpoon mark keymaps in oil
-      ["<leader>k"] = {
-        callback = function()
-          local path = get_path_under_cursor(true)
-
-          require("harpoon"):list():add({
-            context = { col = 0, row = 1 },
-            value = path,
-          })
-        end,
-        desc = "Harpoon add",
-      },
-      ["<leader>j"] = {
-        callback = function()
-          local path = get_path_under_cursor(true)
-
-          local list = require("harpoon"):list()
-
-          for _, item in ipairs(list.items) do
-            if item.value == path then
-              list:remove(item)
-              break
-            end
-          end
-        end,
-        desc = "Harpoon remove",
-      },
-
       -- Allow navigation between panes
       ["<C-h>"] = {
-        callback = function()
-          vim.cmd("TmuxNavigateLeft")
-        end,
+        callback = vim.cmd.NavigatorLeft,
       },
       ["<C-l>"] = {
-        callback = function()
-          vim.cmd("TmuxNavigateRight")
-        end,
+        callback = vim.cmd.NavigatorRight,
       },
     },
   },
