@@ -51,19 +51,6 @@ M.plugin = {
         },
       })
 
-      -- require("mini.notify").setup({
-      --   lsp_progress = {
-      --     enable = false,
-      --   },
-      -- })
-      -- vim.notify = MiniNotify.make_notify()
-      -- vim.keymap.set("n", "<leader>cm", function()
-      --   MiniNotify.clear()
-      -- end, { desc = "Clear Notifications" })
-      -- vim.keymap.set("n", "<leader>sn", function()
-      --   M.open_notifications_history(MiniNotify.get_all())
-      -- end, { desc = "Notifications History" })
-
       local hipatterns = require("mini.hipatterns")
       hipatterns.setup({
         highlighters = {
@@ -525,43 +512,43 @@ M.hl = {}
 --   },
 -- }
 
--- M.open_notifications_history = function(notifications)
---   local buf = vim.api.nvim_create_buf(false, true)
---
---   local width = math.floor(vim.o.columns * 0.8)
---   local height = math.floor(vim.o.lines * 0.8)
---   local col = math.floor((vim.o.columns - width) / 2)
---   local row = math.floor((vim.o.lines - height) / 2)
---
---   local win = vim.api.nvim_open_win(buf, true, {
---     relative = "editor",
---     width = width,
---     height = height,
---     col = col,
---     row = row,
---     style = "minimal",
---     border = "rounded",
---     title = " Notification History ",
---     title_pos = "center",
---   })
---
---   local lines = {}
---   for _, notif in ipairs(notifications) do
---     local msg = type(notif.msg) == "string" and notif.msg or vim.inspect(notif.msg)
---     msg = msg:gsub("%%", "%%%%") -- Escape literal '%'
---     msg = msg:gsub("\n", " ") -- Replace newlines with spaces
---     table.insert(lines, string.format("[%s] %s", notif.level, msg))
---   end
---
---   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
---
---   vim.bo[buf].modifiable = false
---   vim.bo[buf].filetype = "log"
---   vim.bo[buf].bufhidden = "wipe"
---
---   vim.keymap.set("n", "q", function()
---     vim.api.nvim_win_close(win, true)
---   end, { buffer = buf, silent = true, nowait = true, desc = "Close notification history" })
--- end
+M.open_notifications_history = function(notifications)
+  local buf = vim.api.nvim_create_buf(false, true)
+
+  local width = math.floor(vim.o.columns * 0.8)
+  local height = math.floor(vim.o.lines * 0.8)
+  local col = math.floor((vim.o.columns - width) / 2)
+  local row = math.floor((vim.o.lines - height) / 2)
+
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+    style = "minimal",
+    border = "rounded",
+    title = " Notification History ",
+    title_pos = "center",
+  })
+
+  local lines = {}
+  for _, notif in ipairs(notifications) do
+    local msg = type(notif.msg) == "string" and notif.msg or vim.inspect(notif.msg)
+    msg = msg:gsub("%%", "%%%%") -- Escape literal '%'
+    msg = msg:gsub("\n", " ") -- Replace newlines with spaces
+    table.insert(lines, string.format("[%s] %s", notif.level, msg))
+  end
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].filetype = "log"
+  vim.bo[buf].bufhidden = "wipe"
+
+  vim.keymap.set("n", "q", function()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf, silent = true, nowait = true, desc = "Close notification history" })
+end
 
 return M.plugin
