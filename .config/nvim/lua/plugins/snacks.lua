@@ -80,6 +80,8 @@ M.plugin = {
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
     { "<leader>es", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<C-b>", function() Snacks.picker.buffers() end, desc = "Find Recent Files" },
+    { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Recent Files" },
     { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles" }) end, desc = "Find Under Dotfiles" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
@@ -90,8 +92,8 @@ M.plugin = {
     { "<leader>,", function() Snacks.picker.grep_word() end, desc = "Grep", mode = { "x" } },
     { "<leader>sb", function() Snacks.picker.buffers() end, desc = "Open Buffers" },
     { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-    { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()", }) end, desc = "Search TODOs" },
-    { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
+    -- { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()", }) end, desc = "Search TODOs" },
+    -- { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
 
     -- NOTE: Git
     { "<leader>gm", function() M.grep_git_files() end, desc = "Grep Git Files" },
@@ -99,79 +101,6 @@ M.plugin = {
     { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
     { "<leader>gl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
     { "<leader>g\\", function() Snacks.picker.git_log() end, desc = "Git Log" },
-    {
-      "<leader>gD",
-      function()
-        vim.ui.input({ prompt = "Branch: "}, function(input)
-          local branch = (input and input ~= "") and input or "main"
-
-          Snacks.picker.git_diff({
-            finder = function(opts, ctx)
-              local file, line
-              local header, hunk = {}, {}
-              local header_len = 4
-
-              local finder = require("snacks.picker.source.proc").proc({
-                opts,
-                {
-                  cmd = "git",
-                  args = {
-                    "--no-pager",
-                    "diff",
-                    "origin/" .. branch .. "...HEAD",
-                    "--no-color",
-                    "--no-ext-diff",
-                  },
-                },
-              }, ctx)
-
-              return function(cb)
-                local function add()
-                  if file and line and #hunk > 0 then
-                    local diff = table.concat(header, "\n") .. "\n" .. table.concat(hunk, "\n")
-                    cb({
-                      text = file .. ":" .. line,
-                      diff = diff,
-                      file = file,
-                      pos = { line, 0 },
-                      preview = { text = diff, ft = "diff", loc = false },
-                    })
-                  end
-                  hunk = {}
-                end
-
-                finder(function(proc_item)
-                  local text = proc_item.text
-                  if text:find("diff", 1, true) == 1 then
-                    add()
-                    file = text:match("^diff .* a/(.*) b/.*$")
-                    header = { text }
-                    header_len = 4
-                  elseif file and #header < header_len then
-                    if text:find("^deleted file") then
-                      header_len = 5
-                    end
-                    header[#header + 1] = text
-                  elseif text:find("@", 1, true) == 1 then
-                    add()
-                    -- Hunk header
-                    -- @example "@@ -157,20 +157,6 @@ some content"
-                    line = tonumber(string.match(text, "@@ %-.*,.* %+(.*),.* @@"))
-                    hunk = { text }
-                  elseif #hunk > 0 then
-                    hunk[#hunk + 1] = text
-                  else
-                    error("unexpected line: " .. text)
-                  end
-                end)
-                add()
-              end
-            end,
-          })
-        end)
-      end,
-      desc = "Snacks: Git Diff",
-    },
 
     -- NOTE: Search
     { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
@@ -191,7 +120,9 @@ M.plugin = {
     { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
     { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
     { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
-    { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+    { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition" },
+    { "gai", function() Snacks.picker.lsp_incoming_calls() end, desc = "Calls Incoming" },
+    { "gao", function() Snacks.picker.lsp_outgoing_calls() end, desc = "Calls Outgoing" },
     { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
     { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
 
