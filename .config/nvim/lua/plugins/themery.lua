@@ -41,6 +41,7 @@ return {
       { name = "Kanagawa Wave", colorscheme = "kanagawa-wave", after = transparent_background_hl_string },
 
       -- Darker themes for late nights
+      { name = "Vague", colorscheme = "vague", after = transparent_winbar_hl_string },
       { name = "Nightfly", colorscheme = "nightfly" },
       { name = "Kanso Zen", colorscheme = "kanso-zen" },
       { name = "Default", colorscheme = "default", after = default_harpoon_hl_string },

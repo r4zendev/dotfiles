@@ -29,3 +29,5 @@ require("lazy").setup({
 require("todo_list").setup({
   target_file = "~/notes/todo.md",
 })
+
+require("vim._extui").enable({})

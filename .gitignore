@@ -14,6 +14,7 @@
 .config/pgcli
 .config/tmux/plugins
 .config/fish/fish_variables
+.config/lazysql
 .config/wezterm/images
 .config/linearmouse
 

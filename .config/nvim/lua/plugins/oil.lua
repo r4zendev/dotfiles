@@ -15,6 +15,8 @@ end
 
 return {
   "stevearc/oil.nvim",
+  -- Got a local fix for nightly neovim build
+  pin = true,
   event = "VeryLazy",
   cmd = { "Oil" },
   dependencies = { "echasnovski/mini.nvim" },
@@ -37,32 +39,32 @@ return {
       },
 
       -- Harpoon mark keymaps inside oil
-      ["<leader>k"] = {
-        callback = function()
-          local path = get_path_under_cursor(true)
-
-          require("harpoon"):list():add({
-            context = { col = 0, row = 1 },
-            value = path,
-          })
-        end,
-        desc = "Harpoon add",
-      },
-      ["<leader>j"] = {
-        callback = function()
-          local path = get_path_under_cursor(true)
-
-          local list = require("harpoon"):list()
-
-          for _, item in ipairs(list.items) do
-            if item.value == path then
-              list:remove(item)
-              break
-            end
-          end
-        end,
-        desc = "Harpoon remove",
-      },
+      -- ["<leader>k"] = {
+      --   callback = function()
+      --     local path = get_path_under_cursor(true)
+      --
+      --     require("harpoon"):list():add({
+      --       context = { col = 0, row = 1 },
+      --       value = path,
+      --     })
+      --   end,
+      --   desc = "Harpoon add",
+      -- },
+      -- ["<leader>j"] = {
+      --   callback = function()
+      --     local path = get_path_under_cursor(true)
+      --
+      --     local list = require("harpoon"):list()
+      --
+      --     for _, item in ipairs(list.items) do
+      --       if item.value == path then
+      --         list:remove(item)
+      --         break
+      --       end
+      --     end
+      --   end,
+      --   desc = "Harpoon remove",
+      -- },
 
       -- Allow navigation between panes
       ["<C-h>"] = {

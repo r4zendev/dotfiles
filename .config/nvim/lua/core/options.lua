@@ -80,4 +80,5 @@ opt.fillchars:append({
 })
 
 opt.statuscolumn = "%{%v:lua.require('statuscolumn').get_statuscolumn()%}"
+o.cmdheight = 0
 -- o.qftf = "{info -> v:lua.require('core.qftf').qftf(info)}"

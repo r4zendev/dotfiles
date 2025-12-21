@@ -6,18 +6,18 @@ return {
   },
   -- stylua: ignore
   keys = {
-    { "<leader>-", vim.cmd.Yazi, desc = "Yazi: Current file", mode = { "n", "v" },  },
+    { "<leader>-", function () vim.cmd("Yazi") end, desc = "Yazi: Current file", mode = { "n", "v" },  },
     { "<leader>fw", function() vim.cmd("Yazi cwd") end, desc = "Yazi: Working directory" },
-    -- { "<c-up>", "<cmd>Yazi toggle<cr>", desc = "Resume the last yazi session" },
+    -- { "<c-up>", function() vim.cmd("Yazi toggle") end, desc = "Resume the last yazi session" },
   },
   ---@type YaziConfig | {}
   opts = {
-    -- if you want to open yazi instead of netrw, see below for more info
-    -- NOTE: Currently using oil.nvim as a netrw interface
+    -- NOTE: Currently using oil.nvim as a netrw interface, could switch to true to replace
     open_for_directories = false,
     keymaps = {
       show_help = "?",
       -- NOTE: for reference
+      --
       -- open_file_in_vertical_split = "<c-v>",
       -- open_file_in_horizontal_split = "<c-x>",
       -- open_file_in_tab = "<c-t>",
@@ -33,6 +33,6 @@ return {
   init = function()
     -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
     -- vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
+    -- vim.g.loaded_netrwPlugin = 1
   end,
 }

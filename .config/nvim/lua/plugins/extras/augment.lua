@@ -1,3 +1,5 @@
+-- Now can use Auggie as ACP instead for the same set of features but without autocompletions.
+-- I use copilot anyway so I think this unmaintained plugin is better to avoid.
 return {
   "augmentcode/augment.vim",
   cmd = "Augment",
