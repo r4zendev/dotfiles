@@ -147,8 +147,7 @@ M.plugin = {
 
     -- AI completion toggle. Putting it here, since using multiple providers
     -- First, check if enabled by default to omit toggling disabled tools
-    local is_augment_enabled_by_default = vim.g.augment_disable_completions == nil
-      or not vim.g.augment_disable_completions
+    local is_minuet_enabled_by_default = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled_by_default = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
     vim.g.enable_ai_completion = true
     vim.schedule(function()
@@ -160,14 +159,15 @@ M.plugin = {
         set = function(state)
           vim.g.enable_ai_completion = state
 
-          -- Augment
-          if is_augment_enabled_by_default then
-            vim.g.augment_disable_completions = not state
-            vim.g.augment_disable_tab_mapping = not state
+          -- Minuet
+          if is_minuet_enabled_by_default then
+            vim.cmd([[Minuet virtualtext toggle]])
+            vim.g.minuet_enabled = state
           end
 
           -- Copilot
           if is_copilot_enabled_by_default then
+            vim.cmd("Copilot toggle")
             vim.g.copilot_enabled = state
           end
         end,

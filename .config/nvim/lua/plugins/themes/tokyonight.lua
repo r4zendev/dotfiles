@@ -54,6 +54,9 @@ return {
 
       hl.AugmentSuggestionHighlight = { fg = colors.blue1 }
 
+      hl.CopilotSuggestion = { fg = colors.fg_dark }
+      hl.CopilotAnnotation = { fg = colors.fg_dark }
+
       -- hl.NormalFloat = { bg = "NONE" }
       -- hl.FloatBorder = { bg = "NONE" }
       -- hl.FloatTitle = { bg = "NONE" }
