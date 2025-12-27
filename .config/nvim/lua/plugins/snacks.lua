@@ -149,6 +149,8 @@ M.plugin = {
     -- First, check if enabled by default to omit toggling disabled tools
     local is_minuet_enabled_by_default = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled_by_default = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
+    local is_augment_enabled_by_default = vim.g.augment_disable_completions == nil or vim.g.augment_disable_completions
+    local is_supermaven_enabled_by_default = vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled
     vim.g.enable_ai_completion = true
     vim.schedule(function()
       Snacks.toggle({
@@ -163,6 +165,17 @@ M.plugin = {
           if is_minuet_enabled_by_default then
             vim.cmd([[Minuet virtualtext toggle]])
             vim.g.minuet_enabled = state
+          end
+
+          -- Supermaven
+          if is_supermaven_enabled_by_default then
+            vim.g.supermaven_enabled = state
+          end
+
+          -- Augment
+          if is_augment_enabled_by_default then
+            vim.g.augment_disable_completions = not state
+            vim.g.augment_disable_tab_mapping = not state
           end
 
           -- Copilot

@@ -17,10 +17,8 @@ local bindings = {
   { ";", "Settings" },
   { "/", "Activity Monitor" },
   { "p", "Finder", { mods = { "cmd" }, keys = "n" } },
-  { "b", "Brave" },
+  { "b", "Helium" },
   { "`", "WezTerm" },
-  { "c", "Calendar" },
-  { "v", "Mail" },
   -- { "o", "Obsidian" },
   -- { "z", "zoom.us" },
 }

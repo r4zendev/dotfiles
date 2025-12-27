@@ -36,6 +36,7 @@ yabai -m config window_gap                   15
 
 # apps to not manage (floating by default)
 yabai -m rule --add app="^Finder$" manage=off sub-layer=below
+yabai -m rule --add app="^superwhisper$" manage=off sub-layer=below
 yabai -m rule --add app="^qBittorrent" manage=off sub-layer=below
 yabai -m rule --add app="^Archive Utility$" manage=off sub-layer=below
 yabai -m rule --add app="^balenaEtcher$" manage=off sub-layer=below

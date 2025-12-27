@@ -1,5 +1,7 @@
 return {
   "milanglacier/minuet-ai.nvim",
+  enabled = false,
+  cmd = { "Minuet" },
   event = "LazyFile",
   opts = function()
     local minuet_cfg = require("minuet.config")
@@ -96,7 +98,7 @@ return {
       throttle = 2000,
       debounce = 600,
       context_window = 4096,
-      context_ratio = 0.85,
+      context_ratio = 0.80,
       n_completions = 2,
       virtualtext = {
         auto_trigger_ft = { "*" },
@@ -111,17 +113,26 @@ return {
       },
     }, providers[active_provider])
   end,
-  init = function()
-    vim.g.minuet_enabled = true
+  config = function(_, opts)
+    if not vim.g.minuet_enabled then
+      vim.cmd([[silent! Minuet virtualtext disable]])
+    end
 
-    vim.keymap.set("i", "<Tab>", function()
-      local vt = require("minuet.virtualtext").action
-      if vt.is_visible() then
-        vt.accept()
-      else
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-      end
-    end, { silent = true })
+    require("minuet").setup(opts)
+  end,
+  init = function()
+    vim.g.minuet_enabled = false
+
+    if vim.g.minuet_enabled then
+      vim.keymap.set("i", "<Tab>", function()
+        local vt = require("minuet.virtualtext").action
+        if vt.is_visible() then
+          vt.accept()
+        else
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+        end
+      end, { silent = true })
+    end
 
     local DEBUG = false
     if DEBUG then

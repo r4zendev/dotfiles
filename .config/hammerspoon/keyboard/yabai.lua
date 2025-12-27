@@ -54,8 +54,8 @@ alt("s", { sequence = { "space --rotate 180" } })
 -- alt("w", { primary = "window --resize right:-20:0 2> /dev/null", fallback = "window --resize left:-20:0 2> /dev/null" })
 -- alt("s", { primary = "window --resize right:-20:0 2> /dev/null", fallback = "window --resize left:-20:0 2> /dev/null" })
 
+-- using alt+t in claude because they don't allow to rebind 🤡
 altShift("t", { sequence = { "window --toggle float", "window --grid 4:4:1:1:2:2" } })
--- alt("t", { sequence = { "window --toggle float", "window --grid 4:4:1:1:2:2" } })
 alt("e", { sequence = { "window --toggle split" } }) -- toggle window split type
 alt("g", { sequence = { "space --toggle padding", "space --toggle gap" } })
 

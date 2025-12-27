@@ -74,6 +74,7 @@ brew install gdu      # disk usage analyzer
 brew install jq       # JSON processor
 brew install lsd      # ls alternative
 brew install neofetch # system info
+brew install opencode # AI agent using custom models
 brew install pgcli    # postgres client
 brew install ripgrep  # search engine
 brew install tealdeer # quick man-pages extracts
@@ -96,8 +97,9 @@ brew install --cask telegram
 brew install --cask helium-browser
 
 # System utils
-brew install --cask hammerspoon # advanced scripting & automation
-brew install jordanbaird-ice    # toolbar
-brew install --cask keycastr    # keylogger
-brew install --cask linearmouse # app to reverse external mouse scroll
-brew install imagemagick        # image processing
+brew install --cask hammerspoon  # advanced scripting & automation
+brew install jordanbaird-ice     # toolbar
+brew install --cask keycastr     # keylogger
+brew install --cask linearmouse  # app to reverse external mouse scroll
+brew install imagemagick         # image processing
+brew install --cask superwhisper # Voice to text
