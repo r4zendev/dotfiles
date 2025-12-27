@@ -32,14 +32,28 @@ return {
     {
       ">",
       function()
-        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+        local quicker = require("quicker")
+
+        if quicker.is_open() then
+          quicker.expand({ before = 2, after = 2, add_to_existing = true })
+          return
+        end
+
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(">", true, false, true), "n", false)
       end,
       desc = "Expand context",
     },
     {
       "<",
       function()
-        require("quicker").collapse()
+        local quicker = require("quicker")
+
+        if quicker.is_open() then
+          quicker.collapse()
+          return
+        end
+
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<", true, false, true), "n", false)
       end,
       desc = "Collapse context",
     },

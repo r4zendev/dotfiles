@@ -85,7 +85,7 @@ config.window_decorations = "RESIZE"
 config.window_close_confirmation = "NeverPrompt"
 config.scrollback_lines = 3000
 config.default_workspace = "main"
-config.window_padding = { left = 18, right = 18, top = 16, bottom = 16 }
+config.window_padding = { left = 12, right = 12, top = 8, bottom = 8 }
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true

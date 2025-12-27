@@ -43,10 +43,6 @@ return {
       return { desc = desc, buffer = bufnr, silent = true, noremap = true }
     end
 
-    -- map("n", "<leader>cT", function()
-    --   lsp_utils.toggle_ts_server(client)
-    -- end, opts("Toggle ts_ls"))
-
     map("n", "gD", function()
       -- Works without args
       ---@diagnostic disable-next-line: missing-parameter

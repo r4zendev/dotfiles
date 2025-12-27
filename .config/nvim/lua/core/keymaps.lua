@@ -84,22 +84,20 @@ map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 
 -- Search the web
-local function search_web(engine, url_template)
-  vim.ui.input({ prompt = "Search " .. engine .. ": " }, function(query)
-    if query and query ~= "" then
-      local escaped = vim.uri_encode(query)
-      local url = url_template:format(escaped)
-      vim.ui.open(url)
-    end
-  end)
-end
-
-map("n", "<leader>go", function()
-  search_web("Google", "https://www.google.com/search?q=%s")
-end, { desc = "Google it" })
-map("n", "<leader>gp", function()
-  search_web("DuckDuckGo", "https://duckduckgo.com/?q=%s")
-end, { desc = "DuckDuckGo it" })
+--
+-- local function search_web(engine, url_template)
+--   vim.ui.input({ prompt = "Search " .. engine .. ": " }, function(query)
+--     if query and query ~= "" then
+--       local escaped = vim.uri_encode(query)
+--       local url = url_template:format(escaped)
+--       vim.ui.open(url)
+--     end
+--   end)
+-- end
+--
+-- map("n", "<leader>go", function()
+--   search_web("Google", "https://www.google.com/search?q=%s")
+-- end, { desc = "Google it" })
 
 map("n", "<leader>ym", function()
   local path = vim.fn.expand("%:p")
@@ -116,23 +114,6 @@ end, { desc = "Print file's last modified time" })
 -- map("n", "<leader>.", function()
 --   return "<esc>" .. string.rep(".", vim.v.count1)
 -- end, { expr = true, desc = "Repeat dot action" })
-
--- currently trying to use ZZ/ZQ instead
---
--- keymap("n", "<leader>q", ":q<cr>", { desc = "Quit all" })
--- keymap("n", "<leader>w", ":w<cr>", { desc = "Save and quit all" })
-
--- prolly should just learn to press (* or #) with (`` or Ctrl-N) fast
---
--- keymap({ "n", "v" }, "<leader>8", function()
---   if vim.fn.mode() == "v" then
---     vim.cmd('normal! "vy')
---     vim.fn.setreg("/", vim.fn.escape(vim.fn.getreg("v"), "\\/"))
---     vim.cmd("redraw")
---   else
---     vim.cmd("keepjumps normal! mi*`i") -- same as *`` but without moving the cursor (?)
---   end
--- end, { noremap = true, silent = true, desc = "Jump to current" })
 
 -- move in wrapped line, useful when vim.opt.wrap is set to true.
 map("n", "k", function()
