@@ -1,12 +1,12 @@
 # Dotfiles
 
-![setup](./preview.jpg)
+![setup](./preview.png)
 
 These are files that add custom configurations to my computer and applications, primarily the terminal.
 
 ## Neovim startup benchmark
 
-![startup](./startup-time.jpg)
+![startup](./startup-time.png)
 
 ## Installation
 
