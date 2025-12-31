@@ -51,9 +51,14 @@ return {
           .. transparent_winbar_hl_string
           .. transparent_float_hl_string
           .. minicursorword_hl_string
+          .. default_harpoon_hl_string
           .. [[
                 vim.api.nvim_set_hl(0, "Comment", { fg = "#737aa2" })
                 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#627E97", bg = "#011423" })
+                vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = "#666666" })
+                vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = "#3DDBD9" })
+                vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = "#191919" })
+                vim.api.nvim_set_hl(0, "Visual", { bg = "#191919" })
              ]],
       },
 

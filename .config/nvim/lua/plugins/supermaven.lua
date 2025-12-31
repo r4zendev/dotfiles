@@ -25,6 +25,6 @@ return {
     end,
   },
   init = function()
-    vim.g.supermaven_enabled = true
+    vim.g.supermaven_enabled = false
   end,
 }

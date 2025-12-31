@@ -147,10 +147,17 @@ M.plugin = {
 
     -- AI completion toggle. Putting it here, since using multiple providers
     -- First, check if enabled by default to omit toggling disabled tools
-    local is_minuet_enabled_by_default = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
-    local is_copilot_enabled_by_default = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
-    local is_augment_enabled_by_default = vim.g.augment_disable_completions == nil or vim.g.augment_disable_completions
-    local is_supermaven_enabled_by_default = vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled
+    -- stylua: ignore start
+    local is_minuet_enabled = pcall(require, "minuet")
+      and (vim.g.minuet_enabled == nil or vim.g.minuet_enabled)
+    local is_copilot_enabled = pcall(require, "copilot")
+      and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
+    local is_augment_enabled = pcall(require, "augment")
+      and (vim.g.augment_enabled == nil or vim.g.augment_enabled)
+    local is_supermaven_enabled = pcall(require, "supermaven")
+      and (vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled)
+    -- stylua: ignore end
+
     vim.g.enable_ai_completion = true
     vim.schedule(function()
       Snacks.toggle({
@@ -162,24 +169,24 @@ M.plugin = {
           vim.g.enable_ai_completion = state
 
           -- Minuet
-          if is_minuet_enabled_by_default then
+          if is_minuet_enabled then
             vim.cmd([[Minuet virtualtext toggle]])
             vim.g.minuet_enabled = state
           end
 
           -- Supermaven
-          if is_supermaven_enabled_by_default then
+          if is_supermaven_enabled then
             vim.g.supermaven_enabled = state
           end
 
           -- Augment
-          if is_augment_enabled_by_default then
+          if is_augment_enabled then
             vim.g.augment_disable_completions = not state
             vim.g.augment_disable_tab_mapping = not state
           end
 
           -- Copilot
-          if is_copilot_enabled_by_default then
+          if is_copilot_enabled then
             vim.cmd("Copilot toggle")
             vim.g.copilot_enabled = state
           end

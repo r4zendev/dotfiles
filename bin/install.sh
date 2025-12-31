@@ -19,6 +19,7 @@ brew install fish               # daily driver
 brew install fisher             # package manager for fish
 brew install neovim             # editor
 brew install --cask claude-code # AI assistant
+brew install --cask codex       # OpenAI assistant
 # brew install zsh
 
 # Git
@@ -86,6 +87,7 @@ brew tap homebrew/cask-fonts
 brew install --cask font-monaspace
 brew install --cask font-jetbrains-mono-nerd-font
 brew install --cask font-inconsolata-lgc-nerd-font # cyrillic
+# brew install --cask font-maple-mono
 
 # Apps
 brew install th-ch/youtube-music/youtube-music

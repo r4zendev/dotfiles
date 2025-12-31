@@ -69,9 +69,9 @@ M.on_attach = function(_, bufnr)
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist({ open = false })
 
-    local trouble_ok, _ = pcall(require, "trouble")
-    if trouble_ok then
-      require("trouble").open({ mode = "quickfix", focus = false })
+    local quicker_ok, _ = pcall(require, "quicker")
+    if quicker_ok then
+      require("quicker").toggle()
     end
   end, opts("Populate qflist with diagnostics"))
 end

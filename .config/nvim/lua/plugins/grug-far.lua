@@ -7,7 +7,8 @@ return {
       filesFilter = [[
 !node_modules
 !*-lock.{json,yaml}
-!*.lock]],
+!*.lock
+]],
     },
     keymaps = {
       openNextLocation = { n = "<C-j>" },

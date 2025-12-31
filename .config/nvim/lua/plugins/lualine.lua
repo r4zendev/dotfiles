@@ -3,53 +3,59 @@ return {
   event = "LazyFile",
   dependencies = {
     "echasnovski/mini.nvim",
+    -- Currently using custom UI implementation, but the lualine one is also viable
+    -- {
+    --   dir = vim.fn.stdpath("config") .. "/lua/r4zen/plugins/lualine_extras/lualine_harpoon",
+    --   dependencies = {
+    --     "ThePrimeagen/harpoon",
+    --   },
+    -- },
   },
   config = function()
     local git_blame = require("gitblame")
 
-    -- local harpoon_aware_fname = require("lualine.components.filename"):extend()
-    --
-    -- function harpoon_aware_fname:init(options)
-    --   harpoon_aware_fname.super.init(self, options)
-    -- end
-    --
-    -- function harpoon_aware_fname:update_status()
-    --   local data = harpoon_aware_fname.super.update_status(self)
-    --
-    --   local current_file_path = vim.api.nvim_buf_get_name(0)
-    --   local harpoon_items = require("harpoon"):list().items
-    --
-    --   local found = false
-    --   for i = 1, #harpoon_items do
-    --     local harpoon_item = harpoon_items[i]
-    --
-    --     if harpoon_item ~= nil then
-    --       local path = harpoon_item.value
-    --
-    --       if vim.uv.fs_realpath(path) == vim.uv.fs_realpath(current_file_path) then
-    --         found = true
-    --         break
-    --       end
-    --     end
-    --   end
-    --
-    --   if found then
-    --     return " " .. data
-    --   end
-    --
-    --   return data
-    -- end
+    local harpoon_aware_fname = require("lualine.components.filename"):extend()
+
+    function harpoon_aware_fname:init(options)
+      harpoon_aware_fname.super.init(self, options)
+    end
+
+    function harpoon_aware_fname:update_status()
+      local data = harpoon_aware_fname.super.update_status(self)
+
+      local current_file_path = vim.api.nvim_buf_get_name(0)
+      local harpoon_items = require("harpoon"):list().items
+
+      local found = false
+      for i = 1, #harpoon_items do
+        local harpoon_item = harpoon_items[i]
+
+        if harpoon_item ~= nil then
+          local path = harpoon_item.value
+
+          if vim.uv.fs_realpath(path) == vim.uv.fs_realpath(current_file_path) then
+            found = true
+            break
+          end
+        end
+      end
+
+      if found then
+        return " " .. data
+      end
+
+      return data
+    end
 
     require("lualine").setup({
       sections = {
         lualine_c = {
-          -- {
-          --   harpoon_aware_fname,
-          --   cond = function()
-          --     return not vim.api.nvim_buf_get_name(0):match("^oil://")
-          --   end,
-          -- },
-          { "filename" },
+          {
+            harpoon_aware_fname,
+            cond = function()
+              return not vim.api.nvim_buf_get_name(0):match("^oil://")
+            end,
+          },
           {
             function()
               local original_text = git_blame.get_current_blame_text()

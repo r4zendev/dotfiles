@@ -11,7 +11,7 @@ M.plugin = {
     "nvim-lua/plenary.nvim",
     "folke/snacks.nvim",
   },
-  -- stylua: ignore
+  -- stylua: ignore start
   keys = {
     { "<leader>j", function() require("harpoon"):list():remove() end, desc = "Harpoon: Remove" },
     { "<leader>k", function() require("harpoon"):list():add() end, desc = "Harpoon: Add" },
@@ -19,6 +19,7 @@ M.plugin = {
     { "<M-[>", function() M.select_valid_index("prev") end, desc = "Harpoon: Previous" },
     { "<M-]>", function() M.select_valid_index("next") end, desc = "Harpoon: Next" },
   },
+  -- stylua: ignore end
   init = function()
     -- Number key mappings for quick access
     for i = 1, 9 do
