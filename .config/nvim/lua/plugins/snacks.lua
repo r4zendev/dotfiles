@@ -112,7 +112,20 @@ M.plugin = {
     { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
     { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
     { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
-    { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
+    {
+      "<leader>sH",
+      function()
+        Snacks.picker.highlights({
+          confirm = function(picker, item)
+            picker:close()
+            if item then
+              vim.fn.setreg("+", item.text)
+            end
+          end,
+        })
+      end,
+      desc = "Highlights"
+    },
     { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
 
     -- NOTE: LSP
@@ -154,17 +167,13 @@ M.plugin = {
     --   and (vim.g.minuet_enabled == nil or vim.g.minuet_enabled)
     -- local is_copilot_enabled = pcall(require, "copilot")
     --   and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
-    -- local is_ninetyfive_enabled = pcall(require, "ninetyfive")
-    --   and (vim.g.ninetyfive_enabled == nil or vim.g.ninetyfive_enabled)
     -- -- stylua: ignore end
 
-    vim.g.copilot_enabled = false
+    vim.g.copilot_enabled = true
     vim.g.minuet_enabled = false
-    vim.g.ninetyfive_enabled = true
 
     local is_minuet_enabled = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
-    local is_ninetyfive_enabled = vim.g.ninetyfive_enabled == nil or vim.g.ninetyfive_enabled
 
     vim.g.enable_ai_completion = true
     vim.schedule(function()
@@ -180,11 +189,6 @@ M.plugin = {
           if is_minuet_enabled then
             vim.cmd([[Minuet virtualtext toggle]])
             vim.g.minuet_enabled = state
-          end
-
-          -- Ninetyfive
-          if is_ninetyfive_enabled then
-            vim.g.ninetyfive_enabled = state
           end
 
           -- Copilot

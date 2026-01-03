@@ -15,6 +15,7 @@ abbr -a v "nvim"
 abbr -a t "nvim ~/notes/todo.md"
 abbr -a p "pnpm"
 abbr -a cc "claude"
+abbr -a ccy "claude --dangerously-skip-permissions" # yolo mode
 abbr -a oc "opencode"
 abbr -a g "lazygit"
 abbr -a d "lazydocker"

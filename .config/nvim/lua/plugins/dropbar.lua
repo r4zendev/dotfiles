@@ -1,10 +1,68 @@
 return {
   "Bekaboo/dropbar.nvim",
   event = "LazyFile",
-  config = function()
-    local dropbar_api = require("dropbar.api")
-    vim.keymap.set("n", "<leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
-    vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
-    vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
-  end,
+  opts = {
+    icons = {
+      ui = {
+        bar = {
+          separator = "  ",
+          extends = "…",
+        },
+      },
+    },
+    -- Default function for displaying items in the bar
+    -- bar = {
+    --   sources = function(buf, _)
+    --     local sources = require("dropbar.sources")
+    --     local utils = require("dropbar.utils")
+    --     if vim.bo[buf].ft == "markdown" then
+    --       return {
+    --         sources.path,
+    --         sources.markdown,
+    --       }
+    --     end
+    --     if vim.bo[buf].buftype == "terminal" then
+    --       return {
+    --         sources.terminal,
+    --       }
+    --     end
+    --     return {
+    --       sources.path,
+    --       sources.lsp,
+    --       utils.source.fallback({
+    --         sources.lsp,
+    --         sources.treesitter,
+    --       }),
+    --     }
+    --   end,
+    -- },
+    sources = {
+      path = {
+        max_depth = 1,
+      },
+    },
+  },
+  keys = {
+    {
+      "<leader>;",
+      function()
+        require("dropbar.api").pick()
+      end,
+      desc = "Pick symbols in winbar",
+    },
+    {
+      "[;",
+      function()
+        require("dropbar.api").goto_context_start()
+      end,
+      desc = "Go to start of current context",
+    },
+    {
+      "];",
+      function()
+        require("dropbar.api").select_next_context()
+      end,
+      desc = "Select next context",
+    },
+  },
 }

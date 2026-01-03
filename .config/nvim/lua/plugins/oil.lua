@@ -17,6 +17,7 @@ return {
   "stevearc/oil.nvim",
   -- Got a local fix for nightly neovim build
   pin = true,
+  lazy = false,
   event = "VeryLazy",
   cmd = { "Oil" },
   dependencies = { "echasnovski/mini.nvim" },

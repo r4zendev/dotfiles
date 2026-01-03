@@ -14,7 +14,7 @@ return {
         { "<leader>/", icon = { icon = "󰍉", color = "red" } },
         { "<leader><leader>", icon = { icon = "󰍉", color = "blue" } },
 
-        { "<leader>A", group = "Aider REPL", icon = { icon = "", color = "green" } },
+        { "<leader>A", group = "Sidekick", icon = { icon = "", color = "green" } },
         { "<leader>Am", group = "Toggle Aider Mode", icon = { icon = "", color = "green" } },
         { "<leader>a", group = "AI", icon = { icon = "", color = "orange" } },
         { "<leader>b", group = "Bufferline", icon = { icon = "󰓩", color = "blue" } },
