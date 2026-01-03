@@ -45,7 +45,7 @@ return {
       code_config = {
         font_family = "Monaspace Argon",
         breadcrumbs = {
-          enable = true,
+          enable = false,
           separator = "/",
           color = "#80848b",
           font_family = "Monaspace Argon",

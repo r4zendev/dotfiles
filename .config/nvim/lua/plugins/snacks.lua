@@ -147,16 +147,24 @@ M.plugin = {
 
     -- AI completion toggle. Putting it here, since using multiple providers
     -- First, check if enabled by default to omit toggling disabled tools
-    -- stylua: ignore start
-    local is_minuet_enabled = pcall(require, "minuet")
-      and (vim.g.minuet_enabled == nil or vim.g.minuet_enabled)
-    local is_copilot_enabled = pcall(require, "copilot")
-      and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
-    local is_augment_enabled = pcall(require, "augment")
-      and (vim.g.augment_enabled == nil or vim.g.augment_enabled)
-    local is_supermaven_enabled = pcall(require, "supermaven")
-      and (vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled)
-    -- stylua: ignore end
+    --
+    -- Kills lazy loading:
+    -- -- stylua: ignore start
+    -- local is_minuet_enabled = pcall(require, "minuet")
+    --   and (vim.g.minuet_enabled == nil or vim.g.minuet_enabled)
+    -- local is_copilot_enabled = pcall(require, "copilot")
+    --   and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
+    -- local is_ninetyfive_enabled = pcall(require, "ninetyfive")
+    --   and (vim.g.ninetyfive_enabled == nil or vim.g.ninetyfive_enabled)
+    -- -- stylua: ignore end
+
+    vim.g.copilot_enabled = false
+    vim.g.minuet_enabled = false
+    vim.g.ninetyfive_enabled = true
+
+    local is_minuet_enabled = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
+    local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
+    local is_ninetyfive_enabled = vim.g.ninetyfive_enabled == nil or vim.g.ninetyfive_enabled
 
     vim.g.enable_ai_completion = true
     vim.schedule(function()
@@ -174,15 +182,9 @@ M.plugin = {
             vim.g.minuet_enabled = state
           end
 
-          -- Supermaven
-          if is_supermaven_enabled then
-            vim.g.supermaven_enabled = state
-          end
-
-          -- Augment
-          if is_augment_enabled then
-            vim.g.augment_disable_completions = not state
-            vim.g.augment_disable_tab_mapping = not state
+          -- Ninetyfive
+          if is_ninetyfive_enabled then
+            vim.g.ninetyfive_enabled = state
           end
 
           -- Copilot

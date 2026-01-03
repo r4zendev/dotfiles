@@ -14,6 +14,7 @@ git clone git@github.com:r4zendev/dotfiles.git dotfiles
 brew install --cask wezterm     # terminal emulator
 brew install starship           # prompt customization
 brew install tmux               # terminal multiplexer
+brew install sesh               # tmux session manager
 brew install bash               # running bash scripts
 brew install fish               # daily driver
 brew install fisher             # package manager for fish
@@ -41,7 +42,8 @@ brew install oven-sh/bun/bun # runtime
 brew install pnpm            # package manager
 brew install fnm             # node manager
 
-# Python
+brew install zig
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 brew install uv
 
 brew install curlie # curl alternative

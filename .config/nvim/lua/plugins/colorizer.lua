@@ -2,7 +2,7 @@ return {
   "catgoose/nvim-colorizer.lua",
   event = "VeryLazy",
   opts = {
-    filetypes = { "*" },
+    filetypes = { "*", "!oil", "!snacks_picker_input" },
     buftypes = {},
     lazy_load = true,
     user_default_options = {

@@ -14,10 +14,13 @@ abbr -a b "bun"
 abbr -a v "nvim"
 abbr -a t "nvim ~/notes/todo.md"
 abbr -a p "pnpm"
+abbr -a cc "claude"
+abbr -a oc "opencode"
 abbr -a g "lazygit"
 abbr -a d "lazydocker"
 abbr -a ls "lsd -a"
 abbr -a gdu "gdu-go"
+abbr -a gimp "open /Applicatons/GIMP.app"
 
 abbr -a gs "git status"
 

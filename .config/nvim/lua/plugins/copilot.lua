@@ -39,8 +39,6 @@ return {
     { "<leader>ap", "<cmd>Copilot panel<cr>", desc = "Copilot Panel", mode = "n" },
   },
   config = function(_, opts)
-    vim.g.copilot_enabled = true
-
     opts = vim.tbl_deep_extend("force", opts, {
       suggestion = {
         enabled = vim.g.copilot_enabled,

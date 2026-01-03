@@ -109,28 +109,50 @@ return {
         },
       },
       adapters = {
-        copilot = function()
-          return require("codecompanion.adapters").extend("copilot", {
-            schema = { model = { default = "claude-opus-4.5" } },
-          })
-        end,
-        openrouter_grok = function()
-          return require("codecompanion.adapters").extend("openai_compatible", {
-            env = {
-              url = "https://openrouter.ai/api",
-              api_key = "OPENROUTER_API_KEY",
-              chat_url = "/v1/chat/completions",
-            },
-            schema = { model = { default = "x-ai/grok-4.1-fast:free" } },
-          })
-        end,
-        claude_code = function()
-          return require("codecompanion.adapters").extend("claude_code", {
-            env = {
-              CLAUDE_CODE_OAUTH_TOKEN = "CLAUDE_CODE_OAUTH_TOKEN",
-            },
-          })
-        end,
+        http = {
+          copilot = function()
+            return require("codecompanion.adapters").extend("copilot", {
+              schema = { model = { default = "claude-opus-4.5" } },
+            })
+          end,
+          openrouter_grok = function()
+            return require("codecompanion.adapters").extend("openai_compatible", {
+              env = {
+                url = "https://openrouter.ai/api",
+                api_key = "OPENROUTER_API_KEY",
+                chat_url = "/v1/chat/completions",
+              },
+              schema = { model = { default = "x-ai/grok-4.1-fast:free" } },
+            })
+          end,
+        },
+        acp = {
+          claude_code = function()
+            return require("codecompanion.adapters").extend("claude_code", {
+              env = {
+                CLAUDE_CODE_OAUTH_TOKEN = "CLAUDE_CODE_OAUTH_TOKEN",
+              },
+            })
+          end,
+          -- opencode = function()
+          --   return require("codecompanion.adapters").extend("opencode", {
+          --     schema = {
+          --       model = {
+          --         default = "opencode/glm-4.7-free",
+          --         choices = {
+          --           ["opencode/glm-4.7-free"] = { opts = {} },
+          --           ["opencode/minimax-m2.1-free"] = { opts = {} },
+          --           ["opencode/grok-fast-code-1-free"] = { opts = {} },
+          --           ["github-copilot/claude-sonnet-4.5"] = { opts = {} },
+          --           ["github-copilot/claude-opus-4.5"] = { opts = {} },
+          --           ["github-copilot/gpt-5.2"] = { opts = {} },
+          --           ["github-copilot/gemini-3-pro-preview"] = { opts = {} },
+          --         },
+          --       },
+          --     },
+          --   })
+          -- end,
+        },
       },
       strategies = {
         chat = {
@@ -158,9 +180,9 @@ return {
         },
       },
       display = {
-        -- chat = {
-        --   show_settings = true,
-        -- },
+        chat = {
+          show_settings = true,
+        },
 
         action_palette = {
           provider = "default",
@@ -209,6 +231,7 @@ return {
       { "<leader>aa", ":CodeCompanionChat adapter=auggie<CR>", desc = "Codecompanion: Auggie" },
       { "<leader>ac", ":CodeCompanionChat adapter=claude_code<CR>", desc = "Codecompanion: Claude Code" },
       { "<leader>aC", ":CodeCompanionChat adapter=copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
+      { "<leader>ao", ":CodeCompanionChat adapter=opencode<CR>", desc = "Codecompanion: OpenCode" },
       { "<leader>ag", ":CodeCompanionChat adapter=openrouter_grok<CR>", desc = "Codecompanion: Grok 4.1 Fast" },
       -- { "<leader>af", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },
       { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },

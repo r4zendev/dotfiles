@@ -15,7 +15,7 @@ return {
     },
     language = "english",
     -- search_engine = "google" | "duck_duck_go" | "stack_overflow" | "github" | "phind" | "perplexity",
-    search_engine = "duck_duck_go",
+    search_engine = "google",
     picker = "snacks",
     hooks = {
       request_started = nil,

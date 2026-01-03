@@ -121,8 +121,6 @@ return {
     require("minuet").setup(opts)
   end,
   init = function()
-    vim.g.minuet_enabled = false
-
     if vim.g.minuet_enabled then
       vim.keymap.set("i", "<Tab>", function()
         local vt = require("minuet.virtualtext").action

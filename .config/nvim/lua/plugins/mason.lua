@@ -57,9 +57,10 @@ return {
       "typos-lsp",
       "harper-ls",
 
+      "zls",
       "gopls",
-      "bash-language-server",
       "rust-analyzer",
+      "bash-language-server",
       "clangd",
       "clang-format",
       "codelldb",
