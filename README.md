@@ -44,10 +44,8 @@ stow . -t ~
 
 ## Future
 
-- [ ] Tmux [seshions](https://github.com/joshmedeski/sesh)
-- [ ] [Obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim)
 - [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace)
-- [ ] Setup [DAP](.config/nvim/lua/r4zen/plugins/dap.lua) & [Neotest](.config/nvim/lua/r4zen/plugins/neotest.lua)
+- [ ] Setup [DAP](.config/nvim/lua/plugins/extras/dap.lua) & [Neotest](.config/nvim/lua/plugins/extras/neotest.lua)
 
 ## 🎉 Acknowledgment
 
