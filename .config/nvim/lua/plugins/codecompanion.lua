@@ -1,36 +1,4 @@
 return {
-  { "banjo/contextfiles.nvim" },
-  {
-    "ravitemer/mcphub.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    cmd = "MCPHub",
-    build = "npm install -g mcp-hub@latest",
-    opts = {
-      port = 37373,
-      config = vim.fn.expand("~/.config/mcpservers.json"),
-
-      auto_approve = false,
-      auto_toggle_mcp_servers = false,
-
-      log = {
-        level = vim.log.levels.WARN,
-        to_file = false,
-        file_path = nil,
-        prefix = "MCPHub",
-      },
-    },
-    keys = {
-      { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
-    },
-    init = function()
-      local root_dir = require("utils").workspace_root()
-      if root_dir ~= nil then
-        -- Set the environment variable before loading the config
-        -- Used by MCP servers that require project's root path as an argument
-        vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
-      end
-    end,
-  },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {
@@ -39,8 +7,6 @@ return {
       "ravitemer/mcphub.nvim",
       "ravitemer/codecompanion-history.nvim",
     },
-    branch = "v18",
-    cmd = { "CodeCompanion", "CodeCompanionChat" },
     event = { "LazyFile" },
     opts = {
       extensions = {
@@ -154,35 +120,31 @@ return {
           -- end,
         },
       },
-      strategies = {
+      interactions = {
         chat = {
           slash_commands = {
-            ["file"] = {
-              opts = {
-                default_params = "watch",
-                provider = "snacks",
-                contains_code = true,
-              },
-            },
-
             ["buffer"] = {
               opts = {
-                default_params = "watch",
+                default_params = "diff",
                 provider = "snacks",
+              },
+            },
+            ["file"] = {
+              opts = {
+                default_params = "diff",
+                provider = "snacks",
+                contains_code = true,
               },
             },
           },
 
           adapter = "claude_code",
         },
-        inline = {
-          adapter = "copilot",
-        },
       },
       display = {
-        chat = {
-          show_settings = true,
-        },
+        -- chat = {
+        --   show_settings = true,
+        -- },
 
         action_palette = {
           provider = "default",
@@ -190,33 +152,6 @@ return {
 
         diff = {
           provider = "mini_diff",
-        },
-      },
-      prompt_library = {
-        ["With Context Files"] = {
-          strategy = "chat",
-          description = "Chat with context files",
-          opts = {
-            short_name = "context",
-          },
-          prompts = {
-            {
-              role = "user",
-              opts = { contains_code = true },
-              content = function(context)
-                local ctx = require("contextfiles.extensions.codecompanion")
-
-                local ctx_opts = {
-                  -- ...
-                }
-                local format_opts = {
-                  -- ...
-                }
-
-                return ctx.get(context.filename, ctx_opts, format_opts)
-              end,
-            },
-          },
         },
       },
     },
@@ -236,5 +171,36 @@ return {
       -- { "<leader>af", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },
       { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },
     },
+  },
+  {
+    "ravitemer/mcphub.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = "MCPHub",
+    build = "npm install -g mcp-hub@latest",
+    opts = {
+      port = 37373,
+      config = vim.fn.expand("~/.config/mcpservers.json"),
+
+      auto_approve = false,
+      auto_toggle_mcp_servers = false,
+
+      log = {
+        level = vim.log.levels.WARN,
+        to_file = false,
+        file_path = nil,
+        prefix = "MCPHub",
+      },
+    },
+    keys = {
+      { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
+    },
+    init = function()
+      local root_dir = require("utils").workspace_root()
+      if root_dir ~= nil then
+        -- Set the environment variable before loading the config
+        -- Used by MCP servers that require project's root path as an argument
+        vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
+      end
+    end,
   },
 }
