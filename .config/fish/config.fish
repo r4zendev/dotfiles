@@ -8,22 +8,21 @@
 # A smart and user-friendly command line
 # https://fishshell.com/
 
-eval (/opt/homebrew/bin/brew shellenv)
+eval (/opt/homebrew/bin/brew shellenv fish)
 set -x HOMEBREW_AUTOREMOVE 1
-# eval (/opt/homebrew/bin/brew shellenv fish)
 
 starship init fish | source # https://starship.rs/
 zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
 fnm --log-level quiet env --use-on-cd | source # "Schniz/fnm"
-# direnv hook fish | source # https://direnv.net/
-# fx --comp fish | source # https://fx.wtf/
-# set -g direnv_fish_mode eval_on_arrow # trigger direnv at prompt, and on every arrow-based directory change (default)
+fx --comp fish | source # https://fx.wtf/
 
 set -U fish_greeting # disable fish greeting
+# i don't use vi mode in fish
 # set -U fish_key_bindings fish_vi_key_bindings
 
 set -Ux EDITOR nvim # 'neovim/neovim' text editor
-# set -Ux FZF_DEFAULT_COMMAND "fd -H -E '.git'"
+set -Ux FZF_DEFAULT_COMMAND "fd -H -E '.git'"
+fzf --fish | source
 
 set -x PNPM_HOME "$HOME/Library/pnpm"
 fish_add_path $PNPM_HOME
@@ -48,3 +47,4 @@ set -Ux MANPAGER "nvim +Man!"
 # fish_config theme choose Dracula
 # fish_config theme choose tokyonight
 fish_config theme choose catppuccin
+

@@ -18,10 +18,16 @@ brew install sesh               # tmux session manager
 brew install bash               # running bash scripts
 brew install fish               # daily driver
 brew install fisher             # package manager for fish
-brew install neovim             # editor
-brew install --cask claude-code # AI assistant
-brew install --cask codex       # OpenAI assistant
+brew install --cask claude-code # AI assistant [1]
+brew install --cask codex       # AI assistant [2]
+brew install opencode           # AI assistant [3]
+# brew install neovim --HEAD
+
+# Zsh
 # brew install zsh
+# brew install zsh-autocomplete
+# brew install zsh-autosuggestions
+# brew install zsh-syntax-highlighting
 
 # Git
 brew install gh
@@ -53,31 +59,27 @@ brew install xh     # daily driver
 brew install yazi   # file manager
 brew install zoxide # cd alternative
 
-# Zsh add-ons
-brew install zsh-autocomplete
-brew install zsh-autosuggestions
-brew install zsh-syntax-highlighting
-
 # Window management
 # brew install --cask nikitabobko/tap/aerospace
 # OR
 brew install yabai
-yabai --install-sa
-# yabai --start-service
+# AND THEN
+# sudo yabai --install-sa
 # yabai --load-sa
+# yabai --start-service
 
 # Various utils (monitoring, peeking, searching, exploring, etc.)
 brew install bat      # cat alternative
 brew install btop     # system monitor
 brew install duti     # default app handler -> `duti -s net.imput.helium .md all`
 brew install fd       # find alternative
+brew install fx       # JSON viewer
 brew install ffmpeg   # multimedia processing
 brew install fzf      # fuzzy finder
 brew install gdu      # disk usage analyzer
 brew install jq       # JSON processor
 brew install lsd      # ls alternative
 brew install neofetch # system info
-brew install opencode # AI agent using custom models
 brew install pgcli    # postgres client
 brew install ripgrep  # search engine
 brew install tealdeer # quick man-pages extracts
