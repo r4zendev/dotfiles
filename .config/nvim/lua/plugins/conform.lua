@@ -54,6 +54,7 @@ return {
       cpp = { "clang_format" },
       go = { "gofmt" },
       rust = { "rustfmt" },
+      zig = { "zigfmt" },
     },
 
     format_on_save = function(bufnr)

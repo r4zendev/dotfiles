@@ -26,7 +26,6 @@ return {
         return false
       end,
     },
-    indent = { enable = true },
     matchup = { enable = true },
     ensure_installed = {
       "json",
@@ -56,6 +55,7 @@ return {
       "fish",
       "tmux",
       "kdl",
+      "zig",
     },
     incremental_selection = {
       enable = true,

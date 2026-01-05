@@ -42,6 +42,7 @@ map("n", "x", '"_x', { noremap = true, silent = true })
 -- map({ "n", "v", "o" }, "\\", "=", { noremap = true, silent = true })
 
 -- increment/decrement
+map("n", "<C-n>", "<C-e>", { noremap = true, silent = true })
 map("n", "<M-->", "<C-x>", { noremap = true, silent = true })
 map("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
 map("v", "<M-->", "<C-x>gv", { noremap = true, silent = true })

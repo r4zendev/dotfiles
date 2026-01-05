@@ -193,7 +193,7 @@ M.plugin = {
 
           -- Copilot
           if is_copilot_enabled then
-            vim.cmd("Copilot toggle")
+            vim.cmd("silent! Copilot" .. (state and " enable" or " disable"))
             vim.g.copilot_enabled = state
           end
         end,

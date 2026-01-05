@@ -25,6 +25,12 @@ M.plugin = {
 
     require("mini.jump").setup()
 
+    require("mini.pairs").setup({
+      mappings = {
+        ["|"] = { action = "closeopen", pair = "||", neigh_pattern = "[^%a\\].", register = { cr = false } },
+      },
+    })
+
     -- Don't start jump2d if using through `man` cmd, because it will break `gO` quickfix window
     -- with table of contents and make it unusable through <cr>
     local utils = require("utils")

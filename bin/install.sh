@@ -48,7 +48,9 @@ brew install oven-sh/bun/bun # runtime
 brew install pnpm            # package manager
 brew install fnm             # node manager
 
-brew install zig
+# brew install zig # stable
+brew install zigup # master
+zigup master
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 brew install uv
 
@@ -103,6 +105,7 @@ brew install --cask telegram
 brew install --cask helium-browser
 
 # System utils
+brew install --cask blender      # 3D modeling
 brew install --cask hammerspoon  # advanced scripting & automation
 brew install jordanbaird-ice     # toolbar
 brew install --cask keycastr     # keylogger
