@@ -168,7 +168,6 @@ return {
       { "<leader>aC", ":CodeCompanionChat adapter=copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
       { "<leader>ao", ":CodeCompanionChat adapter=opencode<CR>", desc = "Codecompanion: OpenCode" },
       { "<leader>ag", ":CodeCompanionChat adapter=openrouter_grok<CR>", desc = "Codecompanion: Grok 4.1 Fast" },
-      -- { "<leader>af", ":lua require('codecompanion').prompt('context')<CR>", desc = "Codecompanion: With Context Files" },
       { "<leader>at", ":CodeCompanionChat Toggle<CR>", desc = "Codecompanion: toggle" },
     },
   },
