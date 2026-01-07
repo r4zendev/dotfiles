@@ -25,3 +25,17 @@ function frg --description "rg tui built with fzf and bat"
   --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
   --bind "enter:become($EDITOR +{2} {1})"
 end
+
+function yazi_create_tmux --description "Create a new tmux session from yazi file chooser"
+  set tmp (mktemp)
+  yazi --chooser-file="$tmp"
+  set chosen (cat $tmp)
+  rm $tmp
+
+  if test -n "$chosen"
+      test -d "$chosen" && set dir "$chosen" || set dir (dirname "$chosen")
+      set name (basename "$dir" | tr "." "_")
+      tmux new-session -c "$dir" -d -s "$name"
+      tmux switch-client -t "$name"
+  end
+end

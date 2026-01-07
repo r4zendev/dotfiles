@@ -5,8 +5,8 @@ return {
     automatic_enable = {
       exclude = {
         "ts_ls",
-        -- "vtsls",
-        "tsgo",
+        "vtsls",
+        -- "tsgo",
         "harper_ls",
       },
     },
