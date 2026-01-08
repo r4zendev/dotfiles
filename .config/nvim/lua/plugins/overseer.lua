@@ -1,6 +1,8 @@
 return {
   {
     "stevearc/overseer.nvim",
+    pin = true,
+    event = "VeryLazy",
     cmd = { "OverseerRun", "OverseerToggle", "OverseerTaskList", "OverseerInfo" },
     keys = {
       { "<leader>or", "<cmd>OverseerRun<cr>", desc = "Overseer run" },
@@ -14,12 +16,56 @@ return {
       strategy = "terminal",
       templates = { "builtin", "user" },
       task_list = { direction = "bottom", min_height = 10, max_height = 20, default_detail = 1 },
+      -- Override built-in npm (loads ALL workspaces which is slow for large monorepos)
+      -- Remove to use the default behavior, currently using only cwd pkg + root
+      disable_template_modules = { "overseer.template.npm" },
     },
     config = function(_, opts)
       local overseer = require("overseer")
       overseer.setup(opts)
 
       local uv = vim.uv or vim.loop
+      local files = require("overseer.files")
+
+      -- For all workspaces, remove "overseer.template.npm" from disable_template_modules
+      overseer.register_template({
+        name = "npm",
+        priority = 60,
+        generator = function(search_opts)
+          local root_pkg = vim.fs.find("package.json", { upward = true, path = vim.fn.getcwd() })[1]
+          if not root_pkg or root_pkg:match("node_modules") then
+            return "No package.json found"
+          end
+
+          local root_dir = vim.fs.dirname(root_pkg)
+          local bin = (uv.fs_stat(root_dir .. "/pnpm-lock.yaml") and "pnpm")
+            or (uv.fs_stat(root_dir .. "/yarn.lock") and "yarn")
+            or ((uv.fs_stat(root_dir .. "/bun.lockb") or uv.fs_stat(root_dir .. "/bun.lock")) and "bun")
+            or "npm"
+
+          local ret = {}
+          local function add_scripts(pkg_path, prefix)
+            local dir, data = vim.fs.dirname(pkg_path), files.load_json_file(pkg_path)
+            for k in pairs((data and data.scripts) or {}) do
+              table.insert(ret, {
+                name = ("%s%s %s (%s)"):format(bin, prefix, k, data.name or "root"),
+                builder = function()
+                  return { cmd = { bin, "run", k }, cwd = dir }
+                end,
+              })
+            end
+          end
+
+          add_scripts(root_pkg, "")
+
+          local current_pkg = vim.fs.find("package.json", { upward = true, path = search_opts.dir, stop = root_dir })[1]
+          if current_pkg and vim.fs.dirname(current_pkg) ~= root_dir then
+            add_scripts(current_pkg, "[ws] ")
+          end
+
+          return ret
+        end,
+      })
 
       local function exists(p)
         return uv.fs_stat(p) ~= nil
