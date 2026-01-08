@@ -93,11 +93,6 @@ return {
       sources = {
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
         providers = {
-          obsidian = {
-            name = "obsidian",
-            module = "blink.compat.source",
-            score_offset = 100,
-          },
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",

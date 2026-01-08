@@ -37,6 +37,7 @@ fish_add_path $HOME/.config/bin # my custom scripts
 fish_add_path $HOME/.cargo/bin # cargo
 set -Ux GOPATH (go env GOPATH)
 fish_add_path $GOPATH/bin # go
+fish_add_path $HOME/codelldb/extension/adapter # codelldb
 
 fish_add_path (uv python dir)/cpython-3.13.2-macos-aarch64-none/bin # python
 fish_add_path ~/.global-python/bin # python global installs using uv
