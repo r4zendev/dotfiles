@@ -25,8 +25,8 @@ abbr -a gimp "open /Applicatons/GIMP.app"
 
 abbr -a gs "git status"
 
-abbr -a gd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
-abbr -a gd1 --position anywhere --set-cursor 'nvim -c "DiffviewOpen HEAD~1%..HEAD"'
+# abbr -a gd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
+# abbr -a gd1 --position anywhere --set-cursor 'nvim -c "DiffviewOpen HEAD~1%..HEAD"'
 abbr -a gd_ "git diff"
 abbr -a gl "git log"
 abbr -a gck "git checkout"

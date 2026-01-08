@@ -7,6 +7,7 @@ return {
     "MasonToolsUpdateSync",
     "MasonToolsClean",
   },
+  event = "VeryLazy",
   dependencies = {
     {
       "williamboman/mason.nvim",

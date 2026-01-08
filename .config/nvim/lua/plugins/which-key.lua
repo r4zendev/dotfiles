@@ -27,7 +27,7 @@ return {
         { "<leader>i", group = "Icon picker", icon = { icon = "󰱨", color = "green" } },
         { "<leader>m", group = "SSHFS", icon = { icon = "󰣀", color = "grey" } },
         { "<leader>n", group = "Notes (Obsidian)", icon = { icon = "", color = "cyan" } },
-        { "<leader>o", group = "Octo (Git)", icon = { icon = "", color = "green" } },
+        { "<leader>o", group = "Overseer (Tasks)", icon = { icon = "", color = "green" } },
         { "<leader>p", group = "Paste/PreviewMd", icon = { icon = "", color = "green" } },
         { "<leader>s", group = "Search/Splits", icon = { icon = "󰍉", color = "yellow" } },
         { "<leader>t", group = "Testing", icon = { icon = "󰙨", color = "yellow" } },

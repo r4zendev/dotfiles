@@ -1,6 +1,7 @@
 return {
   "stevearc/quicker.nvim",
   event = "FileType qf",
+  opts = {},
   keys = {
     {
       "<leader>xq",
@@ -10,14 +11,20 @@ return {
       desc = "Toggle quickfix",
     },
     {
-      "<leader>xl",
+      "<leader>xd",
       function()
-        require("quicker").toggle({ loclist = true })
+        local quicker = require("quicker")
+
+        if quicker.is_open() then
+          quicker.close()
+        else
+          vim.diagnostic.setloclist()
+        end
       end,
-      desc = "Toggle loclist list",
+      desc = "Toggle buffer diagnostics",
     },
     {
-      "<leader>xd",
+      "<leader>xD",
       function()
         local quicker = require("quicker")
 
@@ -27,7 +34,7 @@ return {
           vim.diagnostic.setqflist()
         end
       end,
-      desc = "Toggle diagnostics",
+      desc = "Toggle project diagnostics",
     },
     {
       ">",
