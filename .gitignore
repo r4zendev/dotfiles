@@ -19,6 +19,7 @@
 .config/opencode
 .config/wezterm/images
 .config/linearmouse
+.config/nvim-extras
 
 .config/fish/conf.d/env.fish
 .config/nvim/lua/r4zen/plugins/extras/browser-tabs

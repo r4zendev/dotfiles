@@ -18,6 +18,15 @@ return {
     filter_kind = false,
     manage_folds = true,
 
+    layout = {
+      -- These control the width of the aerial window.
+      -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+      -- min_width and max_width can be a list of mixed types.
+      -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
+      max_width = 0.5,
+      min_width = 0.3,
+    },
+
     keymaps = {
       ["?"] = "actions.show_help",
       ["g?"] = "actions.show_help",

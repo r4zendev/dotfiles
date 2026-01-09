@@ -1,6 +1,4 @@
--- Used for better messages access and notifications.
--- Cmdline got kinda annoying and nightly's vim._extui with cmdheight 0
--- turned out to be great so using that instead.
+-- Only really used for LSP progress and notifications handling
 return {
   {
     "rcarriga/nvim-notify",
@@ -46,7 +44,7 @@ return {
     },
     keys = {
       { "<leader>cm", vim.cmd.NoiceAll, desc = "See messages history", mode = { "n", "v" } },
-      { "<leader>cd", vim.cmd.NoiceDismiss, desc = "Dismiss notifications", mode = { "n", "v" } },
+      { "<leader>cc", vim.cmd.NoiceDismiss, desc = "Dismiss notifications", mode = { "n", "v" } },
     },
   },
 }
