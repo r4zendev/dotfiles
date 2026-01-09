@@ -55,10 +55,6 @@ return {
         MiniDiffSignChange = { bg = "NONE" },
         MiniDiffSignDelete = { bg = "NONE" },
 
-        MiniDiffOverAdd = { fg = theme.ui.bg, bg = theme.vcs.added },
-        MiniDiffOverChange = { fg = theme.ui.bg, bg = theme.vcs.changed },
-        MiniDiffOverDelete = { fg = theme.ui.bg, bg = theme.vcs.removed },
-
         LineNr = { fg = theme.ui.nontext, bg = "NONE" },
         CursorLineNr = { fg = theme.syn.fun },
         CursorLine = { bg = theme.ui.bg_p1 },

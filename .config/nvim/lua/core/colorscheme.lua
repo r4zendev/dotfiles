@@ -39,6 +39,13 @@ local function ts_context()
   vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = false })
 end
 
+local function mini_diff_overlay()
+  vim.api.nvim_set_hl(0, "MiniDiffOverAdd", { bg = "#1e3a2f", fg = "#a6e3a1" })
+  vim.api.nvim_set_hl(0, "MiniDiffOverDelete", { bg = "#3a1e1e", fg = "#f38ba8" })
+  vim.api.nvim_set_hl(0, "MiniDiffOverChange", { bg = "#3a351e", fg = "#f9e2af" })
+  vim.api.nvim_set_hl(0, "MiniDiffOverContext", { fg = "#6c7086" })
+end
+
 local function custom_blink_cmp()
   vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#1e1e2e", fg = "#cdd6f4" })
   vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { bg = "#1e1e2e", fg = "#89b4fa" })
@@ -155,8 +162,11 @@ function M.apply(name)
   end
 
   local ok = pcall(vim.cmd.colorscheme, theme.colorscheme)
-  if ok and theme.after then
-    theme.after()
+  if ok then
+    if theme.after then
+      theme.after()
+    end
+    mini_diff_overlay()
   end
   return ok
 end

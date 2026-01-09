@@ -44,8 +44,8 @@ stow . -t ~
 
 ## Future
 
-- [ ] Try out [AeroSpace](https://github.com/nikitabobko/AeroSpace)
-- [ ] Setup [DAP](.config/nvim/lua/plugins/extras/dap.lua) & [Neotest](.config/nvim/lua/plugins/extras/neotest.lua)
+- [ ] Switch from yabai to [AeroSpace](https://github.com/nikitabobko/AeroSpace)?
+- [ ] Cleanup
 
 ## 🎉 Acknowledgment
 

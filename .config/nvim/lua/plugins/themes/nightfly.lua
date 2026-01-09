@@ -35,10 +35,6 @@ return {
         vim.api.nvim_set_hl(0, "MiniCursorword", { bg = colors.plant, underline = false })
         vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { bg = colors.plant, underline = false })
 
-        vim.api.nvim_set_hl(0, "MiniDiffOverAdd", { fg = colors.dark_blue, bg = colors.green })
-        vim.api.nvim_set_hl(0, "MiniDiffOverChange", { fg = colors.dark_blue, bg = colors.yellow })
-        vim.api.nvim_set_hl(0, "MiniDiffOverDelete", { fg = colors.dark_blue, bg = colors.red })
-
         vim.api.nvim_set_hl(0, "LineNr", { fg = colors.grey_blue })
         vim.api.nvim_set_hl(0, "CursorLineNr", { fg = colors.blue })
         vim.api.nvim_set_hl(0, "CursorLine", { bg = colors.black_blue })

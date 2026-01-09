@@ -21,10 +21,6 @@ return {
       MiniCursorword = { bg = "highlight_med", underline = false },
       MiniCursorwordCurrent = { bg = "highlight_med", underline = false },
 
-      MiniDiffOverAdd = { bg = "leaf" },
-      MiniDiffOverChange = { bg = "gold" },
-      MiniDiffOverDelete = { bg = "love" },
-
       LineNr = { fg = "muted" },
       CursorLineNr = { fg = "foam" },
       CursorLine = { bg = "overlay" },

@@ -35,10 +35,6 @@ return {
         MiniCursorword = { bg = colors.surface2, style = {} },
         MiniCursorwordCurrent = { bg = colors.surface2, style = {} },
 
-        MiniDiffOverAdd = { fg = colors.mantle, bg = colors.green },
-        MiniDiffOverChange = { fg = colors.mantle, bg = colors.yellow },
-        MiniDiffOverDelete = { fg = colors.mantle, bg = colors.red },
-
         LineNr = { fg = colors.surface2 },
         CursorLineNr = { fg = colors.blue },
         CursorLine = { bg = colors.surface0 },

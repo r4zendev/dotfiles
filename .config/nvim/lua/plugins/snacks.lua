@@ -92,8 +92,6 @@ M.plugin = {
     { "<leader>,", function() Snacks.picker.grep_word() end, desc = "Grep", mode = { "x" } },
     { "<leader>sb", function() Snacks.picker.buffers() end, desc = "Open Buffers" },
     { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-    -- { "<leader>st", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()", }) end, desc = "Search TODOs" },
-    -- { "<leader>sT", function() Snacks.picker.grep({ search = "()TODO()|()FIXME()|()HACK()|()NOTE()", }) end, desc = "Search All Notes" },
 
     -- NOTE: Git
     { "<leader>gm", function() M.grep_git_files() end, desc = "Grep Git Files" },
@@ -127,6 +125,8 @@ M.plugin = {
       desc = "Highlights"
     },
     { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
+    { "<leader>sn", function() Snacks.picker.files({ cwd = "~/notes" }) end, desc = "Grep Notes" },
+    { "<leader>sN", function() Snacks.picker.grep({ cwd = "~/notes" }) end, desc = "Search Notes" },
 
     -- NOTE: LSP
     { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
