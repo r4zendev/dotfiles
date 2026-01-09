@@ -44,6 +44,7 @@ return {
       "html-lsp",
       "css-lsp",
 
+      "marksman",
       "json-lsp",
       "yaml-language-server",
 

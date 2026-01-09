@@ -68,6 +68,23 @@ autocmd("FileType", {
   end,
 })
 
+-- NOTE: Remove binding from jghauser/follow-md-links.nvim and set my own
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.schedule(function()
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<cr>")
+      vim.api.nvim_buf_set_keymap(
+        0,
+        "n",
+        "ge",
+        ':lua require("follow-md-links").follow_link()<cr>',
+        { noremap = true, silent = true }
+      )
+    end)
+  end,
+})
+
 -- Highlight on yank, currently handled by yanky.nvim
 -- autocmd("TextYankPost", {
 --   -- group = augroup("HighlightOnYank", { clear = true }),

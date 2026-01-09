@@ -23,20 +23,20 @@ M.plugin = {
 
     require("mini.cursorword").setup()
 
-    require("mini.jump").setup()
-
     require("mini.pairs").setup({
       mappings = {
         ["|"] = { action = "closeopen", pair = "||", neigh_pattern = "[^%a\\].", register = { cr = false } },
       },
     })
 
+    -- require("mini.jump").setup()
+
     -- Don't start jump2d if using through `man` cmd, because it will break `gO` quickfix window
     -- with table of contents and make it unusable through <cr>
-    local utils = require("utils")
-    if not utils.check_arg("+Man!") then
-      require("mini.jump2d").setup({ view = { n_steps_ahead = 9999 } })
-    end
+    -- local utils = require("utils")
+    -- if not utils.check_arg("+Man!") then
+    --   require("mini.jump2d").setup({ view = { n_steps_ahead = 9999 } })
+    -- end
 
     local mini_indentscope = require("mini.indentscope")
     mini_indentscope.setup({
