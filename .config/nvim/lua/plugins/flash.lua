@@ -42,6 +42,9 @@ return {
   },
   ---@type Flash.Config
   opts = {
+    search = {
+      exclude = { "oil" },
+    },
     modes = {
       char = {
         jump_labels = true,

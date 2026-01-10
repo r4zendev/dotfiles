@@ -1,23 +1,11 @@
 return {
   {
-    "catgoose/nvim-colorizer.lua",
-    event = "VeryLazy",
-    opts = {
-      filetypes = { "*", "!oil", "!snacks_picker_input" },
-      buftypes = {},
-      lazy_load = true,
-      user_default_options = {
-        -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn, oklch_fn
-        css = true,
-        -- rgb_fn, hsl_fn, oklch_fn
-        css_fn = true,
-        -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-        tailwind = "both",
-        tailwind_opts = {
-          update_names = true,
-        },
-      },
-    },
+    -- Used just for highlighting
+    "eero-lehtinen/oklch-color-picker.nvim",
+    event = "LazyFile",
+    version = "*",
+    ---@type oklch.Opts
+    opts = {},
   },
   {
     "uga-rosa/ccc.nvim",
@@ -95,38 +83,4 @@ return {
     --   }))
     -- end,
   },
-  {
-    -- Only this plugin supports ALL the variants below. But I don't like how its colorpicker looks.
-    "eero-lehtinen/oklch-color-picker.nvim",
-    event = "VeryLazy",
-    enabled = false,
-    version = "*",
-    keys = {
-      {
-        "<leader>v",
-        function()
-          require("oklch-color-picker").pick_under_cursor()
-        end,
-        desc = "Color pick under cursor",
-      },
-    },
-    ---@type oklch.Opts
-    opts = {},
-  },
 }
-
--- #RGB #e44
--- #RGBA #f717
--- #RRGGBB #f59e0b
--- #RRGGBBAA #eab30877
--- 0XRRGGBB 0x84CC16
--- OXAARRGGBB 0x7722C55E
--- css rgb rgb(16 185 129)
--- css hsl(173.41 0.8039 0.4)
--- css oklch(0.7148 0.1257 215.22)
--- tailwind bg-sky-500
---
--- ```js
--- let a = color(99, 182, 241, 255);
--- let b = floatColor(0.55, 0.36, 0.96, 0.50);
--- ```
