@@ -24,6 +24,12 @@ local function transparent_float()
   vim.api.nvim_set_hl(0, "FloatTitle", { bg = "NONE" })
 end
 
+local function transparent_neotree()
+  vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { bg = "NONE" })
+end
+
 local function default_harpoon()
   vim.api.nvim_set_hl(0, "HarpoonOptionHL", { fg = "#89DDFF" })
   vim.api.nvim_set_hl(0, "HarpoonSelectedOptionHL", { fg = "#5DE4C7" })
@@ -69,6 +75,8 @@ M.themes = {
     after = function()
       transparent_winbar()
       transparent_float()
+      transparent_neotree()
+      default_harpoon()
     end,
   },
   {

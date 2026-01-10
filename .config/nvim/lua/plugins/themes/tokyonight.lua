@@ -42,24 +42,12 @@ return {
       hl.MiniCursorword = { bg = cursor_word_hl }
       hl.MiniCursorwordCurrent = { bg = cursor_word_hl }
 
-      -- local panel_hl = "#7390AA"
-      local selected_hl = "#5DE4C7"
-      local option_hl = "#89DDFF"
-      -- hl.HarpoonFilesPanelHL = { bg = panel_hl }
-      hl.HarpoonSelectedOptionHL = { fg = selected_hl }
-      hl.HarpoonOptionHL = { fg = option_hl }
-
-      -- local diff_over_change_colors = { fg = "#E4F0FB", bg = "#5FB3A1" }
-      -- hl.MiniDiffOverChange = diff_over_change_colors
-
       hl.AugmentSuggestionHighlight = { fg = colors.blue1 }
 
       hl.CopilotSuggestion = { fg = colors.fg_dark }
       hl.CopilotAnnotation = { fg = colors.fg_dark }
 
-      -- hl.NormalFloat = { bg = "NONE" }
-      -- hl.FloatBorder = { bg = "NONE" }
-      -- hl.FloatTitle = { bg = "NONE" }
+      hl.SnacksPickerInputBorder = { bg = "NONE" }
     end,
   },
 }
