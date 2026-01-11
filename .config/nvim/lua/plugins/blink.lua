@@ -1,12 +1,5 @@
 return {
   {
-    "saghen/blink.compat",
-    version = "*",
-    opts = {
-      impersonate_nvim_cmp = true,
-    },
-  },
-  {
     "saghen/blink.cmp",
     version = "*",
     event = { "InsertEnter", "CmdlineEnter" },
@@ -147,5 +140,12 @@ return {
         return clients
       end
     end,
+  },
+  {
+    "saghen/blink.compat",
+    version = "*",
+    opts = {
+      impersonate_nvim_cmp = true,
+    },
   },
 }

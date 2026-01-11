@@ -80,10 +80,11 @@ M.plugin = {
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
     { "<leader>es", function() Snacks.explorer() end, desc = "File Explorer" },
-    { "<C-b>", function() Snacks.picker.buffers() end, desc = "Find Recent Files" },
-    { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Recent Files" },
+    { "<C-b>", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
+    { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = os.getenv("HOME") .. "/projects/r4zendotdev/dotfiles" }) end, desc = "Find Under Dotfiles" },
+    { "<leader>fF", function() Snacks.picker.files() end, desc = "Find Files" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
 
     -- NOTE: Grep

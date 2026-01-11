@@ -35,6 +35,6 @@ require("vim._extui").enable({
     -- NOTE: Disable message displaying entirely.
     -- Handled by nvim-notify within noice.lua.
     timeout = 0,
-    target = "cmd",
+    target = "msg",
   },
 })

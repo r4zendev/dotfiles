@@ -9,7 +9,13 @@ M.plugin = {
     require("mini.icons").setup({ file = M.file_icon_config })
     MiniIcons.mock_nvim_web_devicons()
 
-    require("mini.ai").setup({ n_lines = 9999 })
+    local ai = require("mini.ai")
+    ai.setup({
+      n_lines = 9999,
+      custom_textobjects = {
+        ["|"] = ai.gen_spec.pair("|", "|", { type = "balanced" }),
+      },
+    })
 
     require("mini.align").setup()
 
@@ -22,12 +28,6 @@ M.plugin = {
     require("mini.splitjoin").setup()
 
     require("mini.cursorword").setup()
-
-    require("mini.pairs").setup({
-      mappings = {
-        ["|"] = { action = "closeopen", pair = "||", neigh_pattern = "[^%a\\].", register = { cr = false } },
-      },
-    })
 
     local mini_indentscope = require("mini.indentscope")
     mini_indentscope.setup({

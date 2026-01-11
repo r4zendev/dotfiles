@@ -89,6 +89,7 @@ M.themes = {
       minicursorword()
       default_harpoon()
       ts_context()
+      vim.api.nvim_set_hl(0, "MatchParen", { underline = false })
       vim.api.nvim_set_hl(0, "Comment", { fg = "#737aa2" })
       vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#627E97", bg = "#011423" })
       vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = "#666666" })
