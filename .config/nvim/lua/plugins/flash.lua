@@ -43,7 +43,17 @@ return {
   ---@type Flash.Config
   opts = {
     search = {
-      exclude = { "oil" },
+      exclude = {
+        "notify",
+        "cmp_menu",
+        "noice",
+        "oil",
+        "flash_prompt",
+        function(win)
+          -- exclude non-focusable windows
+          return not vim.api.nvim_win_get_config(win).focusable
+        end,
+      },
     },
     modes = {
       char = {
