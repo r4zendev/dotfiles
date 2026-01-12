@@ -65,4 +65,9 @@ return {
       desc = "Collapse context",
     },
   },
+  init = function()
+    require("which-key").add({
+      { "<leader>x", group = "Quickfix", icon = { icon = "!", color = "red" } },
+    })
+  end,
 }

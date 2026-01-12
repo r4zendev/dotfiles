@@ -52,13 +52,21 @@ return {
         port = "${port}",
         executable = {
           command = "node",
-          args = { vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js", "${port}" },
+          args = {
+            vim.fn.stdpath("data")
+              .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+            "${port}",
+          },
         },
       }
       dap.adapters["node"] = function(cb, config)
         config.type = "pwa-node"
         local adapter = dap.adapters["pwa-node"]
-        if type(adapter) == "function" then adapter(cb, config) else cb(adapter) end
+        if type(adapter) == "function" then
+          adapter(cb, config)
+        else
+          cb(adapter)
+        end
       end
 
       local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
@@ -68,8 +76,20 @@ return {
 
       for _, ft in ipairs(js_filetypes) do
         dap.configurations[ft] = {
-          { type = "pwa-node", request = "launch", name = "Launch file", program = "${file}", cwd = "${workspaceFolder}" },
-          { type = "pwa-node", request = "attach", name = "Attach", processId = require("dap.utils").pick_process, cwd = "${workspaceFolder}" },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+          },
         }
       end
 
@@ -85,7 +105,9 @@ return {
           name = "Launch",
           type = "codelldb",
           request = "launch",
-          program = function() return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/zig-out/bin/", "file") end,
+          program = function()
+            return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/zig-out/bin/", "file")
+          end,
           cwd = "${workspaceFolder}",
         },
       }
@@ -96,7 +118,9 @@ return {
             name = "Launch",
             type = "codelldb",
             request = "launch",
-            program = function() return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file") end,
+            program = function()
+              return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
             cwd = "${workspaceFolder}",
           },
         }
@@ -117,14 +141,24 @@ return {
       }
       for name, sign in pairs(icons) do
         sign = type(sign) == "table" and sign or { sign }
-        vim.fn.sign_define("Dap" .. name, { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] })
+        vim.fn.sign_define(
+          "Dap" .. name,
+          { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
+        )
       end
 
       local vscode = require("dap.ext.vscode")
       local json = require("plenary.json")
-      vscode.json_decode = function(str) return vim.json.decode(json.json_strip_comments(str)) end
+      vscode.json_decode = function(str)
+        return vim.json.decode(json.json_strip_comments(str))
+      end
 
       require("overseer").enable_dap()
+    end,
+    init = function()
+      require("which-key").add({
+        { "<leader>d", group = "Debug", icon = { icon = "", color = "red" } },
+      })
     end,
   },
 
@@ -135,9 +169,15 @@ return {
     config = function(_, opts)
       local dap, dapui = require("dap"), require("dapui")
       dapui.setup(opts)
-      dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open({}) end
-      dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close({}) end
-      dap.listeners.before.event_exited["dapui_config"] = function() dapui.close({}) end
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open({})
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close({})
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close({})
+      end
     end,
   },
 }

@@ -20,13 +20,21 @@ return {
     vim.diagnostic.config({
       virtual_text = {
         format = function(diagnostic)
-          return diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+          return diagnostic.message
+            :gsub("\n", " ")
+            :gsub("\t", " ")
+            :gsub("%s+", " ")
+            :gsub("^%s+", "")
         end,
       },
     }, neotest_ns)
 
     opts.adapters = {
-      require("neotest-jest")({ cwd = function() return vim.fn.getcwd() end }),
+      require("neotest-jest")({
+        cwd = function()
+          return vim.fn.getcwd()
+        end,
+      }),
       require("neotest-vitest"),
       require("neotest-go")({ args = { "-v", "-race", "-count=1" } }),
       require("neotest-zig"),
@@ -36,6 +44,11 @@ return {
     opts.consumers = { overseer = require("neotest.consumers.overseer") }
 
     require("neotest").setup(opts)
+  end,
+  init = function()
+    require("which-key").add({
+      { "<leader>t", group = "Testing", icon = { icon = "󰙨", color = "yellow" } },
+    })
   end,
   -- stylua: ignore
   keys = {

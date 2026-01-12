@@ -11,27 +11,6 @@ return {
       },
     },
   },
-  config = function(_, opts)
-    require("sidekick").setup(opts)
-
-    vim.g.tig_disabled = false
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "SidekickNesHide",
-      callback = function()
-        if vim.g.tig_disabled then
-          vim.g.tig_disabled = false
-          require("tiny-inline-diagnostic").enable()
-        end
-      end,
-    })
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "SidekickNesShow",
-      callback = function()
-        vim.g.tig_disabled = true
-        require("tiny-inline-diagnostic").disable()
-      end,
-    })
-  end,
   keys = {
     {
       "<tab>",
@@ -115,4 +94,30 @@ return {
       desc = "Sidekick Toggle Claude",
     },
   },
+  config = function(_, opts)
+    require("sidekick").setup(opts)
+
+    vim.g.tig_disabled = false
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "SidekickNesHide",
+      callback = function()
+        if vim.g.tig_disabled then
+          vim.g.tig_disabled = false
+          require("tiny-inline-diagnostic").enable()
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "SidekickNesShow",
+      callback = function()
+        vim.g.tig_disabled = true
+        require("tiny-inline-diagnostic").disable()
+      end,
+    })
+  end,
+  init = function()
+    require("which-key").add({
+      { "<leader>A", group = "Sidekick", icon = { icon = "", color = "green" } },
+    })
+  end,
 }

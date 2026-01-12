@@ -27,6 +27,12 @@ M.plugin = {
       mode = { "n", "v" },
     },
   },
+  config = function(_, opts)
+    require("textcase").setup(opts)
+    require("which-key").add({
+      { "<leader>C", group = "Text Case", icon = { icon = "", color = "green" } },
+    })
+  end,
 }
 
 M.show_picker = function(items, title, callback_provider)
@@ -76,7 +82,12 @@ M.generate_picker_items = function(methods)
   local items = {}
   for _, method in ipairs(methods) do
     table.insert(items, {
-      text = method:gsub("_", " "):gsub("to ", ""):gsub("case", ""):gsub("^%l", string.upper):gsub("%s+$", ""),
+      text = method
+        :gsub("_", " ")
+        :gsub("to ", "")
+        :gsub("case", "")
+        :gsub("^%l", string.upper)
+        :gsub("%s+$", ""),
       method = method,
     })
   end

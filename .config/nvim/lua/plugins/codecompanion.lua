@@ -178,6 +178,10 @@ return {
       { "<leader>ah", ":MCPHub<CR>", desc = "Open MCP Hub" },
     },
     init = function()
+      require("which-key").add({
+        { "<leader>a", group = "AI (Codecompanion)", icon = { icon = "", color = "orange" } },
+      })
+
       local root_dir = require("utils").workspace_root()
       if root_dir ~= nil then
         -- Set the environment variable before loading the config

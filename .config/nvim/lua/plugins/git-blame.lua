@@ -14,4 +14,9 @@ return {
     { "<leader>gBx", vim.cmd.GitBlameOpenCommitURL, desc = "Git Blame Open Commit URL" },
     { "<leader>gBy", vim.cmd.GitBlameCopySHA, desc = "Git Blame Copy SHA" },
   },
+  init = function()
+    require("which-key").add({
+      { "<leader>gB", group = "Git Blame", icon = { icon = "󰊢", color = "orange" } },
+    })
+  end,
 }

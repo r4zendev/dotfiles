@@ -28,9 +28,10 @@ map({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
 map({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
 map({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
 
+map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
+
 map("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
 map("n", "<leader>yr", ':let @+ = expand("%:.")<CR>', { desc = "Copy relative path" })
-map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
 
 map("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
 map("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })

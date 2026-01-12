@@ -65,4 +65,9 @@ return {
       desc = "Select next context",
     },
   },
+  init = function()
+    require("which-key").add({
+      { "<leader>;", group = "Dropbar", icon = { icon = "", color = "blue" } },
+    })
+  end,
 }

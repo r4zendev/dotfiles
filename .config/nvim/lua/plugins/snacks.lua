@@ -151,6 +151,10 @@ M.plugin = {
     { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command List" },
   },
   init = function()
+    require("which-key").add({
+      { "<leader>s", group = "Search", icon = { icon = "󰍉", color = "green" } },
+    })
+
     vim.api.nvim_create_autocmd("User", {
       pattern = "OilActionsPost",
       callback = function(event)

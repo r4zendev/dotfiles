@@ -7,7 +7,7 @@ return {
     { "<leader>ot", "<cmd>OverseerToggle<cr>", desc = "Task list" },
     { "<leader>ol", "<cmd>OverseerTaskAction<cr>", desc = "Task action" },
     { "<leader>b", desc = "Build" },
-    { "<leader>q", desc = "Quickfix" },
+    { "<leader>q", desc = "Toggle quickfix list" },
   },
   opts = {
     strategy = "terminal",
@@ -23,7 +23,6 @@ return {
     local uv = vim.uv or vim.loop
     local files = require("overseer.files")
 
-    -- Fast npm template: root + current workspace only (for large monorepos)
     overseer.register_template({
       name = "npm",
       priority = 60,
@@ -53,7 +52,8 @@ return {
         end
 
         add_scripts(root_pkg, "")
-        local current_pkg = vim.fs.find("package.json", { upward = true, path = search_opts.dir, stop = root_dir })[1]
+        local current_pkg =
+          vim.fs.find("package.json", { upward = true, path = search_opts.dir, stop = root_dir })[1]
         if current_pkg and vim.fs.dirname(current_pkg) ~= root_dir then
           add_scripts(current_pkg, "[ws] ")
         end
@@ -130,5 +130,12 @@ return {
 
     vim.keymap.set("n", "<leader>b", smart_build, { desc = "Build" })
     vim.keymap.set("n", "<leader>q", toggle_quickfix, { desc = "Quickfix" })
+  end,
+  init = function()
+    require("which-key").add({
+      { "<leader>o", group = "Overseer (Tasks)" },
+      { "<leader>b", group = "Build", icon = { icon = "", color = "green" } },
+      { "<leader>q", group = "Quickfix", icon = { icon = "", color = "yellow" } },
+    })
   end,
 }

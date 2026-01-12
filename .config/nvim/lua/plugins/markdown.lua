@@ -18,6 +18,11 @@ return {
       { "<leader>mT", "<cmd>Markview toggle<cr>", desc = "Toggle Markview" },
     },
     opts = {},
+    init = function()
+      require("which-key").add({
+        { "<leader>m", group = "Markdown", icon = { icon = "", color = "green" } },
+      })
+    end,
   },
   {
     "brianhuster/live-preview.nvim",
@@ -48,16 +53,10 @@ return {
         desc = "Stop LivePreview server",
       },
     },
+    init = function()
+      require("which-key").add({
+        { "<leader>m", group = "Markdown", icon = { icon = "", color = "green" } },
+      })
+    end,
   },
-  -- {
-  --   "iamcco/markdown-preview.nvim",
-  --   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-  --   ft = "markdown",
-  --   build = function()
-  --     vim.fn["mkdp#util#install"]()
-  --   end,
-  --   keys = {
-  --     { "<leader>mp", vim.cmd.MarkdownPreview, desc = "Preview Markdown" },
-  --   },
-  -- },
 }
