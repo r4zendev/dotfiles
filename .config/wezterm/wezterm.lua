@@ -20,7 +20,36 @@ local config = wezterm.config_builder and wezterm.config_builder() or {}
 
 config.default_prog = { "/opt/homebrew/bin/fish" }
 config.term = "xterm-256color"
-config.color_scheme = "tokyonight_night"
+
+config.colors = {
+  foreground = "#a6accd",
+  background = "#252b37",
+  ansi = {
+    "#252b37",
+    "#d0679d",
+    "#5de4c7",
+    "#fffac2",
+    "#89ddff",
+    "#fae4fc",
+    "#add7ff",
+    "#ffffff",
+  },
+  brights = {
+    "#a6accd",
+    "#d0679d",
+    "#5de4c7",
+    "#fffac2",
+    "#add7ff",
+    "#fcc5e9",
+    "#89ddff",
+    "#ffffff",
+  },
+  cursor_bg = "#a6accd",
+  cursor_fg = "#252b37",
+  cursor_border = "#a6accd",
+  selection_fg = "none",
+  selection_bg = "#303340",
+}
 
 config.font = wezterm.font_with_fallback({
   {
@@ -52,8 +81,6 @@ config.adjust_window_size_when_changing_font_size = false
 config.cursor_blink_rate = 0
 config.hide_mouse_cursor_when_typing = true
 config.use_ime = false
--- config.send_composed_key_when_left_alt_is_pressed = false
--- config.send_composed_key_when_right_alt_is_pressed = false
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = "NeverPrompt"
 config.scrollback_lines = 3000
@@ -66,15 +93,6 @@ config.inactive_pane_hsb = { saturation = 0.24, brightness = 0.5 }
 config.selection_word_boundary = " \t\n{}[]()\"'`,;:│"
 
 config.keys = {
-  { key = "1", mods = "CTRL", action = act.SendString("\x14\x31") },
-  { key = "2", mods = "CTRL", action = act.SendString("\x14\x32") },
-  { key = "3", mods = "CTRL", action = act.SendString("\x14\x33") },
-  { key = "4", mods = "CTRL", action = act.SendString("\x14\x34") },
-  { key = "5", mods = "CTRL", action = act.SendString("\x14\x35") },
-  { key = "6", mods = "CTRL", action = act.SendString("\x14\x36") },
-  { key = "7", mods = "CTRL", action = act.SendString("\x14\x37") },
-  { key = "8", mods = "CTRL", action = act.SendString("\x14\x38") },
-  { key = "9", mods = "CTRL", action = act.SendString("\x14\x39") },
   { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
   { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
   { key = "t", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-restricted") },

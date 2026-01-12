@@ -1,4 +1,3 @@
--- Testing one two
 return {
   "nvim-neo-tree/neo-tree.nvim",
   lazy = false,
@@ -22,10 +21,8 @@ return {
         if reveal_file == "" then
           reveal_file = vim.fn.getcwd()
         else
-          local f = io.open(reveal_file, "r")
-          if f then
-            f:close()
-          else
+          local stat = vim.loop.fs_stat(reveal_file)
+          if not stat then
             reveal_file = vim.fn.getcwd()
           end
         end
@@ -41,11 +38,26 @@ return {
       desc = "Toggle Neo Tree",
     },
   },
-  opts = {
-    filesystem = {
+  opts = function(_, opts)
+    local function on_move(data)
+      Snacks.rename.on_rename_file(data.source, data.destination)
+    end
+
+    local events = require("neo-tree.events")
+    opts.event_handlers = opts.event_handlers or {}
+    vim.list_extend(opts.event_handlers, {
+      { event = events.FILE_MOVED, handler = on_move },
+      { event = events.FILE_RENAMED, handler = on_move },
+    })
+
+    opts.filesystem = vim.tbl_deep_extend("force", opts.filesystem or {}, {
+      hijack_netrw_behavior = "disabled",
       filtered_items = {
         visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = true,
+        hide_ignored = true,
       },
-    },
-  },
+    })
+  end,
 }

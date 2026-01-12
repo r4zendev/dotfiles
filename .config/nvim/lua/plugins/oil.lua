@@ -15,10 +15,9 @@ end
 
 return {
   "stevearc/oil.nvim",
-  lazy = false,
-  event = "VeryLazy",
   cmd = "Oil",
-  dependencies = { "echasnovski/mini.nvim" },
+  event = { "VimEnter */*,.*", "BufNew */*,.*", "VeryLazy" },
+  dependencies = { "echasnovski/mini.icons" },
   opts = {
     delete_to_trash = true,
     view_options = {
@@ -50,4 +49,17 @@ return {
   keys = {
     { "-", vim.cmd.Oil, mode = "n", desc = "Open parent directory" },
   },
+  init = function()
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "OilActionsPost",
+      callback = function(event)
+        if event.data.actions[1].type == "move" then
+          Snacks.rename.on_rename_file(
+            event.data.actions[1].src_url,
+            event.data.actions[1].dest_url
+          )
+        end
+      end,
+    })
+  end,
 }

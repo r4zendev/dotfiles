@@ -7,7 +7,14 @@ return {
       "ravitemer/mcphub.nvim",
       "ravitemer/codecompanion-history.nvim",
     },
-    event = { "LazyFile" },
+    cmd = {
+      "CodeCompanion",
+      "CodeCompanionActions",
+      "CodeCompanionChat",
+      "CodeCompanionCmd",
+      "CodeCompanionHistory",
+      "CodeCompanionSummaries",
+    },
     opts = {
       extensions = {
         mcphub = {
@@ -122,6 +129,10 @@ return {
       },
       interactions = {
         chat = {
+          slash_commands = {
+            ["file"] = { opts = { provider = "snacks" } },
+          },
+
           adapter = "claude_code",
         },
       },

@@ -1,14 +1,9 @@
 return {
   "gbprod/yanky.nvim",
-  event = "LazyFile",
   dependencies = { "folke/snacks.nvim" },
   opts = {
-    highlight = {
-      timer = 150,
-    },
-    textobj = {
-      enabled = true,
-    },
+    highlight = { timer = 150 },
+    textobj = { enabled = true },
   },
   keys = {
     {

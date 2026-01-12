@@ -1,55 +1,12 @@
-local map = vim.keymap.set
-
 local M = {}
 
 M.plugin = {
-  "echasnovski/mini.nvim",
-  event = "LazyFile",
+  "echasnovski/mini.icons",
+  lazy = false,
   config = function()
-    local mini_align = require("mini.align")
-    local mini_bracketed = require("mini.bracketed")
-    local mini_ai = require("mini.ai")
-    local mini_surround = require("mini.surround")
-    local mini_splitjoin = require("mini.splitjoin")
-    local mini_cursorword = require("mini.cursorword")
-    local mini_diff = require("mini.diff")
-    local mini_move = require("mini.move")
-
-    mini_align.setup()
-    mini_surround.setup({ n_lines = 9999 })
-    mini_splitjoin.setup()
-    mini_cursorword.setup()
-
-    mini_move.setup({
-      mappings = {
-        left = "H",
-        down = "J",
-        up = "K",
-        right = "L",
-      },
-    })
-
-    mini_ai.setup({
-      n_lines = 9999,
-      custom_textobjects = {
-        ["|"] = mini_ai.gen_spec.pair("|", "|", { type = "balanced" }),
-      },
-    })
-
-    mini_bracketed.setup()
-    map("n", "[t", vim.cmd.tabprev, { desc = "Previous tabpage" })
-    map("n", "]t", vim.cmd.tabnext, { desc = "Next tabpage" })
-    map("n", "[d", function()
-      vim.diagnostic.jump({ count = -1, float = false })
-    end, { desc = "Prev diagnostic" })
-    map("n", "]d", function()
-      vim.diagnostic.jump({ count = 1, float = false })
-    end, { desc = "Next diagnostic" })
-
-    mini_diff.setup()
-    map("n", "<leader>=", function()
-      mini_diff.toggle_overlay(0)
-    end, { desc = "Toggle diff overlay" })
+    local mini_icons = require("mini.icons")
+    mini_icons.setup({ file = M.file_icon_config })
+    mini_icons.mock_nvim_web_devicons()
   end,
 }
 

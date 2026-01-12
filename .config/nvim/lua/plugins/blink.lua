@@ -148,4 +148,33 @@ return {
       impersonate_nvim_cmp = true,
     },
   },
+  -- {
+  --   "saghen/blink.indent",
+  --   event = "LazyFile",
+  --   opts = {
+  --     static = {
+  --       -- highlights = {
+  --       --   "BlinkIndentRed",
+  --       --   "BlinkIndentOrange",
+  --       --   "BlinkIndentYellow",
+  --       --   "BlinkIndentGreen",
+  --       --   "BlinkIndentViolet",
+  --       --   "BlinkIndentCyan",
+  --       -- },
+  --       highlights = { "BlinkIndent" },
+  --     },
+  --     scope = {
+  --       -- highlights = {
+  --       --   "BlinkIndentOrange",
+  --       --   "BlinkIndentViolet",
+  --       --   "BlinkIndentBlue",
+  --       --   "BlinkIndentRed",
+  --       --   "BlinkIndentCyan",
+  --       --   "BlinkIndentYellow",
+  --       --   "BlinkIndentGreen",
+  --       -- },
+  --       highlights = { "BlinkIndentOrange", "BlinkIndentViolet", "BlinkIndentBlue" },
+  --     },
+  --   },
+  -- },
 }

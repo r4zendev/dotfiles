@@ -73,6 +73,17 @@ M.plugin = {
     bigfile = { enabled = true },
     image = { enabled = false },
     input = { enabled = true },
+    notifier = {
+      enabled = true,
+      top_down = false,
+      style = "fancy", -- "compact" | "minimal" | "fancy"
+    },
+    indent = {
+      enabled = true,
+      indent = {
+        only_scope = true,
+      },
+    },
   },
   -- stylua: ignore
   keys = {
@@ -144,23 +155,62 @@ M.plugin = {
     -- NOTE: Colorscheme
     { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
 
+    -- NOTE: Notifier / messages
+    { '<leader>cc', function() Snacks.notifier.hide() end, desc = "Notifications history" },
+    { '<leader>ch', function() Snacks.notifier.show_history() end, desc = "Notifications history" },
+    { '<leader>cm', function()
+      Snacks.win({
+        style = "notification_history",
+        text = vim.split(vim.fn.execute('messages'), '\n'),
+        title = " Messages ",
+        ft = "messages",
+      })
+    end, desc = "Messages" },
+
     -- NOTE: Misc
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
     { "<leader>s/", function() Snacks.picker.search_history() end, desc = "Search history" },
     { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command List" },
+
   },
-  init = function()
+  init = function(plugin)
+    -- Fix for C-o working from dashboard on first try (requires two presses without this)
+    if plugin.opts.dashboard.enabled then
+      local id
+      id = vim.api.nvim_create_autocmd("BufEnter", {
+        callback = function()
+          vim.schedule(function()
+            if vim.bo.filetype == "snacks_dashboard" then
+              vim.keymap.set("n", "<C-o>", function()
+                vim.cmd("normal! `0")
+              end, { buffer = true })
+
+              vim.api.nvim_del_autocmd(id)
+            end
+          end)
+        end,
+      })
+    end
+
     require("which-key").add({
       { "<leader>s", group = "Search", icon = { icon = "󰍉", color = "green" } },
     })
 
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "OilActionsPost",
-      callback = function(event)
-        if event.data.actions.type == "move" then
-          Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
-        end
+    vim.api.nvim_create_autocmd("LspProgress", {
+      ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+      callback = function(ev)
+        local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+        vim.notify(vim.lsp.status(), "info", {
+          id = "lsp_progress",
+          title = "LSP Progress",
+          opts = function(notif)
+            notif.icon = ev.data.params.value.kind == "end" and " "
+              or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+            notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
+          end,
+          timeout = 1000,
+        })
       end,
     })
 
