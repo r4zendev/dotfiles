@@ -9,7 +9,7 @@ return {
     {
       "<leader>ss",
       function()
-        require("aerial").snacks_picker()
+        require("aerial").snacks_picker({ focus = "list" })
       end,
       desc = "Aerial Toggle",
     },

@@ -51,6 +51,11 @@ M.plugin = {
         down = "J",
         up = "K",
         right = "L",
+
+        line_left = "",
+        line_right = "",
+        line_down = "",
+        line_up = "",
       },
     })
 
