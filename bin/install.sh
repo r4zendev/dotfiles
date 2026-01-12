@@ -61,8 +61,9 @@ brew install bat      # cat alternative
 brew install btop     # system monitor
 brew install duti     # default app handler -> `duti -s net.imput.helium .md all`
 brew install fd       # find alternative
-brew install fx       # JSON viewer
 brew install ffmpeg   # multimedia processing
+brew install figlet   # text banners
+brew install fx       # JSON viewer
 brew install fzf      # fuzzy finder
 brew install gdu      # disk usage analyzer
 brew install jq       # JSON processor

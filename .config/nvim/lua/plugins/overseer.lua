@@ -1,6 +1,5 @@
 return {
   "stevearc/overseer.nvim",
-  pin = true,
   event = "VeryLazy",
   cmd = { "OverseerRun", "OverseerToggle", "OverseerTaskList", "OverseerInfo" },
   keys = {

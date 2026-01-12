@@ -44,10 +44,12 @@ return {
   opts = {
     search = {
       exclude = {
+        "oil",
+        "blink-cmp-menu",
+        -- Defaults
         "notify",
         "cmp_menu",
         "noice",
-        "oil",
         "flash_prompt",
         function(win)
           -- exclude non-focusable windows

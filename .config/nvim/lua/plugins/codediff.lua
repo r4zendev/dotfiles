@@ -9,21 +9,21 @@ M.plugin = {
   },
   init = function()
     -- Keymaps
-    vim.keymap.set("n", "<leader>hs", function()
+    vim.keymap.set("n", "<leader>gss", function()
       M.git_pickaxe({ global = false })
     end, { desc = "Git Search (Buffer)" })
 
-    vim.keymap.set("n", "<leader>hS", function()
+    vim.keymap.set("n", "<leader>gsS", function()
       M.git_pickaxe({ global = true })
     end, { desc = "Git Search (Global)" })
 
-    vim.keymap.set({ "n", "t" }, "<leader>hl", function()
+    vim.keymap.set({ "n", "t" }, "<leader>gsl", function()
       Snacks.picker.git_log_file({
         confirm = M.walk_in_codediff,
       })
     end, { desc = "find_git_log_file" })
 
-    vim.keymap.set({ "n", "t" }, "<leader>hL", function()
+    vim.keymap.set({ "n", "t" }, "<leader>gsL", function()
       Snacks.picker.git_log({
         confirm = M.walk_in_codediff,
       })

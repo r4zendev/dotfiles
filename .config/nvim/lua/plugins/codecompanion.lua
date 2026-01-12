@@ -122,22 +122,6 @@ return {
       },
       interactions = {
         chat = {
-          slash_commands = {
-            ["buffer"] = {
-              opts = {
-                default_params = "diff",
-                provider = "snacks",
-              },
-            },
-            ["file"] = {
-              opts = {
-                default_params = "diff",
-                provider = "snacks",
-                contains_code = true,
-              },
-            },
-          },
-
           adapter = "claude_code",
         },
       },

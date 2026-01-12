@@ -20,36 +20,7 @@ local config = wezterm.config_builder and wezterm.config_builder() or {}
 
 config.default_prog = { "/opt/homebrew/bin/fish" }
 config.term = "xterm-256color"
-
-config.colors = {
-  foreground = "#a6accd",
-  background = "#252b37",
-  ansi = {
-    "#252b37",
-    "#d0679d",
-    "#5de4c7",
-    "#fffac2",
-    "#89ddff",
-    "#fae4fc",
-    "#add7ff",
-    "#ffffff",
-  },
-  brights = {
-    "#a6accd",
-    "#d0679d",
-    "#5de4c7",
-    "#fffac2",
-    "#add7ff",
-    "#fcc5e9",
-    "#89ddff",
-    "#ffffff",
-  },
-  cursor_bg = "#a6accd",
-  cursor_fg = "#252b37",
-  cursor_border = "#a6accd",
-  selection_fg = "none",
-  selection_bg = "#303340",
-}
+config.color_scheme = "tokyonight_night"
 
 config.font = wezterm.font_with_fallback({
   {

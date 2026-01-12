@@ -108,11 +108,11 @@ M.plugin = {
     { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
     { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
     { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
-    { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
+    -- { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
     { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
     { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
     {
-      "<leader>sH",
+      "<leader>sh",
       function()
         Snacks.picker.highlights({
           confirm = function(picker, item)
@@ -125,6 +125,7 @@ M.plugin = {
       end,
       desc = "Highlights"
     },
+    { "<leader>sH", function() Snacks.picker.man() end, desc = "Man Pages" },
     { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
     { "<leader>sn", function() Snacks.picker.files({ cwd = "~/notes" }) end, desc = "Grep Notes" },
     { "<leader>sN", function() Snacks.picker.grep({ cwd = "~/notes" }) end, desc = "Search Notes" },
@@ -241,19 +242,23 @@ function M.git_branch_del(picker, item)
       return
     end
 
-    Snacks.picker.select({ "Yes", "No" }, { prompt = ("Delete branch %q?"):format(branch) }, function(_, idx)
-      if idx == 1 then
-        -- Proceed with deletion
-        -- NOTE: Modified only here to force delete the branch using the -D flag.
-        Snacks.picker.util.cmd({ "git", "branch", "-D", branch }, function()
-          Snacks.notify("Deleted Branch `" .. branch .. "`", { title = "Snacks Picker" })
-          vim.cmd.checktime()
-          picker.list:set_selected()
-          picker.list:set_target()
-          picker:find()
-        end, { cwd = picker:cwd() })
+    Snacks.picker.select(
+      { "Yes", "No" },
+      { prompt = ("Delete branch %q?"):format(branch) },
+      function(_, idx)
+        if idx == 1 then
+          -- Proceed with deletion
+          -- NOTE: Modified only here to force delete the branch using the -D flag.
+          Snacks.picker.util.cmd({ "git", "branch", "-D", branch }, function()
+            Snacks.notify("Deleted Branch `" .. branch .. "`", { title = "Snacks Picker" })
+            vim.cmd.checktime()
+            picker.list:set_selected()
+            picker.list:set_target()
+            picker:find()
+          end, { cwd = picker:cwd() })
+        end
       end
-    end)
+    )
   end, { cwd = picker:cwd() })
 end
 

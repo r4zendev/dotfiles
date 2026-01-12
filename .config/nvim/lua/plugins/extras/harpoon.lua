@@ -15,7 +15,7 @@ M.plugin = {
   keys = {
     { "<leader>j", function() require("harpoon"):list():remove() end, desc = "Harpoon: Remove" },
     { "<leader>k", function() require("harpoon"):list():add() end, desc = "Harpoon: Add" },
-    { "<C-e>", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon: Toggle UI" },
+    { "<leader>h", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon: Toggle UI" },
     { "<M-[>", function() M.select_valid_index("prev") end, desc = "Harpoon: Previous" },
     { "<M-]>", function() M.select_valid_index("next") end, desc = "Harpoon: Next" },
   },

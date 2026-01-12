@@ -42,9 +42,6 @@ return {
         BlinkCmpLabel = { fg = theme.ui.fg_dim },
         BlinkCmpLabelMatch = { fg = theme.syn.keyword },
 
-        HarpoonOptionHL = { fg = theme.ui.fg },
-        HarpoonSelectedOptionHL = { fg = theme.syn.string },
-
         CodeCompanionChatTool = { fg = theme.syn.identifier },
         CodeCompanionChatVariable = { fg = theme.syn.identifier },
 
