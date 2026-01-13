@@ -19,7 +19,7 @@ abbr -a ccy "claude --dangerously-skip-permissions" # yolo mode
 abbr -a oc "opencode"
 abbr -a g "lazygit"
 abbr -a d "lazydocker"
-abbr -a ls "lsd -a"
+abbr -a ls "lsd --group-dirs first -A"
 abbr -a gdu "gdu-go"
 abbr -a gimp "open /Applicatons/GIMP.app"
 

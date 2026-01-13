@@ -59,7 +59,8 @@ return {
     },
     modes = {
       char = {
-        jump_labels = true,
+        multi_line = true,
+        jump_labels = false,
       },
       search = {
         enabled = true,
