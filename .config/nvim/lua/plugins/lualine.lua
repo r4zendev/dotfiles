@@ -7,6 +7,12 @@ return {
   config = function()
     local git_blame = require("gitblame")
 
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      callback = function()
+        require("lualine").refresh()
+      end,
+    })
+
     require("lualine").setup({
       options = { theme = "everblush" },
       sections = {
@@ -32,17 +38,33 @@ return {
             end,
           },
         },
-        lualine_x = {
-          -- {
-          --   require("noice").api.status.mode.get,
-          --   cond = require("noice").api.status.mode.has,
-          --   color = { fg = "#ff9e64" },
-          -- },
-          { "overseer" },
-          { "encoding" },
-          { "fileformat" },
-          { "filetype" },
-        },
+        lualine_x = (function()
+          local components = {
+            { "overseer" },
+            { "encoding" },
+            { "fileformat" },
+            { "filetype" },
+          }
+
+          local ok, noice = pcall(require, "noice")
+          if ok then
+            table.insert(components, 1, {
+              noice.api.status.mode.get,
+              cond = noice.api.status.mode.has,
+              color = function()
+                local hl = vim.api.nvim_get_hl(0, { name = "CursorLineNr" })
+
+                if hl.fg then
+                  return { fg = string.format("#%06x", hl.fg) }
+                end
+
+                return {}
+              end,
+            })
+          end
+
+          return components
+        end)(),
       },
     })
   end,

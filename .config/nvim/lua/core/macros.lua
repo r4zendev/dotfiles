@@ -21,7 +21,12 @@ local function set_log_macro(filetype)
   elseif filetype == "rust" then
     macro_string = "yoprintln!(" .. esc .. "pa);" .. esc
   elseif filetype == "zig" then
-    macro_string = [[yo@import("std").debug.print("]] .. esc .. [[pa = {}\n", .{]] .. esc .. [[pa});]] .. esc
+    macro_string = [[yo@import("std").debug.print("]]
+      .. esc
+      .. [[pa = {}\n", .{]]
+      .. esc
+      .. [[pa});]]
+      .. esc
   end
   if macro_string then
     vim.fn.setreg("l", macro_string)

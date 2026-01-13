@@ -1,70 +1,45 @@
 local o = vim.o
 local opt = vim.opt
 
--- NOTE: use in case authors don't update their plugins in time to suppress deprecation warnings
----@diagnostic disable-next-line: duplicate-set-field
--- vim.deprecate = function() end
-
 o.updatetime = 100
 o.timeout = true
 o.timeoutlen = 500
 
--- whitespaces
-o.list = false -- Disabled by default, can be toggled using :set list!
+o.list = false
 o.listchars = "tab:▸ ,lead:·,trail:·,nbsp:␣,extends:▶,precedes:◀,eol:↲" -- bigger dot if desired: •
 
--- line numbers
-opt.relativenumber = true -- show relative line numbers
-opt.number = true -- shows absolute line number on cursor line (when relative number is on)
+opt.relativenumber = true
+opt.number = true
 
--- tabs & indentation
-opt.tabstop = 2 -- 2 spaces for tabs
-opt.shiftwidth = 2 -- 2 spaces for indent width
-opt.expandtab = true -- expand tab to spaces
-opt.autoindent = true -- copy indent from current line when starting new one
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.expandtab = true
+opt.autoindent = true
 
--- line wrapping
 opt.wrap = false
 
--- search settings
-opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
+opt.ignorecase = true
+opt.smartcase = true
 
--- cursor line
-opt.cursorline = true -- highlight the current cursor line
+opt.cursorline = true
 
--- appearance
 -- vim.o.showtabline = 2 -- required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
 o.showtabline = 0
 opt.title = false
 opt.conceallevel = 0
 
 opt.termguicolors = true
-opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "yes" -- show sign column so that text doesn't shift
+opt.background = "dark"
+opt.signcolumn = "yes"
+opt.backspace = "indent,eol,start"
+opt.clipboard:append("unnamedplus")
 
--- backspace
-opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
+opt.splitright = true
+opt.splitbelow = true
 
--- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
-
--- split windows
-opt.splitright = true -- split vertical window to the right
-opt.splitbelow = true -- split horizontal window to the bottom
-
--- turn off swapfile
 opt.swapfile = false
-
--- persistent undo
 opt.undofile = true
-
--- update file on external changes
 opt.autoread = true
-
--- sign column & folding
-opt.signcolumn = "number"
--- opt.signcolumn = "yes:1" -- both sign & number
 
 opt.foldenable = true
 opt.foldlevel = 99
@@ -79,5 +54,6 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
+opt.signcolumn = "number"
+-- opt.signcolumn = "yes:1" -- both sign & number
 opt.statuscolumn = "%{%v:lua.require('statuscolumn').get_statuscolumn()%}"
-o.cmdheight = 0

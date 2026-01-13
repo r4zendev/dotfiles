@@ -20,6 +20,10 @@ return {
   dependencies = { "echasnovski/mini.icons" },
   opts = {
     delete_to_trash = true,
+    columns = {
+      "icon",
+      -- { "mtime", format = "|%d.%m|" },
+    },
     view_options = {
       show_hidden = true,
     },

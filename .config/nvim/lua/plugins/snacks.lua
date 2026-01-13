@@ -175,6 +175,10 @@ M.plugin = {
 
   },
   init = function(plugin)
+    require("which-key").add({
+      { "<leader>s", group = "Search", icon = { icon = "󰍉", color = "green" } },
+    })
+
     -- Fix for C-o working from dashboard on first try (requires two presses without this)
     if plugin.opts.dashboard.enabled then
       local id
@@ -193,26 +197,24 @@ M.plugin = {
       })
     end
 
-    require("which-key").add({
-      { "<leader>s", group = "Search", icon = { icon = "󰍉", color = "green" } },
-    })
-
-    vim.api.nvim_create_autocmd("LspProgress", {
-      ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-      callback = function(ev)
-        local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-        vim.notify(vim.lsp.status(), "info", {
-          id = "lsp_progress",
-          title = "LSP Progress",
-          opts = function(notif)
-            notif.icon = ev.data.params.value.kind == "end" and " "
-              or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-            notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
-          end,
-          timeout = 1000,
-        })
-      end,
-    })
+    if plugin.opts.notifier.enabled then
+      vim.api.nvim_create_autocmd("LspProgress", {
+        ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+        callback = function(ev)
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          vim.notify(vim.lsp.status(), "info", {
+            id = "lsp_progress",
+            title = "LSP Progress",
+            opts = function(notif)
+              notif.icon = ev.data.params.value.kind == "end" and " "
+                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+              notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
+            end,
+            timeout = 1000,
+          })
+        end,
+      })
+    end
 
     -- AI completion toggle. Putting it here, since using multiple providers
     -- First, check if enabled by default to omit toggling disabled tools

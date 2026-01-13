@@ -91,6 +91,8 @@ M.themes = {
     name = "Everblush",
     colorscheme = "everblush",
     after = function()
+      transparent_winbar()
+
       local palette = require("everblush.palette")
       local comment_color = "#6c7086"
       vim.api.nvim_set_hl(0, "@comment", { fg = comment_color })

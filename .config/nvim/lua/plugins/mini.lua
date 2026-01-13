@@ -20,6 +20,11 @@ M.plugin = {
     mini_splitjoin.setup()
     mini_cursorword.setup()
 
+    mini_diff.setup()
+    map("n", "<leader>=", function()
+      mini_diff.toggle_overlay(0)
+    end, { desc = "Toggle diff overlay" })
+
     mini_move.setup({
       mappings = {
         left = "H",
@@ -45,11 +50,14 @@ M.plugin = {
     map("n", "]d", function()
       vim.diagnostic.jump({ count = 1, float = false })
     end, { desc = "Next diagnostic" })
-
-    mini_diff.setup()
-    map("n", "<leader>=", function()
-      mini_diff.toggle_overlay(0)
-    end, { desc = "Toggle diff overlay" })
+    vim.keymap.set("n", "u", function()
+      vim.cmd("silent! undo")
+      MiniBracketed.register_undo_state()
+    end)
+    vim.keymap.set("n", "<C-r>", function()
+      vim.cmd("silent! redo")
+      MiniBracketed.register_undo_state()
+    end)
   end,
 }
 

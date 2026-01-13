@@ -1,5 +1,6 @@
 return {
   "folke/trouble.nvim",
+  enabled = false,
   -- event = "LazyFile",
   cmd = "Trouble",
   -- stylua: ignore

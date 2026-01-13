@@ -14,7 +14,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local Event = require("lazy.core.handler.event")
-Event.mappings.LazyFile = { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } }
+Event.mappings.LazyFile =
+  { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } }
 Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
 require("lazy").setup({
@@ -28,13 +29,4 @@ require("lazy").setup({
 
 require("todo_list").setup({
   target_file = "~/notes/todo.md",
-})
-
-require("vim._extui").enable({
-  msg = {
-    -- NOTE: Disable message displaying entirely.
-    -- Handled by nvim-notify within noice.lua.
-    timeout = 0,
-    target = "msg",
-  },
 })

@@ -5,6 +5,7 @@ local M = {}
 
 M.plugin = {
   "ThePrimeagen/harpoon",
+  enabled = false,
   branch = "harpoon2",
   event = "VeryLazy",
   dependencies = {
