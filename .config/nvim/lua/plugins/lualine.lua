@@ -13,7 +13,14 @@ return {
       end,
     })
 
+    local custom = require("lualine.themes.auto")
+    custom.normal.c.bg = "None"
+    vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+
     require("lualine").setup({
+      options = {
+        theme = custom,
+      },
       sections = {
         lualine_c = {
           {

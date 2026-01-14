@@ -122,11 +122,20 @@ M.plugin = {
     { "<leader>sd", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
     { "<leader>sD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
     { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
-    { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
     { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
-    -- { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
     { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
     { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+    {
+      "<leader>sj",
+      function()
+        Snacks.picker.jumps({
+          on_show = function ()
+            vim.cmd.stopinsert()
+          end
+        })
+      end,
+      desc = "Jumps"
+    },
     {
       "<leader>sh",
       function()

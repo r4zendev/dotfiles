@@ -6,6 +6,7 @@ return {
 
     vim.g.VM_leader = "<C-x>"
     vim.g.VM_maps = {
+      ["Select All"] = vim.g.VM_leader .. "a",
       ["Mouse Cursor"] = "<C-LeftMouse>",
       ["Mouse Word"] = "<C-RightMouse>",
       ["Mouse Column"] = "<M-C-RightMouse>",
