@@ -1,6 +1,5 @@
 return {
   "kristijanhusak/vim-dadbod-ui",
-  enabled = false,
   dependencies = {
     { "tpope/vim-dadbod", lazy = true },
   },
@@ -11,7 +10,7 @@ return {
     "DBUIFindBuffer",
   },
   keys = {
-    { "<leader>du", vim.cmd.DBUIToggle, desc = "Toggle DBUI" },
+    { "<leader>ub", vim.cmd.DBUIToggle, desc = "Toggle Dadbod (DB)" },
   },
   init = function()
     vim.g.db_ui_use_nerd_fonts = 1
