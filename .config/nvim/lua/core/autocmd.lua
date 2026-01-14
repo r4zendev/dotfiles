@@ -103,3 +103,18 @@ vim.api.nvim_create_autocmd("FileType", {
 --     vim.opt.formatoptions:remove({ "c", "r", "o" })
 --   end,
 -- })
+
+-- Move tmux status bar to top when entering vim, bottom when exiting
+if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
+  autocmd("VimEnter", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position top", { detach = true })
+    end,
+  })
+
+  autocmd("VimLeavePre", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
+    end,
+  })
+end
