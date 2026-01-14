@@ -101,8 +101,8 @@ config.keys = {
   { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
   { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
   { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
-  { key = ".", mods = "CMD", action = act.EmitEvent("increase-background-brightness") },
-  { key = ",", mods = "CMD", action = act.EmitEvent("decrease-background-brightness") },
+  { key = ";", mods = "CMD|SHIFT", action = act.EmitEvent("increase-background-brightness") },
+  { key = ".", mods = "CMD|SHIFT", action = act.EmitEvent("decrease-background-brightness") },
 }
 
 local IMAGES_DIR = wezterm.home_dir .. "/.config/wezterm/images"
