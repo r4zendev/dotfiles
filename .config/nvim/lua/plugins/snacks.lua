@@ -5,6 +5,11 @@ M.plugin = {
   priority = 1000,
   lazy = false,
   opts = {
+    styles = {
+      notification_history = {
+        wo = { wrap = true },
+      },
+    },
     picker = {
       matcher = { frecency = true },
       sources = {

@@ -147,6 +147,10 @@ M.themes = {
   {
     name = "Nightfly",
     colorscheme = "nightfly",
+    after = function()
+      local palette = require("nightfly").palette
+      vim.api.nvim_set_hl(0, "Substitute", { bg = palette.watermelon, fg = palette.black })
+    end,
   },
   {
     name = "Oxocarbon Dark",

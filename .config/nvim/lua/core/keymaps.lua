@@ -118,12 +118,12 @@ vim.keymap.set("v", "<leader>]", function()
 end, { desc = "Evaluate selection as Lua" })
 
 -- move in wrapped line, useful when vim.opt.wrap is set to true.
--- map("n", "k", function()
---   return vim.v.count == 0 and "gk" or "k"
--- end, { expr = true })
--- map("n", "j", function()
---   return vim.v.count == 0 and "gj" or "j"
--- end, { expr = true })
+map("n", "k", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true })
+map("n", "j", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true })
 
 -- repeat dot multiple times
 -- map("n", "<leader>.", function()
