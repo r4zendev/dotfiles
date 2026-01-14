@@ -117,7 +117,9 @@ local function build_picker_items(filter_to_cwd)
   local cwd = filter_to_cwd and vim.fn.getcwd() or nil
   local items = {}
 
-  for _, mark in ipairs(marks) do
+  -- Reverse marks to show most recent first
+  for i = #marks, 1, -1 do
+    local mark = marks[i]
     local label = mark.mark:sub(2, 2)
     if label:match("[A-Z]") then
       local file = mark.file or bufname

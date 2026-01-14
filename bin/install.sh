@@ -26,6 +26,7 @@ brew install neovim --HEAD                    # my precious
 # Git
 brew install gh
 brew install git
+brew install jj
 # brew install git-delta
 # brew install difftastic
 brew install lazygit # git UI

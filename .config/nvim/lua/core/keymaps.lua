@@ -53,6 +53,9 @@ map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
 map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 
+map("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "<S-Tab>", "<cmd>bprev<CR>", { desc = "Previous buffer" })
+
 vim.keymap.set("v", "<leader>[", function()
   vim.cmd('normal! "xy')
   local text = vim.fn.getreg("x")

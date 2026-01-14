@@ -14,7 +14,6 @@ return {
     })
 
     require("lualine").setup({
-      options = { theme = "everblush" },
       sections = {
         lualine_c = {
           {
