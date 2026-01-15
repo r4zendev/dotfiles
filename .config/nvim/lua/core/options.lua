@@ -20,6 +20,7 @@ opt.wrap = false
 
 opt.ignorecase = true
 opt.smartcase = true
+opt.inccommand = "split"
 
 opt.cursorline = true
 
@@ -54,6 +55,19 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
-opt.signcolumn = "number"
--- opt.signcolumn = "yes:1" -- both sign & number
-opt.statuscolumn = "%{%v:lua.require('statuscolumn').get_statuscolumn()%}"
+-- local diagnostic_icons = require("icons").diagnostics
+-- vim.diagnostic.config({
+--   virtual_text = {
+--     prefix = "●",
+--   },
+--   signs = true,
+--   underline = true,
+--   update_in_insert = false,
+--   severity_sort = true,
+-- })
+-- local signs = {
+--   [vim.diagnostic.severity.ERROR] = diagnostic_icons.ERROR,
+--   [vim.diagnostic.severity.WARN] = diagnostic_icons.WARN,
+--   [vim.diagnostic.severity.HINT] = diagnostic_icons.HINT,
+--   [vim.diagnostic.severity.INFO] = diagnostic_icons.INFO,
+-- }

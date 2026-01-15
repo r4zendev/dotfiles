@@ -7,19 +7,29 @@ return {
   config = function()
     local git_blame = require("gitblame")
 
+    local function get_theme()
+      package.loaded["lualine.themes.auto"] = nil
+      local theme = require("lualine.themes.auto")
+      theme.normal.c.bg = "None"
+      vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+      return theme
+    end
+
     vim.api.nvim_create_autocmd("ColorScheme", {
+      callback = function()
+        require("lualine").setup({ options = { theme = get_theme() } })
+      end,
+    })
+
+    vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
       callback = function()
         require("lualine").refresh()
       end,
     })
 
-    local custom = require("lualine.themes.auto")
-    custom.normal.c.bg = "None"
-    vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
-
     require("lualine").setup({
       options = {
-        theme = custom,
+        theme = get_theme(),
       },
       sections = {
         lualine_c = {
@@ -57,15 +67,17 @@ return {
             table.insert(components, 1, {
               noice.api.status.mode.get,
               cond = noice.api.status.mode.has,
-              color = function()
-                local hl = vim.api.nvim_get_hl(0, { name = "CursorLineNr" })
-
-                if hl.fg then
-                  return { fg = string.format("#%06x", hl.fg) }
-                end
-
-                return {}
+              color = { fg = "#ff6b6b" },
+            })
+          else
+            table.insert(components, 1, {
+              function()
+                return "recording @" .. vim.fn.reg_recording()
               end,
+              cond = function()
+                return vim.fn.reg_recording() ~= ""
+              end,
+              color = { fg = "#ff6b6b" },
             })
           end
 

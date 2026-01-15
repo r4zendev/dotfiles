@@ -43,6 +43,7 @@ return {
   ---@type Flash.Config
   opts = {
     search = {
+      multi_window = false,
       exclude = {
         "oil",
         "blink-cmp-menu",
@@ -69,7 +70,12 @@ return {
   },
   -- stylua: ignore
   keys = {
-    { "<CR>", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+    { "<CR>", mode = { "n", "x", "o" }, function()
+      if vim.bo.buftype == "nofile" or vim.bo.filetype == "vim" then
+        return vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", false)
+      end
+      require("flash").jump()
+    end, desc = "Flash" },
     { "<leader>S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
     { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
     { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },

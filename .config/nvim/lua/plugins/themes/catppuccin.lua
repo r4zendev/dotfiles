@@ -3,6 +3,7 @@ return {
   name = "catppuccin",
   opts = {
     flavour = "mocha",
+    auto_integrations = true,
     transparent_background = true,
     no_italic = true,
     integrations = {

@@ -30,6 +30,12 @@ local function transparent_neotree()
   vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { bg = "NONE" })
 end
 
+local function transparent_statusline()
+  vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE" })
+  -- vim.api.nvim_set_hl(0, "StatusLineTerm", { bg = "NONE" })
+end
+
 local function default_harpoon()
   vim.api.nvim_set_hl(0, "HarpoonOptionHL", { fg = "#89DDFF" })
   vim.api.nvim_set_hl(0, "HarpoonSelectedOptionHL", { fg = "#5DE4C7" })
@@ -196,6 +202,7 @@ function M.apply(name)
     flash_search()
     ts_lsp_bold_nodes()
     default_harpoon()
+    transparent_statusline()
   end
   return ok
 end

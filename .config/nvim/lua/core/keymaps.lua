@@ -20,6 +20,8 @@ map("n", "<M-->", "<C-x>", { noremap = true, silent = true })
 map("n", "<M-=>", "<C-a>", { noremap = true, silent = true })
 map("v", "<M-->", "<C-x>gv", { noremap = true, silent = true })
 map("v", "<M-=>", "<C-a>gv", { noremap = true, silent = true })
+map("v", "g<M-=>", "g<C-a>gv", { noremap = true, silent = true, desc = "Sequential increment" })
+map("v", "g<M-->", "g<C-x>gv", { noremap = true, silent = true, desc = "Sequential decrement" })
 map({ "n", "v" }, "<C-a>", "<Nop>", { noremap = true, silent = true })
 map({ "n", "v" }, "<C-x>", "<Nop>", { noremap = true, silent = true })
 
@@ -55,6 +57,7 @@ map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 
 map("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 map("n", "<S-Tab>", "<cmd>bprev<CR>", { desc = "Previous buffer" })
+map("n", "gp", "`[v`]", { desc = "Select previous paste" })
 
 vim.keymap.set("v", "<leader>[", function()
   vim.cmd('normal! "xy')

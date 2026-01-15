@@ -89,6 +89,19 @@ M.plugin = {
         only_scope = true,
       },
     },
+    statuscolumn = {
+      enabled = true,
+      left = { "mark", "fold", "sign" },
+      right = { "git" },
+      folds = {
+        open = true,
+        git_hl = true,
+      },
+      git = {
+        patterns = { "GitSign", "MiniDiffSign" },
+      },
+      refresh = 50,
+    },
   },
   -- stylua: ignore
   keys = {
