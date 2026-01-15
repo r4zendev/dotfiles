@@ -66,33 +66,13 @@ return {
       return uv.fs_stat(p) ~= nil
     end
 
-    local function open_quickfix()
-      local ok, quicker = pcall(require, "quicker")
-      if ok and quicker and quicker.open then
-        return quicker.open({ focus = true })
-      end
-      vim.cmd("copen")
-    end
-
-    local function toggle_quickfix()
-      local ok, quicker = pcall(require, "quicker")
-      if ok and quicker and quicker.toggle then
-        return quicker.toggle()
-      end
-      if vim.fn.getqflist({ winid = 0 }).winid ~= 0 then
-        vim.cmd("cclose")
-      else
-        vim.cmd("copen")
-      end
-    end
-
     local function run(name)
       vim.fn.setqflist({})
       overseer.run_task({ name = name }, function(task)
         if task then
           task:subscribe("on_complete", function()
             if (vim.fn.getqflist({ size = 0 }).size or 0) > 0 then
-              open_quickfix()
+              vim.cmd("copen")
             end
           end)
         end
@@ -100,6 +80,20 @@ return {
     end
 
     local function smart_build()
+      local ft = vim.bo.filetype
+      if ft == "go" then
+        return run("go build")
+      end
+      if ft == "c" then
+        return run("gcc build")
+      end
+      if ft == "cpp" then
+        return run("c++ build")
+      end
+      if ft == "zig" then
+        return run("zig build")
+      end
+
       local r = require("utils").workspace_root()
       if exists(r .. "/Cargo.toml") then
         return run("cargo build")
@@ -114,22 +108,10 @@ return {
         return run("tsc")
       end
 
-      local ft = vim.bo.filetype
-      if ft == "go" then
-        return run("go build")
-      end
-      if ft == "c" then
-        return run("gcc build")
-      end
-      if ft == "cpp" then
-        return run("c++ build")
-      end
-
       vim.notify("No build for " .. ft, vim.log.levels.WARN)
     end
 
     vim.keymap.set("n", "<leader>b", smart_build, { desc = "Build" })
-    vim.keymap.set("n", "<leader>q", toggle_quickfix, { desc = "Quickfix" })
   end,
   init = function()
     require("which-key").add({

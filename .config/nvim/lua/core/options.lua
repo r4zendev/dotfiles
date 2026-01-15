@@ -1,12 +1,11 @@
-local o = vim.o
 local opt = vim.opt
 
-o.updatetime = 100
-o.timeout = true
-o.timeoutlen = 500
+opt.updatetime = 100
+opt.timeout = true
+opt.timeoutlen = 500
 
-o.list = false
-o.listchars = "tab:▸ ,lead:·,trail:·,nbsp:␣,extends:▶,precedes:◀,eol:↲" -- bigger dot if desired: •
+opt.list = false
+opt.listchars = "tab:▸ ,lead:·,trail:·,nbsp:␣,extends:▶,precedes:◀,eol:↲" -- bigger dot if desired: •
 
 opt.relativenumber = true
 opt.number = true
@@ -24,14 +23,13 @@ opt.inccommand = "split"
 
 opt.cursorline = true
 
--- vim.o.showtabline = 2 -- required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
-o.showtabline = 0
+-- vim.opt.showtabline = 2 -- required for bufferline (tab) plugins to work properly (tabby / bufferline / etc)
+opt.showtabline = 0
 opt.title = false
 opt.conceallevel = 0
 
 opt.termguicolors = true
 opt.background = "dark"
-opt.signcolumn = "yes"
 opt.backspace = "indent,eol,start"
 opt.clipboard:append("unnamedplus")
 
@@ -42,12 +40,15 @@ opt.swapfile = false
 opt.undofile = true
 opt.autoread = true
 
+-- Handled by snacks.statuscolumn
+-- opt.signcolumn = "yes:1"
+-- opt.foldcolumn = "1"
+
 opt.foldenable = true
 opt.foldlevel = 99
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldtext = ""
-opt.foldcolumn = "1"
 opt.fillchars:append({
   fold = " ",
   foldclose = "▶",
@@ -55,19 +56,15 @@ opt.fillchars:append({
   foldsep = " ",
 })
 
--- local diagnostic_icons = require("icons").diagnostics
--- vim.diagnostic.config({
---   virtual_text = {
---     prefix = "●",
---   },
---   signs = true,
---   underline = true,
---   update_in_insert = false,
---   severity_sort = true,
--- })
--- local signs = {
---   [vim.diagnostic.severity.ERROR] = diagnostic_icons.ERROR,
---   [vim.diagnostic.severity.WARN] = diagnostic_icons.WARN,
---   [vim.diagnostic.severity.HINT] = diagnostic_icons.HINT,
---   [vim.diagnostic.severity.INFO] = diagnostic_icons.INFO,
--- }
+vim.diagnostic.config({
+  virtual_text = false,
+  severity_sort = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.INFO] = "",
+      [vim.diagnostic.severity.HINT] = "󰠠",
+    },
+  },
+})

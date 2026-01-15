@@ -23,7 +23,6 @@ map("v", "<M-=>", "<C-a>gv", { noremap = true, silent = true })
 map("v", "g<M-=>", "g<C-a>gv", { noremap = true, silent = true, desc = "Sequential increment" })
 map("v", "g<M-->", "g<C-x>gv", { noremap = true, silent = true, desc = "Sequential decrement" })
 map({ "n", "v" }, "<C-a>", "<Nop>", { noremap = true, silent = true })
-map({ "n", "v" }, "<C-x>", "<Nop>", { noremap = true, silent = true })
 
 map({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
 map({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
@@ -55,9 +54,20 @@ map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
 map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
 map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
 
-map("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
-map("n", "<S-Tab>", "<cmd>bprev<CR>", { desc = "Previous buffer" })
 map("n", "gp", "`[v`]", { desc = "Select previous paste" })
+
+-- move in wrapped line, useful when vim.opt.wrap is set to true.
+map("n", "k", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true })
+map("n", "j", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true })
+
+-- repeat dot multiple times
+-- map("n", "<leader>.", function()
+--   return "<esc>" .. string.rep(".", vim.v.count1)
+-- end, { expr = true, desc = "Repeat dot action" })
 
 vim.keymap.set("v", "<leader>[", function()
   vim.cmd('normal! "xy')
@@ -119,16 +129,3 @@ vim.keymap.set("v", "<leader>]", function()
     vim.notify("Invalid expression", vim.log.levels.ERROR)
   end
 end, { desc = "Evaluate selection as Lua" })
-
--- move in wrapped line, useful when vim.opt.wrap is set to true.
-map("n", "k", function()
-  return vim.v.count == 0 and "gk" or "k"
-end, { expr = true })
-map("n", "j", function()
-  return vim.v.count == 0 and "gj" or "j"
-end, { expr = true })
-
--- repeat dot multiple times
--- map("n", "<leader>.", function()
---   return "<esc>" .. string.rep(".", vim.v.count1)
--- end, { expr = true, desc = "Repeat dot action" })

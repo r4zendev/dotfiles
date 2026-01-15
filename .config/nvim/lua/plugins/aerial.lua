@@ -5,7 +5,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   keys = {
-    { "<leader>sa", vim.cmd.AerialToggle, desc = "Aerial Toggle" },
+    { "<leader>es", vim.cmd.AerialToggle, desc = "Aerial Toggle" },
     {
       "<leader>ss",
       function()

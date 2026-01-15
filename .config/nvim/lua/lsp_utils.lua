@@ -67,12 +67,7 @@ M.on_attach = function(_, bufnr)
     vim.diagnostic.open_float()
   end, opts("Go inside diagnostic window"))
   map({ "n", "v" }, "<leader>cq", function()
-    vim.diagnostic.setqflist({ open = false })
-
-    local quicker_ok, _ = pcall(require, "quicker")
-    if quicker_ok then
-      require("quicker").toggle()
-    end
+    vim.diagnostic.setqflist()
   end, opts("Populate qflist with diagnostics"))
 end
 

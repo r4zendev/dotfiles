@@ -4,7 +4,7 @@ return {
   priority = 1000,
   opts = {
     options = {
-      use_icons_from_diagnostic = false,
+      use_icons_from_diagnostic = true,
       set_arrow_to_diag_color = true,
       add_messages = {
         messages = true,
@@ -12,7 +12,7 @@ return {
         use_max_severity = true,
         show_multiple_glyphs = true,
       },
-      show_diags_only_under_cursor = true,
+      -- show_diags_only_under_cursor = true,
       multilines = {
         enabled = true,
       },
@@ -22,7 +22,4 @@ return {
       override_open_float = true,
     },
   },
-  init = function()
-    vim.diagnostic.config({ virtual_text = false })
-  end,
 }

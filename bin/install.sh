@@ -21,6 +21,7 @@ brew install fisher                           # package manager for fish
 brew install --cask claude-code               # AI assistant [1]
 brew install --cask codex                     # AI assistant [2]
 curl -fsSL https://opencode.ai/install | bash # AI assistant [3]
+brew install --cask danvergara/tools/dblab    # DB client
 brew install neovim --HEAD                    # my precious
 
 # Git

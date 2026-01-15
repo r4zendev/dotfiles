@@ -1,5 +1,3 @@
--- `biome` & `eslint` are used from LSP,
-
 local util = require("lsp_utils")
 
 return {

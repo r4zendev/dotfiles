@@ -19,6 +19,7 @@ return {
     },
     opts = {
       highlighter = {
+        -- Using oklch-color-picker
         auto_enable = false,
         filetypes = {
           "css",

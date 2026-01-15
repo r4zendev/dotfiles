@@ -120,56 +120,13 @@ M.themes = {
     end,
   },
   {
-    name = "Oxocarbon",
-    colorscheme = "oxocarbon",
-    after = function()
-      transparent_background()
-      transparent_winbar()
-      transparent_float()
-      vim.api.nvim_set_hl(0, "MatchParen", { underline = false })
-      vim.api.nvim_set_hl(0, "Comment", { fg = "#737aa2" })
-      vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#627E97", bg = "#011423" })
-      vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = "#666666" })
-      vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = "#3DDBD9" })
-      vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine", { bg = "#191919" })
-    end,
-  },
-  {
-    name = "Rose Pine",
-    colorscheme = "rose-pine",
-    after = function()
-      transparent_winbar()
-    end,
-  },
-  {
     name = "Kanagawa Wave",
     colorscheme = "kanagawa-wave",
     after = transparent_background,
   },
   {
-    name = "Vague",
-    colorscheme = "vague",
-    after = transparent_winbar,
-  },
-  {
-    name = "Nightfly",
-    colorscheme = "nightfly",
-    after = function()
-      local palette = require("nightfly").palette
-      vim.api.nvim_set_hl(0, "Substitute", { bg = palette.watermelon, fg = palette.black })
-    end,
-  },
-  {
-    name = "Oxocarbon Dark",
-    colorscheme = "oxocarbon",
-  },
-  {
     name = "Kanso Zen",
     colorscheme = "kanso-zen",
-  },
-  {
-    name = "Default",
-    colorscheme = "default",
   },
 }
 
@@ -241,7 +198,11 @@ function M.pick()
     preview = nil,
     layout = {
       preset = "select",
-      layout = { width = 25, min_width = 25 },
+      layout = {
+        height = 8,
+        width = 20,
+        min_width = 20,
+      },
     },
     format = function(item)
       return { { item.theme.name } }

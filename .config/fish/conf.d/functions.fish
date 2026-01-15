@@ -37,13 +37,14 @@ function yazi_create_tmux --description "Create a new tmux session from yazi fil
       set name (basename "$dir" | tr "." "_")
       tmux new-session -c "$dir" -d -s "$name"
       tmux switch-client -t "$name"
+      tmux send-keys -t "$name" "nvim '$chosen'" Enter
   end
 end
 
 function ghostty_bg --description "Manage Ghostty background images"
   set -l sf "$HOME/.config/ghostty/.bg-state"
   set -l cf "$HOME/.config/ghostty/background"
-  set -l dir "$HOME/.config/wezterm/images"
+  set -l dir "$HOME/.config/term-images"
 
   function _get -a key -a sf
     test -f "$sf"; and grep "^$key=" "$sf" | cut -d= -f2

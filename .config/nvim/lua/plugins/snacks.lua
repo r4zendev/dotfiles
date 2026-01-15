@@ -91,14 +91,17 @@ M.plugin = {
     },
     statuscolumn = {
       enabled = true,
-      left = { "mark", "fold", "sign" },
-      right = { "git" },
+      -- left = { "mark", "fold", "sign" },
+      -- right = { "git" },
+      left = { "mark", "fold" },
+      right = {},
       folds = {
         open = true,
         git_hl = true,
       },
       git = {
-        patterns = { "GitSign", "MiniDiffSign" },
+        -- patterns = { "GitSign", "MiniDiffSign" },
+        patterns = { "MiniDiffSign" },
       },
       refresh = 50,
     },
@@ -108,7 +111,7 @@ M.plugin = {
     -- NOTE: Files
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
-    { "<leader>es", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
     { "<C-b>", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },
@@ -137,7 +140,17 @@ M.plugin = {
     { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
     { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
     { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
-    { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+    {
+      "<leader>su",
+      function()
+        Snacks.picker.undo({
+          on_show = function ()
+            vim.cmd.stopinsert()
+          end
+        })
+      end,
+      desc = "Undo History"
+    },
     {
       "<leader>sj",
       function()
@@ -283,17 +296,6 @@ M.plugin = {
           end
         end,
       }):map("<leader>a-")
-
-      vim.g.gitblame_display_virtual_text = false
-      Snacks.toggle({
-        name = "Inline git blame",
-        get = function()
-          return vim.g.gitblame_display_virtual_text
-        end,
-        set = function(state)
-          vim.g.gitblame_display_virtual_text = state
-        end,
-      }):map("<leader>gv", { desc = "Toggle Git blame" })
 
       vim.g.statuscolumn_show_signs = true
       Snacks.toggle({

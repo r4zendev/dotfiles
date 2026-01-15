@@ -1,7 +1,12 @@
 .git
+.jj
+.claude
 bin
 .DS_Store
 .ssh/config
 .wget-hsts
 README.md
 .gitignore
+
+preview.png
+startup-time.png

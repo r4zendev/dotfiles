@@ -1,15 +1,6 @@
 vim.opt.grepprg = "rg --hidden --vimgrep --smart-case"
 vim.opt.grepformat = "%f:%l:%c:%m"
 
-local function open_qf()
-  local ok, quicker = pcall(require, "quicker")
-  if ok and quicker and quicker.open then
-    quicker.open({ focus = true })
-  else
-    vim.cmd("copen")
-  end
-end
-
 vim.api.nvim_create_user_command("Grep", function(opts)
   if opts.args == "" then
     vim.notify("Grep: missing pattern", vim.log.levels.WARN)
@@ -19,7 +10,12 @@ vim.api.nvim_create_user_command("Grep", function(opts)
   local root = require("utils").workspace_root()
 
   vim.fn.setqflist({})
-  local cmd = string.format("cd %s && %s -- %s", vim.fn.shellescape(root), vim.o.grepprg, vim.fn.shellescape(opts.args))
+  local cmd = string.format(
+    "cd %s && %s -- %s",
+    vim.fn.shellescape(root),
+    vim.o.grepprg,
+    vim.fn.shellescape(opts.args)
+  )
   local output = vim.fn.system(cmd)
 
   vim.fn.setqflist({}, "a", {
@@ -28,7 +24,7 @@ vim.api.nvim_create_user_command("Grep", function(opts)
   })
 
   if vim.fn.getqflist({ size = 0 }).size > 0 then
-    open_qf()
+    vim.cmd("copen")
   else
     vim.notify("Grep: no matches", vim.log.levels.INFO)
   end

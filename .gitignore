@@ -1,31 +1,27 @@
 !.rgignore
 
-# planned to use
-.config/zed
-
 .aws
 .ssh
-.zsh_env_vars
+.dblab.yaml
+.config/mcpservers.json
+
 .config/gh/hosts.yml
 .config/github-copilot
 .config/qBittorrent
+.config/configstore
 .config/colima
-.config/gcloud
 .config/pgcli
 .config/tmux/plugins
-.config/fish/fish_variables
-.config/lazysql
 .config/sesh
 .config/opencode
-.config/wezterm/images
+.config/term-images
 .config/linearmouse
 .config/nvim-extras
 .config/ghostty/.bg-state
 .config/ghostty/background
 
+.config/fish/fish_variables
 .config/fish/conf.d/env.fish
-.config/nvim/lua/r4zen/plugins/extras/browser-tabs
-.config/mcpservers.json
 
 dist
 logs

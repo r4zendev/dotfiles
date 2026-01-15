@@ -105,7 +105,7 @@ config.keys = {
   { key = ".", mods = "CMD|SHIFT", action = act.EmitEvent("decrease-background-brightness") },
 }
 
-local IMAGES_DIR = wezterm.home_dir .. "/.config/wezterm/images"
+local IMAGES_DIR = wezterm.home_dir .. "/.config/term-images"
 local BRIGHTNESS_STEP = 0.05
 
 local function is_image(filename)

@@ -5,8 +5,6 @@ return {
     "echasnovski/mini.nvim",
   },
   config = function()
-    local git_blame = require("gitblame")
-
     local function get_theme()
       package.loaded["lualine.themes.auto"] = nil
       local theme = require("lualine.themes.auto")
@@ -37,20 +35,6 @@ return {
             "filename",
             cond = function()
               return not vim.api.nvim_buf_get_name(0):match("^oil://")
-            end,
-          },
-          {
-            function()
-              local original_text = git_blame.get_current_blame_text()
-              local separator = "•"
-              local split_text = vim.split(original_text, separator)
-              return (#split_text >= 2)
-                  and (table.concat({ split_text[1], split_text[2] }, separator))
-                or original_text
-            end,
-            cond = function()
-              return git_blame.is_blame_text_available()
-                and not vim.api.nvim_buf_get_name(0):match("^oil://")
             end,
           },
         },

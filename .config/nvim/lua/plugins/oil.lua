@@ -43,10 +43,14 @@ return {
 
       -- Allow navigation between panes
       ["<C-h>"] = {
-        callback = vim.cmd.NavigatorLeft,
+        callback = function()
+          return require("core.tmux").navigate("h")
+        end,
       },
       ["<C-l>"] = {
-        callback = vim.cmd.NavigatorRight,
+        callback = function()
+          return require("core.tmux").navigate("l")
+        end,
       },
     },
   },
@@ -57,6 +61,10 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "OilActionsPost",
       callback = function(event)
+        if #event.data.actions == 0 then
+          return
+        end
+
         if event.data.actions[1].type == "move" then
           Snacks.rename.on_rename_file(
             event.data.actions[1].src_url,

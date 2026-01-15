@@ -50,14 +50,6 @@ autocmd("FileType", {
   end,
 })
 
--- Add empty winbar to align with main window (useful for comparable views)
-autocmd("FileType", {
-  pattern = { "fugitiveblame" },
-  callback = function()
-    vim.wo.winbar = " "
-  end,
-})
-
 -- Window layout
 autocmd("FileType", {
   pattern = { "help", "qf", "copilot", "vim" },
@@ -85,6 +77,55 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Move tmux status bar to top when entering vim, bottom when exiting
+if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
+  autocmd("VimEnter", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position top", { detach = true })
+    end,
+  })
+
+  autocmd("VimLeavePre", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
+    end,
+  })
+end
+
+-- Alternative for dropbar.nvim plugin that I use
+-- Displays the file path in the winbar, with certain exceptions
+-- vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+--   callback = function()
+--     local empty_for = {
+--       "oil",
+--       "NvimTree",
+--       "fugitiveblame",
+--     }
+--     local disable_for = {
+--       "help",
+--       "qf",
+--       "netrw",
+--       "Trouble",
+--       "neo-tree",
+--       "nofile",
+--       "snacks_picker_input",
+--       "snacks_picker_list",
+--       "snacks_picker_preview",
+--     }
+--     local ft = vim.bo.filetype
+--     local bt = vim.bo.buftype
+--
+--     if vim.tbl_contains(disable_for, ft) then
+--       vim.wo.winbar = ""
+--       return
+--     elseif vim.tbl_contains(empty_for, ft) or bt ~= "" then
+--       vim.wo.winbar = " "
+--     else
+--       vim.wo.winbar = "%f"
+--     end
+--   end,
+-- })
+
 -- Highlight on yank, currently handled by yanky.nvim
 -- autocmd("TextYankPost", {
 --   -- group = augroup("HighlightOnYank", { clear = true }),
@@ -103,18 +144,3 @@ vim.api.nvim_create_autocmd("FileType", {
 --     vim.opt.formatoptions:remove({ "c", "r", "o" })
 --   end,
 -- })
-
--- Move tmux status bar to top when entering vim, bottom when exiting
-if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
-  autocmd("VimEnter", {
-    callback = function()
-      vim.fn.jobstart("tmux set status-position top", { detach = true })
-    end,
-  })
-
-  autocmd("VimLeavePre", {
-    callback = function()
-      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
-    end,
-  })
-end

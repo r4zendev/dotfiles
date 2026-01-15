@@ -69,5 +69,12 @@ return {
     require("which-key").add({
       { "<leader>;", group = "Dropbar", icon = { icon = "", color = "blue" } },
     })
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { "fugitiveblame" },
+      callback = function()
+        vim.wo.winbar = " "
+      end,
+    })
   end,
 }

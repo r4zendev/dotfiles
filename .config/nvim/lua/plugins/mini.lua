@@ -14,16 +14,27 @@ M.plugin = {
     local mini_cursorword = require("mini.cursorword")
     local mini_diff = require("mini.diff")
     local mini_move = require("mini.move")
+    local mini_jump = require("mini.jump")
 
     mini_align.setup()
     mini_surround.setup({ n_lines = 9999 })
     mini_splitjoin.setup()
     mini_cursorword.setup()
+    mini_jump.setup()
 
     mini_diff.setup()
     map("n", "<leader>=", function()
       mini_diff.toggle_overlay(0)
     end, { desc = "Toggle diff overlay" })
+    map("n", "<leader>ga", function()
+      MiniDiff.do_hunks(0, "apply")
+    end, { desc = "Apply hunk (stage)" })
+    map("n", "<leader>gr", function()
+      MiniDiff.do_hunks(0, "reset")
+    end, { desc = "Discard hunk" })
+    map("x", "<leader>ga", function()
+      MiniDiff.do_hunks(0, "apply", { selection = true })
+    end, { desc = "Apply selected lines" })
 
     mini_move.setup({
       mappings = {
@@ -41,15 +52,10 @@ M.plugin = {
       },
     })
 
-    mini_bracketed.setup()
-    map("n", "[t", vim.cmd.tabprev, { desc = "Previous tabpage" })
-    map("n", "]t", vim.cmd.tabnext, { desc = "Next tabpage" })
-    map("n", "[d", function()
-      vim.diagnostic.jump({ count = -1, float = false })
-    end, { desc = "Prev diagnostic" })
-    map("n", "]d", function()
-      vim.diagnostic.jump({ count = 1, float = false })
-    end, { desc = "Next diagnostic" })
+    mini_bracketed.setup({
+      treesitter = { suffix = "" },
+      diagnostic = { options = { float = false } },
+    })
     vim.keymap.set("n", "u", function()
       vim.cmd("silent! undo")
       MiniBracketed.register_undo_state()
