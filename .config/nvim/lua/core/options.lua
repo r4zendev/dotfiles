@@ -41,8 +41,8 @@ opt.undofile = true
 opt.autoread = true
 
 -- Handled by snacks.statuscolumn
--- opt.signcolumn = "yes:1"
--- opt.foldcolumn = "1"
+opt.signcolumn = "yes:1"
+opt.foldcolumn = "1"
 
 opt.foldenable = true
 opt.foldlevel = 99

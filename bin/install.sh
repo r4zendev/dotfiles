@@ -11,18 +11,19 @@ cd ~ && mkdir -p projects/r4zendotdev && cd projects/r4zendotdev
 git clone git@github.com:r4zendev/dotfiles.git dotfiles
 
 # Terminal environment
-brew install --cask wezterm                   # terminal emulator
-brew install starship                         # prompt customization
-brew install tmux                             # terminal multiplexer
-brew install sesh                             # tmux session manager
-brew install bash                             # running bash scripts
-brew install fish                             # daily driver
-brew install fisher                           # package manager for fish
-brew install --cask claude-code               # AI assistant [1]
-brew install --cask codex                     # AI assistant [2]
-curl -fsSL https://opencode.ai/install | bash # AI assistant [3]
-brew install --cask danvergara/tools/dblab    # DB client
-brew install neovim --HEAD                    # my precious
+brew install --cask ghostty
+# brew install --cask wezterm
+brew install starship
+brew install tmux
+brew install sesh
+brew install bash
+brew install fish
+brew install fisher
+brew install --cask claude-code
+brew install --cask codex
+curl -fsSL https://opencode.ai/install | bash
+brew install --cask danvergara/tools/dblab
+brew install neovim --HEAD
 
 # Git
 brew install gh
@@ -30,30 +31,27 @@ brew install git
 brew install jj
 # brew install git-delta
 # brew install difftastic
-brew install lazygit # git UI
+brew install lazygit
 
 # Docker
 brew install docker # docker CLI
 brew install docker-compose
 brew install docker-credential-helper
-brew install colima     # docker driver
-brew install lazydocker # docker UI
+brew install colima
+brew install lazydocker
 
 # PMs / Runtimes
-brew install oven-sh/bun/bun # runtime
-brew install pnpm            # package manager
+brew install oven-sh/bun/bun
+brew install pnpm
 
 brew install uv
 
 # Curl
-brew install curlie # curl alternative
-brew install xh     # daily driver
+brew install curlie
+brew install xh
 
 # Window management
-# brew install --cask nikitabobko/tap/aerospace
-# OR
 brew install yabai
-# AND THEN
 # sudo yabai --install-sa
 # yabai --load-sa
 # yabai --start-service
@@ -94,13 +92,14 @@ brew install --cask discord
 brew install --cask helium-browser
 brew install --cask obsidian
 brew install --cask slack
-brew install --cask superwhisper # Voice to text
+brew install --cask superwhisper
 brew install --cask telegram
 brew install th-ch/youtube-music/youtube-music
 
 # System utils
-brew install --cask hammerspoon # advanced scripting & automation
-brew install jordanbaird-ice    # toolbar
-brew install --cask keycastr    # keylogger
-brew install --cask linearmouse # app to reverse external mouse scroll
-brew install imagemagick        # image processing
+brew install --cask hammerspoon
+brew install jordanbaird-ice
+brew install --cask keycastr
+brew install --cask linearmouse
+brew install imagemagick
+brew install pngpaste

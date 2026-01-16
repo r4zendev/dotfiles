@@ -1,0 +1,17 @@
+[default_session]
+startup_command = "nvim -c ':lua Snacks.picker.smart()'"
+
+[[session]]
+name = "grind"
+path = "~/projects/r4zendotdev"
+
+[[session]]
+name = "dotfiles"
+path = "~/projects/r4zendotdev/dotfiles"
+
+[[session]]
+name = "notes"
+path = "~/notes"
+
+[zoxide]
+score_threshold = 25.0
