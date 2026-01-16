@@ -1,25 +1,21 @@
 return {
-  "rachartier/tiny-inline-diagnostic.nvim",
+  -- "rachartier/tiny-inline-diagnostic.nvim",
+  dir = "~/projects/r4zendotdev/tiny-inline-diagnostic.nvim",
   event = "VeryLazy",
   priority = 1000,
   opts = {
+    preset = "powerline",
     options = {
       use_icons_from_diagnostic = true,
       set_arrow_to_diag_color = true,
-      add_messages = {
-        messages = true,
-        display_count = true,
-        use_max_severity = true,
-        show_multiple_glyphs = true,
-      },
-      -- show_diags_only_under_cursor = true,
-      multilines = {
-        enabled = true,
-      },
-      virt_texts = {
-        priority = 9999,
-      },
       override_open_float = true,
+
+      add_messages = { display_count = true },
+      multilines = { enabled = true },
+
+      -- These two seem to be conflicting but somehow enabling both of them results exactly in the view I want
+      show_all_diags_on_cursorline = true,
+      show_diags_only_under_cursor = true,
     },
   },
 }
