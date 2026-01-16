@@ -1,4 +1,5 @@
 local map = vim.keymap.set
+local autocmd = vim.api.nvim_create_autocmd
 
 local M = {}
 
@@ -23,5 +24,20 @@ end)
 map({ "n", "x" }, "<C-l>", function()
   M.navigate("l")
 end)
+
+-- Move tmux status bar to top when entering vim, bottom when exiting
+if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
+  autocmd("VimEnter", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position top", { detach = true })
+    end,
+  })
+
+  autocmd("VimLeavePre", {
+    callback = function()
+      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
+    end,
+  })
+end
 
 return M

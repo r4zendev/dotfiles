@@ -60,38 +60,6 @@ autocmd("FileType", {
   end,
 })
 
--- NOTE: Remove binding from jghauser/follow-md-links.nvim and set my own
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    vim.schedule(function()
-      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<cr>")
-      vim.api.nvim_buf_set_keymap(
-        0,
-        "n",
-        "ge",
-        ':lua require("follow-md-links").follow_link()<cr>',
-        { noremap = true, silent = true }
-      )
-    end)
-  end,
-})
-
--- Move tmux status bar to top when entering vim, bottom when exiting
-if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
-  autocmd("VimEnter", {
-    callback = function()
-      vim.fn.jobstart("tmux set status-position top", { detach = true })
-    end,
-  })
-
-  autocmd("VimLeavePre", {
-    callback = function()
-      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
-    end,
-  })
-end
-
 -- Alternative for dropbar.nvim plugin that I use
 -- Displays the file path in the winbar, with certain exceptions
 -- vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {

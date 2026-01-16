@@ -76,7 +76,13 @@ M.plugin = {
     },
     rename = { enabled = true },
     bigfile = { enabled = true },
-    image = { enabled = false },
+    image = {
+      enabled = true,
+      doc = {
+        inline = false,
+        float = true,
+      },
+    },
     input = { enabled = true },
     notifier = {
       enabled = true,
