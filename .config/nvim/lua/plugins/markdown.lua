@@ -11,7 +11,7 @@ return {
     ft = "markdown",
     cmd = "Markview",
     keys = {
-      { "<leader>mT", "<cmd>Markview toggle<cr>", desc = "Toggle Markview" },
+      { "<leader>mt", "<cmd>Markview toggle<cr>", desc = "Toggle Markview" },
     },
     opts = {},
     init = function()

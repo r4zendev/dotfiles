@@ -1,8 +1,7 @@
 return {
   -- "rachartier/tiny-inline-diagnostic.nvim",
   dir = "~/projects/r4zendotdev/tiny-inline-diagnostic.nvim",
-  event = "VeryLazy",
-  priority = 1000,
+  event = "LspAttach",
   opts = {
     preset = "powerline",
     options = {
