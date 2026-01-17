@@ -60,7 +60,13 @@ M.on_attach = function(_, bufnr)
     return { desc = desc, noremap = true, silent = true, buffer = bufnr }
   end
 
-  map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
+  local tiny_code_action_ok, tiny_code_action = pcall(require, "tiny-code-action")
+  if tiny_code_action_ok then
+    map({ "n", "v" }, "<leader>ca", tiny_code_action.code_action, opts("See available code actions"))
+  else
+    map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
+  end
+
   map("n", "<leader>cn", vim.lsp.buf.rename, opts("Smart rename"))
   map("n", "<leader>cd", function()
     vim.diagnostic.open_float()

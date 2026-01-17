@@ -12,16 +12,16 @@ M.navigate = function(direction)
   end
 end
 
-map({ "n", "x" }, "<C-h>", function()
+map({ "n", "x", "t" }, "<C-h>", function()
   M.navigate("h")
 end)
-map({ "n", "x" }, "<C-j>", function()
+map({ "n", "x", "t" }, "<C-j>", function()
   M.navigate("j")
 end)
-map({ "n", "x" }, "<C-k>", function()
+map({ "n", "x", "t" }, "<C-k>", function()
   M.navigate("k")
 end)
-map({ "n", "x" }, "<C-l>", function()
+map({ "n", "x", "t" }, "<C-l>", function()
   M.navigate("l")
 end)
 

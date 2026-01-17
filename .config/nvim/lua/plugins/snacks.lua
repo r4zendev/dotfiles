@@ -44,7 +44,7 @@ M.plugin = {
         { section = "startup" },
       },
       preset = {
-        -- stylua: ignore
+        -- stylua: ignore start
         keys = {
           { icon = " ", key = "f", desc = "Find Files", action = ":lua Snacks.dashboard.pick('smart', { hidden = true })" },
           { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true })" },
@@ -52,6 +52,7 @@ M.plugin = {
           { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
           { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         },
+        -- stylua: ignore end
         header = [[
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⣠⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
@@ -95,6 +96,9 @@ M.plugin = {
         only_scope = true,
       },
     },
+    terminal = {
+      enabled = true,
+    },
     statuscolumn = {
       enabled = true,
       -- left = { "mark", "fold", "sign" },
@@ -112,8 +116,8 @@ M.plugin = {
       refresh = 50,
     },
   },
-  -- stylua: ignore
   keys = {
+    -- stylua: ignore start
     -- NOTE: Files
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
@@ -219,6 +223,25 @@ M.plugin = {
     { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>sC", function() Snacks.picker.commands() end, desc = "Command List" },
 
+    -- NOTE: Terminal
+    {
+      "<leader>tt",
+      function() Snacks.terminal.toggle() end,
+      mode = { "n", "t" },
+      desc = "Toggle Terminal",
+    },
+    {
+      "<leader>tT",
+      function()
+        vim.ui.input({ prompt = "Terminal Command: " }, function(input)
+          if input and #input > 0 then
+            Snacks.terminal.toggle(input)
+          end
+        end)
+      end,
+      desc = "Toggle Terminal with Command",
+    },
+    -- stylua: ignore end
   },
   init = function(plugin)
     require("which-key").add({
