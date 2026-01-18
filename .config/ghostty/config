@@ -4,6 +4,7 @@ term = xterm-256color
 font-size = 19
 font-family = ""
 font-family = Monaspace Argon
+font-family = JetBrainsMono Nerd Font Mono
 font-style = Medium
 font-style-italic = false
 font-feature = calt

@@ -60,29 +60,42 @@ return {
       },
     })
 
+    local copilot_suggestion = require("copilot.suggestion")
+    local copilot_nes = require("copilot-lsp.nes")
+
+    vim.keymap.set("n", "<Tab>", function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local state = vim.b[bufnr].nes_state
+
+      if state then
+        -- Try to jump to the start of the suggestion edit.
+        -- If already at the start, then apply the pending suggestion and jump to the end of the edit.
+        local _ = copilot_nes.walk_cursor_start_edit()
+          or (copilot_nes.apply_pending_nes() and copilot_nes.walk_cursor_end_edit())
+        return nil
+      end
+
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+    end, { desc = "Accept Copilot NES suggestion", expr = true })
+
+    vim.keymap.set("n", "<Esc>", function()
+      if copilot_suggestion.is_visible() then
+        copilot_suggestion.dismiss()
+        return
+      end
+
+      local bufnr = vim.api.nvim_get_current_buf()
+      local state = vim.b[bufnr].nes_state
+
+      if state then
+        copilot_nes.clear()
+        return
+      end
+
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+    end, { desc = "Accept Copilot NES suggestion", expr = true })
+
     if vim.g.copilot_enabled then
-      local copilot_suggestion = require("copilot.suggestion")
-      local copilot_nes = require("copilot-lsp.nes")
-
-      vim.keymap.set("n", "<Tab>", function()
-        local bufnr = vim.api.nvim_get_current_buf()
-        local state = vim.b[bufnr].nes_state
-
-        if state then
-          -- Try to jump to the start of the suggestion edit.
-          -- If already at the start, then apply the pending suggestion and jump to the end of the edit.
-          local _ = copilot_nes.walk_cursor_start_edit()
-            or (copilot_nes.apply_pending_nes() and copilot_nes.walk_cursor_end_edit())
-          return nil
-        end
-
-        vim.api.nvim_feedkeys(
-          vim.api.nvim_replace_termcodes("<Tab>", true, false, true),
-          "n",
-          false
-        )
-      end, { desc = "Accept Copilot NES suggestion", expr = true })
-
       vim.keymap.set("i", "<Tab>", function()
         if copilot_suggestion.is_visible() then
           copilot_suggestion.accept()
@@ -95,27 +108,6 @@ return {
           false
         )
       end, { silent = true })
-
-      vim.keymap.set("n", "<Esc>", function()
-        if copilot_suggestion.is_visible() then
-          copilot_suggestion.dismiss()
-          return
-        end
-
-        local bufnr = vim.api.nvim_get_current_buf()
-        local state = vim.b[bufnr].nes_state
-
-        if state then
-          copilot_nes.clear()
-          return
-        end
-
-        vim.api.nvim_feedkeys(
-          vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-          "n",
-          false
-        )
-      end, { desc = "Accept Copilot NES suggestion", expr = true })
     end
 
     require("copilot").setup(opts)

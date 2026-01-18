@@ -11,6 +11,7 @@
 .config/configstore
 .config/colima
 .config/pgcli
+.config/neofetch
 .config/tmux/plugins
 .config/opencode
 .config/term-images

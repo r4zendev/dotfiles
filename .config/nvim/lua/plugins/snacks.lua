@@ -296,8 +296,8 @@ M.plugin = {
     --   and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
     -- -- stylua: ignore end
 
-    vim.g.copilot_enabled = true
-    vim.g.minuet_enabled = false
+    vim.g.copilot_enabled = false
+    vim.g.minuet_enabled = true
 
     local is_minuet_enabled = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
