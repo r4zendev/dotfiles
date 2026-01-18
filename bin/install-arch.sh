@@ -26,7 +26,7 @@ yay -S --needed sesh-bin
 sudo pacman -S --needed bash
 sudo pacman -S --needed fish
 yay -S --needed fisher
-yay -S --needed claude-code-cli
+curl -fsSL https://claude.ai/install.sh | bash
 curl -fsSL https://opencode.ai/install | bash
 yay -S --needed dblab-bin
 sudo pacman -S --needed neovim

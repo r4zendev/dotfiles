@@ -19,8 +19,8 @@ brew install sesh
 brew install bash
 brew install fish
 brew install fisher
-brew install --cask claude-code
 brew install --cask codex
+curl -fsSL https://claude.ai/install.sh | bash
 curl -fsSL https://opencode.ai/install | bash
 brew install --cask danvergara/tools/dblab
 brew install neovim --HEAD
