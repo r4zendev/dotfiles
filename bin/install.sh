@@ -89,7 +89,9 @@ brew install --cask font-inconsolata-lgc-nerd-font # cyrillic
 brew install --cask 1password
 brew install --cask blender
 brew install --cask discord
+brew install --cask gimp
 brew install --cask helium-browser
+brew install --cask libreoffice
 brew install --cask obsidian
 brew install --cask slack
 brew install --cask superwhisper
@@ -103,3 +105,4 @@ brew install --cask keycastr
 brew install --cask linearmouse
 brew install imagemagick
 brew install pngpaste
+brew install android-platform-tools

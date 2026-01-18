@@ -69,8 +69,10 @@ sudo pacman -S --needed mako         # notification daemon
 yay -S --needed hyprpaper            # wallpapers
 yay -S --needed bibata-cursor-git    # cursor theme
 
-yay -S --needed cliphist        # clipboard manager
-yay -S --needed wl-clip-persist # keeps clipboard after app closes
+# hyprland.conf -> exec-once = /usr/lib/kdeconnect-indicator
+sudo pacman -S --needed kdeconnect # integration with other devices
+yay -S --needed cliphist           # clipboard manager
+yay -S --needed wl-clip-persist    # keeps clipboard after app closes
 
 sudo pacman -S --needed xdg-desktop-portal-hyprland # screen sharing support
 yay -S --needed wf-recorder                         # screen recording for Wayland
@@ -106,18 +108,21 @@ yay -S --needed ttf-monaspace
 yay -S --needed ttf-inconsolata-lgc-nerd # cyrillic
 
 # Apps
-yay -S --needed 1password
 sudo pacman -S --needed blender
 sudo pacman -S --needed discord
-# helium-browser - https://github.com/imputnet/helium-linux
-yay -S --needed zen-browser-bin
+sudo pacman -S --needed gimp
+sudo pacman -S --needed libreoffice-fresh
+sudo pacman -S --needed telegram-desktop
+yay -S --needed 1password
 yay -S --needed obsidian
 yay -S --needed slack-desktop
-sudo pacman -S --needed telegram-desktop
 yay -S --needed youtube-music-bin
+yay -S --needed zen-browser-bin
+# helium-browser - https://github.com/imputnet/helium-linux
 
 # System utils
 sudo pacman -S --needed imagemagick
+sudo pacman -S --needed android-tools
 yay -S --needed pngpaste
 yay -S --needed keyd        # keyboard remapping
 yay -S --needed whisper.cpp # local whisper ASR
