@@ -19,6 +19,10 @@ indent_size = 4
 [*.rs]
 indent_size = 4
 
+# zig
+[*.zig]
+indent_size = 4
+
 # python
 [*.{ini,py,py.tpl,rst}]
 indent_size = 4
