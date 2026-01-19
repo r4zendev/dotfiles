@@ -19,6 +19,7 @@
 .config/nvim-extras
 .config/ghostty/.bg-state
 .config/ghostty/background
+.config/hammerspoon/Spoons
 
 .config/fish/fish_variables
 .config/fish/conf.d/env.fish
