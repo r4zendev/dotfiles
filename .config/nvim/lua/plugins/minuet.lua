@@ -106,9 +106,9 @@ return {
       deepseek_fim = {
         provider = "openai_fim_compatible",
         n_completions = 1,
-        context_window = 16000,
-        throttle = 600,
-        debounce = 200,
+        -- context_window = 16000,
+        -- throttle = 600,
+        -- debounce = 200,
         provider_options = {
           openai_fim_compatible = {
             api_key = "DEEPSEEK_API_KEY",
@@ -117,7 +117,8 @@ return {
             stream = true,
             name = "DeepSeek FIM",
             optional = {
-              max_tokens = 128,
+              -- max_tokens = 128,
+              max_tokens = 256,
               temperature = 0.1,
               stop = { "\n\n", "```" },
             },

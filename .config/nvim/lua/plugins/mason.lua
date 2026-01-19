@@ -54,7 +54,8 @@ return {
       "black",
       "pylint",
 
-      "lua_ls",
+      { "lua_ls", version = "3.16.4" },
+
       "stylua",
 
       "typos_lsp",
