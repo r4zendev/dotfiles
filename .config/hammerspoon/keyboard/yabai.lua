@@ -34,10 +34,10 @@ alt("r", { sequence = { "space --rotate 90" } })
 -- stylua: ignore start
 alt("a", { primary = "window --resize right:-20:0 2> /dev/null", fallback = "window --resize left:-20:0 2> /dev/null" })
 alt("d", { primary = "window --resize right:20:0 2> /dev/null", fallback = "window --resize left:20:0 2> /dev/null" })
-alt("left", { primary = "window --resize right:-20:0 2> /dev/null", fallback = "window --resize left:-20:0 2> /dev/null" })
-alt("right", { primary = "window --resize right:20:0 2> /dev/null", fallback = "window --resize left:20:0 2> /dev/null" })
-alt("up", { primary = "window --resize bottom:0:-20 2> /dev/null", fallback = "window --resize top:0:-20 2> /dev/null" })
-alt("down", { primary = "window --resize bottom:0:20 2> /dev/null", fallback = "window --resize top:0:20 2> /dev/null" })
+altShift("left", { primary = "window --resize right:-20:0 2> /dev/null", fallback = "window --resize left:-20:0 2> /dev/null" })
+altShift("right", { primary = "window --resize right:20:0 2> /dev/null", fallback = "window --resize left:20:0 2> /dev/null" })
+altShift("up", { primary = "window --resize bottom:0:-20 2> /dev/null", fallback = "window --resize top:0:-20 2> /dev/null" })
+altShift("down", { primary = "window --resize bottom:0:20 2> /dev/null", fallback = "window --resize top:0:20 2> /dev/null" })
 -- stylua: ignore end
 
 alt("w", { sequence = { "space --balance" } })
