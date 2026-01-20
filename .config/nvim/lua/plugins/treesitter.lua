@@ -24,9 +24,10 @@ local parsers = {
   "tmux",
   "tsx",
   "typescript",
-  "vim",
   "yaml",
   "zig",
+  -- buggy parser ("tab" node type does not exist anymore)
+  -- "vim",
 }
 
 local treesitter_fts = vim.tbl_extend("force", parsers, {
