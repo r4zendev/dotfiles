@@ -33,6 +33,8 @@ return {
         lualine_c = {
           {
             "filename",
+            -- 0: fname; 1: relpath; 2: abspath; 3: abspath (~); 4: fname + parent (~);
+            path = 1,
             cond = function()
               return not vim.api.nvim_buf_get_name(0):match("^oil://")
             end,

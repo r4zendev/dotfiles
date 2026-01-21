@@ -94,15 +94,15 @@ autocmd("FileType", {
 --   end,
 -- })
 
--- Highlight on yank, currently handled by yanky.nvim
--- autocmd("TextYankPost", {
---   -- group = augroup("HighlightOnYank", { clear = true }),
---   pattern = "*",
---   desc = "Highlight text when yank",
---   callback = function()
---     vim.hl.on_yank()
---   end,
--- })
+-- Highlight on yank
+autocmd("TextYankPost", {
+  -- group = augroup("HighlightOnYank", { clear = true }),
+  pattern = "*",
+  desc = "Highlight text when yank",
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
 
 -- Disable extending comments on new lines.
 -- autocmd("BufEnter", {

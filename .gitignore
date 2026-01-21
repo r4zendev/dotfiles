@@ -10,6 +10,7 @@
 .config/qBittorrent
 .config/configstore
 .config/colima
+.config/btop
 .config/pgcli
 .config/neofetch
 .config/tmux/plugins

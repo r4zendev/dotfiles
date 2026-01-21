@@ -26,8 +26,7 @@ local parsers = {
   "typescript",
   "yaml",
   "zig",
-  -- buggy parser ("tab" node type does not exist anymore)
-  -- "vim",
+  "vim",
 }
 
 local treesitter_fts = vim.tbl_extend("force", parsers, {
@@ -39,9 +38,11 @@ local treesitter_fts = vim.tbl_extend("force", parsers, {
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    -- lazy = false,
-    event = "LazyFile",
+    lazy = false,
+    -- event = "LazyFile",
     build = ":TSUpdate",
+    branch = "main",
+    -- commit = "f795520371e6563dac17a0d556f41d70ca86a789",
     opts = {
       install_dir = vim.fn.stdpath("data") .. "/treesitter",
     },

@@ -41,8 +41,9 @@ return {
             },
             auto_generate_title = true,
             title_generation_opts = {
-              adapter = "copilot",
-              model = "claude-sonnet-4.5",
+              adapter = "openrouter_devstral",
+              -- adapter = "copilot",
+              -- model = "claude-sonnet-4.5",
               refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
               max_refreshes = 3,
               format_title = function(original_title)
@@ -98,12 +99,32 @@ return {
               schema = { model = { default = "x-ai/grok-4.1-fast:free" } },
             })
           end,
+          openrouter_devstral = function()
+            return require("codecompanion.adapters").extend("openai_compatible", {
+              env = {
+                url = "https://openrouter.ai/api",
+                api_key = "OPENROUTER_API_KEY",
+                chat_url = "/v1/chat/completions",
+              },
+              schema = { model = { default = "mistralai/devstral-2512:free" } },
+            })
+          end,
         },
         acp = {
           claude_code = function()
             return require("codecompanion.adapters").extend("claude_code", {
               env = {
                 CLAUDE_CODE_OAUTH_TOKEN = "CLAUDE_CODE_OAUTH_TOKEN",
+              },
+            })
+          end,
+          codex = function()
+            return require("codecompanion.adapters").extend("codex", {
+              defaults = {
+                auth_method = "chatgpt",
+              },
+              env = {
+                OPENAI_API_KEY = "OPENAI_API_KEY",
               },
             })
           end,
@@ -135,6 +156,9 @@ return {
 
           adapter = "claude_code",
         },
+        inline = {
+          adapter = "openrouter_devstral",
+        },
       },
       display = {
         -- chat = {
@@ -160,6 +184,7 @@ return {
       },
       { "<leader>aa", ":CodeCompanionChat adapter=auggie<CR>", desc = "Codecompanion: Auggie" },
       { "<leader>ac", ":CodeCompanionChat adapter=claude_code<CR>", desc = "Codecompanion: Claude Code" },
+      { "<leader>aO", ":CodeCompanionChat adapter=codex<CR>", desc = "Codecompanion: Codex" },
       { "<leader>aC", ":CodeCompanionChat adapter=copilot<CR>", desc = "Codecompanion: Copilot (Claude)" },
       { "<leader>ao", ":CodeCompanionChat adapter=opencode<CR>", desc = "Codecompanion: OpenCode" },
       { "<leader>ag", ":CodeCompanionChat adapter=openrouter_grok<CR>", desc = "Codecompanion: Grok 4.1 Fast" },
