@@ -104,7 +104,7 @@ pnpm i -g fkill-cli               # kill processes
 
 # Fonts
 sudo pacman -S --needed ttf-jetbrains-mono-nerd
-yay -S --needed ttf-monaspace
+sudo pacman -S --needed otf-monaspace
 yay -S --needed ttf-inconsolata-lgc-nerd # cyrillic
 
 # Apps
@@ -116,14 +116,13 @@ sudo pacman -S --needed telegram-desktop
 yay -S --needed 1password
 yay -S --needed obsidian
 yay -S --needed slack-desktop
-yay -S --needed youtube-music-bin
+yay -S --needed pear-desktop
 yay -S --needed zen-browser-bin
 # helium-browser - https://github.com/imputnet/helium-linux
 
 # System utils
 sudo pacman -S --needed imagemagick
 sudo pacman -S --needed android-tools
-yay -S --needed pngpaste
 yay -S --needed keyd        # keyboard remapping
 yay -S --needed whisper.cpp # local whisper ASR
 

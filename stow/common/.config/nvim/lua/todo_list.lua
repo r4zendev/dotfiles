@@ -20,7 +20,9 @@ end
 local function close_window()
   for buf in pairs(state.buffers) do
     if api.nvim_buf_is_valid(buf) and vim.bo[buf].modified then
-      api.nvim_buf_call(buf, function() vim.cmd.write() end)
+      api.nvim_buf_call(buf, function()
+        vim.cmd.write()
+      end)
     end
   end
   if state.win_id and api.nvim_win_is_valid(state.win_id) then

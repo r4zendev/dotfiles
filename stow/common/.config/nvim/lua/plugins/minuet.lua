@@ -138,6 +138,11 @@ return {
       n_completions = 2,
       virtualtext = {
         auto_trigger_ft = { "*" },
+        auto_trigger_ignore_ft = {
+          "snacks_picker_input",
+          "oil",
+          "qf",
+        },
         keymap = {
           accept = false,
           accept_line = "<C-l>",

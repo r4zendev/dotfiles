@@ -195,8 +195,10 @@ return {
     "ravitemer/mcphub.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     cmd = "MCPHub",
-    build = "bun install -g mcp-hub@latest",
+    build = "bundled_build.lua",
     opts = {
+      use_bundled_binary = true,
+
       port = 37373,
       config = vim.fn.expand("~/.config/mcpservers.json"),
 

@@ -7,8 +7,8 @@ function y
 	rm -f -- "$tmp"
 end
 
-# nul - ctrl-space
-bind -k nul expand-abbr
+# ctrl-space
+bind ctrl-space expand-abbr
 
 abbr -a b "bun"
 abbr -a v "nvim"
