@@ -8,8 +8,10 @@
 # A smart and user-friendly command line
 # https://fishshell.com/
 
-eval (/opt/homebrew/bin/brew shellenv fish)
-set -x HOMEBREW_AUTOREMOVE 1
+if test -x /opt/homebrew/bin/brew
+  eval (/opt/homebrew/bin/brew shellenv fish)
+  set -x HOMEBREW_AUTOREMOVE 1
+end
 
 starship init fish | source # https://starship.rs/
 zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
@@ -30,9 +32,15 @@ set -Ux FZF_DEFAULT_OPTS "\
 --color=border:#6C7086,label:#CDD6F4"
 fzf --fish | source
 
-set -x PNPM_HOME "$HOME/Library/pnpm"
+if test (uname) = "Darwin"
+  set -x PNPM_HOME "$HOME/Library/pnpm"
+else
+  set -x PNPM_HOME "$HOME/.local/share/pnpm"
+end
 fish_add_path $PNPM_HOME
-fish_add_path (pnpm --global bin)
+if type -q pnpm
+  fish_add_path (pnpm --global bin)
+end
 
 fish_add_path "$HOME/.opencode/bin"
 fish_add_path "$HOME/.bun/bin"

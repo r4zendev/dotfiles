@@ -11,7 +11,11 @@ These are files that set up the dev environment on my machines, primarily the te
 ## Installation
 
 ```sh
-git clone git@github.com:r4zendev/dotfiles.git dotfiles && cd dotfiles && stow . -t ~`
+git clone git@github.com:r4zendev/dotfiles.git dotfiles
+cd dotfiles/stow
+stow -t ~ common
+stow -t ~ darwin   # macOS
+stow -t ~ linux    # Arch/CachyOS
 ```
 
 ## Software
@@ -27,7 +31,7 @@ git clone git@github.com:r4zendev/dotfiles.git dotfiles && cd dotfiles && stow .
 - Docker: [lazydocker](https://github.com/jesseduffield/lazydocker)
 - Colors: [catppuccin](https://github.com/catppuccin/)
 - Window manager: [yabai](https://github.com/koekeishiya/yabai)
-- See [`install.sh`](bin/install.sh) for other utils used
+- See [`install.sh`](stow/common/.config/bin/install.sh) for other utils used
 
 ## 🎉 Acknowledgment
 

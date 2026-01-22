@@ -8,7 +8,12 @@ local function init_global(key, default)
   return wezterm.GLOBAL[key]
 end
 
-local background_enabled = init_global("minimal_mode", true)
+local is_darwin = wezterm.target_triple and wezterm.target_triple:find("darwin") ~= nil
+local enable_background_images = is_darwin
+local primary_mod = is_darwin and "CMD" or "CTRL"
+local primary_shift_mod = primary_mod .. "|SHIFT"
+
+local background_enabled = enable_background_images and init_global("minimal_mode", true) or false
 local allow_nsfw = init_global("allow_nsfw", false)
 local allow_restricted = init_global("allow_restricted", false)
 local allow_explicit = init_global("allow_explicit", false)
@@ -18,7 +23,8 @@ local background_brightness = init_global("background_brightness", 0.05)
 
 local config = wezterm.config_builder and wezterm.config_builder() or {}
 
-config.default_prog = { "/opt/homebrew/bin/fish" }
+local default_shell = os.getenv("SHELL") or "fish"
+config.default_prog = { default_shell }
 config.term = "xterm-256color"
 
 config.colors = {
@@ -93,17 +99,20 @@ config.inactive_pane_hsb = { saturation = 0.24, brightness = 0.5 }
 config.selection_word_boundary = " \t\n{}[]()\"'`,;:│"
 
 config.keys = {
-  { key = "l", mods = "CMD", action = act.ShowDebugOverlay },
-  { key = "w", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-nsfw") },
-  { key = "t", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-restricted") },
-  { key = "e", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-explicit") },
-  { key = "d", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-default") },
-  { key = "m", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-background-image") },
-  { key = "r", mods = "CMD|SHIFT", action = act.EmitEvent("refresh-background-image") },
-  { key = "i", mods = "CMD|SHIFT", action = act.EmitEvent("show-background-image-path") },
-  { key = ";", mods = "CMD|SHIFT", action = act.EmitEvent("increase-background-brightness") },
-  { key = ".", mods = "CMD|SHIFT", action = act.EmitEvent("decrease-background-brightness") },
+  { key = "l", mods = primary_mod, action = act.ShowDebugOverlay },
 }
+
+if enable_background_images then
+  table.insert(config.keys, { key = "w", mods = primary_shift_mod, action = act.EmitEvent("toggle-nsfw") })
+  table.insert(config.keys, { key = "t", mods = primary_shift_mod, action = act.EmitEvent("toggle-restricted") })
+  table.insert(config.keys, { key = "e", mods = primary_shift_mod, action = act.EmitEvent("toggle-explicit") })
+  table.insert(config.keys, { key = "d", mods = primary_shift_mod, action = act.EmitEvent("toggle-default") })
+  table.insert(config.keys, { key = "m", mods = primary_shift_mod, action = act.EmitEvent("toggle-background-image") })
+  table.insert(config.keys, { key = "r", mods = primary_shift_mod, action = act.EmitEvent("refresh-background-image") })
+  table.insert(config.keys, { key = "i", mods = primary_shift_mod, action = act.EmitEvent("show-background-image-path") })
+  table.insert(config.keys, { key = ";", mods = primary_shift_mod, action = act.EmitEvent("increase-background-brightness") })
+  table.insert(config.keys, { key = ".", mods = primary_shift_mod, action = act.EmitEvent("decrease-background-brightness") })
+end
 
 local IMAGES_DIR = wezterm.home_dir .. "/.config/term-images"
 local BRIGHTNESS_STEP = 0.05
@@ -210,12 +219,17 @@ local function toggle_category(category_name, global_key)
   end
 end
 
-wezterm.on("toggle-nsfw", toggle_category("NSFW mode", "allow_nsfw"))
-wezterm.on("toggle-restricted", toggle_category("Restricted mode", "allow_restricted"))
-wezterm.on("toggle-explicit", toggle_category("Explicit mode", "allow_explicit"))
-wezterm.on("toggle-default", toggle_category("Exclude default", "exclude_default"))
+if enable_background_images then
+  wezterm.on("toggle-nsfw", toggle_category("NSFW mode", "allow_nsfw"))
+  wezterm.on("toggle-restricted", toggle_category("Restricted mode", "allow_restricted"))
+  wezterm.on("toggle-explicit", toggle_category("Explicit mode", "allow_explicit"))
+  wezterm.on("toggle-default", toggle_category("Exclude default", "exclude_default"))
+end
 
 wezterm.on("refresh-background-image", function(window, _)
+  if not enable_background_images then
+    return
+  end
   if not background_enabled then
     window:toast_notification("WezTerm", "Background image is OFF", nil, 1500)
     return
@@ -234,6 +248,9 @@ wezterm.on("refresh-background-image", function(window, _)
 end)
 
 wezterm.on("toggle-background-image", function(window, _)
+  if not enable_background_images then
+    return
+  end
   background_enabled = not background_enabled
   wezterm.GLOBAL.minimal_mode = background_enabled
   window:toast_notification(
@@ -264,16 +281,20 @@ wezterm.on("toggle-background-image", function(window, _)
 end)
 
 wezterm.on("show-background-image-path", function(window, _)
+  if not enable_background_images then
+    return
+  end
   if not background_enabled or not current_background_image then
     window:toast_notification("WezTerm", "No background image set", nil, 2000)
     return
   end
 
   local _, filename = string.match(current_background_image, "(.-)([^\\/]-%.?[^%.\\/]*)$")
+  local copy_cmd = is_darwin and "pbcopy" or "wl-copy"
   local success = wezterm.run_child_process({
     "bash",
     "-c",
-    "echo -n '" .. current_background_image .. "' | pbcopy",
+    "echo -n '" .. current_background_image .. "' | " .. copy_cmd,
   })
 
   window:toast_notification(
@@ -300,14 +321,16 @@ wezterm.on("decrease-background-brightness", function(window, _)
   adjust_brightness(window, -BRIGHTNESS_STEP)
 end)
 
-local images = get_background_images()
-if not current_background_image and #images > 0 then
-  current_background_image = images[math.random(#images)]
-  wezterm.GLOBAL.current_background_image = current_background_image
-end
+if enable_background_images then
+  local images = get_background_images()
+  if not current_background_image and #images > 0 then
+    current_background_image = images[math.random(#images)]
+    wezterm.GLOBAL.current_background_image = current_background_image
+  end
 
-if current_background_image then
-  config.background = create_background_layers(current_background_image, background_brightness)
+  if current_background_image then
+    config.background = create_background_layers(current_background_image, background_brightness)
+  end
 end
 
 return config
