@@ -52,6 +52,7 @@ end
 
 fish_add_path "$HOME/.opencode/bin"
 fish_add_path "$HOME/.bun/bin"
+fish_add_path "$HOME/.cache/.bun/bin"
 
 set -x XDG_CONFIG_HOME "$HOME/.config"
 

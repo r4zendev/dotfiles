@@ -26,6 +26,7 @@
 
   "clock": {
     "format": "󰥔  {:%a %d %b %H:%M}",
+    "tooltip": false,
     "on-click": "helium-browser --app=https://calendar.google.com"
   },
 
