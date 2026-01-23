@@ -16,7 +16,7 @@ font-feature = ss04
 adjust-cell-height = 1
 
 foreground =           #a6accd
-background =           #000000
+# background =           #000000
 cursor-color =         #a6accd
 cursor-text =          #252b37
 selection-background = #303340
@@ -55,5 +55,5 @@ macos-option-as-alt = true
 macos-non-native-fullscreen = padded-notch
 keybind = alt+enter=toggle_fullscreen
 
-config-file = ?background
 config-file = ?overrides
+config-file = ?background

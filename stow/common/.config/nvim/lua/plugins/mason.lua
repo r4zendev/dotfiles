@@ -42,12 +42,13 @@ return {
       "svelte",
       "js-debug-adapter",
 
-      "html-lsp",
-      "css-lsp",
+      "html",
+      "cssls",
 
       "marksman",
       "jsonls",
       "yamlls",
+      "fish_lsp",
 
       "pylsp",
       "pyright",
