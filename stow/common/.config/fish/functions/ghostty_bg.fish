@@ -1,64 +1,3 @@
-function frec
-  set rand_hex (openssl rand -hex 8)
-  ffmpeg -f avfoundation -capture_cursor 1 -capture_mouse_clicks 1 -i "$argv" -ar 48000 -f mp4 "$HOME/projects/r4zendotdev/screen-recordings/output-$rand_hex.mp4"
-end
-
-function fdev
-  ffmpeg -f avfoundation -list_devices true -i ''
-end
-
-function fish_title
-  echo (basename $PWD)
-  # if [ $_ = "fish" ]
-  #   echo (basename $PWD)
-  # else
-  #   echo $_
-  # end
-end
-
-function frg --description "rg tui built with fzf and bat"
-  rg --smart-case --hidden --sortr=modified --fixed-strings --color=always --line-number --no-heading "$argv" |
-  fzf --ansi \
-  --color 'hl:-1:underline,hl+:-1:underline:reverse' \
-  --delimiter ':' \
-  --preview "bat --color=always {1} --theme='Solarized (light)' --highlight-line {2}" \
-  --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-  --bind "enter:become($EDITOR +{2} {1})"
-end
-
-function yazi_create_tmux --description "Create a new tmux session from yazi file chooser"
-  set tmp (mktemp)
-  yazi --chooser-file="$tmp"
-  set chosen (cat $tmp)
-  rm $tmp
-
-  if test -n "$chosen"
-      test -d "$chosen" && set dir "$chosen" || set dir (dirname "$chosen")
-      set name (basename "$dir" | tr "." "_")
-      tmux new-session -c "$dir" -d -s "$name"
-      tmux switch-client -t "$name"
-      tmux send-keys -t "$name" "nvim '$chosen'" Enter
-  end
-end
-
-if test (uname) = Linux
-function app-id --description "Get application ID from package name"
-  if test (count $argv) -eq 0
-    echo "Usage: app-id <package-name>"
-    return 1
-  end
-
-  set -l desktop_file (pacman -Ql $argv[1] 2>/dev/null | grep "\.desktop\$" | awk '{print $2}')
-
-  if test -n "$desktop_file"
-    basename "$desktop_file" .desktop
-  else
-    echo "No desktop file found for package: $argv[1]"
-    return 1
-  end
-end
-end
-
 if test (uname) = Darwin
 function ghostty_bg --description "Manage Ghostty background images"
   set -l sf "$HOME/.config/ghostty/.bg-state"
@@ -91,7 +30,7 @@ function ghostty_bg --description "Manage Ghostty background images"
   end
   for cat in nsfw restricted explicit
     if test (_get allow_$cat "$sf") = "true"; and test -d "$dir/$cat"
-      for f in $dir/$cat/*.jpg $dir/$cat/*.jpeg $dir/$cat/*.png $dir/$cat/*.gif; test -f "$f"; and set -a imgs "$f"; end
+      for f in $dir/$cat/*.jpg $dir/$cat/*.jpeg $dir/$cat/$cat/*.png $dir/$cat/*.gif; test -f "$f"; and set -a imgs "$f"; end
     end
   end
 
