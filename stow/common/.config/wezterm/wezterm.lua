@@ -98,6 +98,10 @@ config.tab_bar_at_bottom = true
 config.inactive_pane_hsb = { saturation = 0.24, brightness = 0.5 }
 config.selection_word_boundary = " \t\n{}[]()\"'`,;:│"
 
+if not is_darwin then
+  config.window_background_opacity = 0.9
+end
+
 config.keys = {
   { key = "l", mods = primary_mod, action = act.ShowDebugOverlay },
 }

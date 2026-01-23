@@ -56,3 +56,4 @@ macos-non-native-fullscreen = padded-notch
 keybind = alt+enter=toggle_fullscreen
 
 config-file = ?background
+config-file = ?overrides

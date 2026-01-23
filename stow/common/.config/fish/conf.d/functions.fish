@@ -41,6 +41,7 @@ function yazi_create_tmux --description "Create a new tmux session from yazi fil
   end
 end
 
+if test (uname) = Darwin
 function ghostty_bg --description "Manage Ghostty background images"
   set -l sf "$HOME/.config/ghostty/.bg-state"
   set -l cf "$HOME/.config/ghostty/background"
@@ -113,4 +114,5 @@ function ghostty_bg --description "Manage Ghostty background images"
     case '*'
       echo "Usage: ghostty_bg {random|toggle|toggle-nsfw|toggle-restricted|toggle-explicit|toggle-default|brightness-up|brightness-down|show|status}"
   end
+end
 end

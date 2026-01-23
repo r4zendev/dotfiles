@@ -13,6 +13,10 @@ if test -x /opt/homebrew/bin/brew
   set -x HOMEBREW_AUTOREMOVE 1
 end
 
+if test -d "/run/user/"(id -u)"/hypr"
+    set -gx HYPRLAND_INSTANCE_SIGNATURE (ls -t /run/user/(id -u)/hypr/ 2>/dev/null | head -1)
+end
+
 starship init fish | source # https://starship.rs/
 zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
 fx --comp fish | source # https://fx.wtf/

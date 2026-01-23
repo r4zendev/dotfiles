@@ -1,4 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 -- Reload the file if it changes externally
 autocmd({ "FileChangedShell", "FocusGained" }, {
@@ -96,7 +97,7 @@ autocmd("FileType", {
 
 -- Highlight on yank
 autocmd("TextYankPost", {
-  -- group = augroup("HighlightOnYank", { clear = true }),
+  group = augroup("HighlightOnYank", { clear = true }),
   pattern = "*",
   desc = "Highlight text when yank",
   callback = function()
