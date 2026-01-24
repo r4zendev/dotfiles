@@ -120,6 +120,10 @@ M.themes = {
     end,
   },
   {
+    name = "VSCode",
+    colorscheme = "vscode",
+  },
+  {
     name = "Kanagawa Wave",
     colorscheme = "kanagawa-wave",
     after = transparent_background,
