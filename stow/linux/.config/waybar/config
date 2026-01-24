@@ -3,9 +3,9 @@
   "position": "top",
   "height": 34,
 
-  "modules-left": ["hyprland/workspaces"],
+  "modules-left": ["hyprland/workspaces", "custom/media"],
   "modules-center": ["clock"],
-  "modules-right": ["custom/media", "pulseaudio", "bluetooth", "network", "cpu", "memory", "battery"],
+  "modules-right": ["pulseaudio", "bluetooth", "network", "cpu", "memory", "battery"],
 
   "hyprland/workspaces": {
     "format": "{id}"

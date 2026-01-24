@@ -99,7 +99,7 @@ brew install --cask telegram
 brew install th-ch/youtube-music/youtube-music
 
 # System utils
-brew install --cask hammerspoon
+brew install --cask hammerspoon # `defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"`
 brew install jordanbaird-ice
 brew install --cask keycastr
 brew install --cask linearmouse

@@ -160,8 +160,7 @@ return {
     end
 
     require("minuet").setup(opts)
-  end,
-  init = function()
+
     if vim.g.minuet_enabled then
       vim.keymap.set("i", "<Tab>", function()
         local vt = require("minuet.virtualtext").action
@@ -176,7 +175,8 @@ return {
         end
       end, { silent = true })
     end
-
+  end,
+  init = function()
     local DEBUG = false
     if DEBUG then
       local log_file = "/tmp/minuet_debug.log"

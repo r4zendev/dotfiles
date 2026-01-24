@@ -98,6 +98,7 @@ M.plugin = {
     },
     terminal = {
       enabled = true,
+      shell = "/usr/bin/fish",
     },
     statuscolumn = {
       enabled = true,
