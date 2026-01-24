@@ -1,26 +1,19 @@
-function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
+# These always run last and override whatever
+function fish_user_key_bindings
+    bind ctrl-space 'commandline -i " "'
 end
 
-# ctrl-space
-bind ctrl-space expand-abbr
-
-abbr -a b "bun"
-abbr -a v "nvim"
+abbr -a b bun
+abbr -a v nvim
 abbr -a t "nvim ~/notes/todo.md"
-abbr -a p "pnpm"
-abbr -a cc "claude"
+abbr -a p pnpm
+abbr -a cc claude
 abbr -a ccy "claude --dangerously-skip-permissions" # yolo mode
-abbr -a oc "opencode"
-abbr -a g "lazygit"
-abbr -a d "lazydocker"
+abbr -a oc opencode
+abbr -a g lazygit
+abbr -a d lazydocker
 abbr -a ls "lsd --group-dirs first -A"
-abbr -a gdu "gdu-go"
+abbr -a gdu gdu-go
 abbr -a gimp "open /Applicatons/GIMP.app"
 
 abbr -a gs "git status"

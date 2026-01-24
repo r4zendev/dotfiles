@@ -9,8 +9,8 @@
 # https://fishshell.com/
 
 if test -x /opt/homebrew/bin/brew
-  eval (/opt/homebrew/bin/brew shellenv fish)
-  set -x HOMEBREW_AUTOREMOVE 1
+    eval (/opt/homebrew/bin/brew shellenv fish)
+    set -x HOMEBREW_AUTOREMOVE 1
 end
 
 if test -d "/run/user/"(id -u)"/hypr"
@@ -22,7 +22,7 @@ zoxide init --cmd cd fish | source # 'ajeetdsouza/zoxide'
 fx --comp fish | source # https://fx.wtf/
 
 if type -q mise
-  mise activate fish | source
+    mise activate fish | source
 end
 
 set -U fish_greeting # disable fish greeting
@@ -40,14 +40,14 @@ set -Ux FZF_DEFAULT_OPTS "\
 --color=border:#6C7086,label:#CDD6F4"
 fzf --fish | source
 
-if test (uname) = "Darwin"
-  set -x PNPM_HOME "$HOME/Library/pnpm"
+if test (uname) = Darwin
+    set -x PNPM_HOME "$HOME/Library/pnpm"
 else
-  set -x PNPM_HOME "$HOME/.local/share/pnpm"
+    set -x PNPM_HOME "$HOME/.local/share/pnpm"
 end
 fish_add_path $PNPM_HOME
 if type -q pnpm
-  fish_add_path (pnpm --global bin)
+    fish_add_path (pnpm --global bin)
 end
 
 fish_add_path "$HOME/.opencode/bin"
