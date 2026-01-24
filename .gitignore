@@ -29,6 +29,7 @@ stow/common/.config/fish/fish_variables
 stow/common/.config/fish/conf.d/env.fish
 stow/common/.config/wallpapers/
 stow/linux/.config/hypr/.wallpaper-state
+stow/common/.config/tmux/plugins
 
 docs
 dist
