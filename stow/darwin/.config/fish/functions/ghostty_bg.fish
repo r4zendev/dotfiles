@@ -1,0 +1,89 @@
+function ghostty_bg --description "Manage Ghostty background images"
+    set -l sf "$HOME/.config/ghostty/.bg-state"
+    set -l cf "$HOME/.config/ghostty/background"
+    set -l dir "$HOME/.config/term-images"
+
+    function _get -a key -a sf
+        test -f "$sf"; and grep "^$key=" "$sf" | cut -d= -f2
+    end
+
+    function _set -a key -a val -a sf
+        set -l t (mktemp)
+        test -f "$sf"; and grep -v "^$key=" "$sf" >"$t"
+        echo "$key=$val" >>"$t"
+        mv "$t" "$sf"
+    end
+
+    function _apply -a img -a opacity -a cf
+        printf "background-opacity = 1.0\nbackground-image = %s\nbackground-image-opacity = %s\nbackground-image-fit = cover\n" "$img" "$opacity" >"$cf"
+    end
+
+    function _remove -a cf
+        printf "# background disabled\n" >"$cf"
+    end
+
+    # Ghostty background image management
+    set -l imgs
+    if test (_get exclude_default "$sf") != true
+        for f in $dir/*.jpg $dir/*.jpeg $dir/*.png $dir/*.gif
+            test -f "$f"; and set -a imgs "$f"
+        end
+    end
+    for cat in nsfw restricted explicit
+        if test (_get allow_$cat "$sf") = true; and test -d "$dir/$cat"
+            for f in $dir/$cat/*.jpg $dir/$cat/*.jpeg $dir/$cat/$cat/*.png $dir/$cat/*.gif
+                test -f "$f"; and set -a imgs "$f"
+            end
+        end
+    end
+
+    switch $argv[1]
+        case random
+            test (count $imgs) -eq 0; and echo "No images"; and return 1
+            set -l img $imgs[(random 1 (count $imgs))]
+            set -l b (_get brightness "$sf")
+            test -z "$b"; and set b 0.25
+            _set current_image "$img" "$sf"
+            _set enabled true "$sf"
+            _apply "$img" "$b" "$cf"
+        case toggle
+            if test (_get enabled "$sf") = true
+                _set enabled false "$sf"
+                _remove "$cf"
+            else
+                set -l img (_get current_image "$sf")
+                set -l b (_get brightness "$sf")
+                test -z "$b"; and set b 0.25
+                if test -z "$img" -o ! -f "$img"
+                    test (count $imgs) -gt 0; and set img $imgs[(random 1 (count $imgs))]; and _set current_image "$img" "$sf"
+                end
+                test -n "$img" -a -f "$img"; and _set enabled true "$sf"; and _apply "$img" "$b" "$cf"
+            end
+        case toggle-nsfw toggle-restricted toggle-explicit toggle-default
+            set -l key (string replace "toggle-" "" $argv[1])
+            test $key = default; and set key exclude_default; or set key "allow_$key"
+            set -l cur (_get $key "$sf")
+            if test "$cur" = true
+                _set $key false "$sf"
+            else
+                _set $key true "$sf"
+            end
+        case brightness-up brightness-down
+            set -l b (_get brightness "$sf")
+            test -z "$b"; and set b 0.25
+            test $argv[1] = brightness-up; and set b (math "min(1,$b+0.05)"); or set b (math "max(0,$b-0.05)")
+            _set brightness $b "$sf"
+            set -l img (_get current_image "$sf")
+            test (_get enabled "$sf") = true -a -f "$img"; and _apply "$img" "$b" "$cf"
+        case show
+            set -l img (_get current_image "$sf")
+            test -n "$img"; and echo $img | pbcopy; and echo $img
+        case status
+            echo "enabled: "(_get enabled "$sf")"  brightness: "(_get brightness "$sf")
+            echo "image: "(_get current_image "$sf")
+            echo "nsfw: "(_get allow_nsfw "$sf")"  restricted: "(_get allow_restricted "$sf")"  explicit: "(_get allow_explicit "$sf")"  exclude_default: "(_get exclude_default "$sf")
+            echo "available: "(count $imgs)
+        case '*'
+            echo "Usage: ghostty_bg {random|toggle|toggle-nsfw|toggle-restricted|toggle-explicit|toggle-default|brightness-up|brightness-down|show|status}"
+    end
+end
