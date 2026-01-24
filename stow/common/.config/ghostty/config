@@ -4,6 +4,7 @@ term = xterm-256color
 font-size = 19
 font-family = ""
 font-family = Monaspace Argon
+# font-family = Iosevka NF
 font-family = JetBrainsMono Nerd Font Mono
 font-style = Medium
 font-thicken = true
@@ -16,7 +17,6 @@ font-feature = ss04
 adjust-cell-height = 1
 
 foreground =           #a6accd
-# background =           #000000
 cursor-color =         #a6accd
 cursor-text =          #252b37
 selection-background = #303340
