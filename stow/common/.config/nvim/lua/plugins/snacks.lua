@@ -7,7 +7,17 @@ M.plugin = {
   opts = {
     styles = {
       notification_history = {
-        wo = { wrap = true },
+        border = true,
+        zindex = 100,
+        width = 0.6,
+        height = 0.6,
+        minimal = false,
+        title = " Notification History ",
+        title_pos = "center",
+        ft = "markdown",
+        bo = { filetype = "snacks_notif_history", modifiable = false },
+        wo = { winhighlight = "Normal:SnacksNotifierHistory", wrap = true },
+        keys = { q = "close" },
       },
     },
     picker = {
@@ -89,6 +99,10 @@ M.plugin = {
       enabled = true,
       top_down = false,
       style = "fancy", -- "compact" | "minimal" | "fancy"
+      custom = {
+        lsp_progress = true,
+        messages = true,
+      },
     },
     indent = {
       enabled = true,
@@ -198,25 +212,13 @@ M.plugin = {
     { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
     { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
     { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition" },
-    { "gai", function() Snacks.picker.lsp_incoming_calls() end, desc = "Calls Incoming" },
-    { "gao", function() Snacks.picker.lsp_outgoing_calls() end, desc = "Calls Outgoing" },
+    { "gci", function() Snacks.picker.lsp_incoming_calls() end, desc = "Calls Incoming" },
+    { "gco", function() Snacks.picker.lsp_outgoing_calls() end, desc = "Calls Outgoing" },
     -- { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
     { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
 
     -- NOTE: Colorscheme
     { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
-
-    -- NOTE: Notifier / messages
-    { '<leader>cc', function() Snacks.notifier.hide() end, desc = "Notifications history" },
-    { '<leader>ch', function() Snacks.notifier.show_history() end, desc = "Notifications history" },
-    { '<leader>cm', function()
-      Snacks.win({
-        style = "notification_history",
-        text = vim.split(vim.fn.execute('messages'), '\n'),
-        title = " Messages ",
-        ft = "messages",
-      })
-    end, desc = "Messages" },
 
     -- NOTE: Misc
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
@@ -268,22 +270,42 @@ M.plugin = {
     end
 
     if plugin.opts.notifier.enabled then
-      vim.api.nvim_create_autocmd("LspProgress", {
-        ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-        callback = function(ev)
-          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-          vim.notify(vim.lsp.status(), "info", {
-            id = "lsp_progress",
-            title = "LSP Progress",
-            opts = function(notif)
-              notif.icon = ev.data.params.value.kind == "end" and " "
-                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-              notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
-            end,
-            timeout = 1000,
+      vim.keymap.set("n", "<leader>ch", function()
+        Snacks.notifier.show_history()
+      end, { desc = "Notifications history" })
+      vim.keymap.set("n", "<leader>cc", function()
+        Snacks.notifier.hide()
+      end, { desc = "Hide notifications" })
+
+      if plugin.opts.notifier.custom.messages then
+        vim.keymap.set("n", "<leader>cm", function()
+          Snacks.win({
+            style = "notification_history",
+            text = vim.split(vim.fn.execute("messages"), "\n"),
+            title = " Messages ",
+            ft = "messages",
           })
-        end,
-      })
+        end, { desc = "Messages" })
+      end
+
+      if plugin.opts.notifier.custom.lsp_progress then
+        vim.api.nvim_create_autocmd("LspProgress", {
+          ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+          callback = function(ev)
+            local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+            vim.notify(vim.lsp.status(), "info", {
+              id = "lsp_progress",
+              title = "LSP Progress",
+              opts = function(notif)
+                notif.icon = ev.data.params.value.kind == "end" and " "
+                  or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+                notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
+              end,
+              timeout = 1000,
+            })
+          end,
+        })
+      end
     end
 
     -- AI completion toggle. Putting it here, since using multiple providers
@@ -298,10 +320,12 @@ M.plugin = {
     -- -- stylua: ignore end
 
     vim.g.copilot_enabled = false
-    vim.g.minuet_enabled = true
+    vim.g.minuet_enabled = false
+    vim.g.supermaven_enabled = true
 
     local is_minuet_enabled = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
+    local is_supermaven_enabled = vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled
 
     vim.g.enable_ai_completion = true
     vim.schedule(function()
@@ -317,6 +341,11 @@ M.plugin = {
           if is_minuet_enabled then
             vim.cmd([[Minuet virtualtext toggle]])
             vim.g.minuet_enabled = state
+          end
+
+          if is_supermaven_enabled then
+            vim.cmd("silent! Supermaven" .. (state and " enable" or " disable"))
+            vim.g.supermaven_enabled = state
           end
 
           -- Copilot

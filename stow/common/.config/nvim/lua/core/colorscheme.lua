@@ -122,6 +122,9 @@ M.themes = {
   {
     name = "VSCode",
     colorscheme = "vscode",
+    after = function()
+      transparent_float()
+    end,
   },
   {
     name = "Kanagawa Wave",

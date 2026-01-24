@@ -38,6 +38,16 @@ require("lazy").setup({
   defaults = { lazy = true },
 })
 
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  callback = function()
+    if not vim.g.loaded_tpipeline then
+      print("tpipeline not found, using experimental UI")
+      require("core.experimental")
+    end
+  end,
+})
+
 require("todo_list").setup({
   target_file = "~/notes/todo.md",
 })

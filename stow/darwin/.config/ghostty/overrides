@@ -1,0 +1,3 @@
+# vim:set ft=ghostty:
+
+command = /opt/homebrew/bin/fish

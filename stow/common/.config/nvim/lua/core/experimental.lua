@@ -4,8 +4,8 @@ vim.cmd([[cnoreabbrev <expr> w getcmdtype() == ":" && getcmdline() == "w" ? "sil
 vim.cmd([[cnoreabbrev <expr> wq getcmdtype() == ":" && getcmdline() == "wq" ? "silent wq" : "wq"]])
 vim.cmd([[cnoreabbrev <expr> wa getcmdtype() == ":" && getcmdline() == "wa" ? "silent wa" : "wa"]])
 
-vim.o.cmdheight = 0
-vim.o.report = 99999
+vim.opt.cmdheight = 0
+vim.opt.report = 99999
 
 -- NOTE: use in case authors don't update their plugins in time to suppress deprecation warnings
 ---@diagnostic disable-next-line: duplicate-set-field

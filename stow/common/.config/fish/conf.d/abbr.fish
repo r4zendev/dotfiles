@@ -28,3 +28,6 @@ abbr -a gca "git commit --amend --no-edit"
 
 abbr -a gss "git add . && git stash"
 abbr -a gsp "git stash pop"
+
+abbr -a gdd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
+abbr -a gd1 --position anywhere --set-cursor 'nvim -c "DiffviewOpen HEAD~1%..HEAD"'
