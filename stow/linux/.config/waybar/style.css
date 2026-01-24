@@ -86,6 +86,7 @@ tooltip label {
 }
 
 #pulseaudio,
+#custom-mic,
 #bluetooth,
 #network,
 #cpu,
@@ -99,11 +100,24 @@ tooltip label {
 
 #pulseaudio {
   color: #a6e3a1;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px 0 0 0;
   margin-left: 8px;
 }
 
 #pulseaudio:hover {
+  background: rgba(166, 227, 161, 0.2);
+}
+
+#custom-mic.unmuted {
+  color: #a6e3a1;
+}
+
+#custom-mic.muted {
+  color: #f38ba8;
+  animation: blink 2s ease-in-out infinite;
+}
+
+#custom-mic:hover {
   background: rgba(166, 227, 161, 0.2);
 }
 
