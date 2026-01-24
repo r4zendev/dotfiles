@@ -32,7 +32,7 @@ set -U fish_greeting # disable fish greeting
 set -Ux EDITOR nvim
 set -Ux FZF_DEFAULT_COMMAND "fd -H -E '.git'"
 set -Ux FZF_DEFAULT_OPTS "\
---highlight-line --info=inline-right --ansi --layout=reverse --border=none \
+--highlight-line --info=inline-right --ansi --layout=reverse --border=none --preview 'bat --color=always {}' --preview-window '~3' \
 --color=bg+:#313244,bg:-1,spinner:#F5E0DC,hl:#F38BA8 \
 --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
 --color=marker:#B4BEFE,fg+:#F9E2AF,prompt:#CBA6F7,hl+:#F38BA8 \

@@ -2,31 +2,30 @@ root = true
 
 [*]
 charset = utf-8
-indent_size = 2
-indent_style = space
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 100
 
+[*.{js,ts,jsx,tsx,json,yaml,yml,toml,html,css,scss,lua,sh,bash,zsh}]
+indent_size = 2
+indent_style = space
+
 [*.go]
 indent_style = tab
 indent_size = 4
 
-[*.rs]
+[*.{rs,zig,fish,conf}]
 indent_size = 4
-
-[*.zig]
-indent_size = 4
-
-[*.fish]
-indent_size = 4
+indent_style = space
 
 [*.{ini,py,py.tpl,rst}]
 indent_size = 4
+indent_style = space
 
 [*.{c,h,cpp,hpp,cxx,hxx,cc,hh}]
 indent_size = 4
+indent_style = space
 
 [*.{md,mdx,diff}]
 trim_trailing_whitespace = false

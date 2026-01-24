@@ -49,6 +49,7 @@ return {
       "jsonls",
       "yamlls",
       "fish_lsp",
+      "hyprls",
 
       "pylsp",
       "pyright",
