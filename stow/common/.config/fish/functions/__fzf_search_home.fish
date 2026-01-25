@@ -1,14 +1,9 @@
 function __fzf_search_home --description "Search files from home directory with smart preview"
-    # Detect clipboard command
     set -l copy_cmd
-    if command -v wl-copy >/dev/null
-        set copy_cmd "wl-copy"
-    else if command -v pbcopy >/dev/null
+    if test (uname) = Darwin
         set copy_cmd "pbcopy"
-    else if command -v xclip >/dev/null
-        set copy_cmd "xclip -selection clipboard"
     else
-        set copy_cmd "cat"
+        set copy_cmd "wl-copy"
     end
 
     # Smart preview script
