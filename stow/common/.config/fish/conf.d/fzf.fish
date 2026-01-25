@@ -108,7 +108,9 @@ set -Ux FZF_CTRL_T_OPTS "\
 --no-preview \
 --border-label=' Files ' \
 --prompt='📄  ' \
---header='ENTER: insert path'"
+--header='ENTER: insert path' \
+--bind='ctrl-d:half-page-down' \
+--bind='ctrl-u:half-page-up'"
 
 # Alt-C: Directory search with tree preview
 set -Ux FZF_ALT_C_OPTS "\
@@ -117,7 +119,10 @@ set -Ux FZF_ALT_C_OPTS "\
 --preview-window 'right:60%:border-left:wrap' \
 --border-label=' Directories ' \
 --prompt='📁  ' \
---header='CTRL-/: toggle preview'"
+--header='CTRL-/: toggle preview' \
+--bind='ctrl-/:toggle-preview' \
+--bind='ctrl-d:half-page-down' \
+--bind='ctrl-u:half-page-up'"
 
 # Ctrl-R: Command history (no preview needed)
 # Detect clipboard command
@@ -137,7 +142,9 @@ set -Ux FZF_CTRL_R_OPTS "\
 --border-label=' Command History ' \
 --prompt='  ' \
 --header='CTRL-Y: copy | ENTER: execute' \
---bind='ctrl-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*[[:space:]]*//\" | $copy_cmd)+abort'"
+--bind='ctrl-y:execute-silent(echo -n {} | sed \"s/^[[:space:]]*[0-9]*[[:space:]]*//\" | $copy_cmd)+abort' \
+--bind='ctrl-d:half-page-down' \
+--bind='ctrl-u:half-page-up'"
 
 # ============================================================================
 # fzf.fish plugin configuration

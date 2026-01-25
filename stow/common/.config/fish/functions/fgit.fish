@@ -22,6 +22,8 @@ function fgit --description "Browse and open git tracked files with fzf"
             --preview-window "right:60%:border-left:wrap" \
             --border-label=" Git Repository " \
             --bind "ctrl-/:toggle-preview" \
+            --bind "ctrl-d:half-page-down" \
+            --bind "ctrl-u:half-page-up" \
             --bind "alt-m:change-prompt(📝  Modified> )+reload(git diff --name-only)" \
             --bind "alt-s:change-prompt(🌳  Git Files> )+reload(git ls-files)" \
             --bind "alt-u:change-prompt(  Untracked> )+reload(git ls-files --others --exclude-standard)"

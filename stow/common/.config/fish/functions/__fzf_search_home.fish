@@ -29,6 +29,8 @@ function __fzf_search_home --description "Search files from home directory with 
             --preview-window "right:60%:wrap:border-left" \
             --border-label=" Search from Home " \
             --bind "ctrl-/:toggle-preview" \
+            --bind "ctrl-d:half-page-down" \
+            --bind "ctrl-u:half-page-up" \
             --bind "alt-f:change-prompt(📄  Files> )+reload(fd --type f --hidden --follow --exclude .git --exclude node_modules . ~)" \
             --bind "alt-d:change-prompt(📁  Dirs> )+reload(fd --type d --hidden --follow --exclude .git --exclude node_modules . ~)" \
             --bind "alt-a:change-prompt(🏠  Home> )+reload(fd --type f --type d --hidden --follow --exclude .git --exclude node_modules . ~)" \

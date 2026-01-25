@@ -10,6 +10,8 @@ function frg --description "Interactive ripgrep search with live preview"
             --disabled \
             --bind "change:reload:$RG_PREFIX {q} 2>/dev/null || true" \
             --bind "start:unbind(ctrl-r)" \
+            --bind "ctrl-d:half-page-down" \
+            --bind "ctrl-u:half-page-up" \
             --prompt "🔍  Search> " \
             --header "Type to search | ENTER: open file at line" \
             --border-label=" Live Ripgrep " \

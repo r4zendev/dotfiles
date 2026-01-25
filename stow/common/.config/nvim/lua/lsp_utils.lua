@@ -3,58 +3,6 @@ local map = vim.keymap.set
 local M = {}
 local iswin = vim.uv.os_uname().version:match("Windows")
 
-M.get_servers =function ()
-  local server_configs = {}
-  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
-    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
-    if server_name ~= "utils" then
-      server_configs[#server_configs + 1] = server_name
-    end
-  end
-  return server_configs
-end
-
-M.get_servers_with_configs = function()
-  local server_configs = {}
-
-  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
-    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
-
-    if server_name == "utils" then
-      goto continue
-    end
-
-    local chunk, load_err = loadfile(filepath)
-    if not chunk then
-      vim.notify(
-        string.format("Failed to load LSP config file: %s\nError: %s", filepath, load_err or "Unknown error"),
-        vim.log.levels.ERROR
-      )
-      goto continue
-    end
-
-    local exec_ok, config_or_err = pcall(chunk)
-    if not exec_ok then
-      vim.notify(
-        string.format("Failed to execute LSP config file: %s\nError: %s", filepath, tostring(config_or_err)),
-        vim.log.levels.ERROR
-      )
-      goto continue
-    end
-
-    if type(config_or_err) ~= "table" then
-      vim.notify(string.format("LSP config file did not return a table: %s", filepath), vim.log.levels.WARN)
-      goto continue
-    end
-
-    server_configs[server_name] = config_or_err
-
-    ::continue::
-  end
-
-  return server_configs
-end
-
 M.on_attach = function(_, bufnr)
   local opts = function(desc)
     return { desc = desc, noremap = true, silent = true, buffer = bufnr }
@@ -75,26 +23,6 @@ M.on_attach = function(_, bufnr)
   map({ "n", "v" }, "<leader>cq", function()
     vim.diagnostic.setqflist()
   end, opts("Populate qflist with diagnostics"))
-end
-
----@param client vim.lsp.Client
-M.toggle_ts_server = function(client)
-  local new_server_name = client.name == "vtsls" and "ts_ls" or "vtsls"
-  vim.lsp.enable("vtsls", new_server_name == "vtsls")
-  vim.lsp.enable("ts_ls", new_server_name == "ts_ls")
-
-  for buf_id, _ in pairs(client.attached_buffers) do
-    vim.lsp.buf_detach_client(buf_id, client.id)
-  end
-
-  vim.cmd("silent! e")
-
-  vim.defer_fn(function()
-    local new_server_id = vim.lsp.get_clients({ name = new_server_name })[1].id
-    for buf_id, _ in pairs(client.attached_buffers) do
-      vim.lsp.buf_attach_client(buf_id, new_server_id)
-    end
-  end, 1000)
 end
 
 M.lsp_action = setmetatable({}, {
@@ -252,5 +180,83 @@ function M.root_pattern(...)
     end
   end
 end
+
+-- ##################
+-- ### NOT IN USE ###
+-- ##################
+
+M.get_servers =function ()
+  local server_configs = {}
+  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
+    if server_name ~= "utils" then
+      server_configs[#server_configs + 1] = server_name
+    end
+  end
+  return server_configs
+end
+
+M.get_servers_with_configs = function()
+  local server_configs = {}
+
+  for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local server_name = vim.fn.fnamemodify(filepath, ":t:r")
+
+    if server_name == "utils" then
+      goto continue
+    end
+
+    local chunk, load_err = loadfile(filepath)
+    if not chunk then
+      vim.notify(
+        string.format("Failed to load LSP config file: %s\nError: %s", filepath, load_err or "Unknown error"),
+        vim.log.levels.ERROR
+      )
+      goto continue
+    end
+
+    local exec_ok, config_or_err = pcall(chunk)
+    if not exec_ok then
+      vim.notify(
+        string.format("Failed to execute LSP config file: %s\nError: %s", filepath, tostring(config_or_err)),
+        vim.log.levels.ERROR
+      )
+      goto continue
+    end
+
+    if type(config_or_err) ~= "table" then
+      vim.notify(string.format("LSP config file did not return a table: %s", filepath), vim.log.levels.WARN)
+      goto continue
+    end
+
+    server_configs[server_name] = config_or_err
+
+    ::continue::
+  end
+
+  return server_configs
+end
+
+---@param client vim.lsp.Client
+M.toggle_ts_server = function(client)
+  local new_server_name = client.name == "vtsls" and "ts_ls" or "vtsls"
+  vim.lsp.enable("vtsls", new_server_name == "vtsls")
+  vim.lsp.enable("ts_ls", new_server_name == "ts_ls")
+
+  for buf_id, _ in pairs(client.attached_buffers) do
+    vim.lsp.buf_detach_client(buf_id, client.id)
+  end
+
+  vim.cmd("silent! e")
+
+  vim.defer_fn(function()
+    local new_server_id = vim.lsp.get_clients({ name = new_server_name })[1].id
+    for buf_id, _ in pairs(client.attached_buffers) do
+      vim.lsp.buf_attach_client(buf_id, new_server_id)
+    end
+  end, 1000)
+end
+
+
 
 return M

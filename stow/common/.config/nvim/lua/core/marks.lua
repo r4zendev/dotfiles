@@ -145,7 +145,7 @@ local function build_picker_items(filter_to_cwd)
         text = string.format("[%s] %s %s", label, file_display, line_content),
         label = label,
         file = file,
-        pos = mark.pos[2] > 0 and { mark.pos[2], mark.pos[3] } or nil,
+        pos = mark.pos[2] > 0 and { mark.pos[2], math.max(0, (mark.pos[3] or 1) - 1) } or nil,
         buf = buf,
         line = line_content,
       })
