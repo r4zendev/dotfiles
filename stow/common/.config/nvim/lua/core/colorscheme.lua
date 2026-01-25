@@ -120,13 +120,6 @@ M.themes = {
     end,
   },
   {
-    name = "VSCode",
-    colorscheme = "vscode",
-    after = function()
-      transparent_float()
-    end,
-  },
-  {
     name = "Kanagawa Wave",
     colorscheme = "kanagawa-wave",
     after = transparent_background,

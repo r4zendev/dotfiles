@@ -2,4 +2,7 @@
 
 font-size = 14
 background-opacity = 0.75
-app-notifications = true
+
+# app-notifications = no-clipboard-copy
+# app-notifications = false
+app-notifications = no-config-reload
