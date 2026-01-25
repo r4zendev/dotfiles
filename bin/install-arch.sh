@@ -14,7 +14,7 @@ fi
 # Update system first to avoid partial upgrades
 yay -Syu
 
-cd ~ && mkdir -p projects/r4zendotdev && cd projects/r4zendotdev
+cd ~ && mkdir -p projects && cd projects
 git clone git@github.com:r4zendev/dotfiles.git dotfiles
 
 # Terminal environment
@@ -125,6 +125,16 @@ sudo pacman -S --needed imagemagick
 sudo pacman -S --needed android-tools
 yay -S --needed keyd        # keyboard remapping
 yay -S --needed whisper.cpp # local whisper ASR
+
+# KDE/Dolphin configuration
+sudo pacman -S --needed kio-admin # admin:// protocol for Dolphin
+# Install system service menus
+DOTFILES_DIR="$HOME/projects/dotfiles"
+if [ -f "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" ]; then
+  sudo cp "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" /usr/share/kio/servicemenus/
+  sudo chmod 644 /usr/share/kio/servicemenus/admin-folder.desktop
+  echo "Installed Dolphin 'Open as Administrator' context menu"
+fi
 
 # BTRFS snapshots (requires BTRFS filesystem)
 sudo pacman -S --needed snapper       # snapshot management

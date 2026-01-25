@@ -7,7 +7,7 @@ else
   printf 'Homebrew is already installed, skip it.\n'
 fi
 
-cd ~ && mkdir -p projects/r4zendotdev && cd projects/r4zendotdev
+cd ~ && mkdir -p projects && cd projects
 git clone git@github.com:r4zendev/dotfiles.git dotfiles
 
 # Terminal environment

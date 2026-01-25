@@ -25,17 +25,16 @@ map({ "n", "x", "t" }, "<C-l>", function()
   M.navigate("l")
 end)
 
--- Move tmux status bar to top when entering vim, bottom when exiting
 if vim.env.TMUX and vim.env.TMUX_STATUS_DYNAMIC == "1" then
-  autocmd("VimEnter", {
+  autocmd({ "VimEnter", "FocusGained" }, {
     callback = function()
-      vim.fn.jobstart("tmux set status-position top", { detach = true })
+      vim.fn.jobstart("tmux set status-justify right", { detach = true })
     end,
   })
 
-  autocmd("VimLeavePre", {
+  autocmd({ "FocusLost", "VimLeavePre" }, {
     callback = function()
-      vim.fn.jobstart("tmux set status-position bottom", { detach = true })
+      vim.fn.jobstart("tmux set status-justify absolute-centre", { detach = true })
     end,
   })
 end

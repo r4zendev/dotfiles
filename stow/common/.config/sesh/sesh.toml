@@ -3,11 +3,11 @@ startup_command = "nvim -c ':lua Snacks.picker.smart()'"
 
 [[session]]
 name = "grind"
-path = "~/projects/r4zendotdev"
+path = "~/projects"
 
 [[session]]
 name = "dotfiles"
-path = "~/projects/r4zendotdev/dotfiles"
+path = "~/projects/dotfiles"
 
 [[session]]
 name = "notes"
