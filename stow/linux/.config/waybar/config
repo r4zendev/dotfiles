@@ -59,12 +59,12 @@
   },
 
   "network": {
-    "format-wifi": "󰖩 {signalStrength}%",
-    "format-ethernet": "󰈀 {ipaddr}",
+    "format-wifi": "󰖩 {essid}",
+    "format-ethernet": "󰈀 {ifname}",
     "format-disconnected": "󰖪 OFF",
-    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nMAC: {gwaddr}\nSignal: {signalStrength}%",
-    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}\nMAC: {gwaddr}",
-    "on-click": "ghostty --font-size=10 --title=impala -e impala"
+    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}",
+    "on-click": "network-fuzzel"
   },
 
   "cpu": {

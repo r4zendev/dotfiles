@@ -1,0 +1,152 @@
+#!/bin/bash
+
+get_signal_icon() {
+    local signal=$1
+    if [ "$signal" -ge 80 ]; then
+        echo "󰤨"
+    elif [ "$signal" -ge 60 ]; then
+        echo "󰤥"
+    elif [ "$signal" -ge 40 ]; then
+        echo "󰤢"
+    elif [ "$signal" -ge 20 ]; then
+        echo "󰤟"
+    else
+        echo "󰤯"
+    fi
+}
+
+show_menu() {
+    eth_status=$(nmcli device status | grep ethernet | awk '{print $3}')
+    if [ "$eth_status" == "connected" ]; then
+        eth_ip=$(ip -4 addr show enp8s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+        ethernet_line="󰈀 Ethernet  $eth_ip"
+    else
+        ethernet_line="󰈀 Ethernet  Disconnected"
+    fi
+
+    wifi_status=$(nmcli device status | grep wifi | awk '{print $3}')
+    wifi_current=$(nmcli -t -f NAME connection show --active | grep -v "lo\|Wired")
+
+    if [ "$wifi_status" == "connected" ] && [ -n "$wifi_current" ]; then
+        wifi_signal=$(nmcli -t -f ACTIVE,SIGNAL device wifi | grep "^yes" | cut -d: -f2)
+        signal_icon=$(get_signal_icon $wifi_signal)
+        wifi_line="$signal_icon WiFi  $wifi_current  ${wifi_signal}%"
+    elif [ "$wifi_status" == "disconnected" ]; then
+        wifi_line="󰖪 WiFi  Disconnected"
+    else
+        wifi_line="󰖪 WiFi  Powered Off"
+    fi
+
+    wifi_list=$(nmcli -f SSID,SECURITY,SIGNAL device wifi list 2>/dev/null | tail -n +2)
+
+    max_ssid_len=0
+    while IFS= read -r line; do
+        ssid=$(echo "$line" | awk '{print $1}')
+        [ -z "$ssid" ] && continue
+        ssid_len=${#ssid}
+        [ $ssid_len -gt $max_ssid_len ] && max_ssid_len=$ssid_len
+    done <<< "$wifi_list"
+
+    formatted_list=""
+    while IFS= read -r line; do
+        ssid=$(echo "$line" | awk '{print $1}')
+        security=$(echo "$line" | awk '{print $2}')
+        signal=$(echo "$line" | awk '{print $3}')
+
+        [ -z "$ssid" ] && continue
+
+        signal_icon=$(get_signal_icon $signal)
+
+        if [ "$security" == "--" ]; then
+            sec_icon="󰦞"
+        else
+            sec_icon="󰦝"
+        fi
+
+        if [ "$ssid" == "$wifi_current" ]; then
+            star=" "
+        else
+            star=" "
+        fi
+
+        padding=$((max_ssid_len - ${#ssid} + 2))
+        spaces=$(printf '%*s' $padding '')
+
+        # Uncomment to show percentage: formatted_list+="$sec_icon $star$ssid$spaces$signal%\n"
+        formatted_list+="$sec_icon $star$ssid$spaces$signal_icon\n"
+    done <<< "$wifi_list"
+
+    # Build menu
+    menu="$ethernet_line\n"
+    menu+="$wifi_line\n"
+    menu+="\n"
+    menu+="󰑓 Rescan Networks\n"
+
+    if [ "$wifi_status" == "connected" ]; then
+        menu+="󰅙 Disconnect WiFi\n"
+    fi
+
+    menu+="󰩈 Close\n"
+
+    if [ -n "$formatted_list" ]; then
+        menu+="\n"
+        menu+="$formatted_list"
+    else
+        menu+="\n󰤭 No networks found\n"
+    fi
+
+    echo -e "$menu" | fuzzel --dmenu --prompt=" "
+}
+
+
+while true; do
+    selection=$(show_menu)
+
+    if [ -z "$selection" ] || echo "$selection" | grep -q "Close"; then
+        exit 0
+    elif echo "$selection" | grep -q "Rescan"; then
+        notify-send "WiFi" "Scanning for networks..." -t 2000
+        nmcli device wifi rescan
+        sleep 2
+        continue
+    elif echo "$selection" | grep -q "Disconnect WiFi"; then
+        nmcli device disconnect wlan0
+        notify-send "WiFi" "Disconnected" -t 2000
+        continue
+    elif echo "$selection" | grep -q "^󰈀 Ethernet"; then
+        eth_status=$(nmcli device status | grep ethernet | awk '{print $3}')
+        if [ "$eth_status" == "connected" ]; then
+            nmcli device disconnect enp8s0
+            notify-send "Ethernet" "Disconnected" -t 2000
+        else
+            nmcli connection up "Wired connection 1"
+            notify-send "Ethernet" "Connected" -t 2000
+        fi
+        continue
+    elif echo "$selection" | grep -q -E "(^󰖩|^󰤨|^󰤥|^󰤢|^󰤟|^󰤯|^󰖪) WiFi"; then
+        continue
+    elif echo "$selection" | grep -q "No networks found"; then
+        continue
+    else
+        ssid=$(echo "$selection" | sed 's/^[  ]*//' | sed 's/󰤨\|󰤥\|󰤢\|󰤟\|󰤯//g' | sed 's/󰦞\|󰦝//g' | awk '{print $1}')
+        security=$(nmcli -f SSID,SECURITY device wifi list 2>/dev/null | grep "^$ssid" | awk '{print $2}')
+
+        if [ -z "$ssid" ]; then
+            continue
+        fi
+
+        if [ "$security" != "--" ] && [ -n "$security" ]; then
+            password=$(echo "" | fuzzel --dmenu --prompt="󰌾 Password for $ssid: " --password)
+            if [ -n "$password" ]; then
+                nmcli device wifi connect "$ssid" password "$password"
+                notify-send "WiFi" "Connecting to $ssid..." -t 2000
+                sleep 2
+            fi
+        else
+            nmcli device wifi connect "$ssid"
+            notify-send "WiFi" "Connecting to $ssid..." -t 2000
+            sleep 2
+        fi
+        continue
+    fi
+done
