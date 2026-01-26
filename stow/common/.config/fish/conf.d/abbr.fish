@@ -12,6 +12,7 @@ abbr -a b bun
 abbr -a v nvim
 abbr -a p pnpm
 abbr -a cc "claude --dangerously-skip-permissions"
+abbr -a ccr "claude --dangerously-skip-permissions --resume"
 abbr -a oc opencode
 abbr -a ls "lsd --group-dirs first -A"
 

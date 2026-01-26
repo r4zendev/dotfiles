@@ -63,3 +63,5 @@ application/x-7z-compressed=org.kde.ark.desktop
 application/vnd.rar=org.kde.ark.desktop
 application/x-rar=org.kde.ark.desktop
 application/x-archive=org.kde.ark.desktop
+x-scheme-handler/discord=vesktop.desktop
+inode/directory=org.kde.dolphin.desktop

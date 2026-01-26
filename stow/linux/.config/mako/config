@@ -1,9 +1,16 @@
-background-color=#1e1e2e
-text-color=#cdd6f4
-border-color=#89b4fa
+# font=Monaspace Argon
 border-size=2
 border-radius=8
 padding=10
 margin=10
 default-timeout=5000
-# font=Monaspace Argon
+width=400
+max-visible=5
+
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#89b4fa
+progress-color=over #313244
+
+[urgency=high]
+border-color=#fab387

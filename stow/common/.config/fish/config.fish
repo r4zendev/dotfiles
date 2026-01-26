@@ -29,6 +29,7 @@ set -U fish_greeting # disable fish greeting
 # i don't use vi mode in fish
 # set -U fish_key_bindings fish_vi_key_bindings
 
+set -Ux SUDO_EDITOR nvim
 set -Ux EDITOR nvim
 # fzf configuration is in conf.d/fzf.fish
 

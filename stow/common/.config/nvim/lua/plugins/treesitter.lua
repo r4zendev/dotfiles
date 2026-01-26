@@ -69,13 +69,21 @@ return {
         filename = {
           ["tsconfig.json"] = "jsonc",
           [".yamlfmt"] = "yaml",
-          ["config"] = function(path, bufnr)
-            if path:match("ghostty/config$") then
-              return "ghostty"
-            end
-          end,
+          -- ["config"] = function(path, bufnr)
+          --   -- Ghostty is pretty similar to others
+          --   local parents = { "ghostty", "mako" }
+          --
+          --   for _, parent in ipairs(parents) do
+          --     if path:match(parent .. "/config$") then
+          --       return "ghostty"
+          --     end
+          --   end
+          -- end,
         },
         pattern = {
+          -- ['.*/etc/foo/.*%.conf'] = { 'dosini', { priority = 10 } },
+          [".*/ghostty/.*"] = "ghostty",
+          [".*/mako/config"] = "ghostty",
           [".env.*"] = "sh",
         },
       })
