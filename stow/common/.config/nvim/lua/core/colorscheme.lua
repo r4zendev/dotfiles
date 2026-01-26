@@ -67,6 +67,12 @@ local function mini_diff_overlay()
   vim.api.nvim_set_hl(0, "MiniDiffOverContext", { fg = "#6c7086" })
 end
 
+local function diagnostics()
+  local diagnostic_underline = vim.api.nvim_get_hl(0, { name = "DiagnosticUnderline" })
+  diagnostic_underline.underline = true
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", diagnostic_underline)
+end
+
 ---@param disable? boolean If true, removes bold styling from selected nodes instead
 local function ts_lsp_bold_nodes(disable)
   local nodes = {
@@ -160,6 +166,7 @@ function M.apply(name)
     ts_lsp_bold_nodes()
     default_harpoon()
     transparent_statusline()
+    diagnostics()
   end
   return ok
 end

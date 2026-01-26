@@ -85,8 +85,6 @@ M.plugin = {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⢿⣿⣿⠂⠀⠀⠀⠀⠀⢀⣽⣿⣿⣿⣿⣿⣿⣿⣍⠛⠿⣿⣿⣿⣿⣿⣿]],
       },
     },
-    rename = { enabled = true },
-    bigfile = { enabled = true },
     image = {
       enabled = true,
       doc = {
@@ -94,7 +92,6 @@ M.plugin = {
         float = true,
       },
     },
-    input = { enabled = true },
     notifier = {
       enabled = true,
       top_down = false,
@@ -130,6 +127,30 @@ M.plugin = {
       },
       refresh = 50,
     },
+    bigfile = {
+      enabled = true,
+      setup = function(ctx)
+        -- https://github.com/folke/snacks.nvim/blob/main/lua/snacks/bigfile.lua#L18
+        if vim.fn.exists(":NoMatchParen") ~= 0 then
+          vim.cmd([[NoMatchParen]])
+        end
+        Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
+        vim.b.completion = false
+        vim.b.minianimate_disable = true
+        vim.b.minihipatterns_disable = true
+        vim.schedule(function()
+          if vim.api.nvim_buf_is_valid(ctx.buf) then
+            vim.bo[ctx.buf].syntax = ctx.ft
+          end
+        end)
+
+        -- Disable mini.diff as it causes issues with big files
+        vim.b.minidiff_disable = true
+      end,
+    },
+    input = { enabled = true },
+    rename = { enabled = true },
+    quickfile = { enabled = true },
   },
   keys = {
     -- stylua: ignore start
