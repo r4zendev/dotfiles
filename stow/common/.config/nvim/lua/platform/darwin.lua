@@ -1,1 +1,0 @@
--- macOS-specific Neovim overrides go here.

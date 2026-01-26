@@ -1,5 +1,6 @@
 return {
   "vimpostor/vim-tpipeline",
+  enabled = vim.g.is_linux,
   lazy = false,
   init = function()
     -- Fish causes lag while maximizing pane

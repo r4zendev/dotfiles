@@ -6,9 +6,7 @@ vim.g.is_darwin = uname == "Darwin"
 vim.g.is_linux = uname == "Linux"
 
 if vim.g.is_darwin then
-  require("platform.darwin")
-elseif vim.g.is_linux then
-  require("platform.linux")
+  require("core.experimental")
 end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -36,16 +34,6 @@ require("lazy").setup({
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },
   defaults = { lazy = true },
-})
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    if not vim.g.loaded_tpipeline then
-      print("tpipeline not found, using experimental UI")
-      require("core.experimental")
-    end
-  end,
 })
 
 require("todo_list").setup({
