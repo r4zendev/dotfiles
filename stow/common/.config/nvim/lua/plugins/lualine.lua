@@ -2,7 +2,7 @@ return {
   "nvim-lualine/lualine.nvim",
   event = "LazyFile",
   dependencies = {
-    "echasnovski/mini.nvim",
+    "nvim-mini/mini.nvim",
   },
   config = function()
     local function get_theme()

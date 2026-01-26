@@ -17,7 +17,7 @@ return {
   "stevearc/oil.nvim",
   cmd = "Oil",
   event = { "VimEnter */*,.*", "BufNew */*,.*", "VeryLazy" },
-  dependencies = { "echasnovski/mini.icons" },
+  dependencies = { "nvim-mini/mini.icons" },
   opts = {
     delete_to_trash = true,
     columns = {

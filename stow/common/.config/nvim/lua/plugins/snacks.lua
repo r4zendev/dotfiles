@@ -157,7 +157,7 @@ M.plugin = {
     -- NOTE: Files
     { "<leader><leader>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>.", function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Find in directory" },
-    { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<leader>e=", function() Snacks.explorer() end, desc = "File Explorer (Snacks)" },
     { "<C-b>", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },

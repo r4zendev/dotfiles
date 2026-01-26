@@ -3,7 +3,7 @@ local map = vim.keymap.set
 local M = {}
 
 M.plugin = {
-  "echasnovski/mini.nvim",
+  "nvim-mini/mini.nvim",
   event = "LazyFile",
   config = function()
     local mini_align = require("mini.align")

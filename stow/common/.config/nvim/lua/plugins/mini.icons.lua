@@ -1,7 +1,7 @@
 local M = {}
 
 M.plugin = {
-  "echasnovski/mini.icons",
+  "nvim-mini/mini.icons",
   lazy = false,
   config = function()
     local mini_icons = require("mini.icons")
