@@ -9,4 +9,5 @@ dist
 .claude
 Session.vim
 .mcp.json
+.mise.toml
 .snek
