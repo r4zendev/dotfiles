@@ -67,7 +67,7 @@ disabled = false
 detect_extensions = ["js", "mjs", "cjs", "jsx", "tsx", "ts"]
 
 [bun]
-symbol = '🥟'
+symbol = ''
 format = '[$symbol ($version)]($style) '
 disabled = false
 
