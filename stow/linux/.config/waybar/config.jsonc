@@ -5,7 +5,7 @@
 
   "modules-left": ["hyprland/workspaces", "custom/media"],
   "modules-center": ["clock"],
-  "modules-right": ["pulseaudio", "custom/mic", "bluetooth", "network", "cpu", "memory", "battery"],
+  "modules-right": ["custom/hyprwhspr", "pulseaudio", "custom/mic", "bluetooth", "network", "cpu", "memory", "battery"],
 
   "hyprland/workspaces": {
     "format": "{id}"
@@ -89,5 +89,10 @@
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-  }
+  },
+
+
+  "include": [
+    "~/.config/waybar/hyprwhspr-module.jsonc"
+  ]
 }

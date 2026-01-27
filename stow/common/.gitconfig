@@ -16,10 +16,13 @@
 [init]
 	defaultBranch = main
 
-[url "git@github.com:"]
-  insteadOf = https://github.com/
 [pull]
-	rebase = false
+	rebase = true
 
 [advice]
   forceDeleteBranch = false
+
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+[net]
+	git-fetch-with-cli = true

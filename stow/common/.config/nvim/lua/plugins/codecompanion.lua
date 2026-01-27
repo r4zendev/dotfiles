@@ -41,7 +41,7 @@ return {
             },
             auto_generate_title = true,
             title_generation_opts = {
-              adapter = "openrouter_devstral",
+              adapter = "openrouter_mimo",
               -- adapter = "copilot",
               -- model = "claude-sonnet-4.5",
               refresh_every_n_prompts = 0, -- e.g., 3 to refresh after every 3rd user prompt
@@ -99,14 +99,14 @@ return {
               schema = { model = { default = "x-ai/grok-4.1-fast:free" } },
             })
           end,
-          openrouter_devstral = function()
+          openrouter_mimo = function()
             return require("codecompanion.adapters").extend("openai_compatible", {
               env = {
                 url = "https://openrouter.ai/api",
                 api_key = "OPENROUTER_API_KEY",
                 chat_url = "/v1/chat/completions",
               },
-              schema = { model = { default = "mistralai/devstral-2512:free" } },
+              schema = { model = { default = "xiaomi/mimo-v2-flash" } },
             })
           end,
         },
@@ -157,7 +157,7 @@ return {
           adapter = "claude_code",
         },
         inline = {
-          adapter = "openrouter_devstral",
+          adapter = "openrouter_mimo",
         },
       },
       display = {

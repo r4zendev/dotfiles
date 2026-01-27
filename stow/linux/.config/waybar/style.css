@@ -1,3 +1,4 @@
+@import "/usr/lib/hyprwhspr/config/waybar/hyprwhspr-style.css";
 * {
   all: unset;
   font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font";
