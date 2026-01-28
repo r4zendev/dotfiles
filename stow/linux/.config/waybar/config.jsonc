@@ -44,9 +44,9 @@
     "format": "{}",
     "return-type": "json",
     "exec": "~/.config/waybar/scripts/mic-hyprwhspr.sh",
-    "on-click": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "on-click-middle": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh restart",
+    "on-click": "~/.config/waybar/scripts/mic-hyprwhspr.sh record",
+    "on-click-right": "~/.config/waybar/scripts/mic-hyprwhspr.sh mute",
+    "on-click-middle": "~/.config/waybar/scripts/mic-hyprwhspr.sh restart",
     "tooltip": true
   },
 
