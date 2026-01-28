@@ -5,7 +5,7 @@
 
   "modules-left": ["hyprland/workspaces", "custom/media"],
   "modules-center": ["clock"],
-  "modules-right": ["custom/hyprwhspr", "pulseaudio", "custom/mic", "bluetooth", "network", "cpu", "memory", "battery"],
+  "modules-right": ["pulseaudio", "custom/mic-hyprwhspr", "bluetooth", "hyprland/language", "network", "cpu", "memory", "battery"],
 
   "hyprland/workspaces": {
     "format": "{id}"
@@ -40,11 +40,21 @@
     "scroll-step": 2
   },
 
-  "custom/mic": {
+  "custom/mic-hyprwhspr": {
     "format": "{}",
     "return-type": "json",
-    "exec": "~/.config/waybar/scripts/mic-status.sh",
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+    "exec": "~/.config/waybar/scripts/mic-hyprwhspr.sh",
+    "on-click": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-click-middle": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh restart",
+    "tooltip": true
+  },
+
+  "hyprland/language": {
+    "format": "󰌌 {}",
+    "format-en": "EN",
+    "format-ru": "RU",
+    "format-he": "HE"
   },
 
   "bluetooth": {
@@ -89,10 +99,5 @@
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-  },
-
-
-  "include": [
-    "~/.config/waybar/hyprwhspr-module.jsonc"
-  ]
+  }
 }

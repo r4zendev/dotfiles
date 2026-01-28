@@ -1,4 +1,3 @@
-@import "/usr/lib/hyprwhspr/config/waybar/hyprwhspr-style.css";
 * {
   all: unset;
   font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font";
@@ -87,8 +86,9 @@ tooltip label {
 }
 
 #pulseaudio,
-#custom-mic,
+#custom-mic-hyprwhspr,
 #bluetooth,
+#language,
 #network,
 #cpu,
 #memory,
@@ -109,17 +109,37 @@ tooltip label {
   background: rgba(166, 227, 161, 0.2);
 }
 
-#custom-mic.unmuted {
+#custom-mic-hyprwhspr.ready,
+#custom-mic-hyprwhspr.stopped {
   color: #a6e3a1;
 }
 
-#custom-mic.muted {
+#custom-mic-hyprwhspr.muted {
   color: #f38ba8;
-  animation: blink 2s ease-in-out infinite;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-#custom-mic:hover {
+#custom-mic-hyprwhspr.recording {
+  color: #f38ba8;
+  border-bottom: 2px solid #f38ba8;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+
+#custom-mic-hyprwhspr.error {
+  color: #fab387;
+}
+
+#custom-mic-hyprwhspr:hover {
   background: rgba(166, 227, 161, 0.2);
+}
+
+#language {
+  color: #cba6f7;
+}
+
+#language:hover {
+  background: rgba(203, 166, 247, 0.2);
 }
 
 #bluetooth {
@@ -166,15 +186,23 @@ tooltip label {
 
 #battery.critical:not(.charging) {
   color: #f38ba8;
-  animation: blink 1s steps(12) infinite;
+  animation: pulse 1s ease-in-out infinite;
 }
 
 #battery:hover {
   background: rgba(166, 227, 161, 0.2);
 }
 
-@keyframes blink {
-  to {
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
     opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
