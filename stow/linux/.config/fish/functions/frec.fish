@@ -16,7 +16,7 @@
 
 function frec
     set rand_hex (openssl rand -hex 8)
-    set output_file "$HOME/projects/recordings/output-$rand_hex.mp4"
+    set output_file "$HOME/Documents/recordings/output-$rand_hex.mp4"
 
     mkdir -p (dirname $output_file)
 

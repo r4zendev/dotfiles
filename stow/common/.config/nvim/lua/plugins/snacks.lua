@@ -365,7 +365,7 @@ M.plugin = {
           end
 
           if is_supermaven_enabled then
-            vim.cmd("silent! Supermaven" .. (state and " enable" or " disable"))
+            vim.cmd("silent! Supermaven" .. (state and "Start" or "Stop"))
             vim.g.supermaven_enabled = state
           end
 
