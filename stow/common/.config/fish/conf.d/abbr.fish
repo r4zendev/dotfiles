@@ -20,6 +20,8 @@ abbr -a gs "git status"
 abbr -a gd "git diff"
 abbr -a gl "git log"
 abbr -a gck "git checkout"
+abbr -a grh "git reset --hard && git clean -fd"
+abbr -a gcl "git clean -fdx"
 
 abbr -a ga "git add ."
 abbr -a gc --position anywhere --set-cursor 'git commit -m "%"'
