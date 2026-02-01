@@ -1,3 +1,23 @@
+-- {
+--   name = "Everblush",
+--   colorscheme = "everblush",
+--   after = function()
+--     transparent_winbar()
+--
+--     local palette = require("everblush.palette")
+--     local comment_color = "#6c7086"
+--     vim.api.nvim_set_hl(0, "@comment", { fg = comment_color })
+--     vim.api.nvim_set_hl(0, "Comment", { fg = comment_color })
+--     vim.api.nvim_set_hl(0, "LineNr", { fg = comment_color })
+--     vim.api.nvim_set_hl(0, "CursorLineNr", { fg = palette.color4, bold = true })
+--     vim.api.nvim_set_hl(
+--       0,
+--       "SnacksPickerListCursorLine",
+--       { bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg, fg = "NONE" }
+--     )
+--   end,
+-- },
+
 return {
   "Everblush/nvim",
   name = "everblush",

@@ -1,3 +1,8 @@
+-- {
+--   name = "Kanso Zen",
+--   colorscheme = "kanso-zen",
+-- },
+
 return {
   "webhooked/kanso.nvim",
   opts = {

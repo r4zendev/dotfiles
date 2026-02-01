@@ -1,5 +1,4 @@
 local map = vim.keymap.set
-
 local M = {}
 local iswin = vim.uv.os_uname().version:match("Windows")
 
@@ -10,7 +9,12 @@ M.on_attach = function(_, bufnr)
 
   local tiny_code_action_ok, tiny_code_action = pcall(require, "tiny-code-action")
   if tiny_code_action_ok then
-    map({ "n", "v" }, "<leader>ca", tiny_code_action.code_action, opts("See available code actions"))
+    map(
+      { "n", "v" },
+      "<leader>ca",
+      tiny_code_action.code_action,
+      opts("See available code actions")
+    )
   else
     map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("See available code actions"))
   end
@@ -69,7 +73,8 @@ end
 
 function M.insert_package_json(config_files, field, fname)
   local path = vim.fn.fnamemodify(fname, ":h")
-  local root_with_package = vim.fs.dirname(vim.fs.find("package.json", { path = path, upward = true })[1])
+  local root_with_package =
+    vim.fs.dirname(vim.fs.find("package.json", { path = path, upward = true })[1])
 
   if root_with_package then
     -- only add package.json if it contains field parameter
@@ -167,7 +172,9 @@ function M.root_pattern(...)
     startpath = M.strip_archive_subpath(startpath)
     for _, pattern in ipairs(patterns) do
       local match = M.search_ancestors(startpath, function(path)
-        for _, p in ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, "/"), true, true)) do
+        for _, p in
+          ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, "/"), true, true))
+        do
           if vim.loop.fs_stat(p) then
             return path
           end
@@ -185,7 +192,7 @@ end
 -- ### NOT IN USE ###
 -- ##################
 
-M.get_servers =function ()
+M.get_servers = function()
   local server_configs = {}
   for _, filepath in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
     local server_name = vim.fn.fnamemodify(filepath, ":t:r")
@@ -209,7 +216,11 @@ M.get_servers_with_configs = function()
     local chunk, load_err = loadfile(filepath)
     if not chunk then
       vim.notify(
-        string.format("Failed to load LSP config file: %s\nError: %s", filepath, load_err or "Unknown error"),
+        string.format(
+          "Failed to load LSP config file: %s\nError: %s",
+          filepath,
+          load_err or "Unknown error"
+        ),
         vim.log.levels.ERROR
       )
       goto continue
@@ -218,14 +229,21 @@ M.get_servers_with_configs = function()
     local exec_ok, config_or_err = pcall(chunk)
     if not exec_ok then
       vim.notify(
-        string.format("Failed to execute LSP config file: %s\nError: %s", filepath, tostring(config_or_err)),
+        string.format(
+          "Failed to execute LSP config file: %s\nError: %s",
+          filepath,
+          tostring(config_or_err)
+        ),
         vim.log.levels.ERROR
       )
       goto continue
     end
 
     if type(config_or_err) ~= "table" then
-      vim.notify(string.format("LSP config file did not return a table: %s", filepath), vim.log.levels.WARN)
+      vim.notify(
+        string.format("LSP config file did not return a table: %s", filepath),
+        vim.log.levels.WARN
+      )
       goto continue
     end
 
@@ -256,7 +274,5 @@ M.toggle_ts_server = function(client)
     end
   end, 1000)
 end
-
-
 
 return M

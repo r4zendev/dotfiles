@@ -1,3 +1,23 @@
+-- local function transparent_background()
+--   vim.api.nvim_set_hl(0, "NonText", { bg = "NONE" })
+--   pcall(vim.api.nvim_set_hl, 0, "StatusColumn", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "FoldColumn", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+--   vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
+-- end
+-- {
+--   name = "Kanagawa Wave",
+--   colorscheme = "kanagawa-wave",
+--   after = function()
+--     transparent_background()
+--   end,
+-- },
+
 return {
   "rebelot/kanagawa.nvim",
   opts = {

@@ -1,18 +1,5 @@
 local M = {}
 
-local function transparent_background()
-  vim.api.nvim_set_hl(0, "NonText", { bg = "NONE" })
-  pcall(vim.api.nvim_set_hl, 0, "StatusColumn", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "FoldColumn", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
-  vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
-end
-
 local function transparent_winbar()
   vim.api.nvim_set_hl(0, "WinBar", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "WinBarNC", { bg = "NONE" })
@@ -79,6 +66,7 @@ local function ts_lsp_bold_nodes(disable)
     "@lsp.type.function",
     "@function",
     "Function",
+    "Green",
   }
   for _, node in ipairs(nodes) do
     vim.api.nvim_set_hl(
@@ -100,29 +88,11 @@ M.themes = {
     end,
   },
   {
-    name = "Everblush",
-    colorscheme = "everblush",
-    after = function()
-      transparent_winbar()
-
-      local palette = require("everblush.palette")
-      local comment_color = "#6c7086"
-      vim.api.nvim_set_hl(0, "@comment", { fg = comment_color })
-      vim.api.nvim_set_hl(0, "Comment", { fg = comment_color })
-      vim.api.nvim_set_hl(0, "LineNr", { fg = comment_color })
-      vim.api.nvim_set_hl(0, "CursorLineNr", { fg = palette.color4, bold = true })
-      vim.api.nvim_set_hl(
-        0,
-        "SnacksPickerListCursorLine",
-        { bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg, fg = "NONE" }
-      )
-    end,
-  },
-  {
     name = "Everforest",
     colorscheme = "everforest",
     after = function()
       transparent_winbar()
+      transparent_float()
     end,
   },
   {
@@ -131,17 +101,6 @@ M.themes = {
     after = function()
       transparent_float()
     end,
-  },
-  {
-    name = "Kanagawa Wave",
-    colorscheme = "kanagawa-wave",
-    after = function()
-      transparent_background()
-    end,
-  },
-  {
-    name = "Kanso Zen",
-    colorscheme = "kanso-zen",
   },
 }
 
