@@ -41,7 +41,7 @@
 #                - Preview highlights matched line in file
 #                - Enter: open file at matched line in $EDITOR
 #
-#   Alt-K        Interactive process killer (fkill)
+#   Alt-X        Interactive process killer (fkill)
 #                - Tab: select multiple processes
 #                - Ctrl-S: toggle all (select/deselect)
 #                - Alt-C: re-sort by CPU
@@ -50,7 +50,7 @@
 #
 # Custom Functions:
 #   fgit         Browse git tracked files (Ctrl-G)
-#   fkill        Interactive process killer (Alt-K) - sorted by memory
+#   fkill        Interactive process killer (Alt-X) - sorted by memory
 #   frg          Ripgrep file content search (Alt-F) - file-grouped view
 #
 # Universal Controls:
@@ -177,8 +177,8 @@ if bind -M insert >/dev/null 2>&1
     bind -M insert \ef frg
 end
 
-# Alt-K: Process killer (Alt to preserve Ctrl-K kill-line)
-bind \ek 'fkill; commandline -f repaint'
+# Alt-X: Process killer
+bind \ex 'fkill; commandline -f repaint'
 if bind -M insert >/dev/null 2>&1
-    bind -M insert \ek 'fkill; commandline -f repaint'
+    bind -M insert \ex 'fkill; commandline -f repaint'
 end

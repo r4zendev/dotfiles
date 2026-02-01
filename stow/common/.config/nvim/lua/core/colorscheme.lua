@@ -119,6 +119,13 @@ M.themes = {
     end,
   },
   {
+    name = "Everforest",
+    colorscheme = "everforest",
+    after = function()
+      transparent_winbar()
+    end,
+  },
+  {
     name = "Catppuccin",
     colorscheme = "catppuccin-mocha",
     after = function()
@@ -128,7 +135,9 @@ M.themes = {
   {
     name = "Kanagawa Wave",
     colorscheme = "kanagawa-wave",
-    after = transparent_background,
+    after = function()
+      transparent_background()
+    end,
   },
   {
     name = "Kanso Zen",
