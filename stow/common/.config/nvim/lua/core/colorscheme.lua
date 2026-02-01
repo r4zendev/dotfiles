@@ -215,7 +215,7 @@ function M.pick()
     layout = {
       preset = "select",
       layout = {
-        height = 8,
+        height = #M.themes + 2,
         width = 20,
         min_width = 20,
       },
