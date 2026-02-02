@@ -57,11 +57,11 @@ return {
         "pylint",
 
         { "lua_ls", version = "3.16.4" },
-
         "stylua",
 
         "typos_lsp",
         "harper-ls",
+        "tinymist",
 
         "zls",
         "gopls",
@@ -73,12 +73,10 @@ return {
       },
     },
     init = function()
-      -- Check once when opening a file
       vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufWritePre" }, {
         once = true,
         callback = function()
           vim.cmd("MasonToolsUpdate")
-          vim.cmd("MasonToolsInstall")
         end,
       })
     end,

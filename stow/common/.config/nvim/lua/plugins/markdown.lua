@@ -61,6 +61,7 @@ return {
   {
     "brianhuster/live-preview.nvim",
     event = "VeryLazy",
+    ft = { "html", "markdown", "adoc", "txt" },
     opts = {
       picker = "snacks.picker",
     },
