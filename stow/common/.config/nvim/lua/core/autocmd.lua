@@ -61,6 +61,16 @@ autocmd("FileType", {
   end,
 })
 
+-- Highlight on yank
+autocmd("TextYankPost", {
+  group = augroup("HighlightOnYank", { clear = true }),
+  pattern = "*",
+  desc = "Highlight text when yank",
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
 -- Alternative for dropbar.nvim plugin that I use
 -- Displays the file path in the winbar, with certain exceptions
 -- vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
@@ -94,16 +104,6 @@ autocmd("FileType", {
 --     end
 --   end,
 -- })
-
--- Highlight on yank
-autocmd("TextYankPost", {
-  group = augroup("HighlightOnYank", { clear = true }),
-  pattern = "*",
-  desc = "Highlight text when yank",
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
 
 -- Disable extending comments on new lines.
 -- autocmd("BufEnter", {
