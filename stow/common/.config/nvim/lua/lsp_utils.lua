@@ -43,6 +43,37 @@ M.lsp_action = setmetatable({}, {
   end,
 })
 
+function M.apply_action_sync(client, bufnr, action_name, timeout_ms)
+  timeout_ms = timeout_ms or 3000
+  local params = {
+    textDocument = vim.lsp.util.make_text_document_params(bufnr),
+    range = {
+      start = { line = 0, character = 0 },
+      ["end"] = { line = vim.api.nvim_buf_line_count(bufnr), character = 0 },
+    },
+    context = {
+      only = { action_name },
+      diagnostics = {},
+    },
+  }
+
+  local results = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeout_ms)
+  if not results then
+    return
+  end
+
+  for _, res in pairs(results) do
+    for _, action in pairs(res.result or {}) do
+      if action.edit then
+        vim.lsp.util.apply_workspace_edit(action.edit, "utf-16")
+      end
+      if action.command then
+        client.request_sync("workspace/executeCommand", action.command, timeout_ms, bufnr)
+      end
+    end
+  end
+end
+
 function M.execute_command(opts)
   local params = {
     command = opts.command,
