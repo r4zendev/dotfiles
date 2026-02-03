@@ -7,7 +7,6 @@ return {
     { "<leader>ot", "<cmd>OverseerToggle<cr>", desc = "Task list" },
     { "<leader>ol", "<cmd>OverseerTaskAction<cr>", desc = "Task action" },
     { "<leader>b", desc = "Build" },
-    { "<leader>q", desc = "Toggle quickfix list" },
   },
   opts = {
     strategy = "terminal",
