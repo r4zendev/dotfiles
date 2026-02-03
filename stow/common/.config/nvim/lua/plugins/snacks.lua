@@ -24,7 +24,7 @@ M.plugin = {
       matcher = { frecency = true },
       sources = {
         files = { hidden = true, ignored = true },
-        smart = { hidden = true },
+        smart = { hidden = true, ignored = false },
         grep = { hidden = true },
         grep_word = { hidden = true },
         git_status = { untracked = true },
