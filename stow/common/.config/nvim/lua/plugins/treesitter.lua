@@ -9,6 +9,7 @@ local parsers = {
   "gitignore",
   "go",
   "graphql",
+  "haskell",
   "html",
   "javascript",
   "jsdoc",
@@ -20,19 +21,21 @@ local parsers = {
   "prisma",
   "query",
   "rust",
+  "supercollider",
   "svelte",
   "tmux",
   "tsx",
   "typescript",
+  "vim",
   "yaml",
   "zig",
-  "vim",
 }
 
 local treesitter_fts = vim.tbl_extend("force", parsers, {
   "javascriptreact",
   "typescriptreact",
   "sh",
+  "tidal",
 })
 
 return {
@@ -65,6 +68,7 @@ return {
           conf = "conf",
           tiltfile = "tiltfile",
           Tiltfile = "tiltfile",
+          tidal = "tidal",
         },
         filename = {
           ["tsconfig.json"] = "jsonc",
