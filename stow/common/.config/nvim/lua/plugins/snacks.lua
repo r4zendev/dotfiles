@@ -338,7 +338,7 @@ M.plugin = {
     -- AI completion toggle
     vim.g.copilot_enabled = false
     vim.g.llama_enabled = true
-    vim.g.nova_enabled = true
+    vim.g.nova_enabled = false
 
     local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
     local is_llama_enabled = vim.g.llama_enabled == nil or vim.g.llama_enabled
