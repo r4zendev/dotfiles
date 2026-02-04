@@ -35,3 +35,6 @@ abbr -a gsp "git stash pop"
 
 abbr -a gdd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
 abbr -a gd1 --position anywhere --set-cursor 'nvim -c "DiffviewOpen HEAD~1%..HEAD"'
+
+abbr qwencpp "llama-server -hf ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF \
+    --port 8012 -ngl 99 --flash-attn on -ub 1024 -b 1024 --ctx-size 16384 --cache-reuse 256"

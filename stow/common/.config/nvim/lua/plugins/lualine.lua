@@ -31,14 +31,14 @@ return {
       },
       sections = {
         lualine_c = {
-          {
-            "filename",
-            -- 0: fname; 1: relpath; 2: abspath; 3: abspath (~); 4: fname + parent (~);
-            path = 1,
-            cond = function()
-              return not vim.api.nvim_buf_get_name(0):match("^oil://")
-            end,
-          },
+          -- {
+          --   "filename",
+          --   -- 0: fname; 1: relpath; 2: abspath; 3: abspath (~); 4: fname + parent (~);
+          --   path = 1,
+          --   cond = function()
+          --     return not vim.api.nvim_buf_get_name(0):match("^oil://")
+          --   end,
+          -- },
         },
         lualine_x = (function()
           local components = {
@@ -48,8 +48,13 @@ return {
             { "filetype" },
           }
 
-          local ok, noice = pcall(require, "noice")
-          if ok then
+          local nova_ok, nova = pcall(require, "nova")
+          if nova_ok then
+            table.insert(components, 1, nova.status.lualine())
+          end
+
+          local noice_ok, noice = pcall(require, "noice")
+          if noice_ok then
             table.insert(components, 1, {
               noice.api.status.mode.get,
               cond = noice.api.status.mode.has,

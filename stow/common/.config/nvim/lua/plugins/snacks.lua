@@ -314,13 +314,19 @@ M.plugin = {
           ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
           callback = function(ev)
             local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-            vim.notify(vim.lsp.status(), "info", {
+            local ok, status = pcall(vim.lsp.status)
+            if not ok or not status or status == "" then
+              return
+            end
+            local value = ev.data and ev.data.params and ev.data.params.value
+            local is_end = value and value.kind == "end"
+            vim.notify(status, "info", {
               id = "lsp_progress",
               title = "LSP Progress",
               opts = function(notif)
-                notif.icon = ev.data.params.value.kind == "end" and " "
+                notif.icon = is_end and " "
                   or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-                notif.msg = ev.data.params.value.kind == "end" and "Workspace loaded" or notif.msg
+                notif.msg = is_end and "Workspace loaded" or notif.msg
               end,
               timeout = 1000,
             })
@@ -329,24 +335,14 @@ M.plugin = {
       end
     end
 
-    -- AI completion toggle. Putting it here, since using multiple providers
-    -- First, check if enabled by default to omit toggling disabled tools
-    --
-    -- Kills lazy loading:
-    -- -- stylua: ignore start
-    -- local is_minuet_enabled = pcall(require, "minuet")
-    --   and (vim.g.minuet_enabled == nil or vim.g.minuet_enabled)
-    -- local is_copilot_enabled = pcall(require, "copilot")
-    --   and (vim.g.copilot_enabled == nil or vim.g.copilot_enabled)
-    -- -- stylua: ignore end
-
+    -- AI completion toggle
     vim.g.copilot_enabled = false
-    vim.g.minuet_enabled = false
-    vim.g.supermaven_enabled = true
+    vim.g.llama_enabled = true
+    vim.g.nova_enabled = true
 
-    local is_minuet_enabled = vim.g.minuet_enabled == nil or vim.g.minuet_enabled
     local is_copilot_enabled = vim.g.copilot_enabled == nil or vim.g.copilot_enabled
-    local is_supermaven_enabled = vim.g.supermaven_enabled == nil or vim.g.supermaven_enabled
+    local is_llama_enabled = vim.g.llama_enabled == nil or vim.g.llama_enabled
+    local is_nova_enabled = vim.g.nova_enabled == nil or vim.g.nova_enabled
 
     vim.g.enable_ai_completion = true
     vim.schedule(function()
@@ -358,21 +354,19 @@ M.plugin = {
         set = function(state)
           vim.g.enable_ai_completion = state
 
-          -- Minuet
-          if is_minuet_enabled then
-            vim.cmd([[Minuet virtualtext toggle]])
-            vim.g.minuet_enabled = state
-          end
-
-          if is_supermaven_enabled then
-            vim.cmd("silent! Supermaven" .. (state and "Start" or "Stop"))
-            vim.g.supermaven_enabled = state
-          end
-
-          -- Copilot
           if is_copilot_enabled then
             vim.cmd("silent! Copilot" .. (state and " enable" or " disable"))
             vim.g.copilot_enabled = state
+          end
+
+          if is_llama_enabled then
+            vim.cmd("silent! Llama" .. (state and "Enable" or "Disable"))
+            vim.g.llama_enabled = state
+          end
+
+          if is_nova_enabled then
+            vim.cmd("silent! Nova" .. (state and "Enable" or "Disable"))
+            vim.g.nova_enabled = state
           end
         end,
       }):map("<leader>a-")
