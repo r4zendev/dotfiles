@@ -78,18 +78,12 @@ class Clipboard extends GObject.Object {
 			return;
 		}
 
-		console.log(
-			"Clipboard: cliphist database not found. Try copying something first!",
-		);
+		console.warn("Clipboard: cliphist database not found");
 	}
 
 	private init() {
-		console.log("Clipboard: Starting to read cliphist history...");
-
 		this.updateDatabase()
-			.then(() => {
-				console.log("Clipboard: Done reading cliphist history!");
-			})
+			.then(() => {})
 			.catch((err) =>
 				console.error(
 					`Clipboard: An error occurred while reading cliphist history. Stderr: ${err}`,

@@ -1,4 +1,3 @@
-import AstalHyprland from "gi://AstalHyprland";
 import type AstalNotifd from "gi://AstalNotifd";
 
 import { createBinding, For } from "ags";
@@ -51,7 +50,7 @@ export const NotifHistory = () =>
 								appIcon={notif.appIcon}
 								image={Notifications.getDefault().getNotificationImage(notif)}
 								onDismissed={() =>
-									Notifications.getDefault().removeHistory(notif)
+									Notifications.getDefault().removeHistory(notif, true)
 								}
 								id={notif.id}
 							>
@@ -60,27 +59,10 @@ export const NotifHistory = () =>
 										if (gesture.get_current_button() !== Gdk.BUTTON_PRIMARY)
 											return;
 
+										Windows.getDefault().close("control-center");
 										const invoked =
 											Notifications.getDefault().invokeHistoryAction(notif);
-
-										// Always try to focus the app window regardless of invoke result
-										if (notif.appName) {
-											const searchTerm = notif.appName
-												.toLowerCase()
-												.split(/[\s_.-]+/)[0];
-											console.log(
-												`[history-click] appName="${notif.appName}" searchTerm="${searchTerm}"`,
-											);
-											if (searchTerm && searchTerm.length > 2) {
-												AstalHyprland.get_default().dispatch(
-													"focuswindow",
-													`class:${searchTerm}`,
-												);
-											}
-											Windows.getDefault().close("control-center");
-										}
-
-										Notifications.getDefault().removeHistory(notif, true);
+										Notifications.getDefault().removeHistory(notif, !invoked);
 									}}
 								/>
 							</Notification>

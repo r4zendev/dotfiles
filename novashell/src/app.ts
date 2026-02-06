@@ -229,7 +229,6 @@ you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster res
 	}
 
 	private init(): void {
-		console.log(`Novashell: Initializing things`);
 		Adw.init();
 
 		// load gresource from build-defined path
@@ -308,11 +307,9 @@ you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster res
 		Media.getDefault();
 		Clipboard.getDefault();
 
-		console.log("Novashell: Initializing Wallpaper and Stylesheet modules");
 		Wallpaper.getDefault();
 		Stylesheet.getDefault();
 
-		console.log("Runner: Adding plugins");
 		runnerPlugins.forEach((plugin) => Runner.addPlugin(plugin));
 
 		createSubscription(

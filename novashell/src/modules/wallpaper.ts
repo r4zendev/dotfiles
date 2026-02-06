@@ -214,9 +214,7 @@ export class Wallpaper extends GObject.Object {
 				stateDebounce = null;
 				try {
 					const newPath = exec("wallpaper-state get current_image").trim();
-					console.log(`Wallpaper: state file says "${newPath}" (current="${this.#wallpaper}")`);
 					if (newPath && newPath !== this.#wallpaper && GLib.file_test(newPath, GLib.FileTest.EXISTS)) {
-						console.log(`Wallpaper: external change → "${newPath}"`);
 						this.#wallpaper = newPath;
 						this.notify("wallpaper");
 						if (this.shouldSyncColors()) {
@@ -350,7 +348,6 @@ export class Wallpaper extends GObject.Object {
 			return;
 		}
 
-		console.log(`Wallpaper: reloadColors() called for "${this.#wallpaper}" (mode=${this.colorMode})`);
 		const light = this.colorMode === "lighten";
 		this.generateColorsFromImage(this.#wallpaper, light)
 			.then(async (data) => {
@@ -365,7 +362,6 @@ export class Wallpaper extends GObject.Object {
 					`${walDir}/colors.json`,
 					JSON.stringify(data, null, 4),
 				);
-				console.log(`Wallpaper: wrote colors.json (bg=${data.special.background}, accent=${data.colors.color4})`);
 				this.emit("colors-reloaded");
 			})
 			.catch((e: Error) => {
@@ -392,8 +388,6 @@ export class Wallpaper extends GObject.Object {
 		if (hexes.length === 0) {
 			throw new Error("No colors extracted from image");
 		}
-
-		console.log(`Wallpaper: extracted ${hexes.length} colors: ${hexes.join(", ")}`);
 
 		hexes.sort((a, b) => luminance(a) - luminance(b));
 
@@ -424,8 +418,6 @@ export class Wallpaper extends GObject.Object {
 		if (!light && luminance(fg) < 180) {
 			fg = lightenHex(fg, 0.3);
 		}
-
-		console.log(`Wallpaper: palette bg=${bg} fg=${fg} accents=[${readable.join(", ")}]`);
 
 		// color8: muted accent tint instead of pure gray — used for Visual, comments, selections
 		const accent = readable[3]; // color4 position = primary accent
@@ -485,7 +477,6 @@ export class Wallpaper extends GObject.Object {
 			"boolean",
 		);
 		const result = currentTheme === "pywal" && syncEnabled;
-		console.log(`Wallpaper: shouldSyncColors() theme="${currentTheme}" sync=${syncEnabled} → ${result}`);
 		return result;
 	}
 
@@ -499,7 +490,6 @@ export class Wallpaper extends GObject.Object {
 		}
 
 		const wallpaperChanged = this.#wallpaper !== path;
-		console.log(`Wallpaper: setWallpaper("${path}") changed=${wallpaperChanged}`);
 		this.#wallpaper = path;
 		this.notify("wallpaper");
 		this.reloadWallpaper(write)
@@ -541,14 +531,12 @@ export class Wallpaper extends GObject.Object {
 			const latest = exec("wallpaper-state get current_image").trim();
 			if (latest && GLib.file_test(latest, GLib.FileTest.EXISTS)) {
 				if (latest !== this.#wallpaper) {
-					console.log(`Wallpaper: syncColors updating stale path "${this.#wallpaper}" → "${latest}"`);
 					this.#wallpaper = latest;
 					this.notify("wallpaper");
 				}
 			}
 		} catch {}
 
-		console.log(`Wallpaper: syncColorsFromWallpaper() wallpaper="${this.#wallpaper}"`);
 		if (!this.#wallpaper) {
 			console.warn("Wallpaper: No wallpaper set, can't sync colors");
 			return;

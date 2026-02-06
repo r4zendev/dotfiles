@@ -2,7 +2,7 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
     set -l dir "$HOME/wallpapers"
 
     function _notify -a msg
-        notify-send -t 1500 -h string:x-canonical-private-synchronous:wallpaper Wallpaper "$msg"
+        notify-send -e -t 1500 -a Wallpaper "$msg"
     end
 
     # Collect images based on enabled categories

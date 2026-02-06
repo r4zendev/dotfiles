@@ -127,7 +127,6 @@ export class ThemeService extends GObject.Object {
 			this.notify("current-theme");
 
 			const wallpaper = Wallpaper.getDefault();
-			console.log(`ThemeService: switching to pywal, wallpaper="${wallpaper.wallpaper}"`);
 			if (wallpaper.wallpaper) {
 				wallpaper.syncColorsFromWallpaper();
 			} else {
@@ -166,7 +165,6 @@ export class ThemeService extends GObject.Object {
 
 			const json = JSON.stringify(themeData, null, 4);
 			await writeFileAsync(WAL_COLORS_PATH, json);
-			console.log(`ThemeService: wrote ${json.length} bytes to ${WAL_COLORS_PATH} (bg=${themeData.special.background})`);
 
 			// Explicitly reload — file monitors are unreliable for same-process writes
 			Stylesheet.getDefault().reloadColors();

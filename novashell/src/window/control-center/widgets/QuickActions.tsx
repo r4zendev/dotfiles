@@ -7,7 +7,6 @@ import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
 
 import { execApp } from "~/modules/apps";
-import { Wallpaper } from "~/modules/wallpaper";
 import { Windows } from "~/windows";
 
 const userFace: Gio.File = Gio.File.new_for_path(
@@ -38,10 +37,6 @@ const quickActionButtons: Array<{ icon: string; action: () => void }> = [
 				'SELECTION=$(slurp) && grim -g "$SELECTION" - | wl-copy && notify-send -a "Screenshot" -e "Copied to clipboard"',
 			]).catch(() => {});
 		},
-	},
-	{
-		icon: "preferences-desktop-wallpaper-symbolic",
-		action: () => Wallpaper.getDefault().pickWallpaper(),
 	},
 	{
 		icon: "system-shutdown-symbolic",

@@ -163,7 +163,12 @@ export class Notifications extends GObject.Object {
 				const notification = notifd.get_notification(id);
 
 				if (this.getNotifd().dontDisturb || this.ignoreNotifications) {
-					this.addHistory(notification, () => notification.dismiss());
+					if (!notification.transient) {
+						this.addHistory(notification, () => notification.dismiss());
+					} else {
+						this.#selfDismissed.add(notification.id);
+						notification.dismiss();
+					}
 					return;
 				}
 
@@ -189,10 +194,13 @@ export class Notifications extends GObject.Object {
 					return;
 				}
 
-				// Only remove from history when the app explicitly closed the notification
-				// (e.g., user read the Telegram message → app calls CloseNotification).
-				// Don't remove on daemon timeout (EXPIRED) — those should stay in history.
-				if (reason === AstalNotifd.ClosedReason.CLOSED) {
+				// Remove from history when the notification is closed externally
+				// (e.g., user read the Telegram message, or app calls CloseNotification).
+				// Our own dismiss() calls are filtered by #selfDismissed above.
+				if (
+					reason === AstalNotifd.ClosedReason.CLOSED ||
+					reason === AstalNotifd.ClosedReason.DISMISSED_BY_USER
+				) {
 					this.removeHistory(id);
 				}
 			}),
@@ -283,10 +291,10 @@ export class Notifications extends GObject.Object {
 		notif: AstalNotifd.Notification,
 		onAdded?: (notif: AstalNotifd.Notification) => void,
 	): void {
-		if (!notif) return;
+		if (!notif || notif.transient) return;
 
 		this.#history.length === this.historyLimit &&
-			this.removeHistory(this.#history[this.#history.length - 1]);
+			this.removeHistory(this.#history[this.#history.length - 1], true);
 
 		this.#history.map(
 			(notifb, i) => notifb.id === notif.id && this.#history.splice(i, 1),
@@ -424,10 +432,13 @@ export class Notifications extends GObject.Object {
 		const timeout = this.#notifications.get(notif.id)?.[1];
 		timeout?.running && timeout.cancel();
 
+		const willEnterHistory = addToHistory && !notif.transient;
 		this.#notifications.delete(notif.id);
-		addToHistory && !notif.transient && this.addHistory(notif);
+		willEnterHistory && this.addHistory(notif);
 
-		if (dismiss) {
+		// Only dismiss from daemon if the notification won't live in history.
+		// History items need the daemon reference alive for action invocation.
+		if (dismiss && !willEnterHistory) {
 			this.#selfDismissed.add(notif.id);
 			notif.dismiss();
 		}
@@ -488,19 +499,9 @@ export class Notifications extends GObject.Object {
 	public invokeHistoryAction(notif: HistoryNotification): boolean {
 		try {
 			const liveNotif = AstalNotifd.get_default().get_notification(notif.id);
-			if (!liveNotif) {
-				console.log(`[history-click] id=${notif.id} not alive in daemon`);
-				return false;
-			}
+			if (!liveNotif) return false;
 
 			const actions = liveNotif.actions;
-			console.log(
-				`[history-click] id=${notif.id} alive, actions: ${
-					actions
-						.map((a: AstalNotifd.Action) => `${a.id}="${a.label}"`)
-						.join(", ") || "none"
-				}`,
-			);
 
 			// Priority: "default" > "view" > first available
 			const action =
@@ -512,14 +513,9 @@ export class Notifications extends GObject.Object {
 				actions[0];
 
 			if (action) {
-				console.log(
-					`[history-click] invoking action: ${action.id}="${action.label}"`,
-				);
 				liveNotif.invoke(action.id);
 				return true;
 			}
-
-			console.log(`[history-click] no actions to invoke`);
 		} catch (e: any) {
 			console.error(`[history-click] error: ${e.message}`);
 		}

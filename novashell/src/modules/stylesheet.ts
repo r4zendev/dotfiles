@@ -86,8 +86,6 @@ export class Stylesheet {
 			accent: data.accent || data.colors.color4,
 		};
 
-		console.log(`Stylesheet: getColorDefinitions() bg=${data.special.background} accent=${colors.accent} name=${data.name || "pywal"}`);
-
 		return Object.keys(colors)
 			.map((name) => `$${name}: ${colors[name as keyof typeof colors]};`)
 			.join("\n");
@@ -128,7 +126,6 @@ export class Stylesheet {
 		this.compile()
 			.then(() => {
 				const css = this.getStyleSheet();
-				console.log(`Stylesheet: compiled ${css.length} bytes CSS`);
 
 				if (!this.#themeProvider) {
 					this.#themeProvider = Gtk.CssProvider.new();
@@ -140,7 +137,6 @@ export class Stylesheet {
 				}
 
 				this.#themeProvider.load_from_string(css);
-				console.log("Stylesheet: CSS loaded into provider");
 			})
 			.catch((_e) => {
 				const e = _e as Error;
@@ -204,7 +200,6 @@ export class Stylesheet {
 		this.compileApply();
 
 		const data = Wallpaper.getDefault().getData();
-		console.log(`Stylesheet: applying external colors (bg=${data.special.background})`);
 		updateHyprlandColors(data);
 
 		broadcastTerminalColors(data);
@@ -221,7 +216,6 @@ export class Stylesheet {
 			reloadTmux();
 			reloadFish();
 			reloadNeovim(themeId);
-			console.log("Stylesheet: external colors applied");
 		}).catch((e) => {
 			console.error(`Stylesheet: Error applying external colors: ${e}`);
 		});

@@ -43,7 +43,6 @@ export function reloadTmux(): void {
 				"bash", "-c",
 				"tmux list-clients -F '#{client_name}' | while read c; do tmux refresh-client -t \"$c\" -S; done",
 			]).catch(() => {});
-			console.log("ColorUtils: Reloaded tmux colors");
 		})
 		.catch(() => {});
 }
@@ -61,14 +60,14 @@ export function reloadNeovim(themeName?: string): void {
 		"bash", "-c",
 		`for sock in /run/user/1000/nvim.*.0; do [ -e "$sock" ] && nvim --server "$sock" --remote-send ':lua require("core.colorscheme").apply("${escaped}")<CR>' 2>/dev/null; done`,
 	])
-		.then(() => console.log(`ColorUtils: Reloaded neovim instances (theme=${nvimTheme})`))
+		.then(() => {})
 		.catch(() => {});
 }
 
 export function reloadFish(): void {
 	const walCachePath = `${GLib.get_user_cache_dir()}/wal/colors.fish`;
 	execAsync(["fish", "-c", `source ${walCachePath}`])
-		.then(() => console.log("ColorUtils: Reloaded fish colors"))
+		.then(() => {})
 		.catch(() => {});
 }
 
@@ -91,7 +90,7 @@ export function broadcastTerminalColors(data: ColorData): void {
 		"python3", "-c",
 		`import glob,os\nseq="${seq}"\nseq=seq.encode().decode("unicode_escape")\ncount=0\nfor t in glob.glob("/dev/pts/[0-9]*"):\n try:\n  with open(t,"w") as f: f.write(seq); count+=1\n except: pass\nprint(count)`,
 	])
-		.then((out) => console.log(`ColorUtils: Broadcast to ${out.trim()} PTYs`))
+		.then(() => {})
 		.catch((e) => console.error(`ColorUtils: Broadcast failed: ${e}`));
 }
 
@@ -234,7 +233,6 @@ export async function updateGhosttyColors(data: ColorData): Promise<void> {
 	});
 
 	reloadGhostty();
-	console.log(`ColorUtils: Ghostty colors written (bg=${special.background})`);
 }
 
 function reloadGhostty(): void {
@@ -242,7 +240,7 @@ function reloadGhostty(): void {
 		"bash", "-c",
 		`hyprctl clients -j | jq -r '.[] | select(.class == "com.mitchellh.ghostty") | .address' | while read addr; do hyprctl dispatch sendshortcut "CTRL SHIFT, comma, address:$addr" 2>/dev/null; done`,
 	])
-		.then(() => console.log("ColorUtils: Ghostty config reloaded"))
+		.then(() => {})
 		.catch(() => {});
 }
 
