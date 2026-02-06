@@ -1,5 +1,6 @@
 return {
   dir = "~/projects/nova.nvim",
+  enabled = false,
   event = "InsertEnter",
   cmd = { "NovaEnable", "NovaDisable", "NovaToggle", "NovaClearCache", "NovaStats" },
   opts = {

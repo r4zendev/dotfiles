@@ -9,6 +9,7 @@ return {
       keymap_fim_accept_full = "<Tab>",
       keymap_fim_accept_line = "<S-Tab>",
       keymap_fim_accept_word = "",
+      keymap_fim_trigger = "",
       -- keymap_fim_accept_line = "<C-l>",
       -- keymap_fim_accept_word = "<C-w>",
       enable_at_startup = vim.g.llama_enabled == nil or vim.g.llama_enabled,

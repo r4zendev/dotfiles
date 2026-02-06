@@ -13,6 +13,19 @@
   navigate = true
   dark = true
 
+[color "status"]
+	added = "#a6e3a1"
+	changed = "#f9e2af"
+	untracked = "#89b4fa"
+	deleted = "#f38ba8"
+	branch = bold
+
+[color "diff"]
+	meta = "#89b4fa"
+	frag = "#c4a7e7"
+	old = "#f38ba8"
+	new = "#a6e3a1"
+
 [init]
 	defaultBranch = main
 

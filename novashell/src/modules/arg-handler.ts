@@ -1,0 +1,645 @@
+import type AstalIO from "gi://AstalIO";
+import AstalMpris from "gi://AstalMpris";
+
+import { Gtk } from "ags/gtk4";
+import { timeout } from "ags/time";
+
+import { Shell } from "~/app";
+import { generalConfig } from "~/config";
+import { execApp } from "~/modules/apps";
+import Media from "~/modules/media";
+import { restartInstance } from "~/modules/reload-handler";
+import { ThemeService } from "~/modules/theme";
+import { playSystemBell } from "~/modules/utils";
+import { Wireplumber } from "~/modules/volume";
+import { Wallpaper } from "~/modules/wallpaper";
+import { Runner } from "~/runner/Runner";
+import { showWorkspaceNumber } from "~/window/bar/widgets/Workspaces";
+import { Windows } from "~/windows";
+
+export type RemoteCaller = {
+	printerr_literal: (message: string) => void;
+	print_literal: (message: string) => void;
+};
+
+let wsTimeout: AstalIO.Time | undefined;
+const help =
+	`Manage Astal Windows and do more stuff. From r4zendev's novashell, \
+made using GTK4, AGS, Gnim and Astal libraries by Aylur.
+
+Window Management:
+  open [window]: opens the specified window.
+  close [window]: closes all instances of specified window.
+  toggle [window]: toggle-open/close the specified window.
+  windows: list shell windows and their respective status.
+  reload: quit this instance and start a new one.
+  reopen: restart all open-windows.
+  quit: exit the main instance of the shell.
+
+Audio Controls:
+  volume: speaker and microphone volume controller, see "volume help".
+
+Media Controls:
+  media: manage novashell's active player, see "media help".
+${
+	DEVEL
+		? `
+Development Tools:
+  dev: tools to help debugging novashell
+`
+		: ""
+}
+Theme & Wallpaper:
+  theme: manage themes, see "theme help".
+  wallpaper: manage wallpaper, see "wallpaper help".
+
+Other options:
+  runner [initial_text]: open the application runner, optionally add an initial search.
+  run app[.desktop] [client_modifiers]: run applications from the cli, see "run help".
+  peek-workspace-num [millis]: peek the workspace numbers on bar window.
+  build: rebuild novashell from source.
+  v, version: display current novashell version.
+  h, help: shows this help message.
+
+2025 (c) r4zendev's novashell, licensed under the BSD 3-Clause License.
+https://github.com/r4zendev/novashell
+`.trim();
+
+export function handleArguments(
+	cmd: RemoteCaller,
+	args: Array<string>,
+): number {
+	switch (args[0]) {
+		case "help":
+		case "h":
+			cmd.print_literal(help);
+			return 0;
+
+		case "version":
+		case "v":
+			cmd.print_literal(
+				`novashell by r4zendev, version ${
+					NOVASHELL_VERSION
+				}${DEVEL ? " (devel)" : ""}\nhttps://github.com/r4zendev/novashell`,
+			);
+			return 0;
+
+		case "dev":
+			return handleDevArgs(cmd, args);
+
+		case "open":
+		case "close":
+		case "toggle":
+		case "windows":
+		case "reopen":
+			return handleWindowArgs(cmd, args);
+
+		case "volume":
+			return handleVolumeArgs(cmd, args);
+
+		case "run":
+			return handleRunnerArgs(cmd, args);
+
+		case "media":
+			return handleMediaArgs(cmd, args);
+
+		case "theme":
+			return handleThemeArgs(cmd, args);
+
+		case "wallpaper":
+			return handleWallpaperArgs(cmd, args);
+
+		case "reload":
+			restartInstance();
+			cmd.print_literal("Restarting instance...");
+			return 0;
+
+		case "quit":
+			try {
+				Shell.getDefault().quit();
+				cmd.print_literal("Quitting main instance...");
+			} catch (_e) {
+				const e = _e as Error;
+				cmd.printerr_literal(
+					`Error: couldn't quit instance. Stderr: ${e.message}\n${e.stack}`,
+				);
+				return 1;
+			}
+			return 0;
+
+		case "runner":
+			!Runner.instance
+				? Runner.openDefault(args[1] || undefined)
+				: Runner.close();
+
+			cmd.print_literal(
+				`Opening runner${args[1] ? ` with predefined text: "${args[1]}"` : ""}`,
+			);
+			return 0;
+
+		case "peek-workspace-num":
+			if (wsTimeout) {
+				cmd.print_literal("Workspace numbers are already showing");
+				return 0;
+			}
+
+			showWorkspaceNumber(true);
+			wsTimeout = timeout(Number.parseInt(args[1]) || 2200, () => {
+				showWorkspaceNumber(false);
+				wsTimeout = undefined;
+			});
+			cmd.print_literal("Toggled workspace numbers");
+			return 0;
+	}
+
+	cmd.printerr_literal("Error: command not found! try checking help");
+	return 1;
+}
+
+function handleDevArgs(cmd: RemoteCaller, args: Array<string>): number {
+	if (/h|help/.test(args[1])) {
+		cmd.print_literal(
+			`
+Debugging tools for novashell.
+
+Options:
+  inspector: open GTK's visual debugger
+`.trim(),
+		);
+		return 0;
+	}
+
+	switch (args[1]) {
+		case "inspector":
+			cmd.print_literal("Opening inspector...");
+			Gtk.Window.set_interactive_debugging(true);
+			return 0;
+	}
+
+	cmd.printerr_literal("Error: command not found! try checking `dev help`");
+	return 1;
+}
+
+function handleRunnerArgs(cmd: RemoteCaller, args: Array<string>): number {
+	const help = `\
+Run applications and command aliases defined in the novashell
+configuration.
+
+Help:
+  client_modifiers: Hyprland client modifiers(e.g.: "[animation slide]")
+
+Options:
+  h, help: show this help message.
+
+Usage:
+  run %aliasName [client_modifiers]: run a command alias defined in the config.
+  run appName[.desktop] [client_modifiers]: run an ordinary app(uses uwsm if available).`;
+
+	if (/-?h(elp)?/.test(args[1])) {
+		cmd.print_literal(help);
+		return 0;
+	}
+
+	if (args[1].trim() === "" || args[1] === undefined) {
+		cmd.printerr_literal(
+			'Error: No application/alias to run provided after "run"',
+		);
+		return 1;
+	}
+
+	// it's an alias
+	if (args[1].startsWith("%")) {
+		const aliasName = args[1].replace(/^%/, "");
+		const command = generalConfig.getProperty(`aliases.${aliasName}`, "string");
+
+		if (command !== undefined && command.trim() !== "") {
+			cmd.print_literal("Executing from alias...");
+			execApp(command, args[2] || undefined);
+			return 0;
+		}
+
+		cmd.printerr_literal(
+			"Error: provided alias couldn't be found in the aliases list",
+		);
+		return 1;
+	}
+
+	cmd.print_literal(
+		`Executing app from ${
+			args[1].endsWith(".desktop") ? "desktop entry" : "command"
+		}...`,
+	);
+	execApp(args[1], args[2] || undefined);
+	return 0;
+}
+
+function handleMediaArgs(cmd: RemoteCaller, args: Array<string>): number {
+	const mediaHelp = `\
+Manage novashell's active player
+
+Options:
+  play: resume/start active player's media.
+  pause: pause the active player.
+  play-pause: toggle play/pause on active player.
+  stop: stop the active player's media.
+  previous: go back to previous media if player supports it.
+  next: jump to next media if player supports it.
+  bus-name: get active player's mpris bus name.
+  list: show available players with their bus name.
+  select bus_name: change the active player, where bus_name is
+    the desired player's mpris bus name(without the mediaplayer2 prefix).
+`.trim();
+
+	if (/-?h(elp)?/.test(args[1])) {
+		cmd.print_literal(mediaHelp);
+		return 0;
+	}
+
+	const activePlayer: AstalMpris.Player | undefined = Media.getDefault().player
+		.available
+		? Media.getDefault().player
+		: undefined;
+	const players = AstalMpris.get_default().players.filter((pl) => pl.available);
+
+	if (!activePlayer) {
+		cmd.printerr_literal(
+			`Error: no active player found! try playing some media first`,
+		);
+		return 1;
+	}
+
+	switch (args[1]) {
+		case "play":
+			activePlayer.play();
+			cmd.print_literal("Playing");
+			return 0;
+
+		case "list":
+			cmd.print_literal(
+				`Available players:\n${players
+					.map((pl) => {
+						let playbackStatusStr: string;
+						switch (pl.playbackStatus) {
+							case AstalMpris.PlaybackStatus.PAUSED:
+								playbackStatusStr = "paused";
+								break;
+							case AstalMpris.PlaybackStatus.PLAYING:
+								playbackStatusStr = "playing";
+								break;
+							default:
+								playbackStatusStr = "stopped";
+								break;
+						}
+
+						return `  ${pl.busName}: ${playbackStatusStr}`;
+					})
+					.join("\n")}`,
+			);
+			return 0;
+
+		case "pause":
+			activePlayer.pause();
+			cmd.print_literal("Paused");
+			return 0;
+
+		case "play-pause":
+			activePlayer.play_pause();
+			cmd.print_literal(
+				activePlayer?.playbackStatus === AstalMpris.PlaybackStatus.PAUSED
+					? "Toggled play"
+					: "Toggled pause",
+			);
+			return 0;
+
+		case "stop":
+			activePlayer.stop();
+			cmd.print_literal("Stopped!");
+			return 0;
+
+		case "previous":
+			activePlayer.canGoPrevious && activePlayer.previous();
+			cmd.print_literal(
+				activePlayer.canGoPrevious
+					? "Back to previous"
+					: "Player does not support this command",
+			);
+			return 0;
+
+		case "next":
+			activePlayer.canGoNext && activePlayer.next();
+			cmd.print_literal(
+				activePlayer.canGoNext
+					? "Jump to next"
+					: "Player does not support this command",
+			);
+			return 0;
+
+		case "bus-name":
+			cmd.print_literal(activePlayer.busName);
+			return 0;
+
+		case "select":
+			if (!args[2] || !players.filter((pl) => pl.busName == args[2])?.[0]) {
+				cmd.printerr_literal(`Error: either no player was specified or the player with \
+specified bus name does not exist/is not available!`);
+
+				return 1;
+			}
+
+			Media.getDefault().player = players.filter(
+				(pl) => pl.busName === args[2],
+			)[0];
+			cmd.print_literal(`Done setting player to \`${args[2]}\`!`);
+			return 0;
+	}
+
+	cmd.printerr_literal(
+		"Error: couldn't handle media arguments, try checking `media help`",
+	);
+	return 1;
+}
+
+function handleWindowArgs(cmd: RemoteCaller, args: Array<string>): number {
+	switch (args[0]) {
+		case "reopen":
+			Windows.getDefault().reopen();
+			cmd.print_literal("Reopening all open windows");
+			return 0;
+
+		case "windows":
+			cmd.print_literal(
+				Object.keys(Windows.getDefault().windows)
+					.map(
+						(name) =>
+							`${name}: ${
+								Windows.getDefault().isOpen(name) ? "open" : "closed"
+							}`,
+					)
+					.join("\n"),
+			);
+			return 0;
+	}
+
+	const specifiedWindow: string = args[1];
+
+	if (!specifiedWindow) {
+		cmd.printerr_literal("Error: window argument not specified!");
+		return 1;
+	}
+
+	if (!Windows.getDefault().hasWindow(specifiedWindow)) {
+		cmd.printerr_literal(
+			`Error: "${specifiedWindow}" not found on window list! Make sure to add new windows to the system before using them`,
+		);
+		return 1;
+	}
+
+	switch (args[0]) {
+		case "open":
+			if (!Windows.getDefault().isOpen(specifiedWindow)) {
+				Windows.getDefault().open(specifiedWindow);
+				cmd.print_literal(`Opening window with name "${args[1]}"`);
+				return 0;
+			}
+
+			cmd.print_literal(`Window is already open, ignored`);
+			return 0;
+
+		case "close":
+			if (Windows.getDefault().isOpen(specifiedWindow)) {
+				Windows.getDefault().close(specifiedWindow);
+				cmd.print_literal(`Closing window with name "${args[1]}"`);
+				return 0;
+			}
+
+			cmd.print_literal(`Window is already closed, ignored`);
+			return 0;
+
+		case "toggle":
+			if (!Windows.getDefault().isOpen(specifiedWindow)) {
+				Windows.getDefault().open(specifiedWindow);
+				cmd.print_literal(`Toggle opening window "${args[1]}"`);
+				return 0;
+			}
+
+			Windows.getDefault().close(specifiedWindow);
+			cmd.print_literal(`Toggle closing window "${args[1]}"`);
+			return 0;
+	}
+
+	cmd.printerr_literal("Couldn't handle window management arguments");
+	return 1;
+}
+
+function handleVolumeArgs(cmd: RemoteCaller, args: Array<string>): number {
+	if (!args[1]) {
+		cmd.printerr_literal(
+			`Error: please specify what to do! see \`volume help\``,
+		);
+		return 1;
+	}
+
+	if (/^(sink|source)[-](increase|decrease|set)$/.test(args[1]) && !args[2]) {
+		cmd.printerr_literal(`Error: you forgot to set a value`);
+		return 1;
+	}
+
+	const command: Array<string> = args[1].split("-");
+
+	if (/h|help/.test(args[1])) {
+		cmd.print_literal(
+			`
+Control speaker and microphone volumes
+Options:
+  (sink|source)-set [number]: set speaker/microphone volume.
+  (sink|source)-mute: toggle mute for the speaker/microphone device.
+  (sink|source)-increase [number]: increases speaker/microphone volume.
+  (sink|source)-decrease [number]: decreases speaker/microphone volume.
+`.trim(),
+		);
+
+		return 0;
+	}
+
+	if (command[1] === "mute") {
+		command[0] === "sink"
+			? Wireplumber.getDefault().toggleMuteSink()
+			: Wireplumber.getDefault().toggleMuteSource();
+
+		cmd.print_literal(`Done toggling mute!`);
+		return 0;
+	}
+
+	if (Number.isNaN(Number.parseFloat(args[2]))) {
+		cmd.printerr_literal(
+			`Error: argument "${args[2]} is not a valid number! Please use integers"`,
+		);
+		return 1;
+	}
+
+	switch (command[1]) {
+		case "set":
+			command[0] === "sink"
+				? Wireplumber.getDefault().setSinkVolume(Number.parseInt(args[2]))
+				: Wireplumber.getDefault().setSourceVolume(Number.parseInt(args[2]));
+			cmd.print_literal(`Done! Set ${command[0]} volume to ${args[2]}`);
+			return 0;
+
+		case "increase":
+			command[0] === "sink"
+				? Wireplumber.getDefault().increaseSinkVolume(Number.parseInt(args[2]))
+				: Wireplumber.getDefault().increaseSourceVolume(
+						Number.parseInt(args[2]),
+					);
+
+			generalConfig.getProperty(
+				"misc.play_bell_on_volume_change",
+				"boolean",
+			) === true && playSystemBell();
+
+			cmd.print_literal(`Done increasing volume by ${args[2]}`);
+			return 0;
+
+		case "decrease":
+			command[0] === "sink"
+				? Wireplumber.getDefault().decreaseSinkVolume(Number.parseInt(args[2]))
+				: Wireplumber.getDefault().decreaseSourceVolume(
+						Number.parseInt(args[2]),
+					);
+
+			generalConfig.getProperty(
+				"misc.play_bell_on_volume_change",
+				"boolean",
+			) === true && playSystemBell();
+
+			cmd.print_literal(`Done decreasing volume to ${args[2]}`);
+			return 0;
+	}
+
+	cmd.printerr_literal(
+		`Error: couldn't resolve arguments! "${args
+			.join(" ")
+			.replace(new RegExp(`^${args[0]}`), "")}"`,
+	);
+
+	return 1;
+}
+
+function handleThemeArgs(cmd: RemoteCaller, args: Array<string>): number {
+	const themeHelp = `\
+Manage novashell themes
+
+Options:
+  list: show available themes.
+  current: show current theme.
+  set <theme_id>: apply a theme (e.g., "pywal", "catppuccin-mocha", "tokyo-night").
+  sync: manually sync colors from current wallpaper (only works in pywal mode).
+`.trim();
+
+	if (/-?h(elp)?/.test(args[1]) || !args[1]) {
+		cmd.print_literal(themeHelp);
+		return 0;
+	}
+
+	const themeService = ThemeService.getDefault();
+
+	switch (args[1]) {
+		case "list": {
+			const themes = themeService.getAvailableThemes();
+			const current = themeService.getCurrentTheme();
+			cmd.print_literal(
+				`Available themes:\n${themes
+					.map(
+						(t) =>
+							`  ${t.id}${t.id === current ? " (current)" : ""}: ${t.name}${t.isPywal ? " [syncs with wallpaper]" : ""}`,
+					)
+					.join("\n")}`,
+			);
+			return 0;
+		}
+
+		case "current":
+			cmd.print_literal(`Current theme: ${themeService.getCurrentTheme()}`);
+			return 0;
+
+		case "set":
+			if (!args[2]) {
+				cmd.printerr_literal(
+					"Error: no theme specified! Use 'theme list' to see available themes.",
+				);
+				return 1;
+			}
+			themeService.applyTheme(args[2]);
+			cmd.print_literal(`Applying theme: ${args[2]}`);
+			return 0;
+
+		case "sync":
+			if (!themeService.isPywalMode()) {
+				cmd.printerr_literal(
+					"Error: sync only works when theme is set to 'pywal'. Use 'theme set pywal' first.",
+				);
+				return 1;
+			}
+			Wallpaper.getDefault().syncColorsFromWallpaper();
+			cmd.print_literal("Syncing colors from current wallpaper...");
+			return 0;
+	}
+
+	cmd.printerr_literal("Error: unknown theme command. Try 'theme help'.");
+	return 1;
+}
+
+function handleWallpaperArgs(cmd: RemoteCaller, args: Array<string>): number {
+	const wallpaperHelp = `\
+Manage wallpaper
+
+Options:
+  set <path>: set wallpaper (respects theme settings - syncs colors if pywal mode).
+  set-only <path>: set wallpaper WITHOUT changing colors (ignores theme settings).
+  current: show current wallpaper path.
+  pick: open file picker to select wallpaper.
+`.trim();
+
+	if (/-?h(elp)?/.test(args[1]) || !args[1]) {
+		cmd.print_literal(wallpaperHelp);
+		return 0;
+	}
+
+	const wallpaper = Wallpaper.getDefault();
+
+	switch (args[1]) {
+		case "set":
+			if (!args[2]) {
+				cmd.printerr_literal("Error: no wallpaper path specified!");
+				return 1;
+			}
+			wallpaper.setWallpaper(args[2]);
+			cmd.print_literal(`Setting wallpaper: ${args[2]}`);
+			return 0;
+
+		case "set-only":
+			if (!args[2]) {
+				cmd.printerr_literal("Error: no wallpaper path specified!");
+				return 1;
+			}
+			wallpaper.setWallpaperOnly(args[2]);
+			cmd.print_literal(`Setting wallpaper (no color sync): ${args[2]}`);
+			return 0;
+
+		case "current":
+			cmd.print_literal(
+				`Current wallpaper: ${wallpaper.wallpaper || "(none)"}`,
+			);
+			return 0;
+
+		case "pick":
+			wallpaper.pickWallpaper();
+			cmd.print_literal("Opening wallpaper picker...");
+			return 0;
+	}
+
+	cmd.printerr_literal(
+		"Error: unknown wallpaper command. Try 'wallpaper help'.",
+	);
+	return 1;
+}

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Shared wallpaper state file operations
+# Usage: wallpaper-state get <key>
+#        wallpaper-state set <key> <value>
+SF="${HOME}/.config/hypr/.wallpaper-state"
+
+case "$1" in
+    get)
+        [[ -f "$SF" ]] && grep "^${2}=" "$SF" | cut -d= -f2-
+        ;;
+    set)
+        t=$(mktemp)
+        [[ -f "$SF" ]] && grep -v "^${2}=" "$SF" > "$t"
+        echo "${2}=${3}" >> "$t"
+        mv "$t" "$SF"
+        ;;
+    *)
+        echo "Usage: wallpaper-state {get|set} <key> [value]" >&2
+        exit 1
+        ;;
+esac

@@ -15,6 +15,7 @@ return {
     -- colors = {
     --   error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
     -- },
+    -- TODO:
     search = {
       args = {
         "--color=never",

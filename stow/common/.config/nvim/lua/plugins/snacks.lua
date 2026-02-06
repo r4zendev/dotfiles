@@ -113,9 +113,10 @@ M.plugin = {
     },
     statuscolumn = {
       enabled = true,
-      -- left = { "mark", "fold", "sign" },
+      -- TODO:
+      -- left = { "mark", "fold" },
       -- right = { "git" },
-      left = { "mark", "fold" },
+      left = { "sign", "mark", "fold" },
       right = {},
       folds = {
         open = true,
@@ -123,7 +124,7 @@ M.plugin = {
       },
       git = {
         -- patterns = { "GitSign", "MiniDiffSign" },
-        patterns = { "MiniDiffSign" },
+        patterns = { "MiniDiffSign", "DiagnosticSign" },
       },
       refresh = 50,
     },
@@ -162,6 +163,7 @@ M.plugin = {
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Find Buffer" },
     { "<leader>ff", function() Snacks.picker.recent() end, desc = "Find Recent Files" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = os.getenv("HOME") .. "/projects/dotfiles" }) end, desc = "Find Under Dotfiles" },
+    { "<leader>fC", function() Snacks.picker.files({ cwd = os.getenv("XDG_CONFIG_HOME") }) end, desc = "Find Under XDG_CONFIG_HOME" },
     { "<leader>fF", function() Snacks.picker.files() end, desc = "Find Files" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
 

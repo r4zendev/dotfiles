@@ -1,5 +1,39 @@
 local M = {}
 
+local function hex_to_rgb(hex)
+  return tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
+end
+
+local function int_to_rgb(c)
+  return bit.rshift(bit.band(c, 0xFF0000), 16),
+    bit.rshift(bit.band(c, 0x00FF00), 8),
+    bit.band(c, 0x0000FF)
+end
+
+local function rgb_to_hex(r, g, b)
+  return string.format(
+    "#%02x%02x%02x",
+    math.min(255, math.max(0, math.floor(r))),
+    math.min(255, math.max(0, math.floor(g))),
+    math.min(255, math.max(0, math.floor(b)))
+  )
+end
+
+local function lighten(hex, amount)
+  local r, g, b = hex_to_rgb(hex)
+  return rgb_to_hex(r + (255 - r) * amount, g + (255 - g) * amount, b + (255 - b) * amount)
+end
+
+local function blend_int(fg_int, bg_int, alpha)
+  local fr, fg, fb = int_to_rgb(fg_int)
+  local br, bg, bb = int_to_rgb(bg_int)
+  return rgb_to_hex(
+    fr * alpha + br * (1 - alpha),
+    fg * alpha + bg * (1 - alpha),
+    fb * alpha + bb * (1 - alpha)
+  )
+end
+
 local function transparent_winbar()
   vim.api.nvim_set_hl(0, "WinBar", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "WinBarNC", { bg = "NONE" })
@@ -20,7 +54,6 @@ end
 local function transparent_statusline()
   vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE" })
-  -- vim.api.nvim_set_hl(0, "StatusLineTerm", { bg = "NONE" })
 end
 
 local function default_harpoon()
@@ -29,8 +62,14 @@ local function default_harpoon()
 end
 
 local function minicursorword()
-  vim.api.nvim_set_hl(0, "MiniCursorword", { bg = "#506477" })
-  vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { bg = "#506477" })
+  local cl = vim.api.nvim_get_hl(0, { name = "CursorLine" })
+  local func = vim.api.nvim_get_hl(0, { name = "Function" })
+  if not cl.bg or not func.fg then
+    return
+  end
+  local word_bg = blend_int(func.fg, cl.bg, 0.25)
+  vim.api.nvim_set_hl(0, "MiniCursorword", { bg = word_bg })
+  vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { bg = word_bg })
 end
 
 local function ts_context()
@@ -77,7 +116,78 @@ local function ts_lsp_bold_nodes(disable)
   end
 end
 
+local function apply_pywal()
+  local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
+  if not file then
+    vim.notify("pywal: No colors at ~/.cache/wal/colors.json", vim.log.levels.WARN)
+    return false
+  end
+  local content = file:read("*all")
+  file:close()
+
+  local ok, data = pcall(vim.json.decode, content)
+  if not ok or not data then
+    return false
+  end
+
+  vim.cmd("hi clear")
+  vim.g.colors_name = "pywal"
+  vim.o.background = "dark"
+
+  local bg = data.special.background
+  local fg = data.special.foreground
+  local c = data.colors
+
+  local subtle = lighten(bg, 0.1)
+
+  local hi = vim.api.nvim_set_hl
+  hi(0, "Normal", { fg = fg, bg = "NONE" })
+  hi(0, "NormalFloat", { fg = fg, bg = "NONE" })
+  hi(0, "FloatBorder", { fg = c.color8, bg = "NONE" })
+  hi(0, "CursorLine", { bg = subtle })
+  hi(0, "Visual", { bg = c.color8 })
+  hi(0, "LineNr", { fg = c.color8 })
+  hi(0, "CursorLineNr", { fg = c.color4, bold = true })
+  hi(0, "Search", { fg = bg, bg = c.color3 })
+  hi(0, "IncSearch", { fg = bg, bg = c.color5 })
+  hi(0, "Comment", { fg = c.color8, italic = true })
+  hi(0, "String", { fg = c.color2 })
+  hi(0, "Function", { fg = c.color4, bold = true })
+  hi(0, "Keyword", { fg = c.color1 })
+  hi(0, "Type", { fg = c.color3 })
+  hi(0, "Constant", { fg = c.color5 })
+  hi(0, "Identifier", { fg = fg })
+  hi(0, "Special", { fg = c.color6 })
+  hi(0, "Statement", { fg = c.color1 })
+  hi(0, "PreProc", { fg = c.color3 })
+  hi(0, "Operator", { fg = c.color6 })
+  hi(0, "DiagnosticError", { fg = "#f38ba8" })
+  hi(0, "DiagnosticWarn", { fg = "#f9e2af" })
+  hi(0, "DiagnosticInfo", { fg = "#89b4fa" })
+  hi(0, "DiagnosticHint", { fg = "#a6e3a1" })
+  hi(0, "GitSignsAdd", { fg = "#a6e3a1" })
+  hi(0, "GitSignsChange", { fg = "#f9e2af" })
+  hi(0, "GitSignsDelete", { fg = "#f38ba8" })
+  hi(0, "DiffAdd", { fg = "#a6e3a1", bg = "NONE" })
+  hi(0, "DiffChange", { fg = "#f9e2af", bg = "NONE" })
+  hi(0, "DiffDelete", { fg = "#f38ba8", bg = "NONE" })
+  hi(0, "Pmenu", { fg = fg, bg = c.color0 })
+  hi(0, "PmenuSel", { fg = fg, bg = c.color8, bold = true })
+
+  return true
+end
+
 M.themes = {
+  {
+    name = "System (pywal)",
+    colorscheme = "pywal",
+    custom_apply = apply_pywal,
+    after = function()
+      transparent_winbar()
+      transparent_float()
+      transparent_neotree()
+    end,
+  },
   {
     name = "Tokyo Night",
     colorscheme = "tokyonight",
@@ -121,7 +231,15 @@ function M.apply(name)
     return false
   end
 
-  local ok = pcall(vim.cmd.colorscheme, theme.colorscheme)
+  vim.g.THEME = name
+
+  local ok
+  if theme.custom_apply then
+    ok = theme.custom_apply()
+  else
+    ok = pcall(vim.cmd.colorscheme, theme.colorscheme)
+  end
+
   if ok then
     if theme.after then
       theme.after()
@@ -135,14 +253,50 @@ function M.apply(name)
     default_harpoon()
     transparent_statusline()
     diagnostics()
+
+    -- For custom_apply themes, fire ColorScheme so plugins (lualine etc.) update.
+    -- :colorscheme already fires this for built-in themes.
+    if theme.custom_apply then
+      vim.cmd("doautocmd ColorScheme " .. (theme.colorscheme or ""))
+    end
+
+    -- Re-assert diagnostic colors after all plugin ColorScheme handlers settle
+    if theme.colorscheme == "pywal" then
+      vim.schedule(function()
+        if vim.g.colors_name ~= "pywal" then
+          return
+        end
+        local hi = vim.api.nvim_set_hl
+        hi(0, "DiagnosticError", { fg = "#f38ba8" })
+        hi(0, "DiagnosticWarn", { fg = "#f9e2af" })
+        hi(0, "DiagnosticInfo", { fg = "#89b4fa" })
+        hi(0, "DiagnosticHint", { fg = "#a6e3a1" })
+        hi(0, "GitSignsAdd", { fg = "#a6e3a1" })
+        hi(0, "GitSignsChange", { fg = "#f9e2af" })
+        hi(0, "GitSignsDelete", { fg = "#f38ba8" })
+        transparent_statusline()
+      end)
+    end
   end
   return ok
 end
 
+local group = vim.api.nvim_create_augroup("CoreColorscheme", { clear = true })
+
 vim.api.nvim_create_autocmd("VimEnter", {
+  group = group,
   nested = true,
   callback = function()
     M.apply(vim.g.THEME)
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusGained", {
+  group = group,
+  callback = function()
+    if vim.g.THEME == "System (pywal)" then
+      M.apply("System (pywal)")
+    end
   end,
 })
 
@@ -185,7 +339,6 @@ function M.pick()
     confirm = function(picker, item)
       confirmed = true
       if item then
-        vim.g.THEME = item.theme.name
         M.apply(item.theme.name)
       end
       picker:close()

@@ -1,4 +1,5 @@
-palette = "catppuccin_mocha"
+# Switch between "catppuccin_mocha" or "pywal" (source pywal palette below)
+palette = "pywal"
 
 # Minimal single-line format for small tmux panes
 format = "$directory$git_branch$git_status$nodejs$bun$rust$golang$python$lua$zig$time\n$character"
@@ -30,6 +31,36 @@ surface0 = "#313244"
 base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
+
+# Pywal palette - uses terminal colors set by pywal/novashell
+[palettes.pywal]
+red = "red"
+green = "green"
+blue = "blue"
+yellow = "yellow"
+purple = "purple"
+cyan = "cyan"
+white = "white"
+black = "black"
+# Map catppuccin names to terminal colors
+mauve = "magenta"
+peach = "yellow"
+teal = "cyan"
+sky = "bright-cyan"
+sapphire = "bright-blue"
+lavender = "bright-magenta"
+text = "white"
+subtext1 = "bright-white"
+subtext0 = "bright-black"
+overlay2 = "bright-black"
+overlay1 = "bright-black"
+overlay0 = "bright-black"
+surface2 = "bright-black"
+surface1 = "black"
+surface0 = "black"
+base = "black"
+mantle = "black"
+crust = "black"
 
 [character]
 success_symbol = "[❯](green)"

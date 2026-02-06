@@ -22,7 +22,9 @@ M.plugin = {
     mini_cursorword.setup()
     mini_jump.setup()
 
-    mini_diff.setup()
+    mini_diff.setup({
+      view = { style = "sign" },
+    })
     map("n", "<leader>=", function()
       mini_diff.toggle_overlay(0)
     end, { desc = "Toggle diff overlay" })

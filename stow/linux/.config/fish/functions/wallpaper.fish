@@ -1,19 +1,5 @@
 function wallpaper --description "Manage Hyprland wallpapers via swww"
-    set -l sf "$HOME/.config/hypr/.wallpaper-state"
-    set -l dir "$HOME/.config/wallpapers"
-
-    test -d (dirname "$sf"); or mkdir -p (dirname "$sf")
-
-    function _get -a key -a sf
-        test -f "$sf"; and grep "^$key=" "$sf" | cut -d= -f2
-    end
-
-    function _set -a key -a val -a sf
-        set -l t (mktemp)
-        test -f "$sf"; and grep -v "^$key=" "$sf" >"$t"
-        echo "$key=$val" >>"$t"
-        mv "$t" "$sf"
-    end
+    set -l dir "$HOME/wallpapers"
 
     function _notify -a msg
         notify-send -t 1500 -h string:x-canonical-private-synchronous:wallpaper Wallpaper "$msg"
@@ -21,13 +7,13 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
 
     # Collect images based on enabled categories
     set -l imgs
-    if test (_get exclude_default "$sf") != true
+    if test "(wallpaper-state get exclude_default)" != true
         for f in $dir/*.{jpg,jpeg,png,gif}
             test -f "$f"; and set -a imgs "$f"
         end
     end
     for cat in nsfw restricted explicit
-        if test (_get allow_$cat "$sf") = true; and test -d "$dir/$cat"
+        if test "(wallpaper-state get allow_$cat)" = true; and test -d "$dir/$cat"
             for f in $dir/$cat/*.{jpg,jpeg,png,gif}
                 test -f "$f"; and set -a imgs "$f"
             end
@@ -38,23 +24,23 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
         case random
             test (count $imgs) -eq 0; and _notify "No images"; and return 1
             set -l img $imgs[(random 1 (count $imgs))]
-            _set current_image "$img" "$sf"
-            _set enabled true "$sf"
+            wallpaper-state set current_image "$img"
+            wallpaper-state set enabled true
             swww img "$img" --transition-type fade --transition-duration 0.3
             _notify (basename "$img")
 
         case toggle
-            if test (_get enabled "$sf") = true
-                _set enabled false "$sf"
+            if test "(wallpaper-state get enabled)" = true
+                wallpaper-state set enabled false
                 swww clear 000000
                 _notify OFF
             else
-                set -l img (_get current_image "$sf")
+                set -l img (wallpaper-state get current_image)
                 if test -z "$img" -o ! -f "$img"
-                    test (count $imgs) -gt 0; and set img $imgs[(random 1 (count $imgs))]; and _set current_image "$img" "$sf"
+                    test (count $imgs) -gt 0; and set img $imgs[(random 1 (count $imgs))]; and wallpaper-state set current_image "$img"
                 end
                 if test -n "$img" -a -f "$img"
-                    _set enabled true "$sf"
+                    wallpaper-state set enabled true
                     swww img "$img" --transition-type fade --transition-duration 0.3
                     _notify ON
                 end
@@ -63,23 +49,23 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
         case toggle-nsfw toggle-restricted toggle-explicit toggle-default
             set -l key (string replace "toggle-" "" $argv[1])
             test $key = default; and set key exclude_default; or set key "allow_$key"
-            set -l cur (_get $key "$sf")
-            if test "$cur" = true
-                _set $key false "$sf"
+            set -l cur (wallpaper-state get $key)
+            if test "x$cur" = xtrue
+                wallpaper-state set $key false
                 _notify "$key: OFF"
             else
-                _set $key true "$sf"
+                wallpaper-state set $key true
                 _notify "$key: ON"
             end
 
         case show
-            set -l img (_get current_image "$sf")
+            set -l img (wallpaper-state get current_image)
             test -n "$img"; and echo "$img" | wl-copy; and _notify Copied; and echo "$img"
 
         case status
-            echo "enabled: "(_get enabled "$sf")
-            echo "image: "(_get current_image "$sf")
-            echo "nsfw: "(_get allow_nsfw "$sf")"  restricted: "(_get allow_restricted "$sf")"  explicit: "(_get allow_explicit "$sf")"  exclude_default: "(_get exclude_default "$sf")
+            echo "enabled: "(wallpaper-state get enabled)
+            echo "image: "(wallpaper-state get current_image)
+            echo "nsfw: "(wallpaper-state get allow_nsfw)"  restricted: "(wallpaper-state get allow_restricted)"  explicit: "(wallpaper-state get allow_explicit)"  exclude_default: "(wallpaper-state get exclude_default)
             echo "available: "(count $imgs)
 
         case '*'

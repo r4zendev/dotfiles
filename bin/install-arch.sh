@@ -60,14 +60,36 @@ sudo pacman -S --needed xh
 
 # Window management (Arch alternatives to yabai)
 sudo pacman -S --needed hyprland
-sudo pacman -S --needed waybar       # status bar
-sudo pacman -S --needed wofi         # app launcher
 sudo pacman -S --needed wl-clipboard # clipboard (wl-copy/wl-paste)
 sudo pacman -S --needed grim         # screenshot tool
 sudo pacman -S --needed slurp        # region selection for screenshots
-sudo pacman -S --needed mako         # notification daemon
 yay -S --needed hyprpaper            # wallpapers
 yay -S --needed bibata-cursor-git    # cursor theme
+
+# Novashell (replaces waybar, wofi, mako)
+# AGS/Astal runtime
+yay -S --needed aylurs-gtk-shell-git
+yay -S --needed astal-git
+yay -S --needed astal-io-git
+yay -S --needed astal-notifd-git
+yay -S --needed astal-mpris-git
+yay -S --needed astal-wireplumber-git
+yay -S --needed astal-bluetooth-git
+yay -S --needed astal-battery-git
+yay -S --needed astal-network-git
+yay -S --needed astal-tray-git
+yay -S --needed astal-hyprland-git
+yay -S --needed astal-apps-git
+# Novashell build dependencies
+sudo pacman -S --needed gtk4
+sudo pacman -S --needed libadwaita
+sudo pacman -S --needed dart-sass
+# Pywal for theme generation
+yay -S --needed python-pywal16
+# Notification sounds
+sudo pacman -S --needed libcanberra
+# Speech-to-text integration
+yay -S --needed hyprwhspr
 
 # hyprland.conf -> exec-once = /usr/lib/kdeconnect-indicator
 sudo pacman -S --needed kdeconnect # integration with other devices
@@ -166,3 +188,13 @@ sudo pacman -S --needed renderdoc # graphics debugger
 #
 # 4. Regenerate GRUB config:
 #    sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Build and install novashell
+echo "Building novashell..."
+cd ~/projects/dotfiles/novashell
+pnpm install
+pnpm build
+mkdir -p ~/.local/bin
+ln -sf ~/projects/dotfiles/novashell/build/novashell ~/.local/bin/novashell
+ln -sf ~/projects/dotfiles/novashell/build/novashell ~/.local/bin/nsh
+echo "Novashell installed to ~/.local/bin/novashell"

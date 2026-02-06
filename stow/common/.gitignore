@@ -1,0 +1,16 @@
+.aws
+.ssh
+
+.dblab.yaml
+
+.config/ghostty/.bg-state
+.config/ghostty/background
+.config/mcpservers.json
+.config/btop
+.config/pgcli
+.config/opencode
+.config/gh/hosts.yml
+.config/tmux/plugins
+.config/github-copilot
+.config/fish/fish_variables
+.config/fish/conf.d/env.fish
