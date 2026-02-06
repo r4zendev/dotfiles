@@ -1,8 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    "/home/razen/.config/opencode/instructions/**/*.md"
-  ],
   "mcp": {
     "context7": {
       "enabled": true,

@@ -1,0 +1,54 @@
+{
+    "notifications": {
+        "timeout_low": 4000,
+        "timeout_normal": 6000,
+        "timeout_critical": 0,
+        "position_h": "right",
+        "position_v": "top",
+        "dismiss_on_unhover": false,
+        "hold_on_hover": true,
+        "sound_enabled": true,
+        "sound_normal": "message-new-instant",
+        "sound_critical": "dialog-error"
+    },
+    "night_light": {
+        "enabled": false,
+        "temperature": 5000,
+        "gamma": 100,
+        "start_hour": 20,
+        "end_hour": 7
+    },
+    "wallpaper": {
+        "positioning": "cover",
+        "color_mode": "darken",
+        "splash": true
+    },
+    "theme": {
+        "current": "pywal",
+        "sync_with_wallpaper": true,
+        "curated_wallpapers_path": "/home/razen/wallpapers/curated"
+    },
+    "workspaces": {
+        "always_show_id": false,
+        "enable_helper": true,
+        "hide_if_single": false
+    },
+    "aliases": {
+        "terminal": "kitty",
+        "file_manager": "nautilus",
+        "media": "amberol"
+    },
+    "apps": {
+        "exclude": [],
+        "icon_overrides": {
+            "com.github.th_ch.youtube_music": "pear-desktop"
+        }
+    },
+    "clock": {
+        "date_format": "%A %d, %H:%M",
+        "calendar_url": "https://calendar.google.com"
+    },
+    "misc": {
+        "play_bell_on_volume_change": true
+    }
+}

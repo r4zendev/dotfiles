@@ -32,7 +32,6 @@ link-url = true
 
 macos-option-as-alt = true
 macos-non-native-fullscreen = padded-notch
-keybind = alt+enter=toggle_fullscreen
 keybind = ctrl+backspace=text:\x17
 
 config-file = ?colors
