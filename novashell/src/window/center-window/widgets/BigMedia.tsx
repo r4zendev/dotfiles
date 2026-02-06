@@ -9,6 +9,7 @@ import Pango from "gi://Pango?version=1.0";
 import { createBinding, For } from "ags";
 import { register } from "ags/gobject";
 import { Astal, type Gdk, Gtk } from "ags/gtk4";
+import { execAsync } from "ags/process";
 
 import { Cache } from "~/modules/cache";
 import { Clipboard } from "~/modules/clipboard";
@@ -18,6 +19,7 @@ import {
 	pathToURI,
 	variableToBoolean,
 } from "~/modules/utils";
+import { Windows } from "~/windows";
 
 export const BigMedia = () => {
 	const availablePlayers = createBinding(
@@ -211,10 +213,42 @@ class PlayerWidget extends Gtk.Box {
 			});
 		}
 
+		async function focusPlayerWindow(): Promise<void> {
+			const identity = player.identity?.toLowerCase();
+			if (!identity) return;
+
+			try {
+				const json = await execAsync("hyprctl clients -j");
+				const clients: { class: string; initialClass: string; address: string; title: string }[] = JSON.parse(json);
+
+				const matches = clients.filter(
+					(c) => c.class.toLowerCase() === identity || c.initialClass.toLowerCase() === identity,
+				);
+
+				const target = matches.length > 1 && player.title
+					? matches.find((c) => c.title.includes(player.title)) ?? matches[0]
+					: matches[0];
+
+				if (target) {
+					await execAsync(["hyprctl", "dispatch", "focuswindow", `address:${target.address}`]);
+					Windows.getDefault().close("center-window");
+				}
+			} catch (e) {
+				console.error("Failed to focus player window", e);
+			}
+		}
+
 		updateAlbumImage();
 		createSubscription(createBinding(player, "coverArt"), () =>
 			updateAlbumImage(),
 		);
+
+		const clickGesture = new Gtk.GestureClick();
+		clickGesture.connect("released", () => focusPlayerWindow());
+		stack.add_controller(clickGesture);
+		stack.set_cursor_from_name("pointer");
+		stack.set_tooltip_text("Focus player window");
+
 		this.prepend(stack);
 
 		this.append(
