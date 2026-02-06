@@ -8,7 +8,6 @@
 .config/mcpservers.json
 .config/btop
 .config/pgcli
-.config/opencode
 .config/gh/hosts.yml
 .config/tmux/plugins
 .config/github-copilot

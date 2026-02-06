@@ -43,7 +43,6 @@ if type -q pnpm
     fish_add_path (pnpm --global bin)
 end
 
-fish_add_path "$HOME/.opencode/bin"
 fish_add_path "$HOME/.bun/bin"
 fish_add_path "$HOME/.cache/.bun/bin"
 
