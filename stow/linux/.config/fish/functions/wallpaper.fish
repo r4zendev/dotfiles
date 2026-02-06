@@ -7,13 +7,13 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
 
     # Collect images based on enabled categories
     set -l imgs
-    if test "(wallpaper-state get exclude_default)" != true
+    if test (wallpaper-state get exclude_default) != true
         for f in $dir/*.{jpg,jpeg,png,gif}
             test -f "$f"; and set -a imgs "$f"
         end
     end
     for cat in nsfw restricted explicit
-        if test "(wallpaper-state get allow_$cat)" = true; and test -d "$dir/$cat"
+        if test (wallpaper-state get allow_$cat) = true; and test -d "$dir/$cat"
             for f in $dir/$cat/*.{jpg,jpeg,png,gif}
                 test -f "$f"; and set -a imgs "$f"
             end
@@ -30,7 +30,7 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
             _notify (basename "$img")
 
         case toggle
-            if test "(wallpaper-state get enabled)" = true
+            if test (wallpaper-state get enabled) = true
                 wallpaper-state set enabled false
                 swww clear 000000
                 _notify OFF

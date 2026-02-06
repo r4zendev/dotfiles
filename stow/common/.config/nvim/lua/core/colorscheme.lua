@@ -117,6 +117,7 @@ local function ts_lsp_bold_nodes(disable)
 end
 
 M.pywal_data = nil
+M._pywal_raw = nil
 
 local function load_pywal_data()
   local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
@@ -131,6 +132,7 @@ local function load_pywal_data()
   if not ok or not data then
     return nil
   end
+  M._pywal_raw = content
   M.pywal_data = data
   return data
 end
@@ -172,16 +174,6 @@ local function apply_pywal()
   hi(0, "Statement", { fg = c.color1 })
   hi(0, "PreProc", { fg = c.color3 })
   hi(0, "Operator", { fg = c.color6 })
-  hi(0, "DiagnosticError", { fg = "#f38ba8" })
-  hi(0, "DiagnosticWarn", { fg = "#f9e2af" })
-  hi(0, "DiagnosticInfo", { fg = "#89b4fa" })
-  hi(0, "DiagnosticHint", { fg = "#a6e3a1" })
-  hi(0, "GitSignsAdd", { fg = "#a6e3a1" })
-  hi(0, "GitSignsChange", { fg = "#f9e2af" })
-  hi(0, "GitSignsDelete", { fg = "#f38ba8" })
-  hi(0, "DiffAdd", { fg = "#a6e3a1", bg = "NONE" })
-  hi(0, "DiffChange", { fg = "#f9e2af", bg = "NONE" })
-  hi(0, "DiffDelete", { fg = "#f38ba8", bg = "NONE" })
   hi(0, "Pmenu", { fg = fg, bg = c.color0 })
   hi(0, "PmenuSel", { fg = fg, bg = c.color8, bold = true })
 
@@ -285,6 +277,10 @@ function M.apply(name)
         hi(0, "GitSignsAdd", { fg = "#a6e3a1" })
         hi(0, "GitSignsChange", { fg = "#f9e2af" })
         hi(0, "GitSignsDelete", { fg = "#f38ba8" })
+        hi(0, "DiffAdd", { fg = "#a6e3a1", bg = "NONE" })
+        hi(0, "DiffChange", { fg = "#f9e2af", bg = "NONE" })
+        hi(0, "DiffDelete", { fg = "#f38ba8", bg = "NONE" })
+        hi(0, "llama_hl_fim_hint", { link = "Comment" })
         transparent_statusline()
       end)
     end
@@ -305,9 +301,24 @@ vim.api.nvim_create_autocmd("VimEnter", {
 vim.api.nvim_create_autocmd("FocusGained", {
   group = group,
   callback = function()
-    if vim.g.THEME == "System (pywal)" then
-      M.apply("System (pywal)")
+    if vim.g.THEME ~= "System (pywal)" then
+      return
     end
+
+    local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
+
+    if not file then
+      return
+    end
+
+    local content = file:read("*all")
+    file:close()
+
+    if content == M._pywal_raw then
+      return
+    end
+
+    M.apply("System (pywal)")
   end,
 })
 
