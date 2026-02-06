@@ -1,0 +1,32 @@
+[CompactMode]
+PreviewSize=32
+
+[ContextMenu]
+ShowOpenTerminal=false
+
+[DetailsMode]
+PreviewSize=16
+
+[General]
+DoubleClickViewAction=none
+GlobalViewProps=true
+Version=202
+ViewPropsTimestamp=2026,1,22,19,8,47.683
+
+[IconsMode]
+PreviewSize=80
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=22
+
+[MainWindow]
+MenuBar=Disabled
+
+[PreviewSettings]
+MaximumRemoteSize=10485760
+MaximumSize=52428800
+Plugins=glycin-heif,imagethumbnail,jpegthumbnail,windowsimagethumbnail,svgthumbnail,ffmpegthumbs
+
+[UiSettings]
+ColorScheme=novashell
