@@ -116,17 +116,28 @@ local function ts_lsp_bold_nodes(disable)
   end
 end
 
-local function apply_pywal()
+M.pywal_data = nil
+
+local function load_pywal_data()
   local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
   if not file then
     vim.notify("pywal: No colors at ~/.cache/wal/colors.json", vim.log.levels.WARN)
-    return false
+    return nil
   end
   local content = file:read("*all")
   file:close()
 
   local ok, data = pcall(vim.json.decode, content)
   if not ok or not data then
+    return nil
+  end
+  M.pywal_data = data
+  return data
+end
+
+local function apply_pywal()
+  local data = load_pywal_data()
+  if not data then
     return false
   end
 

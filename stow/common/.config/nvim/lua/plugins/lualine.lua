@@ -6,7 +6,36 @@ return {
   },
   config = function()
     local function get_theme()
-      package.loaded["lualine.themes.auto"] = nil
+      for key in pairs(package.loaded) do
+        if key:match("^lualine%.themes%.") then
+          package.loaded[key] = nil
+        end
+      end
+
+      local cs = require("core.colorscheme")
+      if cs.pywal_data and vim.g.colors_name == "pywal" then
+        local bg = cs.pywal_data.special.background
+        local fg = cs.pywal_data.special.foreground
+        local c = cs.pywal_data.colors
+        vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+        return {
+          normal = {
+            a = { bg = c.color4, fg = bg, gui = "bold" },
+            b = { bg = c.color8, fg = fg },
+            c = { bg = "None", fg = fg },
+          },
+          insert = { a = { bg = c.color2, fg = bg, gui = "bold" } },
+          visual = { a = { bg = c.color5, fg = bg, gui = "bold" } },
+          replace = { a = { bg = c.color1, fg = bg, gui = "bold" } },
+          command = { a = { bg = c.color3, fg = bg, gui = "bold" } },
+          inactive = {
+            a = { bg = bg, fg = c.color8, gui = "bold" },
+            b = { bg = bg, fg = c.color8 },
+            c = { bg = bg, fg = c.color8 },
+          },
+        }
+      end
+
       local theme = require("lualine.themes.auto")
       theme.normal.c.bg = "None"
       vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
