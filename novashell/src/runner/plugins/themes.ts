@@ -17,7 +17,7 @@ class _PluginThemes implements Runner.Plugin {
 				: `Apply the ${theme.name} color scheme`,
 			icon:
 				theme.id === currentTheme
-					? "emblem-ok-symbolic"
+					? "object-select-symbolic"
 					: "preferences-color-symbolic",
 			actionClick: () => {
 				if (theme.id !== currentTheme) {

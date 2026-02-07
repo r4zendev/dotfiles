@@ -2,9 +2,23 @@ import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
+import { execAsync } from "ags/process";
 
 import type { ColorData, DerivedPalette } from "./types";
 import { adjustLightness } from "./utils";
+
+async function cpInPlace(content: string, targetPath: string): Promise<void> {
+	const tmpPath = `${GLib.get_tmp_dir()}/novashell-gtk-${GLib.get_monotonic_time()}`;
+	await writeFileAsync(tmpPath, content);
+	await execAsync(["cp", "--", tmpPath, targetPath]);
+}
+
+function ensureDir(path: string): void {
+	const dir = Gio.File.new_for_path(path);
+	if (!dir.query_exists(null)) {
+		dir.make_directory_with_parents(null);
+	}
+}
 
 export async function updateGtkColors(data: ColorData, p: DerivedPalette): Promise<void> {
 	const s = data.special;
@@ -40,14 +54,34 @@ export async function updateGtkColors(data: ColorData, p: DerivedPalette): Promi
 @define-color sidebar_fg_color ${s.foreground};
 `;
 
-	for (const dir of ["gtk-4.0", "gtk-3.0"]) {
-		const dirPath = `${GLib.get_user_config_dir()}/${dir}`;
-		const dirFile = Gio.File.new_for_path(dirPath);
-		if (!dirFile.query_exists(null)) {
-			dirFile.make_directory_with_parents(null);
-		}
-		await writeFileAsync(`${dirPath}/gtk.css`, css).catch((e: Error) => {
-			console.error(`ColorUtils: Failed to write ${dir}/gtk.css: ${e.message}`);
-		});
+	const themeDir = `${GLib.get_user_data_dir()}/themes/novashell`;
+	const targets = [
+		`${GLib.get_user_config_dir()}/gtk-4.0`,
+		`${GLib.get_user_config_dir()}/gtk-3.0`,
+		`${themeDir}/gtk-4.0`,
+		`${themeDir}/gtk-3.0`,
+	];
+
+	for (const dir of targets) {
+		ensureDir(dir);
 	}
+
+	const indexTheme = `[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=novashell
+
+[X-GNOME-Metatheme]
+GtkTheme=novashell
+`;
+
+	await Promise.all([
+		...targets.map((dir) =>
+			cpInPlace(css, `${dir}/gtk.css`).catch((e: Error) => {
+				console.error(`ColorUtils: Failed to write ${dir}/gtk.css: ${e.message}`);
+			}),
+		),
+		writeFileAsync(`${themeDir}/index.theme`, indexTheme).catch((e: Error) => {
+			console.error(`ColorUtils: Failed to write theme index: ${e.message}`);
+		}),
+	]);
 }
