@@ -77,6 +77,11 @@ return {
             { "filetype" },
           }
 
+          local ecolog_ok = pcall(require, "ecolog")
+          if ecolog_ok then
+            table.insert(components, 1, require("ecolog.integrations.statusline").lualine())
+          end
+
           local nova_ok, nova = pcall(require, "nova")
           if nova_ok then
             table.insert(components, 1, nova.status.lualine())
