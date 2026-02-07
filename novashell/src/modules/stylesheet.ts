@@ -8,6 +8,7 @@ import { Gdk, Gtk } from "ags/gtk4";
 
 import {
 	broadcastTerminalColors,
+	derivePalette,
 	generateFishColors,
 	generateTmuxColors,
 	reloadFish,
@@ -17,11 +18,12 @@ import {
 	updateGhosttyColors,
 	updateGtkColors,
 	updateHyprlandColors,
+	updateKdeColorScheme,
 	updateQtColors,
 	updateTelegramTheme,
 	updateVesktopTheme,
 	updateYTMusicTheme,
-} from "~/modules/color-utils";
+} from "~/modules/themes";
 import { decoder } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
 
@@ -203,8 +205,9 @@ export class Stylesheet {
 		this.compileApply();
 
 		const data = Wallpaper.getDefault().getData();
-		updateHyprlandColors(data);
+		const palette = derivePalette(data);
 
+		updateHyprlandColors(data);
 		broadcastTerminalColors(data);
 
 		const themeId = data.name;
@@ -212,12 +215,13 @@ export class Stylesheet {
 			updateGhosttyColors(data),
 			generateFishColors(data),
 			updateBtopColors(data),
-			updateGtkColors(data),
-			updateQtColors(data),
-			generateTmuxColors(data),
-			updateTelegramTheme(data),
-			updateVesktopTheme(data),
-			updateYTMusicTheme(data),
+			updateGtkColors(data, palette),
+			updateQtColors(data, palette),
+			updateKdeColorScheme(data, palette),
+			generateTmuxColors(data, palette),
+			updateTelegramTheme(data, palette),
+			updateVesktopTheme(data, palette),
+			updateYTMusicTheme(data, palette),
 		]).then(() => {
 			reloadTmux();
 			reloadFish();
