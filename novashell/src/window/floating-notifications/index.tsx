@@ -31,6 +31,20 @@ export const FloatingNotifications = (mon: number, scope: Scope) => {
 								return Gtk.RevealerTransitionType.SWING_UP;
 							})}
 						transitionDuration={420}
+						$={(self) => {
+							const legacy = Gtk.EventControllerLegacy.new();
+							legacy.connect("event", (_ctrl: Gtk.EventControllerLegacy, event: Gdk.Event) => {
+								if (
+									event.get_event_type() === Gdk.EventType.BUTTON_RELEASE &&
+									(event as Gdk.ButtonEvent).get_button() === Gdk.BUTTON_SECONDARY
+								) {
+									Notifications.getDefault().removeNotification(notif);
+									return true;
+								}
+								return false;
+							});
+							self.add_controller(legacy);
+						}}
 					>
 						<Gtk.Stack
 							transitionType={createComputed(

@@ -18,6 +18,9 @@ import {
 	updateGtkColors,
 	updateHyprlandColors,
 	updateQtColors,
+	updateTelegramTheme,
+	updateVesktopTheme,
+	updateYTMusicTheme,
 } from "~/modules/color-utils";
 import { decoder } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
@@ -212,6 +215,9 @@ export class Stylesheet {
 			updateGtkColors(data),
 			updateQtColors(data),
 			generateTmuxColors(data),
+			updateTelegramTheme(data),
+			updateVesktopTheme(data),
+			updateYTMusicTheme(data),
 		]).then(() => {
 			reloadTmux();
 			reloadFish();

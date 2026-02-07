@@ -25,6 +25,11 @@
         <file alias="nord">themes/nord.json</file>
     </gresource>
 
+    <!-- Templates -->
+    <gresource prefix="/io/github/razen/novashell/templates">
+        <file alias="yt-music.css">templates/yt-music.css</file>
+    </gresource>
+
     <!-- Icons -->
     <gresource prefix="/io/github/razen/novashell/icons/scalable/actions">
         <file alias="applications-other-symbolic.svg">icons/applications-other-symbolic.svg</file>
