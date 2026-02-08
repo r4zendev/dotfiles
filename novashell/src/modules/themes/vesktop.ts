@@ -1,12 +1,14 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness } from "./utils";
+import { adjustLightness, ensureDirectory } from "./utils";
 
-export async function updateVesktopTheme(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateVesktopTheme(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const c = data.colors;
 	const s = data.special;
 
@@ -239,10 +241,7 @@ ${vars}
 `;
 
 	const vesktopDir = `${GLib.get_user_config_dir()}/vesktop/settings`;
-	const vesktopDirFile = Gio.File.new_for_path(vesktopDir);
-	if (!vesktopDirFile.query_exists(null)) {
-		vesktopDirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(vesktopDir);
 
 	await writeFileAsync(`${vesktopDir}/quickCss.css`, css).catch((e: Error) => {
 		console.error(`ColorUtils: Failed to write Vesktop theme: ${e.message}`);

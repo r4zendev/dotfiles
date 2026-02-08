@@ -16,7 +16,7 @@
 
 function frec
     function _notify -a msg
-        notify-send -e -t 2000 -a frec "$msg"
+        notify-send -e -t 1500 -a "Screen Recording" "$msg"
     end
 
     set rand_hex (openssl rand -hex 8)
@@ -41,5 +41,5 @@ function frec
     echo -n $output_file | wl-copy
     echo "Path copied to clipboard"
 
-    _notify "Recording saved and copied: $output_file"
+    _notify "Saved and copied: "(basename "$output_file")
 end

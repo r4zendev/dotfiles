@@ -1,17 +1,19 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness } from "./utils";
+import { adjustLightness, ensureDirectory } from "./utils";
 
 function hexToRgb(hex: string): string {
 	const h = hex.replace(/^#/, "");
 	return `${parseInt(h.substring(0, 2), 16)}, ${parseInt(h.substring(2, 4), 16)}, ${parseInt(h.substring(4, 6), 16)}`;
 }
 
-export async function updateKdeColorScheme(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateKdeColorScheme(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const s = data.special;
 	const c = data.colors;
 
@@ -173,12 +175,13 @@ inactiveForeground=${subtext0}
 `;
 
 	const colorSchemesDir = `${GLib.get_user_data_dir()}/color-schemes`;
-	const dirFile = Gio.File.new_for_path(colorSchemesDir);
-	if (!dirFile.query_exists(null)) {
-		dirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(colorSchemesDir);
 
-	await writeFileAsync(`${colorSchemesDir}/novashell.colors`, scheme).catch((e: Error) => {
-		console.error(`ColorUtils: Failed to write KDE color scheme: ${e.message}`);
-	});
+	await writeFileAsync(`${colorSchemesDir}/novashell.colors`, scheme).catch(
+		(e: Error) => {
+			console.error(
+				`ColorUtils: Failed to write KDE color scheme: ${e.message}`,
+			);
+		},
+	);
 }

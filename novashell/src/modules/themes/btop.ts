@@ -1,9 +1,9 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
 
 import type { ColorData } from "./types";
+import { ensureDirectory } from "./utils";
 
 export async function updateBtopColors(data: ColorData): Promise<void> {
 	const c = data.colors;
@@ -98,12 +98,7 @@ theme[upload_mid]="${c.color1}"
 theme[upload_end]="${c.color3}"
 `;
 
-	const btopThemesDir = Gio.File.new_for_path(
-		`${GLib.get_user_config_dir()}/btop/themes`,
-	);
-	if (!btopThemesDir.query_exists(null)) {
-		btopThemesDir.make_directory_with_parents(null);
-	}
+	ensureDirectory(`${GLib.get_user_config_dir()}/btop/themes`);
 
 	const btopThemePath = `${GLib.get_user_config_dir()}/btop/themes/pywal.theme`;
 	await writeFileAsync(btopThemePath, btopTheme).catch((e: Error) => {

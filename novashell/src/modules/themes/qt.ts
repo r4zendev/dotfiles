@@ -4,9 +4,12 @@ import GLib from "gi://GLib?version=2.0";
 import { writeFileAsync } from "ags/file";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness, stripHash } from "./utils";
+import { adjustLightness, ensureDirectory, stripHash } from "./utils";
 
-export async function updateQtColors(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateQtColors(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const s = data.special;
 	const c = data.colors;
 
@@ -102,10 +105,7 @@ disabled_colors=${disabledLine}
 `;
 
 	const colorsDir = `${GLib.get_user_config_dir()}/qt6ct/colors`;
-	const colorsDirFile = Gio.File.new_for_path(colorsDir);
-	if (!colorsDirFile.query_exists(null)) {
-		colorsDirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(colorsDir);
 
 	const schemePath = `${colorsDir}/pywal.conf`;
 	await writeFileAsync(schemePath, colorScheme).catch((e: Error) => {

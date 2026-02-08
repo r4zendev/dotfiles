@@ -8,39 +8,12 @@ import { property, register } from "ags/gobject";
 import { generalConfig } from "~/config";
 import { Notifications } from "~/modules/notifications";
 import { Stylesheet } from "~/modules/stylesheet";
+import type { ThemeData } from "~/modules/themes/types";
+import { ensureDirectory } from "~/modules/themes/utils";
 import { decoder } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
 
-export type ThemeData = {
-	name: string;
-	checksum: string;
-	wallpaper: string;
-	alpha: number;
-	accent?: string;
-	special: {
-		background: string;
-		foreground: string;
-		cursor: string;
-	};
-	colors: {
-		color0: string;
-		color1: string;
-		color2: string;
-		color3: string;
-		color4: string;
-		color5: string;
-		color6: string;
-		color7: string;
-		color8: string;
-		color9: string;
-		color10: string;
-		color11: string;
-		color12: string;
-		color13: string;
-		color14: string;
-		color15: string;
-	};
-};
+export type { ThemeData } from "~/modules/themes/types";
 
 export type AvailableTheme = {
 	id: string;
@@ -70,6 +43,15 @@ export class ThemeService extends GObject.Object {
 		if (!ThemeService.instance) ThemeService.instance = new ThemeService();
 
 		return ThemeService.instance;
+	}
+
+	private sendThemeNotification(summary: string, body: string): void {
+		Notifications.getDefault().sendNotification({
+			appName: "novashell",
+			summary,
+			body,
+			transient: true,
+		});
 	}
 
 	/** Get list of available themes */
@@ -130,15 +112,15 @@ export class ThemeService extends GObject.Object {
 			if (wallpaper.wallpaper) {
 				wallpaper.syncColorsFromWallpaper();
 			} else {
-				console.warn("ThemeService: no wallpaper set, can't regenerate pywal colors");
+				console.warn(
+					"ThemeService: no wallpaper set, can't regenerate pywal colors",
+				);
 			}
 
-			Notifications.getDefault().sendNotification({
-				appName: "novashell",
-				summary: "Theme changed",
-				body: "Switched to System (pywal) - colors sync from wallpaper",
-				transient: true,
-			});
+			this.sendThemeNotification(
+				"Theme changed",
+				"Switched to System (pywal) - colors sync from wallpaper",
+			);
 
 			return true;
 		}
@@ -146,22 +128,17 @@ export class ThemeService extends GObject.Object {
 		// Load static theme
 		const themeData = this.loadThemeFromResource(themeId);
 		if (!themeData) {
-			Notifications.getDefault().sendNotification({
-				appName: "novashell",
-				summary: "Theme error",
-				body: `Could not load theme "${themeId}"`,
-				transient: true,
-			});
+			this.sendThemeNotification(
+				"Theme error",
+				`Could not load theme "${themeId}"`,
+			);
 			return false;
 		}
 
 		// Write theme to wal colors.json, then explicitly reload stylesheet + external colors.
 		try {
 			// Ensure wal cache directory exists
-			const walDir = Gio.File.new_for_path(`${GLib.get_user_cache_dir()}/wal`);
-			if (!walDir.query_exists(null)) {
-				walDir.make_directory_with_parents(null);
-			}
+			ensureDirectory(`${GLib.get_user_cache_dir()}/wal`);
 
 			const json = JSON.stringify(themeData, null, 4);
 			await writeFileAsync(WAL_COLORS_PATH, json);
@@ -173,22 +150,18 @@ export class ThemeService extends GObject.Object {
 			generalConfig.setProperty("theme.current", themeId, true);
 			this.notify("current-theme");
 
-			Notifications.getDefault().sendNotification({
-				appName: "novashell",
-				summary: "Theme changed",
-				body: `Applied "${themeData.name}" theme`,
-				transient: true,
-			});
+			this.sendThemeNotification(
+				"Theme changed",
+				`Applied "${themeData.name}" theme`,
+			);
 
 			return true;
 		} catch (e) {
 			console.error(`ThemeService: Could not apply theme: ${e}`);
-			Notifications.getDefault().sendNotification({
-				appName: "novashell",
-				summary: "Theme error",
-				body: `Failed to apply theme: ${(e as Error).message}`,
-				transient: true,
-			});
+			this.sendThemeNotification(
+				"Theme error",
+				`Failed to apply theme: ${(e as Error).message}`,
+			);
 			return false;
 		}
 	}

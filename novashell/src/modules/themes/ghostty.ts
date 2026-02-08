@@ -1,13 +1,14 @@
 import GLib from "gi://GLib?version=2.0";
 
-import { writeFileAsync } from "ags/file";
 import { execAsync } from "ags/process";
 
 import type { ColorData } from "./types";
+import { copyContentInPlace } from "./utils";
 
 function reloadGhostty(): void {
 	execAsync([
-		"bash", "-c",
+		"bash",
+		"-c",
 		`hyprctl clients -j | jq -r '.[] | select(.class == "com.mitchellh.ghostty") | .address' | while read addr; do hyprctl dispatch sendshortcut "CTRL SHIFT, comma, address:$addr" 2>/dev/null; done`,
 	])
 		.then(() => {})
@@ -37,11 +38,11 @@ export async function updateGhosttyColors(data: ColorData): Promise<void> {
 	const content = lines.join("\n") + "\n";
 	const ghosttyColorsPath = `${GLib.get_user_config_dir()}/ghostty/colors`;
 
-	const tmpPath = `${GLib.get_tmp_dir()}/novashell-ghostty-colors`;
-	await writeFileAsync(tmpPath, content).catch((e: Error) => {
-		console.error(`ColorUtils: Failed to write ghostty temp: ${e.message}`);
-	});
-	await execAsync(["cp", "--", tmpPath, ghosttyColorsPath]).catch((e: Error) => {
+	await copyContentInPlace(
+		content,
+		ghosttyColorsPath,
+		"novashell-ghostty-colors",
+	).catch((e: Error) => {
 		console.error(`ColorUtils: Failed to cp ghostty colors: ${e.message}`);
 	});
 

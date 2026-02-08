@@ -1,24 +1,28 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
 import { execAsync } from "ags/process";
 
 import type { ColorData, DerivedPalette } from "./types";
+import { ensureDirectory } from "./utils";
 
 export function reloadTmux(): void {
 	const colorsPath = `${GLib.get_user_cache_dir()}/novashell/tmux-colors.conf`;
 	execAsync(["tmux", "source-file", colorsPath])
 		.then(() => {
 			execAsync([
-				"bash", "-c",
+				"bash",
+				"-c",
 				"tmux list-clients -F '#{client_name}' | while read c; do tmux refresh-client -t \"$c\" -S; done",
 			]).catch(() => {});
 		})
 		.catch(() => {});
 }
 
-export async function generateTmuxColors(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function generateTmuxColors(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const colors = data.colors;
 	const special = data.special;
 
@@ -34,10 +38,7 @@ set-window-option -g window-status-separator " "
 `;
 
 	const cacheDir = `${GLib.get_user_cache_dir()}/novashell`;
-	const cacheDirFile = Gio.File.new_for_path(cacheDir);
-	if (!cacheDirFile.query_exists(null)) {
-		cacheDirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(cacheDir);
 
 	await writeFileAsync(`${cacheDir}/tmux-colors.conf`, tmuxColors).catch(
 		(e) => {

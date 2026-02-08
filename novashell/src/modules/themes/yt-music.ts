@@ -4,9 +4,12 @@ import GLib from "gi://GLib?version=2.0";
 import { writeFileAsync } from "ags/file";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness } from "./utils";
+import { adjustLightness, ensureDirectory } from "./utils";
 
-export async function updateYTMusicTheme(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateYTMusicTheme(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const c = data.colors;
 	const s = data.special;
 
@@ -68,12 +71,11 @@ export async function updateYTMusicTheme(data: ColorData, p: DerivedPalette): Pr
 	const fullCss = variables + template;
 
 	const cacheDir = `${GLib.get_user_cache_dir()}/novashell`;
-	const cacheDirFile = Gio.File.new_for_path(cacheDir);
-	if (!cacheDirFile.query_exists(null)) {
-		cacheDirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(cacheDir);
 
-	await writeFileAsync(`${cacheDir}/yt-music-theme.css`, fullCss).catch((e: Error) => {
-		console.error(`ColorUtils: Failed to write YT Music theme: ${e.message}`);
-	});
+	await writeFileAsync(`${cacheDir}/yt-music-theme.css`, fullCss).catch(
+		(e: Error) => {
+			console.error(`ColorUtils: Failed to write YT Music theme: ${e.message}`);
+		},
+	);
 }

@@ -1,26 +1,14 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
-import { execAsync } from "ags/process";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness } from "./utils";
+import { adjustLightness, copyContentInPlace, ensureDirectory } from "./utils";
 
-async function cpInPlace(content: string, targetPath: string): Promise<void> {
-	const tmpPath = `${GLib.get_tmp_dir()}/novashell-gtk-${GLib.get_monotonic_time()}`;
-	await writeFileAsync(tmpPath, content);
-	await execAsync(["cp", "--", tmpPath, targetPath]);
-}
-
-function ensureDir(path: string): void {
-	const dir = Gio.File.new_for_path(path);
-	if (!dir.query_exists(null)) {
-		dir.make_directory_with_parents(null);
-	}
-}
-
-export async function updateGtkColors(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateGtkColors(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const s = data.special;
 	const c = data.colors;
 
@@ -63,7 +51,7 @@ export async function updateGtkColors(data: ColorData, p: DerivedPalette): Promi
 	];
 
 	for (const dir of targets) {
-		ensureDir(dir);
+		ensureDirectory(dir);
 	}
 
 	const indexTheme = `[Desktop Entry]
@@ -76,9 +64,13 @@ GtkTheme=novashell
 
 	await Promise.all([
 		...targets.map((dir) =>
-			cpInPlace(css, `${dir}/gtk.css`).catch((e: Error) => {
-				console.error(`ColorUtils: Failed to write ${dir}/gtk.css: ${e.message}`);
-			}),
+			copyContentInPlace(css, `${dir}/gtk.css`, "novashell-gtk").catch(
+				(e: Error) => {
+					console.error(
+						`ColorUtils: Failed to write ${dir}/gtk.css: ${e.message}`,
+					);
+				},
+			),
 		),
 		writeFileAsync(`${themeDir}/index.theme`, indexTheme).catch((e: Error) => {
 			console.error(`ColorUtils: Failed to write theme index: ${e.message}`);

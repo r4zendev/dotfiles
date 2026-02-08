@@ -27,6 +27,16 @@ export type ColorData = {
 	};
 };
 
+export type WalData = ColorData & {
+	checksum: string;
+	wallpaper: string;
+	alpha: number;
+};
+
+export type ThemeData = WalData & {
+	name: string;
+};
+
 export type DerivedPalette = {
 	accent: string;
 	surface0: string;

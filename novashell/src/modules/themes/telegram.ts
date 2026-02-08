@@ -1,13 +1,15 @@
-import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { writeFileAsync } from "ags/file";
 import { execAsync } from "ags/process";
 
 import type { ColorData, DerivedPalette } from "./types";
-import { adjustLightness } from "./utils";
+import { adjustLightness, ensureDirectory } from "./utils";
 
-export async function updateTelegramTheme(data: ColorData, p: DerivedPalette): Promise<void> {
+export async function updateTelegramTheme(
+	data: ColorData,
+	p: DerivedPalette,
+): Promise<void> {
 	const c = data.colors;
 	const s = data.special;
 
@@ -525,10 +527,7 @@ historyVideoMessageProgressFg: ${p.accent};
 `;
 
 	const cacheDir = `${GLib.get_user_cache_dir()}/novashell`;
-	const cacheDirFile = Gio.File.new_for_path(cacheDir);
-	if (!cacheDirFile.query_exists(null)) {
-		cacheDirFile.make_directory_with_parents(null);
-	}
+	ensureDirectory(cacheDir);
 
 	const colorsPath = `${cacheDir}/telegram-colors.tdesktop-theme`;
 	await writeFileAsync(colorsPath, theme).catch((e: Error) => {
@@ -536,32 +535,47 @@ historyVideoMessageProgressFg: ${p.accent};
 	});
 
 	const themePath = `${cacheDir}/telegram-theme.tdesktop-theme`;
+	const writePlainTheme = async (): Promise<void> => {
+		await writeFileAsync(themePath, theme).catch((e: Error) => {
+			console.error(`ColorUtils: Failed to write Telegram theme: ${e.message}`);
+		});
+	};
+
 	const wallpaper = data.wallpaper;
 
 	if (wallpaper && GLib.file_test(wallpaper, GLib.FileTest.EXISTS)) {
 		const resizedPath = `${cacheDir}/telegram-bg.jpg`;
 		await execAsync([
-			"magick", wallpaper, "-resize", "1920x1920>", "-quality", "85", resizedPath,
+			"magick",
+			wallpaper,
+			"-resize",
+			"1920x1920>",
+			"-quality",
+			"85",
+			resizedPath,
 		]).catch((e: Error) => {
-			console.error(`ColorUtils: Failed to resize wallpaper for Telegram: ${e.message}`);
+			console.error(
+				`ColorUtils: Failed to resize wallpaper for Telegram: ${e.message}`,
+			);
 		});
 
 		if (GLib.file_test(resizedPath, GLib.FileTest.EXISTS)) {
 			await execAsync([
-				"python3", "-c",
+				"python3",
+				"-c",
 				`import zipfile,sys\nwith zipfile.ZipFile(sys.argv[1],"w",zipfile.ZIP_DEFLATED) as z:\n z.write(sys.argv[2],"colors.tdesktop-theme")\n z.write(sys.argv[3],"background.jpg")`,
-				themePath, colorsPath, resizedPath,
+				themePath,
+				colorsPath,
+				resizedPath,
 			]).catch((e: Error) => {
-				console.error(`ColorUtils: Failed to create Telegram theme ZIP: ${e.message}`);
+				console.error(
+					`ColorUtils: Failed to create Telegram theme ZIP: ${e.message}`,
+				);
 			});
 		} else {
-			await writeFileAsync(themePath, theme).catch((e: Error) => {
-				console.error(`ColorUtils: Failed to write Telegram theme: ${e.message}`);
-			});
+			await writePlainTheme();
 		}
 	} else {
-		await writeFileAsync(themePath, theme).catch((e: Error) => {
-			console.error(`ColorUtils: Failed to write Telegram theme: ${e.message}`);
-		});
+		await writePlainTheme();
 	}
 }

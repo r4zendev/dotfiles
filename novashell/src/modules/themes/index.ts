@@ -10,7 +10,12 @@ export { updateQtColors } from "./qt";
 export { updateTelegramTheme } from "./telegram";
 export { broadcastTerminalColors } from "./terminal";
 export { generateTmuxColors, reloadTmux } from "./tmux";
-export type { ColorData, DerivedPalette } from "./types";
-export { adjustLightness, stripHash } from "./utils";
+export type { ColorData, DerivedPalette, ThemeData, WalData } from "./types";
+export {
+	adjustLightness,
+	copyContentInPlace,
+	ensureDirectory,
+	stripHash,
+} from "./utils";
 export { updateVesktopTheme } from "./vesktop";
 export { updateYTMusicTheme } from "./yt-music";
