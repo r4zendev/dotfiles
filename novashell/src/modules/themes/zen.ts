@@ -164,17 +164,105 @@ function buildUserChrome(data: ColorData, p: DerivedPalette): string {
 
   #urlbar-results,
   .urlbarView,
-  .urlbarView-body-inner,
-  panel,
-  menupopup,
-  .panel-subview-body,
-  .PanelUI-subView,
-  #appMenu-popup,
-  #widget-overflow,
-  #customizationui-widget-panel {
+  .urlbarView-body-inner {
     background-color: ${p.surface0} !important;
     color: ${s.foreground} !important;
     border-color: ${p.surface2} !important;
+  }
+
+  panel,
+  menupopup,
+  panel[type="arrow"] {
+    --panel-background: ${p.surface0} !important;
+    --arrowpanel-background: ${p.surface0} !important;
+    --panel-border-color: ${p.surface2} !important;
+    --menu-background-color: ${p.surface0} !important;
+    background-color: ${p.surface0} !important;
+    color: ${s.foreground} !important;
+    border-color: ${p.surface2} !important;
+    box-shadow: none !important;
+  }
+
+  panel::part(content),
+  menupopup::part(content),
+  panel[type="arrow"]::part(content) {
+    background-color: ${p.surface0} !important;
+    border-color: ${p.surface2} !important;
+    box-shadow: none !important;
+  }
+
+  panelmultiview,
+  panelview,
+  #appMenu-popup,
+  #appMenu-multiView,
+  #appMenu-mainView,
+  #widget-overflow,
+  #customizationui-widget-panel,
+  .panel-subview-body,
+  .PanelUI-subView,
+  .panel-viewcontainer,
+  .panel-arrowcontainer,
+  .panel-arrowcontent {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+
+  :is(
+    #contentAreaContextMenu,
+    #tabContextMenu,
+    #toolbar-context-menu,
+    #placesContext,
+    #downloadsContextMenu,
+    #backForwardMenu,
+    #pageActionContextMenu
+  ) {
+    appearance: none !important;
+    -moz-default-appearance: none !important;
+    --panel-background: transparent !important;
+    --arrowpanel-background: transparent !important;
+    --menu-background-color: transparent !important;
+    --panel-border-color: transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: ${s.foreground} !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  :is(
+    #contentAreaContextMenu,
+    #tabContextMenu,
+    #toolbar-context-menu,
+    #placesContext,
+    #downloadsContextMenu,
+    #backForwardMenu,
+    #pageActionContextMenu
+  )::part(content),
+  :is(
+    #contentAreaContextMenu,
+    #tabContextMenu,
+    #toolbar-context-menu,
+    #placesContext,
+    #downloadsContextMenu,
+    #backForwardMenu,
+    #pageActionContextMenu
+  )::part(arrowscrollbox),
+  :is(
+    #contentAreaContextMenu,
+    #tabContextMenu,
+    #toolbar-context-menu,
+    #placesContext,
+    #downloadsContextMenu,
+    #backForwardMenu,
+    #pageActionContextMenu
+  ) .menupopup-arrowscrollbox {
+    background: ${p.surface0} !important;
+    background-color: ${p.surface0} !important;
+    border: 1px solid ${p.surface2} !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
   }
 
   #sidebar-box,
