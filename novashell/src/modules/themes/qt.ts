@@ -114,27 +114,43 @@ disabled_colors=${disabledLine}
 		);
 	});
 
-	const qt6ctConfPath = `${GLib.get_user_config_dir()}/qt6ct/qt6ct.conf`;
+	const qt6ctDir = `${GLib.get_user_config_dir()}/qt6ct`;
+	ensureDirectory(qt6ctDir);
+	const qt6ctConfPath = `${qt6ctDir}/qt6ct.conf`;
 	const qt6ctConfFile = Gio.File.new_for_path(qt6ctConfPath);
-	if (qt6ctConfFile.query_exists(null)) {
-		try {
-			const [ok, contents] = qt6ctConfFile.load_contents(null);
-			if (ok) {
-				let conf = new TextDecoder().decode(contents);
+	if (!qt6ctConfFile.query_exists(null)) {
+		const conf = `[Appearance]
+color_scheme_path=${schemePath}
+custom_palette=true
+standard_dialogs=xdgdesktopportal
+style=Fusion
+
+[Troubleshooting]
+force_raster_widgets=1
+`;
+		await writeFileAsync(qt6ctConfPath, conf).catch((e: Error) => {
+			console.error(`ColorUtils: Failed to create qt6ct.conf: ${e.message}`);
+		});
+		return;
+	}
+
+	try {
+		const [ok, contents] = qt6ctConfFile.load_contents(null);
+		if (ok) {
+			let conf = new TextDecoder().decode(contents);
+			conf = conf.replace(
+				/^color_scheme_path=.*$/m,
+				`color_scheme_path=${schemePath}`,
+			);
+			if (!conf.includes("custom_palette=true")) {
 				conf = conf.replace(
-					/^color_scheme_path=.*$/m,
-					`color_scheme_path=${schemePath}`,
+					/^\[Appearance\]$/m,
+					"[Appearance]\ncustom_palette=true",
 				);
-				if (!conf.includes("custom_palette=true")) {
-					conf = conf.replace(
-						/^\[Appearance\]$/m,
-						"[Appearance]\ncustom_palette=true",
-					);
-				}
-				await writeFileAsync(qt6ctConfPath, conf);
 			}
-		} catch (e) {
-			console.error(`ColorUtils: Failed to update qt6ct.conf: ${e}`);
+			await writeFileAsync(qt6ctConfPath, conf);
 		}
+	} catch (e) {
+		console.error(`ColorUtils: Failed to update qt6ct.conf: ${e}`);
 	}
 }
