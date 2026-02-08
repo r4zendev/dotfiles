@@ -4,7 +4,7 @@ import { createBinding, createComputed, createState, For, With } from "ags";
 import { Gtk } from "ags/gtk4";
 
 import { generalConfig } from "~/config";
-import { getAppIcon, getSymbolicIcon } from "~/modules/apps";
+import { resolveIcon } from "~/modules/apps";
 import { variableToBoolean } from "~/modules/utils";
 import { Separator } from "~/widget/Separator";
 
@@ -58,12 +58,16 @@ export const Workspaces = () => {
 								{(lastClient: AstalHyprland.Client | null) =>
 									lastClient && (
 										<Gtk.Image
-											class="last-client"
 											iconName={createBinding(lastClient, "initialClass").as(
-												(initialClass) =>
-													getSymbolicIcon(initialClass) ??
-													getAppIcon(initialClass) ??
-													"application-x-executable-symbolic",
+												(initialClass) => resolveIcon(initialClass).name,
+											)}
+											cssClasses={createBinding(lastClient, "initialClass").as(
+												(initialClass) => {
+													const r = resolveIcon(initialClass);
+													return r.symbolic
+														? ["last-client", "icon-symbolic"]
+														: ["last-client", "icon-regular"];
+												},
 											)}
 										/>
 									)
@@ -198,16 +202,21 @@ export const Workspaces = () => {
 											</Gtk.Revealer>
 											{lastClient && (
 												<Gtk.Image
-													class={"last-client-icon"}
 													iconName={createBinding(
 														lastClient,
 														"initialClass",
 													).as(
-														(initialClass) =>
-															getSymbolicIcon(initialClass) ??
-															getAppIcon(initialClass) ??
-															"application-x-executable-symbolic",
+														(initialClass) => resolveIcon(initialClass).name,
 													)}
+													cssClasses={createBinding(
+														lastClient,
+														"initialClass",
+													).as((initialClass) => {
+														const r = resolveIcon(initialClass);
+														return r.symbolic
+															? ["last-client-icon", "icon-symbolic"]
+															: ["last-client-icon", "icon-regular"];
+													})}
 													hexpand
 													vexpand
 													visible={createBinding(

@@ -13,7 +13,7 @@ const astalApps: AstalApps.Apps = new AstalApps.Apps();
 
 let appsList: Array<AstalApps.Application> = [];
 
-function filterExcludedApps(
+export function filterExcludedApps(
 	apps: Array<AstalApps.Application>,
 ): Array<AstalApps.Application> {
 	const exclude =
@@ -37,22 +37,21 @@ function filterExcludedApps(
 }
 
 export function getApps(): Array<AstalApps.Application> {
-	if (!appsList.length) appsList = filterExcludedApps(astalApps.get_list());
+	if (!appsList.length) appsList = astalApps.get_list();
 	return appsList;
 }
 
 export function updateApps(): void {
 	astalApps.reload();
-	appsList = filterExcludedApps(astalApps.get_list());
+	appsList = astalApps.get_list();
 }
 
 export function getAstalApps(): AstalApps.Apps {
 	return astalApps;
 }
 
-/** fuzzy query with exclusion filter applied */
 export function queryApps(text: string): Array<AstalApps.Application> {
-	return filterExcludedApps(astalApps.fuzzy_query(text));
+	return astalApps.fuzzy_query(text);
 }
 
 /** execute apps and commands using Hyprland's exec dispatcher.
@@ -169,4 +168,19 @@ export function getSymbolicIcon(
 	return icon && lookupIcon(`${icon}-symbolic`)
 		? `${icon}-symbolic`
 		: undefined;
+}
+
+export type ResolvedIcon = { name: string; symbolic: boolean };
+
+export function resolveIcon(
+	app: string | AstalApps.Application,
+	fallback = "application-x-executable-symbolic",
+): ResolvedIcon {
+	const symbolic = getSymbolicIcon(app);
+	if (symbolic) return { name: symbolic, symbolic: true };
+
+	const regular = getAppIcon(app);
+	if (regular) return { name: regular, symbolic: false };
+
+	return { name: fallback, symbolic: fallback.endsWith("-symbolic") };
 }

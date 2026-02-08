@@ -11,3 +11,4 @@ $bg-translucent-secondary: color.change($color: wal.$background, $alpha: 78%);
 $fg-primary: wal.$foreground;
 $fg-light: $bg-primary;
 $fg-disabled: color.adjust($color: wal.$foreground, $lightness: -11%);
+$accent: wal.$accent;

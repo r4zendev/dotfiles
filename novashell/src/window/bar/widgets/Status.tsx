@@ -204,8 +204,8 @@ function StatusIcons() {
 						"dontDisturb",
 					).as((dnd) =>
 						dnd
-							? "minus-circle-filled-symbolic"
-							: "preferences-system-notifications-symbolic",
+							? "notifications-disabled-symbolic"
+							: "notification-symbolic",
 					)}
 				/>
 				<Gtk.Image

@@ -84,10 +84,22 @@ $color-hover: colors.$bg-primary;
           color: colors.$fg-light;
           margin-right: 0;
         }
+
+        & icon, & image {
+          color: colors.$fg-light;
+        }
       }
 
-      & icon {
+      & icon, & image {
         font-size: 16px;
+      }
+
+      & image.icon-symbolic {
+        color: colors.$accent;
+      }
+
+      & image.icon-regular {
+        -gtk-icon-filter: saturate(60%) brightness(1.2);
       }
 
       &.show label.id {
@@ -106,6 +118,14 @@ $color-hover: colors.$bg-primary;
     & image {
       margin-right: 6px;
       -gtk-icon-size: 18px;
+    }
+
+    & image.icon-symbolic {
+      color: colors.$accent;
+    }
+
+    & image.icon-regular {
+      -gtk-icon-filter: saturate(60%) brightness(1.2);
     }
 
     & .text-content {
@@ -173,6 +193,14 @@ $color-hover: colors.$bg-primary;
 
     & .item {
       all: unset;
+    }
+
+    & image.icon-symbolic {
+      color: colors.$accent;
+    }
+
+    & image.icon-regular {
+      -gtk-icon-filter: saturate(60%) brightness(1.2);
     }
   }
 

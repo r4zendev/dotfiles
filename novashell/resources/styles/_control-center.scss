@@ -221,12 +221,14 @@
     & .icon {
       transition: 120ms ease-in;
       border-radius: calc($radius - $padding);
-      padding: 8px 12px;
+      padding: 10px;
       margin-right: 6px;
       background: color.scale($color: colors.$bg-primary, $lightness: 10%);
 
       & image {
-        -gtk-icon-size: 18px;
+        -gtk-icon-size: 20px;
+        min-width: 20px;
+        min-height: 20px;
       }
 
       &:hover {

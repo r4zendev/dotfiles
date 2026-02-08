@@ -1,3 +1,6 @@
+; org.gnome.Loupe.desktop;
+; qimgv.desktop;
+
 [Added Associations]
 application/x-extension-htm=zen.desktop;
 application/x-extension-html=zen.desktop;

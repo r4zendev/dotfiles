@@ -5,24 +5,40 @@ import type GObject from "gi://GObject?version=2.0";
 import { createBinding, createComputed, For, With } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
 
-import { getAppIcon, lookupIcon } from "~/modules/apps";
+import { getAppIcon, getSymbolicIcon } from "~/modules/apps";
 
 const astalTray = AstalTray.get_default();
 
-function resolveTrayIcon(item: AstalTray.TrayItem): Gio.Icon | null {
-	const gicon = item.gicon;
+type TrayIcon = { gicon: Gio.Icon | null; symbolic: boolean };
 
-	// Check if the themed icon actually exists in the current theme
-	if (gicon instanceof Gio.ThemedIcon) {
-		const names = gicon.get_names();
-		if (names?.some((name: string) => lookupIcon(name))) return gicon;
+function extractTrayIdentifiers(item: AstalTray.TrayItem): string[] {
+	const ids = [item.id, item.iconName, item.title];
 
-		// Themed icon not found — try app icon lookup as fallback
-		const appIcon = getAppIcon(item.id) ?? getAppIcon(item.title);
-		if (appIcon) return Gio.ThemedIcon.new(appIcon);
+	const tooltip = item.tooltipMarkup || item.tooltipText || "";
+	if (tooltip) ids.push(tooltip.replace(/<[^>]*>/g, "").trim());
+
+	if (item.gicon instanceof Gio.ThemedIcon) {
+		const names = item.gicon.get_names();
+		if (names) ids.push(...names);
 	}
 
-	return gicon;
+	return ids.filter((id): id is string => !!id && id !== "null");
+}
+
+function resolveTrayIcon(item: AstalTray.TrayItem): TrayIcon {
+	const identifiers = extractTrayIdentifiers(item);
+
+	for (const id of identifiers) {
+		const symbolic = getSymbolicIcon(id);
+		if (symbolic) return { gicon: Gio.ThemedIcon.new(symbolic), symbolic: true };
+	}
+
+	for (const id of identifiers) {
+		const icon = getAppIcon(id);
+		if (icon) return { gicon: Gio.ThemedIcon.new(icon), symbolic: false };
+	}
+
+	return { gicon: item.gicon, symbolic: false };
 }
 
 export const Tray = () => {
@@ -80,8 +96,13 @@ export const Tray = () => {
 										}}
 									>
 										<Gtk.Image
-											gicon={createBinding(item, "gicon").as(() =>
-												resolveTrayIcon(item),
+											gicon={createBinding(item, "gicon").as(
+												() => resolveTrayIcon(item).gicon,
+											)}
+											cssClasses={createBinding(item, "gicon").as(() =>
+												resolveTrayIcon(item).symbolic
+													? ["icon-symbolic"]
+													: ["icon-regular"],
 											)}
 											pixelSize={16}
 										/>

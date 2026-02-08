@@ -77,6 +77,7 @@ export class Tile extends Gtk.Box {
 	constructor(
 		props: Partial<Omit<Gtk.Box.ConstructorProps, "orientation">> & {
 			icon: string;
+			iconSize?: number;
 			title: string;
 			description?: string;
 			state?: boolean;
@@ -87,6 +88,7 @@ export class Tile extends Gtk.Box {
 		super(
 			omitObjectKeys(props, [
 				"icon",
+				"iconSize",
 				"title",
 				"description",
 				"state",
@@ -131,6 +133,7 @@ export class Tile extends Gtk.Box {
 					<Gtk.Image
 						iconName={createBinding(this, "icon")}
 						halign={Gtk.Align.CENTER}
+						{...(props.iconSize ? { pixelSize: props.iconSize } : {})}
 					/>
 					<Gtk.GestureClick
 						onReleased={() => {
