@@ -4,11 +4,11 @@ import { createBinding, createComputed } from "ags";
 
 import { Bluetooth } from "~/modules/bluetooth";
 import { secureBaseBinding } from "~/modules/utils";
+import type { Pages } from "~/window/control-center/widgets/pages";
 import { BluetoothPage } from "~/window/control-center/widgets/pages/Bluetooth";
-import { TilesPages } from "~/window/control-center/widgets/tiles";
 import { Tile } from "~/window/control-center/widgets/tiles/Tile";
 
-export const TileBluetooth = () => (
+export const TileBluetooth = (pages: Pages) => (
 	<Tile
 		title={createBinding(Bluetooth.getDefault(), "lastDevice").as(
 			(dev) => dev?.alias ?? "Bluetooth",
@@ -27,7 +27,10 @@ export const TileBluetooth = () => (
 		)}
 		onEnabled={() => Bluetooth.getDefault().adapter?.set_powered(true)}
 		onDisabled={() => Bluetooth.getDefault().adapter?.set_powered(false)}
-		onClicked={() => TilesPages?.toggle(BluetoothPage)}
+		arrowOpen={createBinding(pages, "page").as(
+			(page) => page?.id === BluetoothPage.id,
+		)}
+		onClicked={() => pages.toggle(BluetoothPage)}
 		hasArrow
 		state={createBinding(AstalBluetooth.get_default(), "isPowered")}
 		icon={createComputed(

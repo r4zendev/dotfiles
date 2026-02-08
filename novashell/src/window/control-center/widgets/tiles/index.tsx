@@ -1,4 +1,4 @@
-import { createRoot, getScope } from "ags";
+import { createRoot } from "ags";
 import { Gtk } from "ags/gtk4";
 
 import { Pages } from "~/window/control-center/widgets/pages";
@@ -9,21 +9,19 @@ import { TileNetwork } from "~/window/control-center/widgets/tiles/Network";
 import { TileNightLight } from "~/window/control-center/widgets/tiles/NightLight";
 import { TileRecording } from "~/window/control-center/widgets/tiles/Recording";
 
-export let TilesPages: Pages | undefined;
-export const tileList: Array<() => JSX.Element | Gtk.Widget> = [
+export const tileList: Array<(pages: Pages) => JSX.Element | Gtk.Widget> = [
 	TileNetwork,
 	TileBluetooth,
 	TileRecording,
 	TileDND,
 	TileNightLight,
 	TileLanguage,
-] as Array<() => Gtk.Widget>;
+] as Array<(pages: Pages) => Gtk.Widget>;
 
 export function Tiles(): Gtk.Widget {
 	return createRoot((dispose) => {
-		getScope().onCleanup(() => {
-			TilesPages = undefined;
-		});
+		const pages = new Pages();
+		pages.add_css_class("tile-pages");
 
 		return (
 			<Gtk.Box
@@ -41,15 +39,10 @@ export function Tiles(): Gtk.Widget {
 					hexpand
 					homogeneous
 				>
-					{tileList.map((t) => t())}
+					{tileList.map((t) => t(pages))}
 				</Gtk.FlowBox>
 
-				<Pages
-					class={"tile-pages"}
-					$={(self) => {
-						TilesPages = self;
-					}}
-				/>
+				{pages}
 			</Gtk.Box>
 		) as Gtk.Box;
 	});

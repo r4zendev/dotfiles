@@ -71,6 +71,8 @@ export class Pages extends Gtk.Box {
 
 	open(newPage: Page, onOpen?: () => void) {
 		this.#page = newPage;
+		this.notify("page");
+		this.notify("is-open");
 
 		this.prepend(
 			(
@@ -94,6 +96,8 @@ export class Pages extends Gtk.Box {
 
 		this.#page?.actionClosed?.();
 		this.#page = undefined;
+		this.notify("page");
+		this.notify("is-open");
 
 		page.set_reveal_child(false);
 		this.#timeouts.push([

@@ -5,7 +5,7 @@ import {
 } from "~/modules/keyboard";
 import { Tile } from "~/window/control-center/widgets/tiles/Tile";
 
-export const TileLanguage = () => (
+export const TileLanguage = (_pages?: unknown) => (
 	<Tile
 		title={keyboardLayout}
 		description={keyboardLayout((l) => fullLangName(l))}

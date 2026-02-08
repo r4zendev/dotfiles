@@ -4,7 +4,7 @@ import { Recording } from "~/modules/recording";
 import { isInstalled } from "~/modules/utils";
 import { Tile } from "~/window/control-center/widgets/tiles/Tile";
 
-export const TileRecording = () => (
+export const TileRecording = (_pages?: unknown) => (
 	<Tile
 		title={"Screen Recording"}
 		description={createComputed(

@@ -5,8 +5,8 @@ import { execAsync } from "ags/process";
 
 import { Notifications } from "~/modules/notifications";
 import { secureBaseBinding } from "~/modules/utils";
+import type { Pages } from "~/window/control-center/widgets/pages";
 import { PageNetwork } from "~/window/control-center/widgets/pages/Network";
-import { TilesPages } from "~/window/control-center/widgets/tiles";
 import { Tile } from "~/window/control-center/widgets/tiles/Tile";
 
 const { WIFI, WIRED } = AstalNetwork.Primary,
@@ -44,7 +44,7 @@ const wiredIcon = secureBaseBinding<AstalNetwork.Wired>(
 
 const primary = createBinding(AstalNetwork.get_default(), "primary");
 
-export const TileNetwork = () => (
+export const TileNetwork = (pages: Pages) => (
 	<Tile
 		hasArrow
 		title={createComputed(
@@ -63,7 +63,10 @@ export const TileNetwork = () => (
 				return "Network";
 			},
 		)}
-		onClicked={() => TilesPages?.toggle(PageNetwork)}
+		arrowOpen={createBinding(pages, "page").as(
+			(page) => page?.id === PageNetwork.id,
+		)}
+		onClicked={() => pages.toggle(PageNetwork)}
 		icon={createComputed(
 			[primary, wifiIcon, wiredIcon],
 			(primary, wifiIcon, wiredIcon) => {

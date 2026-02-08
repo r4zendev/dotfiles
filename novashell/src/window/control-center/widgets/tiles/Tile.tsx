@@ -19,6 +19,7 @@ export class Tile extends Gtk.Box {
 		"notify::toggle-on-click": () => void;
 		"notify::state": () => void;
 		"notify::has-arrow": () => void;
+		"notify::arrow-open": () => void;
 	};
 
 	@signal(Boolean)
@@ -55,6 +56,9 @@ export class Tile extends Gtk.Box {
 	@property(Boolean)
 	public hasArrow: boolean = false;
 
+	@property(Boolean)
+	public arrowOpen: boolean = false;
+
 	public enable(): void {
 		if (this.state) return;
 
@@ -83,6 +87,7 @@ export class Tile extends Gtk.Box {
 			state?: boolean;
 			toggleOnClick?: boolean;
 			hasArrow?: boolean;
+			arrowOpen?: boolean;
 		},
 	) {
 		super(
@@ -93,6 +98,8 @@ export class Tile extends Gtk.Box {
 				"description",
 				"state",
 				"toggleOnClick",
+				"hasArrow",
+				"arrowOpen",
 			]),
 		);
 
@@ -117,6 +124,8 @@ export class Tile extends Gtk.Box {
 		this.hexpand = true;
 
 		if (props.hasArrow !== undefined) this.hasArrow = props.hasArrow;
+
+		if (props.arrowOpen !== undefined) this.arrowOpen = props.arrowOpen;
 
 		if (props.description !== undefined) this.description = props.description;
 
@@ -179,7 +188,9 @@ export class Tile extends Gtk.Box {
 				(
 					<Gtk.Image
 						class={"arrow"}
-						iconName={"go-next-symbolic"}
+						iconName={createBinding(this, "arrowOpen").as((isOpen) =>
+							isOpen ? "pan-down-symbolic" : "pan-end-symbolic",
+						)}
 						halign={Gtk.Align.END}
 					/>
 				) as Gtk.Image,

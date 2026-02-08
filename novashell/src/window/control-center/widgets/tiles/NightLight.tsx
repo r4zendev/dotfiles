@@ -2,11 +2,11 @@ import { createBinding, createComputed } from "ags";
 
 import { NightLight } from "~/modules/nightlight";
 import { isInstalled } from "~/modules/utils";
+import type { Pages } from "~/window/control-center/widgets/pages";
 import { PageNightLight } from "~/window/control-center/widgets/pages/NightLight";
-import { TilesPages } from "~/window/control-center/widgets/tiles";
 import { Tile } from "~/window/control-center/widgets/tiles/Tile";
 
-export const TileNightLight = () => (
+export const TileNightLight = (pages: Pages) => (
 	<Tile
 		title={"Night Light"}
 		icon={"weather-clear-night-symbolic"}
@@ -31,7 +31,10 @@ export const TileNightLight = () => (
 		onEnabled={() => {
 			NightLight.getDefault().identity = false;
 		}}
-		onClicked={() => TilesPages?.toggle(PageNightLight)}
+		arrowOpen={createBinding(pages, "page").as(
+			(page) => page?.id === PageNightLight.id,
+		)}
+		onClicked={() => pages.toggle(PageNightLight)}
 		state={createBinding(NightLight.getDefault(), "identity").as(
 			(identity) => !identity,
 		)}
