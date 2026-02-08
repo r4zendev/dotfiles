@@ -7,6 +7,19 @@ import { PluginShell } from "~/runner/plugins/shell";
 import { PluginThemes } from "~/runner/plugins/themes";
 import { PluginWallpapers } from "~/runner/plugins/wallpapers";
 import { PluginWebSearch } from "~/runner/plugins/websearch";
+import type { Runner } from "~/runner/Runner";
+
+export const defaultRunnerPlugins: Array<Runner.Plugin> = [
+	PluginApps,
+	PluginShell,
+	PluginWebSearch,
+	PluginKill,
+	PluginMedia,
+	PluginWallpapers,
+	PluginClipboard,
+	PluginThemes,
+	PluginColors,
+];
 
 export {
 	PluginApps,

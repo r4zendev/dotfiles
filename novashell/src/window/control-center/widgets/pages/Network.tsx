@@ -6,9 +6,7 @@ import { createBinding, createRoot, For, With } from "ags";
 import { Gtk } from "ags/gtk4";
 
 import { execApp } from "~/modules/apps";
-import { Notifications } from "~/modules/notifications";
 import { encoder, variableToBoolean } from "~/modules/utils";
-import { AskPopup, type AskPopupProps } from "~/widget/AskPopup";
 import { Page, PageButton } from "~/window/control-center/widgets/Page";
 import { Windows } from "~/windows";
 
@@ -214,56 +212,3 @@ export const PageNetwork = createRoot(
 			/>
 		) as Page,
 );
-
-function activateWirelessConnection(
-	connection: NM.RemoteConnection,
-	ssid: string,
-): void {
-	AstalNetwork.get_default()
-		.get_client()
-		.activate_connection_async(
-			connection,
-			AstalNetwork.get_default().wifi.get_device(),
-			null,
-			null,
-			(_, asyncRes) => {
-				const activeConnection = AstalNetwork.get_default()
-					.get_client()
-					.activate_connection_finish(asyncRes);
-				if (!activeConnection) {
-					Notifications.getDefault().sendNotification({
-						appName: "network",
-						summary: "Couldn't activate wireless connection",
-						body: `An error occurred while activating the wireless connection "${ssid}"`,
-					});
-					return;
-				}
-			},
-		);
-}
-
-function notifyConnectionError(ssid: string): void {
-	Notifications.getDefault().sendNotification({
-		appName: "network",
-		summary: "Coudn't connect Wi-Fi",
-		body: `An error occurred while trying to connect to the "${ssid}" access point. \nMaybe the password is invalid?`,
-	});
-}
-function saveToDisk(remoteConnection: NM.RemoteConnection, ssid: string): void {
-	AskPopup({
-		text: `Save password for connection "${ssid}"?`,
-		acceptText: "Yes",
-		onAccept: () =>
-			remoteConnection.commit_changes_async(
-				true,
-				null,
-				(_, asyncRes) =>
-					!remoteConnection.commit_changes_finish(asyncRes) &&
-					Notifications.getDefault().sendNotification({
-						appName: "network",
-						summary: "Couldn't save Wi-Fi password",
-						body: `An error occurred while trying to write the password for "${ssid}" to disk`,
-					}),
-			),
-	} as AskPopupProps);
-}

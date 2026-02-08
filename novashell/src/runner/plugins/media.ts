@@ -8,8 +8,11 @@ import type { Runner } from "~/runner/Runner";
 
 export const PluginMedia = {
 	prefix: ":",
-	handle: () =>
-		!Media.getDefault().player.available
+	handle: () => {
+		const media = Media.getDefault();
+		const playerBinding = createBinding(media, "player");
+
+		return !media.player.available
 			? {
 					icon: "folder-music-symbolic",
 					title: "Couldn't find any players",
@@ -19,7 +22,7 @@ export const PluginMedia = {
 			: [
 					{
 						icon: secureBaseBinding<AstalMpris.Player>(
-							createBinding(Media.getDefault(), "player"),
+							playerBinding,
 							"playbackStatus",
 							AstalMpris.PlaybackStatus.PAUSED,
 						).as((status) =>
@@ -31,17 +34,17 @@ export const PluginMedia = {
 						title: createComputed(
 							[
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"title",
 									null,
 								).as((t) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"artist",
 									null,
 								).as((t) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"playbackStatus",
 									AstalMpris.PlaybackStatus.PAUSED,
 								),
@@ -53,7 +56,7 @@ export const PluginMedia = {
 										: "Play"
 								} ${title} | ${artist}`,
 						),
-						actionClick: () => Media.getDefault().player.play_pause(),
+						actionClick: () => media.player.play_pause(),
 					},
 					{
 						icon: "media-skip-backward-symbolic",
@@ -61,17 +64,17 @@ export const PluginMedia = {
 						title: createComputed(
 							[
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"title",
 									null,
 								).as((t) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"artist",
 									null,
 								).as((t) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"identity",
 									"Music Player",
 								),
@@ -80,8 +83,7 @@ export const PluginMedia = {
 								`Go Previous ${title ? title : identity}${artist ? ` | ${artist}` : ""}`,
 						),
 						actionClick: () =>
-							Media.getDefault().player.canGoPrevious &&
-							Media.getDefault().player.previous(),
+							media.player.canGoPrevious && media.player.previous(),
 					},
 					{
 						icon: "media-skip-forward-symbolic",
@@ -89,17 +91,17 @@ export const PluginMedia = {
 						title: createComputed(
 							[
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"title",
 									null,
 								).as((t) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"artist",
 									null,
 								).as((t) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
-									createBinding(Media.getDefault(), "player"),
+									playerBinding,
 									"identity",
 									"Music Player",
 								),
@@ -107,9 +109,8 @@ export const PluginMedia = {
 							(title, artist, identity) =>
 								`Go Next ${title ? title : identity}${artist ? ` | ${artist}` : ""}`,
 						),
-						actionClick: () =>
-							Media.getDefault().player.canGoNext &&
-							Media.getDefault().player.next(),
+						actionClick: () => media.player.canGoNext && media.player.next(),
 					},
-				],
+				];
+	},
 } as Runner.Plugin;

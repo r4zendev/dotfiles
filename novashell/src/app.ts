@@ -32,32 +32,10 @@ import { Socket } from "~/modules/socket";
 import { Stylesheet } from "~/modules/stylesheet";
 import { createSubscription, secureBaseBinding } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
-import {
-	PluginApps,
-	PluginClipboard,
-	PluginColors,
-	PluginKill,
-	PluginMedia,
-	PluginShell,
-	PluginThemes,
-	PluginWallpapers,
-	PluginWebSearch,
-} from "~/runner/plugins";
+import { defaultRunnerPlugins } from "~/runner/plugins";
 import { Runner } from "~/runner/Runner";
 import { OSDModes, triggerOSD } from "~/window/osd";
 import { Windows } from "~/windows";
-
-const runnerPlugins: Array<Runner.Plugin> = [
-	PluginApps,
-	PluginShell,
-	PluginWebSearch,
-	PluginKill,
-	PluginMedia,
-	PluginWallpapers,
-	PluginClipboard,
-	PluginThemes,
-	PluginColors,
-];
 
 const defaultWindows: Array<string> = ["bar"];
 
@@ -95,12 +73,12 @@ export class Shell extends Adw.Application {
 	}
 
 	public resetStyle(): void {
-		this.#providers.forEach((provider) =>
+		this.#providers.forEach((provider) => {
 			Gtk.StyleContext.remove_provider_for_display(
 				Gdk.Display.get_default()!,
 				provider,
-			),
-		);
+			);
+		});
 	}
 
 	public removeProvider(provider: Gtk.CssProvider): void {
@@ -219,11 +197,16 @@ you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster res
 				console.log(
 					"Novashell: disposing connections and quitting because of ::shutdown",
 				);
-				this.#connections.forEach((ids, obj) =>
-					Array.isArray(ids)
-						? ids.forEach((id) => obj.disconnect(id))
-						: obj.disconnect(ids),
-				);
+				this.#connections.forEach((ids, obj) => {
+					if (Array.isArray(ids)) {
+						ids.forEach((id) => {
+							obj.disconnect(id);
+						});
+						return;
+					}
+
+					obj.disconnect(ids);
+				});
 			});
 		});
 	}
@@ -310,7 +293,9 @@ you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster res
 		Wallpaper.getDefault();
 		Stylesheet.getDefault();
 
-		runnerPlugins.forEach((plugin) => Runner.addPlugin(plugin));
+		defaultRunnerPlugins.forEach((plugin) => {
+			Runner.addPlugin(plugin);
+		});
 
 		createSubscription(
 			createComputed([
@@ -347,7 +332,9 @@ you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster res
 			}),
 		]);
 
-		defaultWindows.forEach((w) => Windows.getDefault().open(w));
+		defaultWindows.forEach((w) => {
+			Windows.getDefault().open(w);
+		});
 	}
 
 	quit(): void {

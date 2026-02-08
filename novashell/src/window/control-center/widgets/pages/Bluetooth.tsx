@@ -14,6 +14,22 @@ import { variableToBoolean } from "~/modules/utils";
 import { Page, PageButton } from "~/window/control-center/widgets/Page";
 import { Windows } from "~/windows";
 
+function stopDiscovery(adapter: AstalBluetooth.Adapter): void {
+	try {
+		adapter.stop_discovery();
+	} catch (e: any) {
+		if (String(e.message).includes("No discovery started")) {
+			adapter.powered = false;
+			setTimeout(() => {
+				adapter.powered = true;
+			}, 500);
+			return;
+		}
+
+		console.error(`Bluetooth: stop_discovery failed: ${e.message}`);
+	}
+}
+
 export const BluetoothPage = createRoot(
 	() =>
 		(
@@ -39,25 +55,7 @@ export const BluetoothPage = createRoot(
 										),
 										actionClicked: () => {
 											if (adapter.discovering) {
-												try {
-													adapter.stop_discovery();
-												} catch (e: any) {
-													// "No discovery started" = orphaned state from a previous
-													// D-Bus client that disconnected without stopping.
-													// Power-cycle the adapter to reset BlueZ's stuck state.
-													if (
-														String(e.message).includes("No discovery started")
-													) {
-														adapter.powered = false;
-														setTimeout(() => {
-															adapter.powered = true;
-														}, 500);
-													} else {
-														console.error(
-															`Bluetooth: stop_discovery failed: ${e.message}`,
-														);
-													}
-												}
+												stopDiscovery(adapter);
 												return;
 											}
 
@@ -70,16 +68,7 @@ export const BluetoothPage = createRoot(
 				actionClosed={() => {
 					const adapter = Bluetooth.getDefault().adapter;
 					if (adapter?.discovering) {
-						try {
-							adapter.stop_discovery();
-						} catch (e: any) {
-							if (String(e.message).includes("No discovery started")) {
-								adapter.powered = false;
-								setTimeout(() => {
-									adapter.powered = true;
-								}, 500);
-							}
-						}
+						stopDiscovery(adapter);
 					}
 				}}
 				bottomButtons={[

@@ -65,8 +65,11 @@ function rgbToHex(r: number, g: number, b: number): string {
 }
 
 function rgbToHsl(r: number, g: number, b: number): HSL {
-	r /= 255; g /= 255; b /= 255;
-	const max = Math.max(r, g, b), min = Math.min(r, g, b);
+	r /= 255;
+	g /= 255;
+	b /= 255;
+	const max = Math.max(r, g, b),
+		min = Math.min(r, g, b);
 	const l = (max + min) / 2;
 	if (max === min) return { h: 0, s: 0, l };
 	const d = max - min;
@@ -132,7 +135,11 @@ function blendHex(hex1: string, hex2: string, ratio: number): string {
 
 /** Ensure a color is readable against a dark background by enforcing
  *  minimum lightness and saturation in HSL space. */
-function ensureReadable(hex: string, minLightness = 0.5, minSaturation = 0.3): string {
+function ensureReadable(
+	hex: string,
+	minLightness = 0.5,
+	minSaturation = 0.3,
+): string {
 	const [r, g, b] = hexToRgb(hex);
 	const hsl = rgbToHsl(r, g, b);
 	const l = Math.max(hsl.l, minLightness);
@@ -142,7 +149,6 @@ function ensureReadable(hex: string, minLightness = 0.5, minSaturation = 0.3): s
 
 /** wallpaper tiling mode */
 export type WallpaperPositioning = "contain" | "tile" | "cover" | "fill";
-
 
 @register({ GTypeName: "Wallpaper" })
 export class Wallpaper extends GObject.Object {
@@ -194,7 +200,10 @@ export class Wallpaper extends GObject.Object {
 			if (wall?.trim()) {
 				this.#wallpaper = wall.trim();
 
-				const currentTheme = generalConfig.getProperty("theme.current", "string");
+				const currentTheme = generalConfig.getProperty(
+					"theme.current",
+					"string",
+				);
 				if (!currentTheme || currentTheme === "pywal") {
 					this.reloadColors();
 				}
@@ -214,7 +223,11 @@ export class Wallpaper extends GObject.Object {
 				stateDebounce = null;
 				try {
 					const newPath = exec("wallpaper-state get current_image").trim();
-					if (newPath && newPath !== this.#wallpaper && GLib.file_test(newPath, GLib.FileTest.EXISTS)) {
+					if (
+						newPath &&
+						newPath !== this.#wallpaper &&
+						GLib.file_test(newPath, GLib.FileTest.EXISTS)
+					) {
 						this.#wallpaper = newPath;
 						this.notify("wallpaper");
 						if (this.shouldSyncColors()) {
@@ -305,9 +318,11 @@ export class Wallpaper extends GObject.Object {
 	private writeState(): void {
 		if (!this.#wallpaper) return;
 
-		execAsync(`wallpaper-state set current_image "${this.#wallpaper}"`).catch((e) => {
-			console.error(`Wallpaper: couldn't write state: ${e}`);
-		});
+		execAsync(`wallpaper-state set current_image "${this.#wallpaper}"`).catch(
+			(e) => {
+				console.error(`Wallpaper: couldn't write state: ${e}`);
+			},
+		);
 	}
 
 	public getData(): WalData {
@@ -480,21 +495,29 @@ export class Wallpaper extends GObject.Object {
 		return result;
 	}
 
-	/** Set wallpaper with optional color sync (respects theme settings) */
-	public setWallpaper(path: string | Gio.File, write: boolean = true): void {
-		path = typeof path === "string" ? path : path.peek_path()!;
+	private normalizeWallpaperPath(path: string | Gio.File): string {
+		return typeof path === "string" ? path : path.peek_path()!;
+	}
 
-		if (!GLib.file_test(path, GLib.FileTest.EXISTS)) {
+	private applyWallpaperPath(
+		path: string | Gio.File,
+		write: boolean,
+		syncColors: boolean,
+	): void {
+		const normalizedPath = this.normalizeWallpaperPath(path);
+
+		if (!GLib.file_test(normalizedPath, GLib.FileTest.EXISTS)) {
 			console.error("Wallpaper: file does not exist, skipped");
 			return;
 		}
 
-		const wallpaperChanged = this.#wallpaper !== path;
-		this.#wallpaper = path;
+		const wallpaperChanged = this.#wallpaper !== normalizedPath;
+		this.#wallpaper = normalizedPath;
 		this.notify("wallpaper");
+
 		this.reloadWallpaper(write)
 			.then(() => {
-				if (wallpaperChanged && this.shouldSyncColors()) {
+				if (syncColors && wallpaperChanged && this.shouldSyncColors()) {
 					this.reloadColors();
 				}
 			})
@@ -505,23 +528,17 @@ export class Wallpaper extends GObject.Object {
 			});
 	}
 
+	/** Set wallpaper with optional color sync (respects theme settings) */
+	public setWallpaper(path: string | Gio.File, write: boolean = true): void {
+		this.applyWallpaperPath(path, write, true);
+	}
+
 	/** Set wallpaper WITHOUT triggering any color changes (for theme-independent wallpaper selection) */
 	public setWallpaperOnly(
 		path: string | Gio.File,
 		write: boolean = true,
 	): void {
-		path = typeof path === "string" ? path : path.peek_path()!;
-
-		if (!GLib.file_test(path, GLib.FileTest.EXISTS)) {
-			console.error("Wallpaper: file does not exist, skipped");
-			return;
-		}
-
-		this.#wallpaper = path;
-		this.notify("wallpaper");
-		this.reloadWallpaper(write).catch((e: Error) => {
-			console.error(`Wallpaper: Couldn't set wallpaper. Stderr: ${e.message}`);
-		});
+		this.applyWallpaperPath(path, write, false);
 	}
 
 	/** Manually trigger color sync from current wallpaper (useful when switching to pywal theme) */

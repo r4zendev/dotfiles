@@ -171,9 +171,13 @@ export class Socket<
 							let str!: string;
 
 							try {
-								str = (
-									this.decoder ?? (this.decoder = new TextDecoder())
-								).decode(conn.inputStream.read_bytes_finish(res).toArray());
+								if (!this.decoder) {
+									this.decoder = new TextDecoder();
+								}
+
+								str = this.decoder.decode(
+									conn.inputStream.read_bytes_finish(res).toArray(),
+								);
 							} catch (e) {
 								console.error(
 									`Socket: An error occurred while reading the input stream bytes: ${(e as Error).message}`,
@@ -185,7 +189,9 @@ export class Socket<
 							str
 								.split(outputSeparator)
 								.filter((s) => s.trim() !== "")
-								.forEach((msg) => this.emit("received", msg));
+								.forEach((msg) => {
+									this.emit("received", msg);
+								});
 						},
 					);
 					return true;
@@ -207,6 +213,55 @@ export class Socket<
 		);
 	}
 
+	private createClient(): Gio.SocketClient {
+		const client = Gio.SocketClient.new();
+		client.set_family(Gio.SocketFamily.UNIX);
+		client.set_socket_type(Gio.SocketType.STREAM);
+		return client;
+	}
+
+	private async connectClient(): Promise<Gio.SocketConnection> {
+		return await new Promise((resolve, reject) => {
+			const client = this.createClient();
+			client.connect_async(this.address!, null, (_, res) => {
+				try {
+					resolve(client.connect_finish(res));
+				} catch (e) {
+					reject(
+						`Failed to estabilish socket connection: ${(e as Gio.IOErrorEnum).message}`,
+					);
+				}
+			});
+		});
+	}
+
+	private async writeMessage(
+		conn: Gio.SocketConnection,
+		message: string,
+	): Promise<void> {
+		await new Promise<void>((resolve, reject) => {
+			if (!this.encoder) {
+				this.encoder = new TextEncoder();
+			}
+
+			conn.outputStream.write_bytes_async(
+				this.encoder.encode(message),
+				GLib.PRIORITY_DEFAULT,
+				null,
+				(_, res) => {
+					try {
+						conn.outputStream.write_bytes_finish(res);
+						conn.outputStream.close(null);
+						resolve();
+					} catch (e) {
+						this.emit("panic", e as Gio.IOErrorEnum);
+						reject(e);
+					}
+				},
+			);
+		});
+	}
+
 	/** client-only method.
 	 * sends a message to the socket using a GSocketConnection.
 	 *
@@ -218,86 +273,55 @@ export class Socket<
 		message: string,
 		wait: boolean = false,
 	): Promise<string | null> {
-		return new Promise((resolve, reject) => {
-			const client = Gio.SocketClient.new();
-			client.set_family(Gio.SocketFamily.UNIX);
-			client.set_socket_type(Gio.SocketType.STREAM);
-			client.connect_async(this.address!, null, (_, res) => {
-				let conn!: Gio.SocketConnection;
-				try {
-					conn = client.connect_finish(res);
-				} catch (e) {
-					reject(
-						`Failed to estabilish socket connection: ${(e as Gio.IOErrorEnum).message}`,
-					);
-					return;
-				}
+		const conn = await this.connectClient();
+		await this.writeMessage(conn, message);
 
-				conn.outputStream.write_bytes_async(
-					(this.encoder ?? (this.encoder = new TextEncoder())).encode(message),
-					GLib.PRIORITY_DEFAULT,
-					null,
-					(_, res) => {
-						try {
-							conn.outputStream.write_bytes_finish(res);
-							conn.outputStream.close(null); // close output stream for this process
+		if (conn.get_input_stream().is_closed()) {
+			conn.close();
+			return null;
+		}
 
-							if (conn.get_input_stream().is_closed()) {
-								// return nothing if the input stream got closed instantly
-								resolve(null);
-								return;
+		return await new Promise((resolve) => {
+			let output = "";
+			const chaneru = GLib.IOChannel.unix_new(conn.get_socket().get_fd());
+
+			GLib.io_add_watch(
+				chaneru,
+				GLib.PRIORITY_DEFAULT,
+				GLib.IOCondition.IN | GLib.IOCondition.PRI | GLib.IOCondition.HUP,
+				(_, cond) => {
+					if (cond === GLib.IOCondition.HUP) {
+						resolve(output);
+						conn.close();
+						return false;
+					}
+
+					const data = Gio.DataInputStream.new(conn.inputStream);
+					data.read_upto_async(
+						"\x00",
+						-1,
+						GLib.PRIORITY_DEFAULT,
+						null,
+						(_, res) => {
+							let out!: string;
+							try {
+								out = data.read_upto_finish(res)[0];
+								output = out;
+							} catch (_) {
+								resolve(output);
 							}
+						},
+					);
 
-							let output: string = "";
-							const chaneru = GLib.IOChannel.unix_new(
-								conn.get_socket().get_fd(),
-							);
-							GLib.io_add_watch(
-								chaneru,
-								GLib.PRIORITY_DEFAULT,
-								GLib.IOCondition.IN |
-									GLib.IOCondition.PRI |
-									GLib.IOCondition.HUP,
-								(_, cond) => {
-									if (cond === GLib.IOCondition.HUP) {
-										resolve(output);
-										conn.close();
-										return false;
-									}
+					if (wait) {
+						resolve(output);
+						conn.close();
+						return false;
+					}
 
-									const data = Gio.DataInputStream.new(conn.inputStream);
-									data.read_upto_async(
-										"\x00",
-										-1,
-										GLib.PRIORITY_DEFAULT,
-										null,
-										(_, res) => {
-											let out!: string;
-											try {
-												out = data.read_upto_finish(res)[0];
-												output = out;
-											} catch (e) {
-												resolve(output);
-												return;
-											}
-										},
-									);
-
-									if (wait) {
-										resolve(output);
-										conn.close();
-										return false;
-									}
-
-									return true;
-								},
-							);
-						} catch (e) {
-							this.emit("panic", e as Gio.IOErrorEnum);
-						}
-					},
-				);
-			});
+					return true;
+				},
+			);
 		});
 	}
 
@@ -308,44 +332,15 @@ export class Socket<
 	 *
 	 * @returns a GInputStream promise, that contains the socket's response to the message, can be null. */
 	async send(message: string): Promise<Gio.InputStream | null> {
-		return new Promise((resolve, reject) => {
-			const client = Gio.SocketClient.new();
-			client.set_family(Gio.SocketFamily.UNIX);
-			client.set_socket_type(Gio.SocketType.STREAM);
-			client.connect_async(this.address!, null, (_, res) => {
-				let conn!: Gio.SocketConnection;
-				try {
-					conn = client.connect_finish(res);
-				} catch (e) {
-					reject(
-						`Failed to estabilish socket connection: ${(e as Gio.IOErrorEnum).message}`,
-					);
-					return;
-				}
+		const conn = await this.connectClient();
+		await this.writeMessage(conn, message);
 
-				conn.outputStream.write_bytes_async(
-					(this.encoder ?? (this.encoder = new TextEncoder())).encode(message),
-					GLib.PRIORITY_DEFAULT,
-					null,
-					(_, res) => {
-						try {
-							conn.outputStream.write_bytes_finish(res);
-							conn.outputStream.close(null); // close output stream for this process
+		if (conn.get_input_stream().is_closed()) {
+			conn.close();
+			return null;
+		}
 
-							if (conn.get_input_stream().is_closed()) {
-								// return nothing if the input stream got closed instantly
-								resolve(null);
-								return;
-							}
-
-							resolve(conn.inputStream);
-						} catch (e) {
-							this.emit("panic", e as Gio.IOErrorEnum);
-						}
-					},
-				);
-			});
-		});
+		return conn.inputStream;
 	}
 
 	connect<S extends keyof Socket.SignalSignatures>(
