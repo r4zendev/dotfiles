@@ -156,13 +156,13 @@ export function PopupWindow(props: PopupWindowProps): GObject.Object {
 					}),
 				);
 
-				scope.onCleanup(() =>
-					conns.forEach(
-						(id, obj) =>
-							GObject.signal_handler_is_connected(obj, id) &&
-							obj.disconnect(id),
-					),
-				);
+				scope.onCleanup(() => {
+					conns.forEach((id, obj) => {
+						if (!GObject.signal_handler_is_connected(obj, id)) return;
+
+						obj.disconnect(id);
+					});
+				});
 
 				props.$?.(self);
 			}}
@@ -192,13 +192,17 @@ export function PopupWindow(props: PopupWindowProps): GObject.Object {
 						self.add_controller(gestureClick);
 						conns.set(
 							gestureClick,
-							gestureClick.connect("released", () => (clickedInside = true)),
+							gestureClick.connect("released", () => {
+								clickedInside = true;
+							}),
 						);
 
 						conns.set(
 							self,
 							self.connect("destroy", () =>
-								conns.forEach((id, obj) => obj.disconnect(id)),
+								conns.forEach((id, obj) => {
+									obj.disconnect(id);
+								}),
 							),
 						);
 					}}

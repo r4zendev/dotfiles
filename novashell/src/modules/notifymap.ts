@@ -29,7 +29,9 @@ export class NotifyMap<
 	constructor(items?: Array<[K, V]>) {
 		super();
 		if (items !== undefined) {
-			items.forEach((pair) => this.#map.set(pair[0], pair[1]));
+			items.forEach((pair) => {
+				this.#map.set(pair[0], pair[1]);
+			});
 			this.notify("map");
 		}
 	}

@@ -116,7 +116,9 @@ export class Config<K extends string, V = any> extends GObject.Object {
 		watch &&
 			monitorFile(this.#file.get_path()!, () => {
 				if (this.timeout) return;
-				this.timeout = setTimeout(() => (this.timeout = undefined), 1000);
+				this.timeout = setTimeout(() => {
+					this.timeout = undefined;
+				}, 1000);
 
 				if (this.#file.query_exists(null)) {
 					this.timeout?.destroy();
@@ -141,7 +143,9 @@ export class Config<K extends string, V = any> extends GObject.Object {
 		await writeFileAsync(
 			this.#file.get_path()!,
 			JSON.stringify(this.entries, undefined, 4),
-		).finally(() => (this.timeout = false));
+		).finally(() => {
+			this.timeout = false;
+		});
 	}
 
 	private readFile(): void {

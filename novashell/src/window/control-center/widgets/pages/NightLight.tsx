@@ -25,7 +25,7 @@ export const PageNightLight = (
 				min={NightLight.minTemperature}
 				max={NightLight.maxTemperature}
 				onChangeValue={(_, type, value) => {
-					if (type != undefined && type !== null)
+					if (type != null)
 						NightLight.getDefault().temperature = Math.floor(value);
 				}}
 			/>,
@@ -42,8 +42,7 @@ export const PageNightLight = (
 				)}
 				max={NightLight.maxGamma}
 				onChangeValue={(_, type, value) => {
-					if (type != undefined && type !== null)
-						NightLight.getDefault().gamma = Math.floor(value);
+					if (type != null) NightLight.getDefault().gamma = Math.floor(value);
 				}}
 			/>,
 		]}

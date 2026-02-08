@@ -82,11 +82,15 @@ export class Auth extends PolkitAgent.Listener {
 					reject(
 						`Auth: Authentication has failed for user ${this.#pam.username}`,
 					);
-					connections.forEach((id) => this.#pam.disconnect(id));
+					connections.forEach((id) => {
+						this.#pam.disconnect(id);
+					});
 				}),
 				this.#pam.connect("success", () => {
 					resolve(true);
-					connections.forEach((id) => this.#pam.disconnect(id));
+					connections.forEach((id) => {
+						this.#pam.disconnect(id);
+					});
 				}),
 			);
 

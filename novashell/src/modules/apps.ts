@@ -90,14 +90,14 @@ export function getAppsByName(
 	const exact: Array<AstalApps.Application> = [];
 	const partial: Array<AstalApps.Application> = [];
 
-	getApps().map((app: AstalApps.Application) => {
+	for (const app of getApps()) {
 		const name = app.get_name().trim().toLowerCase();
 		const wm = app?.wmClass?.trim().toLowerCase() ?? "";
 
 		if (name === query || wm === query) exact.push(app);
 		else if (name.includes(query) || query.includes(name) || wm.includes(query))
 			partial.push(app);
-	});
+	}
 
 	if (exact.length > 0) return exact;
 	if (partial.length > 0) return partial;

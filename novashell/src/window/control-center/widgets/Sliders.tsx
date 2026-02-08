@@ -19,7 +19,9 @@ export function Sliders() {
 			orientation={Gtk.Orientation.VERTICAL}
 			hexpand
 			spacing={10}
-			onUnmap={() => (slidersPages = undefined)}
+			onUnmap={() => {
+				slidersPages = undefined;
+			}}
 		>
 			<With
 				value={createBinding(Wireplumber.getWireplumber(), "defaultSpeaker")}
@@ -114,7 +116,11 @@ export function Sliders() {
 					}
 				</With>
 			</Gtk.Box>
-			<Pages $={(self) => (slidersPages = self)} />
+			<Pages
+				$={(self) => {
+					slidersPages = self;
+				}}
+			/>
 		</Gtk.Box>
 	);
 }

@@ -65,7 +65,9 @@ export class Bluetooth extends GObject.Object {
 				ad.set_powered(true);
 				return false;
 			})
-			.forEach((ad) => ad.set_powered(false));
+			.forEach((ad) => {
+				ad.set_powered(false);
+			});
 
 		execAsync(`bluetoothctl select ${newAdapter.address}`)
 			.then(() => {

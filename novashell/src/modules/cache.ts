@@ -101,11 +101,15 @@ export class Cache extends GObject.Object {
 	 * @param sectionName optional section to provide, it's used internally to check if
 	 * there's already an item with the generated ID, which avoids accidentally replacing it */
 	private generateID(sectionName?: string): string {
-		let unusedId: string = String((this.#lastId += 1));
+		this.#lastId += 1;
+		let unusedId: string = String(this.#lastId);
 
 		if (sectionName !== undefined) {
 			const section = this.#sections.get(sectionName)!;
-			while (section.get(unusedId)) unusedId = String((this.#lastId += 1));
+			while (section.get(unusedId)) {
+				this.#lastId += 1;
+				unusedId = String(this.#lastId);
+			}
 		}
 
 		return unusedId;

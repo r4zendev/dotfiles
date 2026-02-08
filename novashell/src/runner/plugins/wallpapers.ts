@@ -257,7 +257,7 @@ class _PluginWallpapers implements Runner.Plugin {
 			.search(search, {
 				limit: limit ?? Infinity,
 			})
-			.map((result) => {
+			.forEach((result) => {
 				const info = this.#files.filter(
 					(inf) => inf.get_name() === result.item,
 				)[0];

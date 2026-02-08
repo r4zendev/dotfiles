@@ -141,14 +141,20 @@ export class Wireplumber {
 	}
 
 	public toggleMuteSink(): void {
-		if (this.isMutedSink()) return this.unmuteSink();
+		if (this.isMutedSink()) {
+			this.unmuteSink();
+			return;
+		}
 
-		return this.muteSink();
+		this.muteSink();
 	}
 
 	public toggleMuteSource(): void {
-		if (this.isMutedSource()) return this.unmuteSource();
+		if (this.isMutedSource()) {
+			this.unmuteSource();
+			return;
+		}
 
-		return this.muteSource();
+		this.muteSource();
 	}
 }

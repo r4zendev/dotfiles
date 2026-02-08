@@ -25,8 +25,12 @@ export const TileNightLight = () => (
 		)}
 		hasArrow
 		visible={isInstalled("hyprsunset")}
-		onDisabled={() => (NightLight.getDefault().identity = true)}
-		onEnabled={() => (NightLight.getDefault().identity = false)}
+		onDisabled={() => {
+			NightLight.getDefault().identity = true;
+		}}
+		onEnabled={() => {
+			NightLight.getDefault().identity = false;
+		}}
 		onClicked={() => TilesPages?.toggle(PageNightLight)}
 		state={createBinding(NightLight.getDefault(), "identity").as(
 			(identity) => !identity,

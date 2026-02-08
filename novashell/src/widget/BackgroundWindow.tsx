@@ -105,7 +105,9 @@ export function BackgroundWindow(props: BackgroundWindowProps): Astal.Window {
 				conns.set(
 					self,
 					self.connect("destroy", () =>
-						conns.forEach((id, obj) => obj.disconnect(id)),
+						conns.forEach((id, obj) => {
+							obj.disconnect(id);
+						}),
 					),
 				);
 			}}

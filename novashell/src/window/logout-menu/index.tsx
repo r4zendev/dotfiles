@@ -36,7 +36,9 @@ export const LogoutMenu = (mon: number) =>
 				conns.set(
 					self,
 					self.connect("close-request", () =>
-						conns.forEach((id, obj) => obj.disconnect(id)),
+						conns.forEach((id, obj) => {
+							obj.disconnect(id);
+						}),
 					),
 				);
 			}}
@@ -64,7 +66,9 @@ export const LogoutMenu = (mon: number) =>
 					conns.set(
 						self,
 						self.connect("destroy", () =>
-							conns.forEach((id, obj) => obj.disconnect(id)),
+							conns.forEach((id, obj) => {
+								obj.disconnect(id);
+							}),
 						),
 					);
 				}}

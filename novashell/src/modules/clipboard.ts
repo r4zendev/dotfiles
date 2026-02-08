@@ -60,10 +60,9 @@ class Clipboard extends GObject.Object {
 		this.#dbMonitor = monitorFile(this.#dbFile.get_path()!, () => {
 			if (this.#ignoreChanges || this.#changesTimeout) return;
 
-			this.#changesTimeout = timeout(
-				300,
-				() => (this.#changesTimeout = undefined),
-			);
+			this.#changesTimeout = timeout(300, () => {
+				this.#changesTimeout = undefined;
+			});
 
 			if (this.#updateDone) {
 				this.updateDatabase();
@@ -120,7 +119,15 @@ stderr for more info.`);
 		const item = await this.getItemContent(itemToSelect);
 		let res: boolean = true;
 
-		if (item) await this.copyAsync(item).catch(() => (res = false));
+		if (item) {
+			await this.copyAsync(item)
+				.then((ok) => {
+					res = ok;
+				})
+				.catch(() => {
+					res = false;
+				});
+		}
 
 		return res;
 	}
@@ -202,7 +209,9 @@ stderr for more info.`);
 					}${err.stack}`,
 				),
 			)
-			.finally(() => (this.#ignoreChanges = false));
+			.finally(() => {
+				this.#ignoreChanges = false;
+			});
 	}
 
 	public async updateDatabase(): Promise<void> {

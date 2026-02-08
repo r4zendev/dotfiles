@@ -21,7 +21,9 @@ export const tileList: Array<() => JSX.Element | Gtk.Widget> = [
 
 export function Tiles(): Gtk.Widget {
 	return createRoot((dispose) => {
-		getScope().onCleanup(() => (TilesPages = undefined));
+		getScope().onCleanup(() => {
+			TilesPages = undefined;
+		});
 
 		return (
 			<Gtk.Box
@@ -42,7 +44,12 @@ export function Tiles(): Gtk.Widget {
 					{tileList.map((t) => t())}
 				</Gtk.FlowBox>
 
-				<Pages class={"tile-pages"} $={(self) => (TilesPages = self)} />
+				<Pages
+					class={"tile-pages"}
+					$={(self) => {
+						TilesPages = self;
+					}}
+				/>
 			</Gtk.Box>
 		) as Gtk.Box;
 	});
