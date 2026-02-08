@@ -72,12 +72,11 @@ function getZenProfiles(): ZenProfile[] {
 	}
 }
 
-function buildLogoSvg(data: ColorData, p: DerivedPalette): string {
+function buildLogoSvg(p: DerivedPalette): string {
 	return `<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1024" height="1024" rx="225" fill="${p.crust}"/>
-  <circle cx="512" cy="512" r="340" stroke="${data.special.foreground}" stroke-width="70"/>
-  <circle cx="512" cy="512" r="224.915" stroke="${data.special.foreground}" stroke-width="51"/>
-  <circle cx="512" cy="512" r="129.018" stroke="${data.special.foreground}" stroke-width="31"/>
+  <circle cx="512" cy="512" r="340" stroke="${p.accent}" stroke-width="70"/>
+  <circle cx="512" cy="512" r="224.915" stroke="${p.accent}" stroke-width="51"/>
+  <circle cx="512" cy="512" r="129.018" stroke="${p.accent}" stroke-width="31"/>
 </svg>
 `;
 }
@@ -493,7 +492,16 @@ export async function updateZenTheme(
 
 	const userChrome = buildUserChrome(data, p);
 	const userContent = buildUserContent(data, p);
-	const logoSvg = buildLogoSvg(data, p);
+	const logoSvg = buildLogoSvg(p);
+	const iconThemeDir = `${GLib.get_home_dir()}/.local/share/icons/hicolor/scalable/apps`;
+	const zenIconPath = `${iconThemeDir}/zen-logo-novashell.svg`;
+
+	ensureDirectory(iconThemeDir);
+	await writeFileAsync(zenIconPath, logoSvg).catch((e: Error) => {
+		console.error(
+			`ColorUtils: Failed to write Novashell Zen icon (${zenIconPath}): ${e.message}`,
+		);
+	});
 
 	await Promise.all(
 		profiles.map(async (profile) => {

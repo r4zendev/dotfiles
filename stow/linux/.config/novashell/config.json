@@ -13,7 +13,7 @@
   },
   "night_light": {
     "enabled": true,
-    "temperature": 5000,
+    "temperature": 6000,
     "gamma": 100,
     "start_hour": 20,
     "end_hour": 7
@@ -38,7 +38,8 @@
     "icon_overrides": {
       "com.github.th_ch.youtube_music": "pear-desktop",
       "vesktop": "discord-bin",
-      "wayscriber": "gpu-screen-recorder"
+      "wayscriber": "gpu-screen-recorder",
+      "zen": "zen-logo-novashell"
     }
   },
   "clock": {

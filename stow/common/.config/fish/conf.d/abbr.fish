@@ -31,6 +31,7 @@ abbr -a gwip "ga && gc wip && gp"
 abbr -a gca "git commit --amend --no-edit"
 
 abbr -a gss "git add . && git stash"
+abbr -a gsl "git stash list"
 abbr -a gsp "git stash pop"
 
 abbr -a gdd --position anywhere --set-cursor 'nvim -c "DiffviewOpen %"'
