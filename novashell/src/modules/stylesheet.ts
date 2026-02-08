@@ -22,6 +22,7 @@ import {
 	updateTelegramTheme,
 	updateVesktopTheme,
 	updateYTMusicTheme,
+	updateZenTheme,
 } from "~/modules/themes";
 import { decoder } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
@@ -221,6 +222,7 @@ export class Stylesheet {
 			updateTelegramTheme(data, palette),
 			updateVesktopTheme(data, palette),
 			updateYTMusicTheme(data, palette),
+			updateZenTheme(data, palette),
 		])
 			.then(() => {
 				reloadTmux();

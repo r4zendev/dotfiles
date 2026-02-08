@@ -92,12 +92,6 @@ const generalConfigDefaults = {
 		hide_if_single: false,
 	},
 
-	aliases: {
-		terminal: "kitty",
-		file_manager: "nautilus",
-		media: "amberol",
-	},
-
 	apps: {
 		/** list of app names or .desktop filenames to exclude from runner and apps viewer
 		 * @example ["Avahi SSH Server Browser", "qt5ct", "electron29"] */

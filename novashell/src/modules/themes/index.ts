@@ -19,3 +19,4 @@ export {
 } from "./utils";
 export { updateVesktopTheme } from "./vesktop";
 export { updateYTMusicTheme } from "./yt-music";
+export { updateZenTheme } from "./zen";
