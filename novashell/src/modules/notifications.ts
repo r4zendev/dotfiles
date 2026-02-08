@@ -150,19 +150,43 @@ export class Notifications extends GObject.Object {
 	@signal(Number) historyRemoved(_id: number) {}
 	@signal(Number) notificationReplaced(_id: number) {}
 
+	private dismissDaemonNotification(notifId: number): void {
+		try {
+			const liveNotif = this.getNotifd().get_notification(notifId);
+			if (!liveNotif) return;
+
+			this.#selfDismissed.add(notifId);
+			liveNotif.dismiss();
+		} catch {
+			/* notification may already be gone */
+		}
+	}
+
+	private removeActiveNotificationById(id: number): void {
+		const data = this.#notifications.get(id);
+		if (!data) return;
+
+		const [, timeout] = data;
+		timeout?.running && timeout.cancel();
+		this.#notifications.delete(id);
+		this.notify("notifications");
+		this.emit("notification-removed", id);
+	}
+
 	constructor() {
 		super();
+		const notifd = this.getNotifd();
 
 		// Prevent daemon from expiring notifications on its own timeout.
 		// We handle UI timeouts ourselves and need notifications to stay alive
 		// in the daemon so history items can invoke their actions.
-		AstalNotifd.get_default().ignoreTimeout = true;
+		notifd.ignoreTimeout = true;
 
 		this.#connections.push(
-			AstalNotifd.get_default().connect("notified", (notifd, id) => {
+			notifd.connect("notified", (_notifd, id) => {
 				const notification = notifd.get_notification(id);
 
-				if (this.getNotifd().dontDisturb || this.ignoreNotifications) {
+				if (notifd.dontDisturb || this.ignoreNotifications) {
 					if (!notification.transient) {
 						this.addHistory(notification, () => notification.dismiss());
 					} else {
@@ -178,16 +202,8 @@ export class Notifications extends GObject.Object {
 				);
 			}),
 
-			AstalNotifd.get_default().connect("resolved", (_notifd, id, reason) => {
-				// Remove from active notifications if still floating
-				const data = this.#notifications.get(id);
-				if (data) {
-					const [, timeout] = data;
-					timeout?.running && timeout.cancel();
-					this.#notifications.delete(id);
-					this.notify("notifications");
-					this.emit("notification-removed", id);
-				}
+			notifd.connect("resolved", (_notifd, id, reason) => {
+				this.removeActiveNotificationById(id);
 
 				if (this.#selfDismissed.has(id)) {
 					this.#selfDismissed.delete(id);
@@ -207,7 +223,9 @@ export class Notifications extends GObject.Object {
 		);
 
 		onCleanup(() => {
-			this.#connections.map((id) => AstalNotifd.get_default().disconnect(id));
+			this.#connections.forEach((id) => {
+				notifd.disconnect(id);
+			});
 		});
 	}
 
@@ -317,22 +335,11 @@ export class Notifications extends GObject.Object {
 	}
 
 	public async clearHistory(): Promise<void> {
-		this.#history.reverse().map((notif) => {
-			// Dismiss from daemon to free resources
-			try {
-				const liveNotif =
-					AstalNotifd.get_default().get_notification(notif.id);
-				if (liveNotif) {
-					this.#selfDismissed.add(notif.id);
-					liveNotif.dismiss();
-				}
-			} catch {
-				/* already gone */
-			}
-
+		for (const notif of [...this.#history].reverse()) {
+			this.dismissDaemonNotification(notif.id);
 			this.#history = this.history.filter((n) => n.id !== notif.id);
 			this.emit("history-removed", notif.id);
-		});
+		}
 
 		this.emit("history-cleared");
 		this.notify("history");
@@ -348,16 +355,7 @@ export class Notifications extends GObject.Object {
 		);
 
 		if (dismissFromDaemon) {
-			try {
-				const liveNotif =
-					AstalNotifd.get_default().get_notification(notifId);
-				if (liveNotif) {
-					this.#selfDismissed.add(notifId);
-					liveNotif.dismiss();
-				}
-			} catch {
-				/* notification may already be gone */
-			}
+			this.dismissDaemonNotification(notifId);
 		}
 
 		this.notify("history");
@@ -424,8 +422,11 @@ export class Notifications extends GObject.Object {
 		addToHistory: boolean = true,
 		dismiss: boolean = true,
 	): void {
-		notif =
-			typeof notif === "number" ? this.#notifications.get(notif)?.[0]! : notif;
+		if (typeof notif === "number") {
+			notif = this.#notifications.get(notif)?.[0] as
+				| AstalNotifd.Notification
+				| undefined;
+		}
 
 		if (!notif) return;
 
@@ -498,7 +499,7 @@ export class Notifications extends GObject.Object {
 	 * Returns true if the notification was still alive in the daemon and an action was invoked. */
 	public invokeHistoryAction(notif: HistoryNotification): boolean {
 		try {
-			const liveNotif = AstalNotifd.get_default().get_notification(notif.id);
+			const liveNotif = this.getNotifd().get_notification(notif.id);
 			if (!liveNotif) return false;
 
 			const actions = liveNotif.actions;
@@ -524,8 +525,9 @@ export class Notifications extends GObject.Object {
 	}
 
 	public toggleDoNotDisturb(value?: boolean): boolean {
-		value = value ?? !AstalNotifd.get_default().dontDisturb;
-		AstalNotifd.get_default().dontDisturb = value;
+		const notifd = this.getNotifd();
+		value = value ?? !notifd.dontDisturb;
+		notifd.dontDisturb = value;
 
 		return value;
 	}

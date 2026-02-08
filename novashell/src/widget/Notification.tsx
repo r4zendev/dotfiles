@@ -90,6 +90,7 @@ export class Notification extends Gtk.Box {
 
 		this.set_orientation(Gtk.Orientation.VERTICAL);
 		this.set_spacing(5);
+		const notifications = Notifications.getDefault();
 
 		this.prepend(
 			(
@@ -289,7 +290,7 @@ export class Notification extends Gtk.Box {
 												);
 												// clear cache of this notification when it gets removed from the history
 												// (there's nothing more to do with this cache, so we just remove it
-												const connId = Notifications.getDefault().connect(
+												const connId = notifications.connect(
 													"history-removed",
 													(notifs, id) => {
 														if (id !== this.id) return;
@@ -366,7 +367,7 @@ export class Notification extends Gtk.Box {
 				<Gtk.ListBox class={"actions"} selectionMode={Gtk.SelectionMode.NONE}>
 					<For
 						each={createBinding(this, "actions").as(
-							Notifications.getDefault().removeDuplicateActions,
+							notifications.removeDuplicateActions,
 						)}
 					>
 						{(action: AstalNotifd.Action) => {

@@ -288,9 +288,9 @@ export namespace Runner {
 
 		// Insert placeholder if there are no results
 		if (placeholders && newResults.length < 1)
-			placeholders.forEach((phdlr) =>
-				listbox.insert((<ResultWidget {...phdlr} />) as ResultWidget, -1),
-			);
+			placeholders.forEach((phdlr) => {
+				listbox.insert((<ResultWidget {...phdlr} />) as ResultWidget, -1);
+			});
 
 		newResults.length > 0
 			? !scrolledWindow.visible && scrolledWindow.show()
@@ -327,10 +327,16 @@ export namespace Runner {
 		listbox.select_row(targetRow as Gtk.ListBoxRow);
 
 		// emit ResultWidget ::selected / ::unselected
-		(selectedRow?.get_child() as ResultWidget).emit("unselected");
-		((targetRow as Gtk.ListBoxRow | null)?.get_child() as ResultWidget).emit(
-			"selected",
-		);
+		const selectedChild = selectedRow?.get_child();
+		const targetChild = (targetRow as Gtk.ListBoxRow).get_child();
+
+		if (selectedChild instanceof ResultWidget) {
+			selectedChild.emit("unselected");
+		}
+
+		if (targetChild instanceof ResultWidget) {
+			targetChild.emit("selected");
+		}
 
 		if (direction === "prev") {
 			const [, , targetRowY] = targetRow.translate_coordinates(
@@ -363,6 +369,31 @@ export namespace Runner {
 
 		let clickTimeout: GLib.Source | undefined;
 
+		const getListboxFromPopup = (self: Gtk.Widget): Gtk.ListBox =>
+			(
+				(
+					getPopupWindowContainer(self).get_last_child() as Gtk.ScrolledWindow
+				).get_child() as Gtk.Viewport
+			).get_child() as Gtk.ListBox;
+
+		const getListboxFromEntry = (self: Gtk.Entry): Gtk.ListBox =>
+			(
+				(
+					self.get_next_sibling() as Gtk.ScrolledWindow
+				).get_child() as Gtk.Viewport
+			).get_child() as Gtk.ListBox;
+
+		const runSelectedResultAction = (widget: Gtk.Widget | null): void => {
+			if (!(widget instanceof ResultWidget) || clickTimeout) return;
+
+			clickTimeout = setTimeout(() => {
+				clickTimeout = undefined;
+			}, 250);
+
+			widget.actionClick?.();
+			if (widget.closeOnClick) Runner.close();
+		};
+
 		if (!instance)
 			instance = Windows.getDefault().createWindowForFocusedMonitor(
 				(mon, root) =>
@@ -382,7 +413,9 @@ export namespace Runner {
 							hexpand
 							orientation={Gtk.Orientation.VERTICAL}
 							$={() => {
-								plugins.forEach((plugin) => plugin.init?.());
+								plugins.forEach((plugin) => {
+									plugin.init?.();
+								});
 
 								props.initialText && Runner.setEntryText(props.initialText);
 
@@ -390,14 +423,21 @@ export namespace Runner {
 								gtkEntry?.notify("text");
 							}}
 							actionKeyPressed={(self, keyval, _keycode, state) => {
-								const listbox = (
-									(
-										getPopupWindowContainer(
-											self,
-										).get_last_child() as Gtk.ScrolledWindow
-									).get_child() as Gtk.Viewport
-								).get_child() as Gtk.ListBox;
+								const listbox = getListboxFromPopup(self);
 								const ctrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
+
+								const navigate = (
+									direction: "prev" | "next",
+									steps: number = 1,
+								): void => {
+									if (steps <= 1) {
+										selectItem(listbox, direction);
+									} else {
+										selectItemN(listbox, direction, steps);
+									}
+
+									gtkEntry?.grab_focus();
+								};
 
 								switch (keyval) {
 									case Gdk.KEY_F5:
@@ -406,44 +446,38 @@ export namespace Runner {
 
 									case Gdk.KEY_Left:
 									case Gdk.KEY_Up:
-										selectItem(listbox, "prev");
-										gtkEntry?.grab_focus();
+										navigate("prev");
 										return;
 
 									case Gdk.KEY_Right:
 									case Gdk.KEY_Down:
-										selectItem(listbox, "next");
-										gtkEntry?.grab_focus();
+										navigate("next");
 										return;
 
 									case Gdk.KEY_j:
 										if (ctrl) {
-											selectItem(listbox, "next");
-											gtkEntry?.grab_focus();
+											navigate("next");
 											return;
 										}
 										break;
 
 									case Gdk.KEY_k:
 										if (ctrl) {
-											selectItem(listbox, "prev");
-											gtkEntry?.grab_focus();
+											navigate("prev");
 											return;
 										}
 										break;
 
 									case Gdk.KEY_d:
 										if (ctrl) {
-											selectItemN(listbox, "next", 5);
-											gtkEntry?.grab_focus();
+											navigate("next", 5);
 											return;
 										}
 										break;
 
 									case Gdk.KEY_u:
 										if (ctrl) {
-											selectItemN(listbox, "prev", 5);
-											gtkEntry?.grab_focus();
+											navigate("prev", 5);
 											return;
 										}
 										break;
@@ -457,7 +491,9 @@ export namespace Runner {
 								}
 							}}
 							actionClosed={() => {
-								[...plugins.values()].forEach((plugin) => plugin?.onClose?.());
+								[...plugins.values()].forEach((plugin) => {
+									plugin?.onClose?.();
+								});
 								root.dispose();
 
 								instance = null;
@@ -467,13 +503,11 @@ export namespace Runner {
 							<Gtk.Entry
 								class={"search"}
 								placeholderText={props.entryPlaceHolder ?? ""}
-								$={(self) => (gtkEntry = self)}
+								$={(self) => {
+									gtkEntry = self;
+								}}
 								onNotifyText={(self) => {
-									const listbox = (
-										(
-											self.get_next_sibling()! as Gtk.ScrolledWindow
-										).get_child() as Gtk.Viewport
-									).get_child() as Gtk.ListBox;
+									const listbox = getListboxFromEntry(self);
 									updateResultsList(
 										listbox,
 										self.text,
@@ -502,21 +536,10 @@ export namespace Runner {
 									self.set_text("");
 								}}
 								onActivate={(self) => {
-									const listbox = (
-										(
-											self.get_next_sibling() as Gtk.ScrolledWindow
-										).get_child() as Gtk.Viewport
-									).get_child() as Gtk.ListBox;
-									const resultWidget = listbox.get_selected_row()?.get_child();
-
-									if (resultWidget instanceof ResultWidget && !clickTimeout) {
-										clickTimeout = setTimeout(
-											() => (clickTimeout = undefined),
-											250,
-										);
-										resultWidget.actionClick();
-										resultWidget.closeOnClick && Runner.close();
-									}
+									const listbox = getListboxFromEntry(self);
+									runSelectedResultAction(
+										listbox.get_selected_row()?.get_child(),
+									);
 								}}
 							/>
 							<Gtk.ScrolledWindow
@@ -541,16 +564,7 @@ export namespace Runner {
 										}
 									}}
 									onRowActivated={(_, row) => {
-										const child = row.get_child()!;
-
-										if (child instanceof ResultWidget && !clickTimeout) {
-											clickTimeout = setTimeout(
-												() => (clickTimeout = undefined),
-												250,
-											);
-											child.actionClick?.();
-											child.closeOnClick && Runner.close();
-										}
+										runSelectedResultAction(row.get_child());
 									}}
 								/>
 							</Gtk.ScrolledWindow>

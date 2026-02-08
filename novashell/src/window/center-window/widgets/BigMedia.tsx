@@ -84,6 +84,45 @@ class PlayerWidget extends Gtk.Box {
 		return this.#player;
 	}
 
+	private clearCopyClickTimeout(): void {
+		if (this.#copyClickTimeout && !this.#copyClickTimeout.is_destroyed()) {
+			this.#copyClickTimeout.destroy();
+		}
+
+		this.#copyClickTimeout = undefined;
+	}
+
+	private setCopyIconState(
+		button: Gtk.Button,
+		state: "done-icon" | "error-icon",
+		resetAfter: number,
+	): void {
+		const stack = button.get_child();
+		if (!(stack instanceof Gtk.Stack)) return;
+
+		this.clearCopyClickTimeout();
+		stack.set_visible_child_name(state);
+
+		this.#copyClickTimeout = setTimeout(() => {
+			stack.set_visible_child_name("copy-icon");
+			this.clearCopyClickTimeout();
+		}, resetAfter);
+	}
+
+	private copyMediaUrl(button: Gtk.Button): void {
+		const url = Media.accessMediaUrl(this.#player).get();
+		if (!url) return;
+
+		Clipboard.getDefault()
+			.copyAsync(url)
+			.then(() => {
+				this.setCopyIconState(button, "done-icon", 1100);
+			})
+			.catch(() => {
+				this.setCopyIconState(button, "error-icon", 900);
+			});
+	}
+
 	constructor({ player }: { player: AstalMpris.Player }) {
 		super();
 
@@ -219,18 +258,32 @@ class PlayerWidget extends Gtk.Box {
 
 			try {
 				const json = await execAsync("hyprctl clients -j");
-				const clients: { class: string; initialClass: string; address: string; title: string }[] = JSON.parse(json);
+				const clients: {
+					class: string;
+					initialClass: string;
+					address: string;
+					title: string;
+				}[] = JSON.parse(json);
 
 				const matches = clients.filter(
-					(c) => c.class.toLowerCase() === identity || c.initialClass.toLowerCase() === identity,
+					(c) =>
+						c.class.toLowerCase() === identity ||
+						c.initialClass.toLowerCase() === identity,
 				);
 
-				const target = matches.length > 1 && player.title
-					? matches.find((c) => c.title.includes(player.title)) ?? matches[0]
-					: matches[0];
+				const target =
+					matches.length > 1 && player.title
+						? (matches.find((c) => c.title.includes(player.title)) ??
+							matches[0])
+						: matches[0];
 
 				if (target) {
-					await execAsync(["hyprctl", "dispatch", "focuswindow", `address:${target.address}`]);
+					await execAsync([
+						"hyprctl",
+						"dispatch",
+						"focuswindow",
+						`address:${target.address}`,
+					]);
 					Windows.getDefault().close("center-window");
 				}
 			} catch (e) {
@@ -301,19 +354,17 @@ class PlayerWidget extends Gtk.Box {
 							if (type == null) return;
 
 							if (!this.#dragTimer) {
-								this.#dragTimer = setTimeout(
-									() => (player.position = Math.floor(value)),
-									200,
-								);
+								this.#dragTimer = setTimeout(() => {
+									player.position = Math.floor(value);
+								}, 200);
 
 								return;
 							}
 
 							this.#dragTimer?.destroy();
-							this.#dragTimer = setTimeout(
-								() => (player.position = Math.floor(value)),
-								200,
-							);
+							this.#dragTimer = setTimeout(() => {
+								player.position = Math.floor(value);
+							}, 200);
 						}}
 					/>
 				</Gtk.Box>
@@ -343,50 +394,7 @@ class PlayerWidget extends Gtk.Box {
 								class={"link"}
 								tooltipText={"Copy to clipboard"}
 								visible={variableToBoolean(Media.accessMediaUrl(player))}
-								onClicked={(self) => {
-									const url = Media.accessMediaUrl(player).get();
-									// a widget that supports adding multiple icons and allows switching
-									// through them would be pretty nice!! (i'll probably do this later)
-									url &&
-										Clipboard.getDefault()
-											.copyAsync(url)
-											.then(() => {
-												if (
-													this.#copyClickTimeout &&
-													!this.#copyClickTimeout.is_destroyed()
-												)
-													this.#copyClickTimeout.destroy();
-
-												(self.get_child() as Gtk.Stack).set_visible_child_name(
-													"done-icon",
-												);
-												this.#copyClickTimeout = setTimeout(() => {
-													(
-														self.get_child() as Gtk.Stack
-													).set_visible_child_name("copy-icon");
-													this.#copyClickTimeout!.destroy();
-													this.#copyClickTimeout = undefined;
-												}, 1100);
-											})
-											.catch(() => {
-												if (
-													this.#copyClickTimeout &&
-													!this.#copyClickTimeout.is_destroyed()
-												)
-													this.#copyClickTimeout.destroy();
-
-												(self.get_child() as Gtk.Stack).set_visible_child_name(
-													"error-icon",
-												);
-												this.#copyClickTimeout = setTimeout(() => {
-													(
-														self.get_child() as Gtk.Stack
-													).set_visible_child_name("copy-icon");
-													this.#copyClickTimeout!.destroy();
-													this.#copyClickTimeout = undefined;
-												}, 900);
-											});
-								}}
+								onClicked={(self) => this.copyMediaUrl(self)}
 							>
 								<Gtk.Stack
 									transitionType={Gtk.StackTransitionType.CROSSFADE}
