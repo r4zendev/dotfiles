@@ -30,7 +30,8 @@ function resolveTrayIcon(item: AstalTray.TrayItem): TrayIcon {
 
 	for (const id of identifiers) {
 		const symbolic = getSymbolicIcon(id);
-		if (symbolic) return { gicon: Gio.ThemedIcon.new(symbolic), symbolic: true };
+		if (symbolic)
+			return { gicon: Gio.ThemedIcon.new(symbolic), symbolic: true };
 	}
 
 	for (const id of identifiers) {

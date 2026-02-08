@@ -239,19 +239,32 @@ export namespace Runner {
 		input: string,
 		limit?: number,
 		placeholders?: Array<Result>,
-	) {
+		shouldApply: () => boolean = () => true,
+	): Promise<boolean> {
 		const newResults: Array<Result> = [],
 			scrolledWindow = listbox.parent.parent as Gtk.ScrolledWindow;
+		let hasError = false;
+		let errorMessage = "";
 
 		const results = await getPluginResults(input, limit).catch((e: Error) => {
+			hasError = true;
+			errorMessage = e.message;
 			console.error(
 				`Couldn't get results because of an error: ${e.message}\n${e.stack}`,
 			);
 
+			return [] satisfies Array<Result>;
+		});
+
+		if (!shouldApply()) return false;
+
+		listbox.remove_all();
+
+		if (hasError) {
 			listbox.insert(
 				(
 					<ResultWidget
-						title={`Error: ${e.message}`}
+						title={`Error: ${errorMessage}`}
 						description={"Try changing your search a little..."}
 						icon={"window-close-symbolic"}
 						actionClick={() =>
@@ -261,11 +274,7 @@ export namespace Runner {
 				) as ResultWidget,
 				-1,
 			);
-
-			return [] satisfies Array<Result>;
-		});
-
-		listbox.remove_all();
+		}
 
 		results.forEach((result) => {
 			listbox.insert(
@@ -295,6 +304,8 @@ export namespace Runner {
 		newResults.length > 0
 			? !scrolledWindow.visible && scrolledWindow.show()
 			: scrolledWindow.hide();
+
+		return true;
 	}
 
 	function selectItemN(
@@ -368,6 +379,7 @@ export namespace Runner {
 		props.height ??= 420;
 
 		let clickTimeout: GLib.Source | undefined;
+		let resultsUpdateToken = 0;
 
 		const getListboxFromPopup = (self: Gtk.Widget): Gtk.ListBox =>
 			(
@@ -508,12 +520,19 @@ export namespace Runner {
 								}}
 								onNotifyText={(self) => {
 									const listbox = getListboxFromEntry(self);
+									const requestId = ++resultsUpdateToken;
+									const shouldApply = () =>
+										requestId === resultsUpdateToken && gtkEntry === self;
+
 									updateResultsList(
 										listbox,
 										self.text,
 										props.resultsLimit,
 										placeholders,
-									).then(() => {
+										shouldApply,
+									).then((applied) => {
+										if (!applied) return;
+
 										const firstResult = listbox.get_row_at_index(0);
 										if (firstResult) {
 											listbox.select_row(firstResult);

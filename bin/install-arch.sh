@@ -196,5 +196,5 @@ pnpm install
 pnpm build
 mkdir -p ~/.local/bin
 ln -sf ~/projects/dotfiles/novashell/build/novashell ~/.local/bin/novashell
-ln -sf ~/projects/dotfiles/novashell/build/novashell ~/.local/bin/nsh
+ln -sf ~/projects/dotfiles/novashell/build/nsh ~/.local/bin/nsh
 echo "Novashell installed to ~/.local/bin/novashell"

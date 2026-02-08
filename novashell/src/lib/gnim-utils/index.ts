@@ -2,7 +2,7 @@
 // https://github.com/retrozinndev/gnim-utils
 // Licensed under MIT License
 
-import { Accessor, For, getScope, Node, With } from "gnim";
+import { Accessor, For, getScope, type Node, With } from "gnim";
 import GObject from "gnim/gobject";
 
 /** re-exported gnim's jsx node type */
@@ -11,7 +11,7 @@ export type JSXNode = Node;
 function snakeify(str: string): string {
 	return str
 		.replace(/[A-Z]/g, (s) => `_${s.toLowerCase()}`)
-		.replace(/\-/g, "_")
+		.replace(/-/g, "_")
 		.toLowerCase();
 }
 
@@ -72,7 +72,7 @@ function hasGetter(gobj: GObject.Object, prop: string): boolean {
 export function createSecureBinding<
 	GObj extends GObject.Object,
 	Prop extends keyof GObj,
-	Returns extends unknown,
+	Returns,
 >(
 	gobj: GObj,
 	prop: Prop,

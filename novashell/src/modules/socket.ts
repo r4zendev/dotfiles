@@ -297,6 +297,29 @@ export class Socket<
 					}
 
 					const data = Gio.DataInputStream.new(conn.inputStream);
+					if (wait) {
+						data.read_upto_async(
+							"\x00",
+							-1,
+							GLib.PRIORITY_DEFAULT,
+							null,
+							(_, res) => {
+								let out!: string;
+								try {
+									out = data.read_upto_finish(res)[0];
+									output = out;
+								} catch (_) {
+									/* keep previous output */
+								}
+
+								resolve(output);
+								conn.close();
+							},
+						);
+
+						return false;
+					}
+
 					data.read_upto_async(
 						"\x00",
 						-1,
@@ -312,12 +335,6 @@ export class Socket<
 							}
 						},
 					);
-
-					if (wait) {
-						resolve(output);
-						conn.close();
-						return false;
-					}
 
 					return true;
 				},

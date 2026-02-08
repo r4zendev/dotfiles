@@ -2,9 +2,8 @@ import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { readFile, writeFileAsync } from "ags/file";
-import { execAsync } from "ags/process";
-
 import { Gdk, Gtk } from "ags/gtk4";
+import { execAsync } from "ags/process";
 
 import {
 	broadcastTerminalColors,
@@ -222,12 +221,14 @@ export class Stylesheet {
 			updateTelegramTheme(data, palette),
 			updateVesktopTheme(data, palette),
 			updateYTMusicTheme(data, palette),
-		]).then(() => {
-			reloadTmux();
-			reloadFish();
-			reloadNeovim(themeId);
-		}).catch((e) => {
-			console.error(`Stylesheet: Error applying external colors: ${e}`);
-		});
+		])
+			.then(() => {
+				reloadTmux();
+				reloadFish();
+				reloadNeovim(themeId);
+			})
+			.catch((e) => {
+				console.error(`Stylesheet: Error applying external colors: ${e}`);
+			});
 	}
 }

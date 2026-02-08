@@ -36,7 +36,7 @@ export class NotificationTimeout {
 		return this.#millis;
 	}
 	get remaining(): number {
-		return this.source!.get_time();
+		return this.source ? this.source.get_time() : 0;
 	}
 	get lastRemained(): number {
 		return this.#lastRemained;
@@ -128,7 +128,7 @@ export class Notifications extends GObject.Object {
 	@getter(Array<AstalNotifd.Notification>)
 	public get notificationsOnHold() {
 		return [...this.#notifications.values()]
-			.filter(([_, s]) => typeof s === "undefined")
+			.filter(([_, timeout]) => !timeout?.running)
 			.map(([n]) => n);
 	}
 
@@ -481,15 +481,14 @@ export class Notifications extends GObject.Object {
 	public removeDuplicateActions(
 		actions: Array<AstalNotifd.Action>,
 	): Array<AstalNotifd.Action> {
-		const finalActions: Array<AstalNotifd.Action> = [...actions];
+		const seen = new Set<string>();
+		const finalActions: Array<AstalNotifd.Action> = [];
 
-		for (let i = 0; i < actions.length; i++) {
-			const action = actions[i];
-			const lastIndex = finalActions.findLastIndex((a) => a.id === action.id);
+		for (const action of actions) {
+			if (seen.has(action.id)) continue;
 
-			if (lastIndex !== i) {
-				finalActions.splice(lastIndex, 1);
-			}
+			seen.add(action.id);
+			finalActions.push(action);
 		}
 
 		return finalActions;

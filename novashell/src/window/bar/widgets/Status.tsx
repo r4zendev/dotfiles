@@ -203,9 +203,7 @@ function StatusIcons() {
 						Notifications.getDefault().getNotifd(),
 						"dontDisturb",
 					).as((dnd) =>
-						dnd
-							? "notifications-disabled-symbolic"
-							: "notification-symbolic",
+						dnd ? "notifications-disabled-symbolic" : "notification-symbolic",
 					)}
 				/>
 				<Gtk.Image

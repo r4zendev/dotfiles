@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-import socket, sys
+import os
+import socket
+import sys
+
 s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-s.connect(f"/run/user/1000/novashell.sock")
+runtime_dir = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+s.connect(f"{runtime_dir}/novashell.sock")
 s.sendall((' '.join(sys.argv[1:]) + '\x00').encode())
 s.close()

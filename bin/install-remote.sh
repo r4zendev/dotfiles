@@ -26,8 +26,8 @@ fi
 echo "==> Setting up config..."
 git clone --depth 1 https://github.com/r4zendev/dotfiles.git ~/.dotfiles 2>/dev/null || (cd ~/.dotfiles && git pull)
 mkdir -p ~/.config
-ln -sf ~/.dotfiles/.config/nvim ~/.config/nvim
-ln -sf ~/.dotfiles/.config/tmux ~/.config/tmux
+ln -sfn ~/.dotfiles/stow/common/.config/nvim ~/.config/nvim
+ln -sfn ~/.dotfiles/stow/common/.config/tmux ~/.config/tmux
 
 # TPM for tmux plugins
 if [ ! -d ~/.tmux/plugins/tpm ]; then

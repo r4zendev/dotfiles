@@ -22,7 +22,8 @@ export const FocusedClient = () => {
 							<Gtk.Image
 								iconName={createBinding(focusedClient, "class").as((clss) => {
 									const r = resolveIcon(clss);
-									if (r.name !== "application-x-executable-symbolic") return r.name;
+									if (r.name !== "application-x-executable-symbolic")
+										return r.name;
 									return resolveIcon(focusedClient.initialClass).name;
 								})}
 								cssClasses={createBinding(focusedClient, "class").as((clss) => {

@@ -228,11 +228,12 @@ export const FloatingNotifications = (mon: number, scope: Scope) => {
 
 				const newNotif = notifications.notifications.find(
 					(n) => n.id === replacedId,
-				)!;
+				);
+				if (!newNotif) return;
 
-				const notifWidget = stack.get_child_by_name(
-					"notification",
-				) as Notification;
+				const notifWidget = stack.get_child_by_name("notification");
+				if (!(notifWidget instanceof Notification)) return;
+
 				notifWidget.summary = newNotif.summary;
 				notifWidget.body = newNotif.body;
 				notifWidget.actions = newNotif.actions;
