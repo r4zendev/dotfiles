@@ -35,33 +35,44 @@ options:
     esac
 done
 
-if [[ -d "$output" ]] && [[ ! -z "$(ls -A -w1 $output)" ]]; then
+mkdir -p "$output"
+
+if [[ -n "$(ls -A "$output")" ]]; then
     echo "[info] cleaning previous build"
-    rm -rf $output/*
-else
-    mkdir -p $output
+    rm -rf -- "$output"/*
 fi
 
 echo "[info] compiling gresource"
-gres_target=`[[ "$keep_gresource" ]] && echo -n "$output/resources.gresource" || \
-    echo -n "${gresources_target:-$output/resources.gresource}"`
-mkdir -p `dirname "$gres_target"`
+if [[ "$keep_gresource" ]]; then
+    gres_target="$output/resources.gresource"
+else
+    gres_target="${gresources_target:-$output/resources.gresource}"
+fi
+
+mkdir -p "$(dirname "$gres_target")"
 glib-compile-resources resources.gresource.xml \
     --sourcedir ./resources \
     --target "$gres_target"
 
 echo "[info] bundling project"
-ags --gtk 4 bundle src/app.ts $output/novashell \
+devel_mode=false
+if [[ "$is_devel" ]]; then
+    devel_mode=true
+fi
+
+novashell_version="$(jq -r '.version' package.json)"
+
+ags --gtk 4 bundle "src/app.ts" "$output/novashell" \
     -r ./src \
     --alias "~=$(pwd)/src" \
-    -d "DEVEL=`[[ $is_devel ]] && echo -n true || echo -n false`" \
-    -d "NOVASHELL_VERSION='`cat package.json | jq -r .version`'" \
-    -d "GRESOURCES_FILE='$(realpath ${gresources_target:-$output/resources.gresource})'" \
+    -d "DEVEL=$devel_mode" \
+    -d "NOVASHELL_VERSION='$novashell_version'" \
+    -d "GRESOURCES_FILE='$(realpath "${gresources_target:-$output/resources.gresource}")'" \
     -d "SOURCE_DIR='$(pwd)'" \
-|| rm -rf src/node_modules
+|| rm -rf "src/node_modules"
 
 echo "[info] creating nsh wrapper"
-cat > $output/nsh << 'WRAPPER'
+cat > "$output/nsh" << 'WRAPPER'
 #!/bin/bash
 DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 
@@ -78,4 +89,4 @@ mkdir -p "$(dirname "$LOG")"
 
 exec "$DIR/novashell" "$@" >>"$LOG" 2>&1
 WRAPPER
-chmod +x $output/nsh
+chmod +x "$output/nsh"

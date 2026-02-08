@@ -18,11 +18,11 @@
     <!-- Themes -->
     <gresource prefix="/io/github/razen/novashell/themes">
         <file alias="catppuccin-mocha">themes/catppuccin-mocha.json</file>
-        <file alias="tokyo-night">themes/tokyo-night.json</file>
         <file alias="everforest">themes/everforest.json</file>
         <file alias="gruvbox">themes/gruvbox.json</file>
-        <file alias="rose-pine">themes/rose-pine.json</file>
         <file alias="nord">themes/nord.json</file>
+        <file alias="rose-pine">themes/rose-pine.json</file>
+        <file alias="tokyo-night">themes/tokyo-night.json</file>
     </gresource>
 
     <!-- Templates -->

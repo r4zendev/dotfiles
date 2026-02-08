@@ -7,7 +7,8 @@
 		"types": "pnpx @ts-for-gir/cli generate --ignoreVersionConflicts",
 		"clean": "rm -rf ./build",
 		"build": "sh ./build.sh",
-		"fixall": "biome check --write --diagnostic-level=error .",
+		"biome:check": "biome check --write --diagnostic-level=error .",
+		"fixall": "pnpm biome:check",
 		"lint": "biome lint --write --diagnostic-level=error .",
 		"format": "biome format --write --diagnostic-level=error ."
 	},
