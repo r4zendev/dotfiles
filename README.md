@@ -1,31 +1,65 @@
 # Dotfiles
 
-![system](./system.png)
+Desktop environment for my main rig and laptop.
 
-![preview](./preview.png)
+## Screenshots
 
-## Installation
+| Terminal                                | Neovim                                    | Desktop                                        |
+| --------------------------------------- | ----------------------------------------- | ---------------------------------------------- |
+| ![Terminal](./screenshots/terminal.jpg) | ![Neovim](./screenshots/nvim-startup.jpg) | ![Desktop](./screenshots/dolphin-chromium.jpg) |
+
+| Telegram                                | Discord                               | YT Music Desktop                             |
+| --------------------------------------- | ------------------------------------- | -------------------------------------------- |
+| ![Telegram](./screenshots/telegram.jpg) | ![Discord](./screenshots/discord.jpg) | ![YouTube Music](./screenshots/yt-music.jpg) |
+
+## Tooling
+
+| Layer          | Tooling                                                              |
+| -------------- | -------------------------------------------------------------------- |
+| OS / WM        | CachyOS (Arch) + Hyprland                                            |
+| OS Shell       | [Novashell](./novashell) (AGS + Astal)                               |
+| Terminal       | Ghostty + tmux + fzf                                                 |
+| Terminal Shell | Fish + Starship + Zoxide                                             |
+| Editor         | Neovim                                                               |
+| Keyboard       | [Custom-built 34 keys alt layout](https://github.com/r4zendev/keebs) |
+
+## Custom features
+
+- Unified shell windows: bar, control center, runner, notification centre, media controls, etc.
+- Live custom theme generation based on wallpaper colors. 10+ apps synced on the fly.
+- Utilities integrations (Mission Center, btop, Google Calendar, and more)
+- Predictable interface interactions (e.g. notifications, media controls, etc.)
+- `nsh` and `nsh-msg` (fast socket version) for system-specific actions (windows, media, volume, themes, wallpapers, etc.).
+- Runner plugins for apps, shell commands, web search, clipboard, wallpapers, media, themes, and even color conversion.
+- Fish shell with custom helper functions (5+ useful custom fzf pickers and other system utilities).
+- Tmux setup with custom pickers, persistence (restore/continuum) and utility-overlays (e.g. lazygit, lazydocker, dblab, etc.).
+- Highly performant Neovim setup with 50+ plugins and a lot of custom functionality tailored to my workflow. Search-first flow, heavy `snacks.nvim` reliance, AI integration via `codecompanion.nvim` (agentic w/ MCP) & `llama.cpp` (local-first completion).
+
+## Repository layout
+
+| Path        | Purpose                   |
+| ----------- | ------------------------- |
+| `stow`      | Home directory configs    |
+| `novashell` | Novashell source code     |
+| `bin`       | Install/bootstrap scripts |
+
+## Install
+
+### Apply dotfiles to an existing Linux machine
 
 ```sh
-git clone git@github.com:r4zendev/dotfiles.git dotfiles
-cd dotfiles/stow
+git clone git@github.com:r4zendev/dotfiles.git ~/projects/dotfiles
+cd ~/projects/dotfiles/stow
 stow -t ~ common
-stow -t ~ darwin   # macOS
-stow -t ~ linux    # Arch/CachyOS
+stow -t ~ linux
 ```
 
-## Main tools
+### Full Linux bootstrap (packages + Novashell build)
 
-- Keyboard: [MoErgo Glove80](https://www.moergo.com/collections/glove80-keyboards/products/glove80-split-ergonomic-keyboard-revision-2) with [Graphite-based layers](https://github.com/r4zendev/glophite)
-- Terminal: [Ghostty](http://ghostty.org/)
-- Editor: [Neovim](https://neovim.io)
-- Multiplexer: [tmux](https://github.com/tmux/tmux/wiki)
-- Shell: [fish](https://fishshell.com/)
-- Prompt: [Starship](https://starship.rs/)
-- Font: [Monaspace](https://monaspace.githubnext.com/)
-- Arch Linux
-  - OS: [CachyOS](https://cachyos.org/)
-  - DE/WM: [Hyprland](https://hypr.land/)
-- Darwin
-  - Hotkeys: [Hammerspoon](https://hammerspoon.org/)
-  - WM: [yabai](https://github.com/koekeishiya/yabai)
+```sh
+~/projects/dotfiles/bin/install-arch.sh
+```
+
+## macOS (secondary)
+
+macOS support exists via `stow/darwin` and `bin/install.sh` (yabai + hammerspoon) for my laptop, but it's not actively supported anymore.
