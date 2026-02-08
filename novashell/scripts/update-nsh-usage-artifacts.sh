@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 NSH_SPEC_FILE="$ROOT_DIR/nsh.usage.kdl"
 NSH_MSG_SPEC_FILE="$ROOT_DIR/nsh-msg.usage.kdl"
-FISH_COMPLETION_DIR="$ROOT_DIR/../stow/common/.config/fish/completions"
+FISH_COMPLETION_DIR="$ROOT_DIR/../stow/linux/.config/fish/completions"
 FISH_COMPLETION_NSH_FILE="$FISH_COMPLETION_DIR/nsh.fish"
 FISH_COMPLETION_NSH_MSG_FILE="$FISH_COMPLETION_DIR/nsh-msg.fish"
 

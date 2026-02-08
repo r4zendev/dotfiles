@@ -1,0 +1,3 @@
+exec-once = clipse -listen
+bind = $mainMod, V, exec, ghostty --class='ghostty.clipse' -e 'clipse'
+bind = $mainMod SHIFT, V, exec, clipse -clear

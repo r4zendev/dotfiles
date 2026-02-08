@@ -116,20 +116,30 @@ stderr for more info.`);
 	public async selectItem(
 		itemToSelect: number | ClipboardItem,
 	): Promise<boolean> {
-		const item = await this.getItemContent(itemToSelect);
-		let res: boolean = true;
+		const id =
+			typeof itemToSelect === "number" ? itemToSelect : itemToSelect.id;
 
-		if (item) {
-			await this.copyAsync(item)
-				.then((ok) => {
-					res = ok;
-				})
-				.catch(() => {
-					res = false;
-				});
+		const proc = Gio.Subprocess.new(
+			["sh", "-c", `cliphist decode ${id} | wl-copy`],
+			Gio.SubprocessFlags.STDERR_PIPE,
+		);
+
+		const stderr = Gio.DataInputStream.new(proc.get_stderr_pipe()!);
+
+		if (!proc.wait_check(null)) {
+			try {
+				const [err] = stderr.read_upto("\x00", -1);
+				console.error(
+					`Clipboard: An error occurred while selecting history item. Stderr: ${err}`,
+				);
+			} catch (_) {
+				console.error(
+					"Clipboard: An error occurred while selecting history item and stderr couldn't be read.",
+				);
+			}
 		}
 
-		return res;
+		return proc.get_exit_status() === 0;
 	}
 
 	/** Gets history item's content by its ID.
@@ -184,7 +194,7 @@ stderr for more info.`);
 	}
 
 	private getContentType(preview: string): ClipboardItemType {
-		return /^\[\[.*binary data.*x.*\]\]$/u.test(preview)
+		return /^\[\[\s*binary data\b.*\]\]$/u.test(preview)
 			? ClipboardItemType.IMAGE
 			: ClipboardItemType.TEXT;
 	}
