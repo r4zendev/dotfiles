@@ -121,6 +121,11 @@ export class Shell extends Adw.Application {
 
 	vfunc_command_line(cmd: Gio.ApplicationCommandLine): number {
 		const args = cmd.get_arguments().toSpliced(0, 1); // remove executable
+		const finish = (status: number): number => {
+			cmd.set_exit_status(status);
+			cmd.done();
+			return status;
+		};
 
 		// build doesn't need a running instance
 		if (args[0] === "build") {
@@ -137,47 +142,40 @@ export class Shell extends Adw.Application {
 					cmd.printerr_literal(
 						`Build failed (exit ${status}):\n${err}\n${out}`,
 					);
-					cmd.done();
-					return 1;
+					return finish(1);
 				}
 			} catch (_e) {
 				const e = _e as Error;
 				cmd.printerr_literal(`Build error: ${e.message}`);
-				cmd.done();
-				return 1;
+				return finish(1);
 			}
-			cmd.done();
-			return 0;
+			return finish(0);
 		}
 
 		if (cmd.isRemote) {
 			try {
 				// warn user that this method is pretty slow
 				cmd.print_literal(
-					"\nNovashell: !! Using a remote instance to communicate is pretty slow, \
-you should use the socket in the XDG_RUNTIME_DIR/novashell.sock for a faster response.\n\n",
+					"\nNovashell: Remote CLI mode is slower. For fast socket actions use `nsh-msg <command...>`\n" +
+						"(for example: `nsh-msg toggle runner`, `nsh-msg volume sink-set 35`).\n" +
+						"Use `nsh` when you need output/help text or for startup-only commands like `build`.\n\n",
 				);
 
 				const res = handleArguments(cmd, args);
-
-				cmd.done();
-				cmd.set_exit_status(res);
-				return res;
+				return finish(res);
 			} catch (_e) {
 				const e = _e as Error;
 				cmd.printerr_literal(
 					`Error: something went wrong! Stderr: ${e.message}\n${e.stack}`,
 				);
-				cmd.done();
-				return 1;
+				return finish(1);
 			}
 		} else {
 			if (args.length > 0) {
 				cmd.printerr_literal(
 					"Error: novashell not running. Try to clean-run before using arguments",
 				);
-				cmd.done();
-				return 1;
+				return finish(1);
 			}
 
 			this.activate();

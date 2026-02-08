@@ -137,6 +137,11 @@ export class ThemeService extends GObject.Object {
 
 		// Write theme to wal colors.json, then explicitly reload stylesheet + external colors.
 		try {
+			const currentWallpaper = Wallpaper.getDefault().wallpaper;
+			if (currentWallpaper) {
+				themeData.wallpaper = currentWallpaper;
+			}
+
 			// Ensure wal cache directory exists
 			ensureDirectory(`${GLib.get_user_cache_dir()}/wal`);
 

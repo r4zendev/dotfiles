@@ -1,10 +1,110 @@
 #!/usr/bin/env python3
 import os
+import shlex
 import socket
 import sys
 
-s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-runtime_dir = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
-s.connect(f"{runtime_dir}/novashell.sock")
-s.sendall((' '.join(sys.argv[1:]) + '\x00').encode())
-s.close()
+HELP = """nsh-msg: fast Novashell socket client
+
+Usage:
+  nsh-msg <command...>
+
+Use `nsh-msg` for action commands where output is not required.
+Use `nsh` for output-oriented commands (help/version/windows/current/list) and `nsh build`.
+
+Examples:
+  nsh-msg toggle runner
+  nsh-msg volume sink-set 35
+  nsh-msg theme set tokyo-night
+  nsh-msg wallpaper set /path/to/wallpaper.jpg
+"""
+
+SUPPORTED_TOP_LEVEL = {
+	"open",
+	"close",
+	"toggle",
+	"reopen",
+	"reload",
+	"quit",
+	"runner",
+	"run",
+	"peek-workspace-num",
+	"volume",
+	"media",
+	"theme",
+	"wallpaper",
+	"dev",
+}
+
+OUTPUT_ONLY_TOP_LEVEL = {
+	"help",
+	"h",
+	"version",
+	"v",
+	"build",
+	"windows",
+}
+
+
+def is_output_or_info_subcommand(args: list[str]) -> bool:
+	if not args:
+		return True
+
+	top = args[0]
+	sub = args[1] if len(args) > 1 else None
+
+	if top in OUTPUT_ONLY_TOP_LEVEL:
+		return True
+
+	if top == "volume" and sub in {"help", "h"}:
+		return True
+	if top == "media" and sub in {"help", "h", "list", "bus-name"}:
+		return True
+	if top == "theme" and sub in {"help", "h", "list", "current"}:
+		return True
+	if top == "wallpaper" and sub in {"help", "h", "current"}:
+		return True
+	if top == "dev" and sub in {"help", "h"}:
+		return True
+
+	return False
+
+
+def main() -> int:
+	args = sys.argv[1:]
+
+	if not args or args[0] in {"help", "h", "--help", "-h"}:
+		print(HELP)
+		return 0
+
+	if is_output_or_info_subcommand(args):
+		print(
+			"nsh-msg: this command is output-oriented. Use `nsh` instead.",
+			file=sys.stderr,
+		)
+		return 2
+
+	if args[0] not in SUPPORTED_TOP_LEVEL:
+		print(f"nsh-msg: unsupported command `{args[0]}`", file=sys.stderr)
+		print("Try `nsh-msg help` for supported usage.", file=sys.stderr)
+		return 2
+
+	runtime_dir = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+	address = f"{runtime_dir}/novashell.sock"
+	payload = shlex.join(args) + "\x00"
+
+	try:
+		with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+			sock.connect(address)
+			sock.sendall(payload.encode())
+	except OSError as e:
+		print(
+			f"nsh-msg: could not connect to socket `{address}` ({e}). Is Novashell running?",
+			file=sys.stderr,
+		)
+		return 1
+
+	return 0
+
+
+raise SystemExit(main())

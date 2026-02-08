@@ -1,12 +1,14 @@
 {
 	"$schema": "https://www.schemastore.org/package.json",
 	"name": "novashell",
-	"version": "2.0.5",
+	"version": "1.0.0",
 	"packageManager": "pnpm@10.12.1",
 	"scripts": {
 		"types": "pnpx @ts-for-gir/cli generate --ignoreVersionConflicts",
 		"clean": "rm -rf ./build",
 		"build": "sh ./build.sh",
+		"usage:lint": "usage lint ./nsh.usage.kdl && usage lint ./nsh-msg.usage.kdl",
+		"usage:sync": "bash ./scripts/update-nsh-usage-artifacts.sh",
 		"biome:check": "biome check --write --diagnostic-level=error .",
 		"fixall": "pnpm biome:check",
 		"lint": "biome lint --write --diagnostic-level=error .",

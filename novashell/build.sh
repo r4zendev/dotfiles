@@ -84,9 +84,26 @@ fi
 LOG="${XDG_CACHE_HOME:-$HOME/.cache}/novashell/novashell.log"
 mkdir -p "$(dirname "$LOG")"
 
-# Truncate log on fresh start (no args = primary instance)
-[[ $# -eq 0 ]] && : > "$LOG"
+# Run command mode in foreground so users can see errors/help output.
+if [[ $# -gt 0 ]]; then
+    err_file="$(mktemp)"
+    "$DIR/novashell" "$@" 2>"$err_file"
+    status=$?
 
-exec "$DIR/novashell" "$@" >>"$LOG" 2>&1
+    if [[ -s "$err_file" ]]; then
+        cat "$err_file" >&2
+        rm -f "$err_file"
+        [[ $status -eq 0 ]] && exit 1
+        exit $status
+    fi
+
+    rm -f "$err_file"
+    exit $status
+fi
+
+# Truncate log on fresh start (no args = primary instance)
+: > "$LOG"
+
+exec "$DIR/novashell" >>"$LOG" 2>&1
 WRAPPER
 chmod +x "$output/nsh"

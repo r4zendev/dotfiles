@@ -34,6 +34,8 @@ Other options:
   build: rebuild novashell from source.
   v, version: display current novashell version.
   h, help: shows this help message.
+
+Tip: use shell completion with "nsh <TAB>" for guided subcommands.
 `.trim();
 
 export function getVersionMessage(): string {

@@ -15,6 +15,7 @@ import { exec, execAsync } from "ags/process";
 
 import { generalConfig } from "~/config";
 import { Notifications } from "~/modules/notifications";
+import { derivePalette, updateTelegramTheme } from "~/modules/themes";
 import type { WalData } from "~/modules/themes/types";
 import { createSubscription, encoder } from "~/modules/utils";
 
@@ -203,6 +204,8 @@ export class Wallpaper extends GObject.Object {
 						this.notify("wallpaper");
 						if (this.shouldSyncColors()) {
 							this.reloadColors();
+						} else {
+							this.updateTelegramThemeWallpaper(newPath);
 						}
 					}
 				} catch (e) {
@@ -470,6 +473,30 @@ export class Wallpaper extends GObject.Object {
 		return typeof path === "string" ? path : path.peek_path()!;
 	}
 
+	private updateTelegramThemeWallpaper(path: string): void {
+		let data: WalData;
+
+		try {
+			data = this.getData();
+		} catch (e) {
+			console.warn(
+				`Wallpaper: couldn't read current colors for Telegram theme update: ${e}`,
+			);
+			return;
+		}
+
+		const nextData: WalData = {
+			...data,
+			wallpaper: path,
+		};
+
+		updateTelegramTheme(nextData, derivePalette(nextData)).catch((e: Error) => {
+			console.error(
+				`Wallpaper: couldn't refresh Telegram theme wallpaper: ${e.message}`,
+			);
+		});
+	}
+
 	private applyWallpaperPath(
 		path: string | Gio.File,
 		write: boolean,
@@ -490,6 +517,8 @@ export class Wallpaper extends GObject.Object {
 			.then(() => {
 				if (syncColors && wallpaperChanged && this.shouldSyncColors()) {
 					this.reloadColors();
+				} else if (wallpaperChanged) {
+					this.updateTelegramThemeWallpaper(normalizedPath);
 				}
 			})
 			.catch((e: Error) => {
