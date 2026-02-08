@@ -220,15 +220,20 @@ function buildUserChrome(data: ColorData, p: DerivedPalette): string {
   ) {
     appearance: none !important;
     -moz-default-appearance: none !important;
-    --panel-background: transparent !important;
-    --arrowpanel-background: transparent !important;
-    --menu-background-color: transparent !important;
+    --panel-background: ${p.surface0} !important;
+    --arrowpanel-background: ${p.surface0} !important;
+    --menu-background-color: ${p.surface0} !important;
     --panel-border-color: transparent !important;
-    background: transparent !important;
-    background-color: transparent !important;
+    --panel-shadow: none !important;
+    --panel-shadow-margin: 0px !important;
+    background: ${p.surface0} !important;
+    background-color: ${p.surface0} !important;
     color: ${s.foreground} !important;
     border: none !important;
+    border-radius: 10px !important;
     box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   :is(
@@ -239,7 +244,16 @@ function buildUserChrome(data: ColorData, p: DerivedPalette): string {
     #downloadsContextMenu,
     #backForwardMenu,
     #pageActionContextMenu
-  )::part(content),
+  )::part(content) {
+    background: ${p.surface0} !important;
+    background-color: ${p.surface0} !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   :is(
     #contentAreaContextMenu,
     #tabContextMenu,
@@ -260,9 +274,11 @@ function buildUserChrome(data: ColorData, p: DerivedPalette): string {
   ) .menupopup-arrowscrollbox {
     background: ${p.surface0} !important;
     background-color: ${p.surface0} !important;
-    border: 1px solid ${p.surface2} !important;
+    border: none !important;
     border-radius: 10px !important;
     box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   #sidebar-box,
