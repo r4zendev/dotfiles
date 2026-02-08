@@ -15,6 +15,10 @@
 # --codec-param="crf=18"  # Very high quality (larger files)
 
 function frec
+    function _notify -a msg
+        notify-send -e -t 2000 -a frec "$msg"
+    end
+
     set rand_hex (openssl rand -hex 8)
     set output_file "$HOME/Documents/recordings/output-$rand_hex.mp4"
 
@@ -36,4 +40,6 @@ function frec
 
     echo -n $output_file | wl-copy
     echo "Path copied to clipboard"
+
+    _notify "Recording saved and copied: $output_file"
 end

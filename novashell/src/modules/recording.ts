@@ -6,7 +6,6 @@ import GObject, { getter, register, signal } from "ags/gobject";
 import type { Gdk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 
-import { Notifications } from "~/modules/notifications";
 import { makeDirectory, time } from "~/modules/utils";
 
 @register({ GTypeName: "Recording" })
@@ -169,11 +168,5 @@ export class Recording extends GObject.Object {
 		this.#output = null;
 		this.notify("recording");
 		this.emit("stopped");
-
-		Notifications.getDefault().sendNotification({
-			appName: "Screen Recording",
-			summary: "Screen Recording saved",
-			body: "Recording saved to ~/Documents/recordings (path copied to clipboard)",
-		});
 	}
 }
