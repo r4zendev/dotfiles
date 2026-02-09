@@ -3,6 +3,7 @@ import AstalNetwork from "gi://AstalNetwork";
 import { type Accessor, createBinding, createComputed } from "ags";
 import { execAsync } from "ags/process";
 
+import { lookupIcon } from "~/modules/apps";
 import { Notifications } from "~/modules/notifications";
 import { secureBaseBinding } from "~/modules/utils";
 import type { Pages } from "~/window/control-center/widgets/pages";
@@ -44,6 +45,31 @@ const wiredIcon = secureBaseBinding<AstalNetwork.Wired>(
 
 const primary = createBinding(AstalNetwork.get_default(), "primary");
 
+function resolveNetworkTileIcon(icon: string, fallback: string): string {
+	const candidate = icon.trim();
+
+	if (
+		/wireless|wifi/i.test(candidate) &&
+		lookupIcon("network-wireless-symbolic")
+	)
+		return "network-wireless-symbolic";
+
+	if (/wired|ethernet/i.test(candidate) && lookupIcon("network-wired-symbolic"))
+		return "network-wired-symbolic";
+
+	if (
+		/no-route|offline|disconnected|unavailable/i.test(candidate) &&
+		lookupIcon("network-no-route-symbolic")
+	)
+		return "network-no-route-symbolic";
+
+	if (candidate && lookupIcon(candidate)) return candidate;
+	if (candidate && lookupIcon(`${candidate}-symbolic`))
+		return `${candidate}-symbolic`;
+
+	return fallback;
+}
+
 export const TileNetwork = (pages: Pages) => (
 	<Tile
 		hasArrow
@@ -72,13 +98,16 @@ export const TileNetwork = (pages: Pages) => (
 			(primary, wifiIcon, wiredIcon) => {
 				switch (primary) {
 					case WIFI:
-						return wifiIcon;
+						return resolveNetworkTileIcon(
+							wifiIcon,
+							"network-wireless-symbolic",
+						);
 
 					case WIRED:
-						return wiredIcon;
+						return resolveNetworkTileIcon(wiredIcon, "network-wired-symbolic");
 				}
 
-				return "network-wired-no-route-symbolic";
+				return "network-no-route-symbolic";
 			},
 		)}
 		state={createComputed(

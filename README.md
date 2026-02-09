@@ -26,7 +26,7 @@ Desktop environment for my main rig and laptop.
 ## Custom features
 
 - Unified shell windows: bar, control center, runner, notification centre, media controls, etc.
-- Live custom theme generation based on wallpaper colors. 10+ apps synced on the fly.
+- Live custom theme generation based on wallpaper colors. 10+ apps synced on the fly as well as all kinds of icons.
 - Utilities integrations (Mission Center, btop, Google Calendar, and more)
 - Predictable interface interactions (e.g. notifications, media controls, etc.)
 - `nsh` and `nsh-msg` (fast socket version) for system-specific actions (windows, media, volume, themes, wallpapers, etc.).

@@ -4,12 +4,47 @@ import { createBinding, createComputed, createState, For, With } from "ags";
 import { Gtk } from "ags/gtk4";
 
 import { generalConfig } from "~/config";
-import { resolveIcon } from "~/modules/apps";
+import { resolveIconFromClasses } from "~/modules/apps";
 import { variableToBoolean } from "~/modules/utils";
 import { Separator } from "~/widget/Separator";
 
 const [showNumbers, setShowNumbers] = createState(false);
 export const showWorkspaceNumber = (show: boolean) => setShowNumbers(show);
+
+function resolveWorkspaceIcon(client: AstalHyprland.Client) {
+	return resolveIconFromClasses(client.class, client.initialClass);
+}
+
+function resolveWorkspaceDisplayIcon(
+	ws: AstalHyprland.Workspace,
+	clients: Array<AstalHyprland.Client>,
+	lastClient: AstalHyprland.Client | null,
+	focusedClient: AstalHyprland.Client | null,
+) {
+	const clientsOnWorkspace = clients.filter(
+		(client) => client.workspace?.id === ws.id,
+	);
+
+	const fallbackClient =
+		clientsOnWorkspace.find((client) => client.class || client.initialClass) ??
+		clientsOnWorkspace[0] ??
+		lastClient;
+
+	const focusedOnWs =
+		focusedClient && focusedClient.workspace?.id === ws.id
+			? focusedClient
+			: null;
+	const client = focusedOnWs ?? fallbackClient;
+
+	if (!client) {
+		return {
+			name: "application-x-executable-symbolic",
+			symbolic: true,
+		};
+	}
+
+	return resolveWorkspaceIcon(client);
+}
 
 export const Workspaces = () => {
 	const workspaces = createBinding(AstalHyprland.get_default(), "workspaces"),
@@ -22,7 +57,9 @@ export const Workspaces = () => {
 		focusedWorkspace = createBinding(
 			AstalHyprland.get_default(),
 			"focusedWorkspace",
-		);
+		),
+		hyprlandClients = createBinding(AstalHyprland.get_default(), "clients"),
+		focusedClient = createBinding(AstalHyprland.get_default(), "focusedClient");
 
 	return (
 		<Gtk.Box
@@ -58,12 +95,33 @@ export const Workspaces = () => {
 								{(lastClient: AstalHyprland.Client | null) =>
 									lastClient && (
 										<Gtk.Image
-											iconName={createBinding(lastClient, "initialClass").as(
-												(initialClass) => resolveIcon(initialClass).name,
+											iconName={createComputed(
+												[
+													createBinding(ws, "lastClient"),
+													hyprlandClients,
+													focusedClient,
+												],
+												(lastClient, clients, focusedClient) =>
+													resolveWorkspaceDisplayIcon(
+														ws,
+														clients,
+														lastClient,
+														focusedClient,
+													).name,
 											)}
-											cssClasses={createBinding(lastClient, "initialClass").as(
-												(initialClass) => {
-													const r = resolveIcon(initialClass);
+											cssClasses={createComputed(
+												[
+													createBinding(ws, "lastClient"),
+													hyprlandClients,
+													focusedClient,
+												],
+												(lastClient, clients, focusedClient) => {
+													const r = resolveWorkspaceDisplayIcon(
+														ws,
+														clients,
+														lastClient,
+														focusedClient,
+													);
 													return r.symbolic
 														? ["last-client", "icon-symbolic"]
 														: ["last-client", "icon-regular"];
@@ -202,21 +260,38 @@ export const Workspaces = () => {
 											</Gtk.Revealer>
 											{lastClient && (
 												<Gtk.Image
-													iconName={createBinding(
-														lastClient,
-														"initialClass",
-													).as(
-														(initialClass) => resolveIcon(initialClass).name,
+													iconName={createComputed(
+														[
+															createBinding(ws, "lastClient"),
+															hyprlandClients,
+															focusedClient,
+														],
+														(lastClient, clients, focusedClient) =>
+															resolveWorkspaceDisplayIcon(
+																ws,
+																clients,
+																lastClient,
+																focusedClient,
+															).name,
 													)}
-													cssClasses={createBinding(
-														lastClient,
-														"initialClass",
-													).as((initialClass) => {
-														const r = resolveIcon(initialClass);
-														return r.symbolic
-															? ["last-client-icon", "icon-symbolic"]
-															: ["last-client-icon", "icon-regular"];
-													})}
+													cssClasses={createComputed(
+														[
+															createBinding(ws, "lastClient"),
+															hyprlandClients,
+															focusedClient,
+														],
+														(lastClient, clients, focusedClient) => {
+															const r = resolveWorkspaceDisplayIcon(
+																ws,
+																clients,
+																lastClient,
+																focusedClient,
+															);
+															return r.symbolic
+																? ["last-client-icon", "icon-symbolic"]
+																: ["last-client-icon", "icon-regular"];
+														},
+													)}
 													hexpand
 													vexpand
 													visible={createBinding(

@@ -142,7 +142,7 @@ export class Tile extends Gtk.Box {
 					<Gtk.Image
 						iconName={createBinding(this, "icon")}
 						halign={Gtk.Align.CENTER}
-						{...(props.iconSize ? { pixelSize: props.iconSize } : {})}
+						pixelSize={props.iconSize ?? 16}
 					/>
 					<Gtk.GestureClick
 						onReleased={() => {

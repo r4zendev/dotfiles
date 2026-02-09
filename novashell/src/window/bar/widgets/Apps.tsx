@@ -9,7 +9,7 @@ export const Apps = () => (
 			(openWindows) =>
 				`apps ${Object.hasOwn(openWindows, "apps-window") ? "open" : ""}`,
 		)}
-		iconName={"applications-other-symbolic"}
+		iconName={"view-app-grid-symbolic"}
 		halign={Gtk.Align.CENTER}
 		hexpand
 		tooltipText={"Applications"}

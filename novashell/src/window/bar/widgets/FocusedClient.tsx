@@ -3,7 +3,7 @@ import Pango from "gi://Pango?version=1.0";
 import { createBinding, With } from "ags";
 import { Gtk } from "ags/gtk4";
 
-import { resolveIcon } from "~/modules/apps";
+import { resolveIconFromClasses } from "~/modules/apps";
 import { Compositor } from "~/modules/compositors/base";
 import { variableToBoolean } from "~/modules/utils";
 
@@ -20,16 +20,18 @@ export const FocusedClient = () => {
 					focusedClient?.class && (
 						<Gtk.Box>
 							<Gtk.Image
-								iconName={createBinding(focusedClient, "class").as((clss) => {
-									const r = resolveIcon(clss);
-									if (r.name !== "application-x-executable-symbolic")
-										return r.name;
-									return resolveIcon(focusedClient.initialClass).name;
-								})}
-								cssClasses={createBinding(focusedClient, "class").as((clss) => {
-									let r = resolveIcon(clss);
-									if (r.name === "application-x-executable-symbolic")
-										r = resolveIcon(focusedClient.initialClass);
+								iconName={createBinding(focusedClient, "class").as(
+									() =>
+										resolveIconFromClasses(
+											focusedClient.class,
+											focusedClient.initialClass,
+										).name,
+								)}
+								cssClasses={createBinding(focusedClient, "class").as(() => {
+									const r = resolveIconFromClasses(
+										focusedClient.class,
+										focusedClient.initialClass,
+									);
 									return r.symbolic ? ["icon-symbolic"] : ["icon-regular"];
 								})}
 								vexpand

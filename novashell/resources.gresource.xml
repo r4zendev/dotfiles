@@ -30,6 +30,13 @@
         <file alias="yt-music.css">templates/yt-music.css</file>
     </gresource>
 
+    <!-- Scripts -->
+    <gresource prefix="/io/github/razen/novashell/scripts">
+        <file alias="icons-recolor.py">scripts/icons-recolor.py</file>
+        <file alias="icons-overlay-apps.py">scripts/icons-overlay-apps.py</file>
+        <file alias="icons-overlay-categories.py">scripts/icons-overlay-categories.py</file>
+    </gresource>
+
     <!-- Icons -->
     <gresource prefix="/io/github/razen/novashell/icons/scalable/actions">
         <file alias="applications-other-symbolic.svg">icons/applications-other-symbolic.svg</file>

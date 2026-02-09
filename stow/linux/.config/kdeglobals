@@ -1,3 +1,9 @@
+[General]
+ColorScheme=qt6ct
+
+[Icons]
+Theme=Novashell-Mono
+
 [KDE]
 ShowDeleteCommand=false
 
@@ -22,6 +28,3 @@ View Style=DetailTree
 EnableRemoteFolderThumbnail=false
 MaximumRemoteSize=10485760
 MaximumSize=52428800
-
-[General]
-ColorScheme=qt6ct

@@ -17,6 +17,7 @@ import {
 	updateGhosttyColors,
 	updateGtkColors,
 	updateHyprlandColors,
+	updateIconTheme,
 	updateKdeColorScheme,
 	updateQtColors,
 	updateTelegramTheme,
@@ -212,6 +213,7 @@ export class Stylesheet {
 
 		const themeId = data.name;
 		Promise.all([
+			updateIconTheme(data),
 			updateGhosttyColors(data),
 			generateFishColors(data),
 			updateBtopColors(data),

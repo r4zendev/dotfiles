@@ -91,7 +91,7 @@ $color-hover: colors.$bg-primary;
       }
 
       & icon, & image {
-        font-size: 16px;
+        -gtk-icon-size: 18px;
       }
 
       & image.icon-symbolic {

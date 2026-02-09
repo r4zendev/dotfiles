@@ -69,6 +69,12 @@ const generalConfigDefaults = {
 		/** current theme. "pywal" syncs colors from wallpaper, others are static themes
 		 * @default "pywal" */
 		current: "pywal" as string,
+		/** generate and apply monochrome icon theme from accent color
+		 * @default true */
+		icon_generation_enabled: true,
+		/** icon theme used when monochrome generation is disabled
+		 * @default "Novashell-Icons" */
+		icon_theme_regular: "Novashell-Icons",
 		/** whether to sync colors when wallpaper changes (only applies when theme is "pywal")
 		 * @default true */
 		sync_with_wallpaper: true,
