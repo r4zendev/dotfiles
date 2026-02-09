@@ -108,8 +108,8 @@ export function CustomDialog({
 					heightRequest={38}
 					homogeneous={true}
 				>
-					{transformWidget(options, (props) => (
-						<CustomDialogOption {...props} dialog={popup} />
+					{transformWidget(options, (option: CustomDialogOption) => (
+						<CustomDialogOption {...option} dialog={popup} />
 					))}
 				</Gtk.Box>
 			) as Gtk.Box,

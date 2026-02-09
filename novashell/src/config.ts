@@ -99,7 +99,7 @@ const generalConfigDefaults = {
 	},
 
 	apps: {
-		/** list of app names or .desktop filenames to exclude from runner and apps viewer
+		/** list of app names or .desktop filenames to exclude from app launcher
 		 * @example ["Avahi SSH Server Browser", "qt5ct", "electron29"] */
 		exclude: [] as string[],
 		/** WM class → icon name overrides for apps whose icons aren't resolved automatically.

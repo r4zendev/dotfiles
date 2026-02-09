@@ -25,7 +25,7 @@ export const PluginMedia = {
 							playerBinding,
 							"playbackStatus",
 							AstalMpris.PlaybackStatus.PAUSED,
-						).as((status) =>
+						).as((status: AstalMpris.PlaybackStatus) =>
 							status === AstalMpris.PlaybackStatus.PLAYING
 								? "media-playback-pause-symbolic"
 								: "media-playback-start-symbolic",
@@ -37,12 +37,12 @@ export const PluginMedia = {
 									playerBinding,
 									"title",
 									null,
-								).as((t) => t ?? "No title"),
+								).as((t: string | null) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"artist",
 									null,
-								).as((t) => t ?? "No artist"),
+								).as((t: string | null) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"playbackStatus",
@@ -67,12 +67,12 @@ export const PluginMedia = {
 									playerBinding,
 									"title",
 									null,
-								).as((t) => t ?? "No title"),
+								).as((t: string | null) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"artist",
 									null,
-								).as((t) => t ?? "No artist"),
+								).as((t: string | null) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"identity",
@@ -94,12 +94,12 @@ export const PluginMedia = {
 									playerBinding,
 									"title",
 									null,
-								).as((t) => t ?? "No title"),
+								).as((t: string | null) => t ?? "No title"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"artist",
 									null,
-								).as((t) => t ?? "No artist"),
+								).as((t: string | null) => t ?? "No artist"),
 								secureBaseBinding<AstalMpris.Player>(
 									playerBinding,
 									"identity",

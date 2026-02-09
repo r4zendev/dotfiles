@@ -6,8 +6,12 @@ const astalApps: AstalApps.Apps = new AstalApps.Apps();
 let appsList: Array<AstalApps.Application> = [];
 
 function getDesktopId(app: AstalApps.Application): string {
-	if (typeof app.get_desktop_id === "function") {
-		return app.get_desktop_id() ?? "";
+	const withDesktopId = app as AstalApps.Application & {
+		get_desktop_id?: () => string | null;
+	};
+
+	if (typeof withDesktopId.get_desktop_id === "function") {
+		return withDesktopId.get_desktop_id() ?? "";
 	}
 
 	return "";

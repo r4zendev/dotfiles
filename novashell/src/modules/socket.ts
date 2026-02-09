@@ -51,6 +51,13 @@ export class Socket<
 		outputSeparator?: string,
 	);
 
+	constructor(
+		type: Socket.Type.SERVER,
+		path: string | Gio.File,
+		listen?: boolean,
+		outputSeparator?: string,
+	);
+
 	/** @param type defines the behavior of the instance, to send/receive to data(CLIENT) or receive/send from/to client(SERVER)
 	 * @param path the socket address path, where it's phisically stored */
 	constructor(

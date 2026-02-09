@@ -4,7 +4,13 @@ import Pango from "gi://Pango?version=1.0";
 import { createState, For } from "ags";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
 
-import { execApp, getAppIcon, getApps, queryApps } from "~/modules/apps";
+import {
+	execApp,
+	filterExcludedApps,
+	getAppIcon,
+	getApps,
+	queryApps,
+} from "~/modules/apps";
 import { escapeUnintendedMarkup } from "~/modules/utils";
 import { getPopupWindowContainer, PopupWindow } from "~/widget/PopupWindow";
 
@@ -21,10 +27,13 @@ const ignoredKeys = new Set([
 ]);
 
 export const AppsWindow = (mon: number) => {
+	const getSortedApps = () =>
+		[...getApps()].sort((a, b) => b.frequency - a.frequency);
+	const getFilteredApps = (items: Array<AstalApps.Application>) =>
+		filterExcludedApps(items);
+
 	const [results, setResults] = createState(
-		[...getApps()].sort(
-			(a, b) => b.frequency - a.frequency,
-		) as Array<AstalApps.Application>,
+		getFilteredApps(getSortedApps()) as Array<AstalApps.Application>,
 	);
 
 	return (
@@ -54,9 +63,7 @@ export const AppsWindow = (mon: number) => {
 					onSearchChanged={(self) => {
 						const text = self.text.trim();
 						setResults(
-							text
-								? queryApps(text)
-								: [...getApps()].sort((a, b) => b.frequency - a.frequency),
+							getFilteredApps(text ? queryApps(text) : getSortedApps()),
 						);
 					}}
 					onStopSearch={(self) => (self.get_root() as Astal.Window)?.close()}

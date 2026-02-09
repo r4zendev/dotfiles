@@ -13,6 +13,7 @@ const cachedScriptPaths = new Map<string, string>();
 
 function decodeResource(path: string): string {
 	const bytes = Gio.resources_lookup_data(path, null).get_data();
+	if (!bytes) return "";
 	return new TextDecoder().decode(bytes);
 }
 

@@ -68,44 +68,56 @@ export const TileNetwork = (pages: Pages) => (
 			(page) => page?.id === PageNetwork.id,
 		)}
 		onClicked={() => pages.toggle(PageNetwork)}
-		icon={createComputed(
-			[primary, wifiIcon, wiredIcon],
-			(primary, wifiIcon, wiredIcon) => {
-				switch (primary) {
-					case WIFI:
-						return resolveNetworkIcon(wifiIcon, "network-wireless-symbolic");
+		icon={
+			createComputed(
+				[primary, wifiIcon, wiredIcon],
+				(
+					primary: AstalNetwork.Primary,
+					wifiIcon: string,
+					wiredIcon: string,
+				) => {
+					switch (primary) {
+						case WIFI:
+							return resolveNetworkIcon(wifiIcon, "network-wireless-symbolic");
 
-					case WIRED:
-						return resolveNetworkIcon(wiredIcon, "network-wired-symbolic");
-				}
+						case WIRED:
+							return resolveNetworkIcon(wiredIcon, "network-wired-symbolic");
+					}
 
-				return "network-no-route-symbolic";
-			},
-		)}
-		state={createComputed(
-			[
-				primary,
-				secureBaseBinding<AstalNetwork.Wifi>(
-					createBinding(AstalNetwork.get_default(), "wifi"),
-					"enabled",
-					false,
-				),
-				wiredInternet.as(
-					(internet) => internet === CONNECTED || internet === CONNECTING,
-				),
-			],
-			(primary, wifiEnabled, wiredEnabled) => {
-				switch (primary) {
-					case WIFI:
-						return wifiEnabled;
+					return "network-no-route-symbolic";
+				},
+			) as Accessor<string>
+		}
+		state={
+			createComputed(
+				[
+					primary,
+					secureBaseBinding<AstalNetwork.Wifi>(
+						createBinding(AstalNetwork.get_default(), "wifi"),
+						"enabled",
+						false,
+					),
+					wiredInternet.as(
+						(internet) => internet === CONNECTED || internet === CONNECTING,
+					),
+				],
+				(
+					primary: AstalNetwork.Primary,
+					wifiEnabled: boolean,
+					wiredEnabled: boolean,
+				) => {
+					switch (primary) {
+						case WIFI:
+							return wifiEnabled;
 
-					case WIRED:
-						return wiredEnabled;
-				}
+						case WIRED:
+							return wiredEnabled;
+					}
 
-				return false;
-			},
-		)}
+					return false;
+				},
+			) as Accessor<boolean>
+		}
 		description={createComputed(
 			[primary, wifiInternet, wiredInternet],
 			(primary, wifiInternet, wiredInternet) => {

@@ -185,6 +185,7 @@ export class Notifications extends GObject.Object {
 		this.#connections.push(
 			notifd.connect("notified", (_notifd, id) => {
 				const notification = notifd.get_notification(id);
+				if (!notification) return;
 
 				if (notifd.dontDisturb || this.ignoreNotifications) {
 					if (!notification.transient) {
@@ -311,8 +312,10 @@ export class Notifications extends GObject.Object {
 	): void {
 		if (!notif || notif.transient) return;
 
-		this.#history.length === this.historyLimit &&
-			this.removeHistory(this.#history[this.#history.length - 1], true);
+		const oldestNotif = this.#history.at(-1);
+		if (this.#history.length === this.historyLimit && oldestNotif) {
+			this.removeHistory(oldestNotif, true);
+		}
 
 		this.#history.map(
 			(notifb, i) => notifb.id === notif.id && this.#history.splice(i, 1),
@@ -422,30 +425,26 @@ export class Notifications extends GObject.Object {
 		addToHistory: boolean = true,
 		dismiss: boolean = true,
 	): void {
-		if (typeof notif === "number") {
-			notif = this.#notifications.get(notif)?.[0] as
-				| AstalNotifd.Notification
-				| undefined;
-		}
+		const notification =
+			typeof notif === "number" ? this.#notifications.get(notif)?.[0] : notif;
+		if (!notification) return;
 
-		if (!notif) return;
-
-		const timeout = this.#notifications.get(notif.id)?.[1];
+		const timeout = this.#notifications.get(notification.id)?.[1];
 		timeout?.running && timeout.cancel();
 
-		const willEnterHistory = addToHistory && !notif.transient;
-		this.#notifications.delete(notif.id);
-		willEnterHistory && this.addHistory(notif);
+		const willEnterHistory = addToHistory && !notification.transient;
+		this.#notifications.delete(notification.id);
+		willEnterHistory && this.addHistory(notification);
 
 		// Only dismiss from daemon if the notification won't live in history.
 		// History items need the daemon reference alive for action invocation.
 		if (dismiss && !willEnterHistory) {
-			this.#selfDismissed.add(notif.id);
-			notif.dismiss();
+			this.#selfDismissed.add(notification.id);
+			notification.dismiss();
 		}
 
 		this.notify("notifications");
-		this.emit("notification-removed", notif.id);
+		this.emit("notification-removed", notification.id);
 	}
 
 	public holdNotification(notif: AstalNotifd.Notification | number): void {

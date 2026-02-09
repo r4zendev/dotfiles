@@ -157,7 +157,7 @@ export const Media = () =>
 											player,
 											"playbackStatus",
 											AstalMpris.PlaybackStatus.PAUSED,
-										).as((status) =>
+										).as((status: AstalMpris.PlaybackStatus) =>
 											status === AstalMpris.PlaybackStatus.PAUSED
 												? "media-playback-start-symbolic"
 												: "media-playback-pause-symbolic",
@@ -166,7 +166,7 @@ export const Media = () =>
 											player,
 											"playbackStatus",
 											AstalMpris.PlaybackStatus.PAUSED,
-										).as((status) =>
+										).as((status: AstalMpris.PlaybackStatus) =>
 											status === AstalMpris.PlaybackStatus.PAUSED
 												? "Play"
 												: "Pause",

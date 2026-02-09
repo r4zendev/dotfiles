@@ -381,7 +381,7 @@ export namespace Runner {
 		let clickTimeout: GLib.Source | undefined;
 		let resultsUpdateToken = 0;
 
-		const getListboxFromPopup = (self: Gtk.Widget): Gtk.ListBox =>
+		const getListboxFromPopup = (self: Astal.Window): Gtk.ListBox =>
 			(
 				(
 					getPopupWindowContainer(self).get_last_child() as Gtk.ScrolledWindow
@@ -395,7 +395,9 @@ export namespace Runner {
 				).get_child() as Gtk.Viewport
 			).get_child() as Gtk.ListBox;
 
-		const runSelectedResultAction = (widget: Gtk.Widget | null): void => {
+		const runSelectedResultAction = (
+			widget: Gtk.Widget | null | undefined,
+		): void => {
 			if (!(widget instanceof ResultWidget) || clickTimeout) return;
 
 			clickTimeout = setTimeout(() => {

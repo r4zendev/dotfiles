@@ -9,7 +9,7 @@ import { getAppIcon, getSymbolicIcon } from "~/modules/apps";
 
 const astalTray = AstalTray.get_default();
 
-type TrayIcon = { gicon: Gio.Icon | null; symbolic: boolean };
+type TrayIcon = { gicon: Gio.Icon; symbolic: boolean };
 
 function extractTrayIdentifiers(item: AstalTray.TrayItem): string[] {
 	const ids = [item.id, item.iconName, item.title];
@@ -39,7 +39,11 @@ function resolveTrayIcon(item: AstalTray.TrayItem): TrayIcon {
 		if (icon) return { gicon: Gio.ThemedIcon.new(icon), symbolic: false };
 	}
 
-	return { gicon: item.gicon, symbolic: false };
+	return {
+		gicon:
+			item.gicon ?? Gio.ThemedIcon.new("application-x-executable-symbolic"),
+		symbolic: false,
+	};
 }
 
 export const Tray = () => {

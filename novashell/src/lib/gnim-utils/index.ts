@@ -2,8 +2,8 @@
 // https://github.com/retrozinndev/gnim-utils
 // Licensed under MIT License
 
-import { Accessor, For, getScope, type Node, With } from "gnim";
-import GObject from "gnim/gobject";
+import { Accessor, For, getScope, type Node, With } from "ags";
+import GObject from "ags/gobject";
 
 /** re-exported gnim's jsx node type */
 export type JSXNode = Node;
@@ -43,7 +43,7 @@ export function toBoolean(
 	variable: any | Array<any> | Accessor<Array<any> | any>,
 ): boolean | Accessor<boolean> {
 	return variable instanceof Accessor
-		? variable.as((v) =>
+		? variable.as((v: Array<any> | any) =>
 				Array.isArray(v) ? (v as Array<any>).length > 0 : Boolean(v),
 			)
 		: Array.isArray(variable)
@@ -89,15 +89,18 @@ export function createSecureBinding<
 				: (gobj[prop] as NonNullable<GObj[Prop]>)
 			: defaultValue;
 
-	return new Accessor<NonNullable<GObj[Prop]> | Returns>(get, (notify) => {
-		const gobjectProp = kebabify(prop as string);
-		const id = gobj.connect(`notify::${gobjectProp}`, () => notify());
-		return () => {
-			try {
-				gobj.disconnect(id);
-			} catch (e) {}
-		};
-	});
+	return new Accessor<NonNullable<GObj[Prop]> | Returns>(
+		get,
+		(notify: () => void) => {
+			const gobjectProp = kebabify(prop as string);
+			const id = gobj.connect(`notify::${gobjectProp}`, () => notify());
+			return () => {
+				try {
+					gobj.disconnect(id);
+				} catch (e) {}
+			};
+		},
+	);
 }
 
 /** bind to a property inside an existing accessor.
@@ -141,7 +144,7 @@ export function createAccessorBinding<
 
 	const accessor = new Accessor<T[Prop]>(
 		() => gobj![prop],
-		(notifyFun) => {
+		(notifyFun: () => void) => {
 			notify = notifyFun;
 
 			const id = gobj?.connect(`notify::${kebabify(prop as string)}`, () =>
@@ -200,7 +203,7 @@ export function createSecureAccessorBinding<
 
 	const accessor = new Accessor<NonNullable<T[Prop]> | Default>(
 		() => (gobj ? ((gobj as T)[prop] as NonNullable<T[Prop]>) : defaultValue),
-		(notifyFun) => {
+		(notifyFun: () => void) => {
 			notify = notifyFun;
 
 			const id = gobj?.connect(
@@ -239,7 +242,7 @@ export function transformWidget<ValueType = unknown>(
 		? Array.isArray(v.get())
 			? For({
 					each: v as Accessor<Array<ValueType>>,
-					children: (cval, i) => fn(cval, i),
+					children: (cval: ValueType, i: Accessor<number>) => fn(cval, i),
 				})
 			: With({
 					value: v as Accessor<ValueType>,
@@ -257,8 +260,14 @@ export function filter<ValueType = unknown, FilterReturnType = unknown>(
 	fn: (v: ValueType, i: number, array: Array<ValueType>) => FilterReturnType,
 ): Array<ValueType> | Accessor<Array<ValueType>> {
 	return v instanceof Accessor
-		? v((v) => v.filter((it, i, arr) => fn(it, i, arr)))
-		: v.filter((it, i, arr) => fn(it, i, arr));
+		? v((val: Array<ValueType>) =>
+				val.filter((it: ValueType, i: number, arr: Array<ValueType>) =>
+					fn(it, i, arr),
+				),
+			)
+		: v.filter((it: ValueType, i: number, arr: Array<ValueType>) =>
+				fn(it, i, arr),
+			);
 }
 
 /** initialize class fields with a props object and dispose subscriptions together with
@@ -292,7 +301,9 @@ export function construct<Class extends object>(
 				v.subscribe(() => {
 					klass[k as keyof Class] = v.get() as Class[keyof Class];
 					if (isGObject)
-						klass.notify(k.replace(/[A-Z]/g, (s) => `-${s.toLowerCase()}`));
+						(klass as unknown as GObject.Object).notify(
+							k.replace(/[A-Z]/g, (s) => `-${s.toLowerCase()}`),
+						);
 				}),
 			);
 
@@ -313,8 +324,9 @@ export function createScopedConnection<
 	Signal extends keyof GObj["$signals"],
 >(gobj: GObj, signal: Signal, callback: GObj["$signals"][Signal]): void {
 	const scope = getScope();
-	const id = gobj.connect(signal as string, (_, ...args) =>
-		(callback as Function)(...args),
+	const id = gobj.connect(
+		signal as string,
+		(_: unknown, ...args: Array<unknown>) => (callback as Function)(...args),
 	);
 
 	scope.onCleanup(() => gobj.disconnect(id));

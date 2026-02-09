@@ -10,6 +10,14 @@ import { encoder, variableToBoolean } from "~/modules/utils";
 import { Page, PageButton } from "~/window/control-center/widgets/Page";
 import { Windows } from "~/windows";
 
+const nmSecurityFlags = NM as unknown as {
+	__80211ApSecurityFlags?: {
+		KEY_MGMT_802_1X?: number;
+	};
+};
+const keyMgmt8021x =
+	nmSecurityFlags.__80211ApSecurityFlags?.KEY_MGMT_802_1X ?? 0;
+
 export const PageNetwork = createRoot(
 	() =>
 		(
@@ -177,13 +185,9 @@ export const PageNetwork = createRoot(
 														NM.SettingWirelessSecurity.new();
 													const setting8021x = NM.Setting8021x.new();
 
-													// @ts-expect-error yep, type-gen issues again
 													if (
-														ap.rsnFlags! &
-															NM["80211ApSecurityFlags"].KEY_MGMT_802_1X &&
-														// @ts-expect-error
-														ap.wpaFlags! &
-															NM["80211ApSecurityFlags"].KEY_MGMT_802_1X
+														((ap.rsnFlags ?? 0) & keyMgmt8021x) > 0 &&
+														((ap.wpaFlags ?? 0) & keyMgmt8021x) > 0
 													) {
 														return;
 													}

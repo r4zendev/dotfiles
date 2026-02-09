@@ -137,7 +137,7 @@ export async function updateGtkColors(
 			GTK3_BASE_CANDIDATES,
 			"resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css",
 		),
-		data.name,
+		data.name ?? "pywal",
 		overrides,
 	);
 	const gtk4ThemeCss = buildThemeCss(
@@ -145,7 +145,7 @@ export async function updateGtkColors(
 			GTK4_BASE_CANDIDATES,
 			"resource:///org/gtk/libgtk/theme/Default/Default-dark.css",
 		),
-		data.name,
+		data.name ?? "pywal",
 		overrides,
 	);
 

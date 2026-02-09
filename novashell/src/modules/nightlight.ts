@@ -14,7 +14,7 @@ export class NightLight extends GObject.Object {
 	public static readonly identityTemperature = 6000;
 	public static readonly maxGamma = 100;
 
-	#watchInterval: GLib.Source;
+	#watchInterval: GLib.Source | null = null;
 	#temperature: number = NightLight.identityTemperature;
 	#gamma: number = NightLight.maxGamma;
 	#identity: boolean = true;
