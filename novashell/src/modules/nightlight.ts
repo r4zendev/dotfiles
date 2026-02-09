@@ -211,6 +211,13 @@ export class NightLight extends GObject.Object {
 		}
 	}
 
+	public stop(): void {
+		if (!this.#watchInterval) return;
+
+		this.#watchInterval.destroy();
+		this.#watchInterval = null;
+	}
+
 	private dispatch(call: "temperature", val: number): string;
 	private dispatch(call: "gamma", val: number): string;
 	private dispatch(call: "identity"): string;

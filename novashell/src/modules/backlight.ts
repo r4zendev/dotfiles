@@ -117,8 +117,8 @@ export namespace Backlights {
 		#path: string;
 		#maxBrightness: number;
 		#brightness: number;
-		#monitor: Gio.FileMonitor;
-		#conn: number;
+		#monitor: Gio.FileMonitor | null = null;
+		#conn: number | null = null;
 
 		@signal(Number) brightnessChanged(_: number): void {}
 
@@ -155,11 +155,9 @@ export namespace Backlights {
 			return this.#maxBrightness;
 		}
 
-		// intel_backlight is mostly the default on laptops
 		constructor(name: string = "intel_backlight") {
 			super();
 
-			// check if backlight exists
 			if (
 				!Gio.File.new_for_path(
 					`/sys/class/backlight/${name}/brightness`,
@@ -167,7 +165,6 @@ export namespace Backlights {
 			)
 				throw new Error(`Brightness: Couldn't find brightness for "${name}"`);
 
-			// notify :is-default on default backlight change
 			this.#conn = getDefault().connect("notify::default", () =>
 				this.notify("is-default"),
 			);
@@ -189,6 +186,20 @@ export namespace Backlights {
 					this.emit("brightness-changed", this.brightness);
 				},
 			);
+		}
+
+		vfunc_dispose(): void {
+			if (this.#conn !== null) {
+				getDefault().disconnect(this.#conn);
+				this.#conn = null;
+			}
+
+			if (this.#monitor) {
+				this.#monitor.cancel();
+				this.#monitor = null;
+			}
+
+			super.vfunc_dispose();
 		}
 
 		private readBrightness(): number {

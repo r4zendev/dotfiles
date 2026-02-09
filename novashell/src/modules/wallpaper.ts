@@ -1,7 +1,7 @@
 import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
-import { createRoot, getScope, type Scope } from "ags";
+import { createRoot } from "ags";
 import { monitorFile, readFile, writeFileAsync } from "ags/file";
 import GObject, {
 	getter,
@@ -17,7 +17,7 @@ import { generalConfig } from "~/config";
 import { Notifications } from "~/modules/notifications";
 import { derivePalette, updateTelegramTheme } from "~/modules/themes";
 import type { WalData } from "~/modules/themes/types";
-import { createSubscription, encoder } from "~/modules/utils";
+import { createSubscription } from "~/modules/utils";
 
 export type WalMode = "darken" | "lighten";
 
@@ -126,7 +126,6 @@ export type WallpaperPositioning = "contain" | "tile" | "cover" | "fill";
 export class Wallpaper extends GObject.Object {
 	private static instance: Wallpaper;
 	#wallpaper: string | undefined;
-	#scope!: Scope;
 	#splash: boolean = false;
 	#wallpapersPath: string;
 
@@ -216,8 +215,6 @@ export class Wallpaper extends GObject.Object {
 		});
 
 		createRoot(() => {
-			this.#scope = getScope();
-
 			createSubscription(
 				generalConfig.bindProperty("wallpaper.color_mode", "string"),
 				() => {
@@ -307,17 +304,13 @@ export class Wallpaper extends GObject.Object {
 	}
 
 	public async getWallpaper(): Promise<string | undefined> {
-		// Read from shared wallpaper state (wallpaper-state script)
 		try {
 			const path = exec("wallpaper-state get current_image").trim();
 			if (path && GLib.file_test(path, GLib.FileTest.EXISTS)) {
 				return path;
 			}
-		} catch {
-			// wallpaper-state not available or no current_image set
-		}
+		} catch {}
 
-		// Fallback: query swww directly
 		try {
 			const output = exec("swww query");
 			const match = output.match(/image:\s*(.+)$/m);
@@ -400,15 +393,12 @@ export class Wallpaper extends GObject.Object {
 			accents.push(accents[accents.length - 1] || fg);
 		}
 
-		// Ensure accent colors are readable: boost saturation, enforce min lightness
 		const readable = accents.map((c) => ensureReadable(saturateHex(c, 0.2)));
 
-		// Ensure fg has enough contrast against the darkened bg
 		if (!light && luminance(fg) < 180) {
 			fg = lightenHex(fg, 0.3);
 		}
 
-		// color8: muted accent tint instead of pure gray — used for Visual, comments, selections
 		const accent = readable[3]; // color4 position = primary accent
 		const color8 = blendHex(lightenHex(bg, 0.35), accent, 0.15);
 		const color7 = blendHex(lightenHex(bg, 0.75), accent, 0.08);
@@ -442,7 +432,6 @@ export class Wallpaper extends GObject.Object {
 	public async reloadWallpaper(write: boolean = true): Promise<void> {
 		if (!this.#wallpaper?.trim()) return;
 
-		// Map positioning to swww resize mode
 		const resizeMap: Record<WallpaperPositioning, string> = {
 			cover: "crop",
 			contain: "fit",
@@ -543,7 +532,6 @@ export class Wallpaper extends GObject.Object {
 
 	/** Manually trigger color sync from current wallpaper (useful when switching to pywal theme) */
 	public syncColorsFromWallpaper(): void {
-		// Re-read latest wallpaper path in case it changed while on a static theme
 		try {
 			const latest = exec("wallpaper-state get current_image").trim();
 			if (latest && GLib.file_test(latest, GLib.FileTest.EXISTS)) {

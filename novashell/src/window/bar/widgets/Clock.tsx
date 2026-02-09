@@ -2,7 +2,6 @@ import Gio from "gi://Gio?version=2.0";
 
 import { createBinding } from "ags";
 import { Gdk, Gtk } from "ags/gtk4";
-import { execAsync } from "ags/process";
 
 import { generalConfig } from "~/config";
 import { time } from "~/modules/utils";

@@ -5,7 +5,7 @@ import { construct } from "~/modules/utils";
 
 @register({ GTypeName: "OSDMode" })
 export default class OSDMode extends GObject.Object {
-	readonly #subs: Array<() => void> = [];
+	#subs: Array<() => void> = [];
 
 	@property(String)
 	icon: string = "image-missing";
@@ -31,5 +31,11 @@ export default class OSDMode extends GObject.Object {
 	}) {
 		super();
 		this.#subs = construct(this, props);
+	}
+
+	vfunc_dispose(): void {
+		for (const unsub of this.#subs) unsub();
+		this.#subs = [];
+		super.vfunc_dispose();
 	}
 }

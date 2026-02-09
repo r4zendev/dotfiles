@@ -10,57 +10,6 @@ import { Notifications } from "~/modules/notifications";
 
 type JSONValues = string | boolean | null | number | object;
 type ValueTypes = "string" | "boolean" | "object" | "number" | "any";
-type SelectorOption = {
-	/** this property is set at runtime, with the same zero-based index of the item in the array */
-	id?: number;
-	label: string;
-	actionSelected?: () => void;
-};
-type Section = {
-	title: string;
-	description?: string;
-	properties: Record<string, Property>;
-};
-type Property<T extends Config.PropertyType = Config.PropertyType.ENTRY> = {
-	type: T;
-	description?: string;
-} & (T extends Config.PropertyType.ENTRY
-	? {
-			value?: string;
-			setText: (newText: string) => void;
-			getText: () => string;
-			subscribe?: (notify: () => void) => void;
-		}
-	: T extends Config.PropertyType.LEVEL
-		? {
-				value: number;
-				setValue: (newValue: number) => void;
-				getValue: () => number;
-				subscribe?: (notify: () => void) => void;
-			}
-		: T extends Config.PropertyType.SELECT
-			? {
-					options: Array<SelectorOption>;
-					/** pre-selected option by the index of the provided array */
-					option: number;
-					setSelection: (optionId: number) => void;
-					getSelection: () => number;
-					subscribe?: (notify: () => void) => void;
-				}
-			: T extends Config.PropertyType.SLIDER
-				? {
-						maxValue: number;
-						/** @default 0 */
-						minValue?: number;
-						setValue: (newValue: number) => void;
-					}
-				: T extends Config.PropertyType.SWITCH
-					? {
-							state: boolean;
-							getState: () => boolean;
-							setState: (newState: boolean) => void;
-						}
-					: {});
 
 @register({ GTypeName: "Config" })
 export class Config<K extends string, V = any> extends GObject.Object {

@@ -1,6 +1,0 @@
-export {
-	ICON_THEME_META_FILE,
-	ICON_THEME_OVERLAY_SOURCE,
-	ICON_THEME_SOURCE_CANDIDATES,
-	NOVASHELL_ICON_THEME_NAME,
-} from "~/modules/icons/theme-config";

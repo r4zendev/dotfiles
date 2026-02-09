@@ -1,10 +1,10 @@
+export { NOVASHELL_ICON_THEME_NAME } from "~/modules/icons/theme-config";
+export { updateIconTheme } from "~/modules/icons/theme-manager";
 export { updateBtopColors } from "./btop";
 export { generateFishColors, reloadFish } from "./fish";
 export { updateGhosttyColors } from "./ghostty";
 export { updateGtkColors } from "./gtk";
 export { updateHyprlandColors } from "./hyprland";
-export { NOVASHELL_ICON_THEME_NAME } from "./icon-theme";
-export { updateIconTheme } from "./icons";
 export { updateKdeColorScheme } from "./kde";
 export { reloadNeovim } from "./neovim";
 export { derivePalette } from "./palette";

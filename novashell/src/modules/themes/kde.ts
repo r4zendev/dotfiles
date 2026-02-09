@@ -23,14 +23,10 @@ export async function updateKdeColorScheme(
 	const surface0 = hexToRgb(p.surface0);
 	const surface1 = hexToRgb(p.surface1);
 	const mantle = hexToRgb(p.mantle);
-	const crust = hexToRgb(p.crust);
-	const overlay0 = hexToRgb(p.overlay0);
 	const subtext0 = hexToRgb(p.subtext0);
 	const color1 = hexToRgb(c.color1);
 	const color2 = hexToRgb(c.color2);
 	const color3 = hexToRgb(c.color3);
-	const color4 = hexToRgb(c.color4);
-	const color5 = hexToRgb(c.color5);
 	const visited = hexToRgb(adjustLightness(p.accent, -30));
 	const altBg = hexToRgb(adjustLightness(s.background, 8));
 	const viewBg = hexToRgb(adjustLightness(s.background, 5));

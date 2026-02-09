@@ -6,7 +6,6 @@ import { Cpu } from "~/window/bar/widgets/Cpu";
 import { FocusedClient } from "~/window/bar/widgets/FocusedClient";
 import { Media } from "~/window/bar/widgets/Media";
 import { Memory } from "~/window/bar/widgets/Memory";
-import { MicHyprwhspr } from "~/window/bar/widgets/MicHyprwhspr";
 import { Status } from "~/window/bar/widgets/Status";
 import { Tray } from "~/window/bar/widgets/Tray";
 import { Workspaces } from "~/window/bar/widgets/Workspaces";
@@ -59,7 +58,6 @@ export const Bar = (mon: number) => {
 					>
 						<Cpu />
 						<Memory />
-						{/* <MicHyprwhspr /> */}
 						<Tray />
 						<Status />
 					</Gtk.Box>

@@ -1,5 +1,4 @@
 import type AstalWp from "gi://AstalWp";
-import GObject from "gi://GObject?version=2.0";
 import Pango from "gi://Pango?version=1.0";
 
 import { createBinding, For } from "ags";

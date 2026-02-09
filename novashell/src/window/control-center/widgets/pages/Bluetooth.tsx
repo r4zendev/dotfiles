@@ -5,7 +5,6 @@ import type Gio from "gi://Gio?version=2.0";
 
 import { createBinding, createComputed, createRoot, For, With } from "ags";
 import { Gtk } from "ags/gtk4";
-import { execAsync } from "ags/process";
 
 import { execApp } from "~/modules/apps";
 import { Bluetooth } from "~/modules/bluetooth";
@@ -230,7 +229,6 @@ function DeviceWidget({
 				pair()
 					.then(() => {
 						device.connect_device((_, res) => {
-							// get error
 							try {
 								device.connect_device_finish(res);
 							} catch (e: any) {

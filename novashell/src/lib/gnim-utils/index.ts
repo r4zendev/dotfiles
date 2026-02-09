@@ -5,8 +5,7 @@
 import { Accessor, For, getScope, type Node, With } from "ags";
 import GObject from "ags/gobject";
 
-/** re-exported gnim's jsx node type */
-export type JSXNode = Node;
+type JSXNode = Node;
 
 function snakeify(str: string): string {
 	return str
@@ -103,64 +102,6 @@ export function createSecureBinding<
 	);
 }
 
-/** bind to a property inside an existing accessor.
- * use this when the property you want to bind is inside another
- * property of a GObject.
- *
- * @param accessorObject the gobject property that links to a gobject
- * @param prop the property to bind from the gobject accessor
- *
- * You need to provide the GObject type in a generic type format.
- * @example
- * \/\/ MainGObject is a GObject here
- * \/\/ It has the property "subGObject", which points to a existing GObject(AnotherGObject)
- * const mainGObject = new MainGObject();
- *
- * \/\/ The AnotherGObject GObject has the property "exampleProperty", which is a string
- * createAccessorBinding<AnotherGObject>(
- *     createBinding(mainGObject, "subGObject"),
- *     "exampleProperty"
- * );
- * */
-export function createAccessorBinding<
-	T extends GObject.Object = GObject.Object,
-	Prop extends keyof T = keyof T,
->(accessorObject: Accessor<T>, prop: Prop): Accessor<T[Prop]> {
-	let gobj: T | undefined = accessorObject.get();
-	let notify: () => void;
-
-	const baseSub = accessorObject.subscribe(() => {
-		const newBase = accessorObject.get();
-
-		if (!newBase) {
-			gobj = undefined;
-			notify!();
-			return;
-		}
-
-		gobj = newBase;
-		notify!();
-	});
-
-	const accessor = new Accessor<T[Prop]>(
-		() => gobj![prop],
-		(notifyFun: () => void) => {
-			notify = notifyFun;
-
-			const id = gobj?.connect(`notify::${kebabify(prop as string)}`, () =>
-				notify(),
-			);
-
-			return () => {
-				id !== undefined && gobj?.disconnect(id);
-				baseSub();
-			};
-		},
-	);
-
-	return accessor;
-}
-
 /** securely bind to a property of an existing gobject wrapped with an accessor.
  *
  * It follows the same idea of secureBinding: allows setting
@@ -221,15 +162,6 @@ export function createSecureAccessorBinding<
 	return accessor;
 }
 
-/** transform a normal value or an accessor to something else
- * @returns the transformation result */
-export function transform<ValueType = any | Array<any>, RType = any>(
-	v: Accessor<ValueType> | ValueType,
-	fn: (v: ValueType) => RType,
-): RType | Accessor<RType> {
-	return v instanceof Accessor ? v.as(fn) : fn(v);
-}
-
 /** transform data or accessor containing data to widget(s)
  * if an array is provided, the callback will act like a forEach function.
  *
@@ -251,23 +183,6 @@ export function transformWidget<ValueType = unknown>(
 		: Array.isArray(v)
 			? v.map((val) => fn(val))
 			: fn(v);
-}
-
-/** filter normal data types or an array wrapped inside an accessor
- * @returns the filtered data */
-export function filter<ValueType = unknown, FilterReturnType = unknown>(
-	v: Accessor<Array<ValueType>> | Array<ValueType>,
-	fn: (v: ValueType, i: number, array: Array<ValueType>) => FilterReturnType,
-): Array<ValueType> | Accessor<Array<ValueType>> {
-	return v instanceof Accessor
-		? v((val: Array<ValueType>) =>
-				val.filter((it: ValueType, i: number, arr: Array<ValueType>) =>
-					fn(it, i, arr),
-				),
-			)
-		: v.filter((it: ValueType, i: number, arr: Array<ValueType>) =>
-				fn(it, i, arr),
-			);
 }
 
 /** initialize class fields with a props object and dispose subscriptions together with

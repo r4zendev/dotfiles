@@ -6,18 +6,14 @@ import { execAsync } from "ags/process";
 export {
 	filterExcludedApps,
 	getApps,
-	getAppsByName,
-	getAstalApps,
 	queryApps,
 	updateApps,
 } from "~/modules/apps-registry";
-export type { ResolvedIcon } from "~/modules/icons/resolver";
 export {
 	getAppIcon,
 	getIconByAppName,
 	getSymbolicIcon,
 	lookupIcon,
-	resolveIcon,
 	resolveIconFromClasses,
 } from "~/modules/icons/resolver";
 

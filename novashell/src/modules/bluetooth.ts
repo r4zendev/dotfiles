@@ -1,6 +1,6 @@
 import AstalBluetooth from "gi://AstalBluetooth";
 
-import { createRoot, getScope, type Scope } from "ags";
+import { createRoot } from "ags";
 import GObject, {
 	getter,
 	gtype,
@@ -28,7 +28,6 @@ export class Bluetooth extends GObject.Object {
 	private astalBl: AstalBluetooth.Bluetooth;
 
 	#adapter: AstalBluetooth.Adapter | null = null;
-	#scope!: Scope;
 	#isAvailable: boolean = false;
 	#lastDevice: AstalBluetooth.Device | null = null;
 
@@ -94,9 +93,6 @@ export class Bluetooth extends GObject.Object {
 		}
 
 		createRoot(() => {
-			this.#scope = getScope();
-
-			// load previous default adapter
 			const dataDefaultAdapter = userData.getProperty(
 				"bluetooth_default_adapter",
 				"string",
@@ -112,9 +108,7 @@ export class Bluetooth extends GObject.Object {
 				AstalBluetooth.get_default(),
 				"adapter-added",
 				(adapter) => {
-					if (this.astalBl.adapters.length === 1)
-						// adapter was just added
-						this.adapter = adapter;
+					if (this.astalBl.adapters.length === 1) this.adapter = adapter;
 				},
 			);
 
@@ -129,8 +123,6 @@ export class Bluetooth extends GObject.Object {
 					}
 
 					if (this.#adapter?.address !== adapter.address) return;
-
-					// the removed adapter was the default
 
 					if (this.astalBl.adapters.length < 1) {
 						this.adapter = null;

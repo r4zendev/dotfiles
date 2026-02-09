@@ -127,11 +127,10 @@ export class Shell extends Adw.Application {
 			return status;
 		};
 
-		// build doesn't need a running instance
 		if (args[0] === "build") {
 			cmd.print_literal("Building novashell...\n");
 			try {
-				const [ok, stdout, stderr, status] = GLib.spawn_command_line_sync(
+				const [, stdout, stderr, status] = GLib.spawn_command_line_sync(
 					`sh -c 'cd ${SOURCE_DIR} && pnpm build'`,
 				);
 				const out = new TextDecoder().decode(stdout ?? new Uint8Array());
@@ -154,7 +153,6 @@ export class Shell extends Adw.Application {
 
 		if (cmd.isRemote) {
 			try {
-				// warn user that this method is pretty slow
 				cmd.print_literal(
 					"\nNovashell: Remote CLI mode is slower. For fast socket actions use `nsh-msg <command...>`\n" +
 						"(for example: `nsh-msg toggle runner`, `nsh-msg volume sink-set 35`).\n" +
@@ -212,14 +210,12 @@ export class Shell extends Adw.Application {
 	private init(): void {
 		Adw.init();
 
-		// load gresource from build-defined path
 		try {
 			const gresourcesPath: string = GRESOURCES_FILE.startsWith("/")
 				? GRESOURCES_FILE
 				: GRESOURCES_FILE.split("/")
 						.filter((s) => s !== "")
 						.map((path) => {
-							// support environment variables at runtime
 							if (/^\$/.test(path)) {
 								const env = GLib.getenv(path.replace(/^\$/, ""));
 								if (env === null)
@@ -233,7 +229,6 @@ export class Shell extends Adw.Application {
 			this.#gresource = Gio.Resource.load(gresourcesPath);
 			Gio.resources_register(this.#gresource);
 
-			// add icons
 			Gtk.IconTheme.get_for_display(
 				Gdk.Display.get_default()!,
 			).add_resource_path("/io/github/razen/novashell/icons");
@@ -337,6 +332,7 @@ export class Shell extends Adw.Application {
 
 	quit(): void {
 		try {
+			NightLight.getDefault().stop();
 			NightLight.getDefault().applyIdentity();
 		} catch (e) {
 			console.error(

@@ -1,4 +1,3 @@
-import { generalConfig } from "~/config";
 import { execApp } from "~/modules/apps";
 import type { RemoteCaller } from "~/modules/arg-handler/types";
 import { isHelpArg } from "~/modules/arg-handler/utils";

@@ -5,6 +5,7 @@ PreviewSize=32
 ShowOpenTerminal=false
 
 [DetailsMode]
+LeftPadding=1
 PreviewSize=16
 
 [General]

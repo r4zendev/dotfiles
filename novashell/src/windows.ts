@@ -14,11 +14,11 @@ import { FloatingNotifications } from "~/window/floating-notifications";
 import { LogoutMenu } from "~/window/logout-menu";
 import { OSD } from "~/window/osd";
 
-export type WindowInstance = {
+type WindowInstance = {
 	instance?: Astal.Window;
 	connections: Array<number>;
 };
-export type WindowData = {
+type WindowData = {
 	create: () => Astal.Window | Array<Astal.Window>;
 	instance?: WindowInstance | Array<WindowInstance>;
 	status?: "open" | "closed";
@@ -288,19 +288,8 @@ export class Windows extends GObject.Object {
 		};
 	}
 
-	public addWindow(
-		name: string,
-		create: () => Astal.Window | Array<Astal.Window>,
-	): void {
-		this.#windows[name] = { create };
-	}
-
 	public hasWindow(name: string): boolean {
 		return Boolean(this.windows?.[name as keyof typeof this.windows]);
-	}
-
-	public getWindows(): Array<() => Astal.Window | Array<Astal.Window>> {
-		return Object.values(this.windows);
 	}
 
 	public getFocusedMonitorId(): number | null {

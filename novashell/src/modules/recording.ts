@@ -6,7 +6,7 @@ import GObject, { getter, register, signal } from "ags/gobject";
 import type { Gdk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 
-import { makeDirectory, time } from "~/modules/utils";
+import { time } from "~/modules/utils";
 
 @register({ GTypeName: "Recording" })
 export class Recording extends GObject.Object {
@@ -153,9 +153,7 @@ export class Recording extends GObject.Object {
 	public stopRecording() {
 		if (!this.#process || !this.#recording) return;
 
-		// Kill wf-recorder (which frec runs underneath)
 		execAsync(["killall", "-s", "SIGINT", "wf-recorder"]).catch(() => {
-			// fallback: kill the fish process directly
 			if (this.#process && !this.#process.get_if_exited())
 				execAsync(["kill", "-s", "SIGTERM", this.#process.get_identifier()!]);
 		});

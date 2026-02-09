@@ -50,10 +50,6 @@ export function updateApps(): void {
 	appsList = astalApps.get_list();
 }
 
-export function getAstalApps(): AstalApps.Apps {
-	return astalApps;
-}
-
 export function queryApps(text: string): Array<AstalApps.Application> {
 	return astalApps.fuzzy_query(text);
 }

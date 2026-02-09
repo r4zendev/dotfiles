@@ -38,7 +38,7 @@ class Clipboard extends GObject.Object {
 	};
 
 	#dbFile: Gio.File;
-	#dbMonitor: Gio.FileMonitor;
+	#dbMonitor: Gio.FileMonitor | null = null;
 	#updateDone: boolean = false;
 	#history = [] as ClipboardItem[];
 	#changesTimeout: AstalIO.Time | undefined;
@@ -78,6 +78,15 @@ class Clipboard extends GObject.Object {
 		}
 
 		console.warn("Clipboard: cliphist database not found");
+	}
+
+	vfunc_dispose(): void {
+		if (this.#dbMonitor) {
+			this.#dbMonitor.cancel();
+			this.#dbMonitor = null;
+		}
+
+		super.vfunc_dispose();
 	}
 
 	private init() {

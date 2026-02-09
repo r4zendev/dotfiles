@@ -1,18 +1,16 @@
 import { type Astal, Gtk } from "ags/gtk4";
-import { exec, execAsync } from "ags/process";
+import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
 
 import { getSymbolicIcon } from "~/modules/apps";
 
 export {
 	construct,
-	createAccessorBinding as baseBinding,
 	createScopedConnection,
 	createSecureAccessorBinding as secureBaseBinding,
 	createSecureBinding as secureBinding,
 	createSubscription,
 	toBoolean as variableToBoolean,
-	transform,
 	transformWidget,
 } from "~/lib/gnim-utils";
 
@@ -24,16 +22,6 @@ export const decoder = new TextDecoder("utf-8"),
 export const time = createPoll(GLib.DateTime.new_now_local(), 500, () =>
 	GLib.DateTime.new_now_local(),
 );
-
-export function getHyprlandInstanceSig(): string | null {
-	return GLib.getenv("HYPRLAND_INSTANCE_SIGNATURE");
-}
-
-export function getHyprlandVersion(): string {
-	return exec(
-		`${GLib.getenv("HYPRLAND_CMD") ?? "Hyprland"} --version | head -n1`,
-	).split(" ")[1];
-}
 
 export function getPlayerIconFromBusName(busName: string): string {
 	const splitName = busName
@@ -64,36 +52,6 @@ export function escapeUnintendedMarkup(input: string): string {
 	});
 }
 
-export function escapeSpecialCharacters(str: string): string {
-	return str.replace(/[\\^$.*?()[\]{}|]/g, "\\$&");
-}
-
-/** translate paths with environment variables in it to absolute paths */
-export function translateDirWithEnvironment(path: string): string {
-	path = path.replace(/^[~]/, GLib.get_home_dir());
-
-	return path
-		.split("/")
-		.map((part) =>
-			/^\$/.test(part) ? (GLib.getenv(part.replace(/^\$/, "")) ?? part) : part,
-		)
-		.join("/");
-}
-
-export function getChildren(widget: Gtk.Widget): Array<Gtk.Widget> {
-	const firstChild = widget.get_first_child(),
-		children: Array<Gtk.Widget> = [];
-	if (!firstChild) return [];
-
-	let currentChild = firstChild.get_next_sibling();
-	while (currentChild != null) {
-		children.push(currentChild);
-		currentChild = currentChild.get_next_sibling();
-	}
-
-	return children;
-}
-
 export function omitObjectKeys<ObjT = object>(
 	obj: ObjT,
 	keys: keyof ObjT | Array<keyof ObjT>,
@@ -121,24 +79,6 @@ export function omitObjectKeys<ObjT = object>(
 	return finalObject as object;
 }
 
-export function pickObjectKeys<ObjT = object>(
-	obj: ObjT,
-	keys: Array<keyof ObjT>,
-): object {
-	const finalObject = {} as Record<keyof ObjT, any>;
-
-	for (const key of keys) {
-		for (const objKey of Object.keys(obj as object)) {
-			if (key === objKey) {
-				finalObject[key as keyof ObjT] = obj[objKey as keyof ObjT];
-				break;
-			}
-		}
-	}
-
-	return finalObject;
-}
-
 export function pathToURI(path: string): string {
 	switch (true) {
 		case /^[/]/.test(path):
@@ -150,14 +90,6 @@ export function pathToURI(path: string): string {
 	}
 
 	return path;
-}
-
-export function makeDirectory(dir: string): void {
-	execAsync(["mkdir", "-p", dir]);
-}
-
-export function deleteFile(path: string): void {
-	execAsync(["rm", "-r", path]);
 }
 
 export function playSystemBell(): void {

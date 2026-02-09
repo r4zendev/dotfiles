@@ -13,9 +13,7 @@ import { ensureDirectory } from "~/modules/themes/utils";
 import { decoder } from "~/modules/utils";
 import { Wallpaper } from "~/modules/wallpaper";
 
-export type { ThemeData } from "~/modules/themes/types";
-
-export type AvailableTheme = {
+type AvailableTheme = {
 	id: string;
 	name: string;
 	isPywal: boolean;
