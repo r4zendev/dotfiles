@@ -1,11 +1,6 @@
-export const NOVASHELL_ICON_THEME_NAME = "Novashell-Mono";
-
-export const ICON_THEME_SOURCE_CANDIDATES = [
-	"Papirus-Dark",
-	"Papirus",
-	"Novashell-Icons",
-];
-
-export const ICON_THEME_OVERLAY_SOURCE = "Novashell-Icons";
-
-export const ICON_THEME_META_FILE = ".novashell-icon-meta.json";
+export {
+	ICON_THEME_META_FILE,
+	ICON_THEME_OVERLAY_SOURCE,
+	ICON_THEME_SOURCE_CANDIDATES,
+	NOVASHELL_ICON_THEME_NAME,
+} from "~/modules/icons/theme-config";

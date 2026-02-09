@@ -5,77 +5,19 @@ import type AstalWp from "gi://AstalWp";
 import { type Accessor, createBinding, createComputed, With } from "ags";
 import type GObject from "ags/gobject";
 import { Gtk } from "ags/gtk4";
-import { lookupIcon } from "~/modules/apps";
 import { Battery } from "~/modules/battery";
 import { Bluetooth } from "~/modules/bluetooth";
+import {
+	resolveNetworkIcon,
+	resolveStatusIconName,
+	resolveVolumeStatusIcon,
+} from "~/modules/icons";
 import { keyboardLayout } from "~/modules/keyboard";
 import { Notifications } from "~/modules/notifications";
 import { Recording } from "~/modules/recording";
 import { variableToBoolean } from "~/modules/utils";
 import { Wireplumber } from "~/modules/volume";
 import { Windows } from "~/windows";
-
-function resolveStatusIconName(icon: string, fallback: string): string {
-	const candidate = icon.trim();
-	if (candidate && lookupIcon(candidate)) return candidate;
-
-	const base = candidate
-		.replace(/-panel$/i, "")
-		.replace(/-symbolic$/i, "")
-		.trim();
-	const variants = [
-		`${base}-symbolic`,
-		`${base}-panel`,
-		`${base}-panel-symbolic`,
-		base,
-	];
-
-	for (const variant of variants) {
-		if (variant && lookupIcon(variant)) return variant;
-	}
-
-	return fallback;
-}
-
-function resolveVolumeStatusIcon(icon: string, source: boolean): string {
-	if (source && /^microphone-sensitivity-(high|medium|low)/.test(icon)) {
-		if (lookupIcon("audio-input-microphone-symbolic"))
-			return "audio-input-microphone-symbolic";
-		if (lookupIcon("audio-input-microphone")) return "audio-input-microphone";
-	}
-
-	const fallback = source
-		? "microphone-sensitivity-muted-symbolic"
-		: "audio-volume-muted-symbolic";
-
-	return resolveStatusIconName(icon, fallback);
-}
-
-function resolveNetworkStatusIcon(icon: string): string {
-	const candidate = icon.trim();
-
-	if (
-		/wireless|wifi/i.test(candidate) &&
-		lookupIcon("network-wireless-symbolic")
-	)
-		return "network-wireless-symbolic";
-
-	if (/wired|ethernet/i.test(candidate) && lookupIcon("network-wired-symbolic"))
-		return "network-wired-symbolic";
-
-	if (
-		/no-route|offline|disconnected|unavailable/i.test(candidate) &&
-		lookupIcon("network-no-route-symbolic")
-	)
-		return "network-no-route-symbolic";
-
-	if (/acquiring|connecting|receive|transmit/i.test(candidate)) {
-		if (lookupIcon("network-transmit-receive-symbolic"))
-			return "network-transmit-receive-symbolic";
-	}
-
-	return resolveStatusIconName(candidate, "network-no-route-symbolic");
-}
 
 export const Status = () =>
 	(
@@ -260,7 +202,7 @@ function StatusIcons() {
 						return (
 							<Gtk.Image
 								iconName={createBinding(device, "iconName").as((icon) =>
-									resolveNetworkStatusIcon(icon),
+									resolveNetworkIcon(icon, "network-no-route-symbolic"),
 								)}
 							/>
 						);
