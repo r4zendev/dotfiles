@@ -4,9 +4,9 @@ Desktop environment for my main rig and laptop.
 
 ## Screenshots
 
-| Terminal                                | Neovim                                    | Desktop                                        |
-| --------------------------------------- | ----------------------------------------- | ---------------------------------------------- |
-| ![Terminal](./screenshots/terminal.jpg) | ![Neovim](./screenshots/nvim-startup.jpg) | ![Desktop](./screenshots/dolphin-chromium.jpg) |
+| Terminal                                | Neovim                                    | Desktop                               |
+| --------------------------------------- | ----------------------------------------- | ------------------------------------- |
+| ![Terminal](./screenshots/terminal.jpg) | ![Neovim](./screenshots/nvim-startup.jpg) | ![Desktop](./screenshots/desktop.jpg) |
 
 | Telegram                                | Discord                               | YT Music Desktop                             |
 | --------------------------------------- | ------------------------------------- | -------------------------------------------- |
