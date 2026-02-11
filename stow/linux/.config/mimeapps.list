@@ -1,5 +1,5 @@
-; org.gnome.Loupe.desktop;
-; qimgv.desktop;
+# org.gnome.Loupe.desktop;
+# qimgv.desktop;
 
 [Added Associations]
 application/x-extension-htm=zen.desktop;
@@ -71,3 +71,4 @@ inode/directory=org.kde.dolphin.desktop
 x-scheme-handler/betterdiscord=discord.desktop
 x-scheme-handler/about=zen.desktop
 x-scheme-handler/unknown=zen.desktop
+
