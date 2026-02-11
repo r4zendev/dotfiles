@@ -12,7 +12,7 @@ image/bmp=qimgv.desktop;
 image/gif=qimgv.desktop;
 image/jpeg=qimgv.desktop;
 image/png=qimgv.desktop;
-image/svg+xml=qimgv.desktop;
+image/svg+xml=org.gnome.Loupe.desktop;
 image/webp=qimgv.desktop;
 text/html=zen.desktop;
 x-scheme-handler/chrome=zen.desktop;
@@ -30,6 +30,8 @@ application/x-7z-compressed=org.kde.ark.desktop;
 application/vnd.rar=org.kde.ark.desktop;
 application/x-rar=org.kde.ark.desktop;
 application/x-archive=org.kde.ark.desktop;
+application/x-bittorrent=org.qbittorrent.qBittorrent.desktop;
+x-scheme-handler/magnet=org.qbittorrent.qBittorrent.desktop;
 
 [Default Applications]
 application/x-extension-htm=zen.desktop
@@ -40,9 +42,9 @@ application/x-extension-xhtml=zen.desktop
 application/xhtml+xml=zen.desktop
 image/bmp=qimgv.desktop
 image/gif=qimgv.desktop
-image/jpeg=qimgv.desktop;
+image/jpeg=qimgv.desktop
 image/png=qimgv.desktop
-image/svg+xml=qimgv.desktop
+image/svg+xml=org.gnome.Loupe.desktop
 image/webp=qimgv.desktop
 text/html=zen.desktop
 x-scheme-handler/chrome=zen.desktop
@@ -71,4 +73,6 @@ inode/directory=org.kde.dolphin.desktop
 x-scheme-handler/betterdiscord=discord.desktop
 x-scheme-handler/about=zen.desktop
 x-scheme-handler/unknown=zen.desktop
+application/x-bittorrent=org.qbittorrent.qBittorrent.desktop
+x-scheme-handler/magnet=org.qbittorrent.qBittorrent.desktop
 
