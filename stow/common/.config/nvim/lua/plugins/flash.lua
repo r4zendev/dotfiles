@@ -47,6 +47,7 @@ return {
       exclude = {
         "oil",
         "blink-cmp-menu",
+        "qf",
         -- Defaults
         "notify",
         "cmp_menu",
@@ -71,7 +72,7 @@ return {
   -- stylua: ignore
   keys = {
     { "<CR>", mode = { "n", "x", "o" }, function()
-      if vim.bo.buftype == "nofile" or vim.bo.filetype == "vim" then
+      if vim.bo.buftype == "nofile" or vim.bo.buftype == "quickfix" or vim.bo.filetype == "vim" then
         return vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", false)
       end
       require("flash").jump()

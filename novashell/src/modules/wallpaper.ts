@@ -2,7 +2,7 @@ import Gio from "gi://Gio?version=2.0";
 import GLib from "gi://GLib?version=2.0";
 
 import { createRoot } from "ags";
-import { monitorFile, readFile, writeFileAsync } from "ags/file";
+import { readFile, writeFileAsync } from "ags/file";
 import GObject, {
 	getter,
 	gtype,
@@ -187,8 +187,14 @@ export class Wallpaper extends GObject.Object {
 		const stateDir = `${GLib.get_home_dir()}/.config/hypr`;
 		const stateFilename = ".wallpaper-state";
 		let stateDebounce: number | null = null;
-		monitorFile(stateDir, (file) => {
-			if (!file.endsWith(stateFilename)) return;
+		const stateDirFile = Gio.File.new_for_path(stateDir);
+		const monitor = stateDirFile.monitor_directory(
+			Gio.FileMonitorFlags.WATCH_MOVES,
+			null,
+		);
+		monitor.connect("changed", (_mon, file, _other, _event) => {
+			const path = file.get_path();
+			if (!path?.endsWith(stateFilename)) return;
 			if (stateDebounce !== null) GLib.source_remove(stateDebounce);
 			stateDebounce = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
 				stateDebounce = null;
