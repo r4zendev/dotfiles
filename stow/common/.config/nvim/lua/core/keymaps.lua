@@ -51,10 +51,10 @@ map("n", "<leader>wJ", "<C-w>J", { desc = "Move split to bottom" })
 map("n", "<leader>wK", "<C-w>K", { desc = "Move split to top" })
 map("n", "<leader>wL", "<C-w>L", { desc = "Move split to right" })
 
-map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
-map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
-map("n", "<C-Up>", "5<C-w>+", { desc = "Height shrink" })
-map("n", "<C-Down>", "5<C-w>-", { desc = "Height grow" })
+map("n", "<M-Left>", "5<C-w><", { desc = "Width shrink" })
+map("n", "<M-Right>", "5<C-w>>", { desc = "Width grow" })
+map("n", "<M-Up>", "5<C-w>+", { desc = "Height grow" })
+map("n", "<M-Down>", "5<C-w>-", { desc = "Height shrink" })
 
 map("n", "gp", "`[v`]", { desc = "Select previous paste" })
 
