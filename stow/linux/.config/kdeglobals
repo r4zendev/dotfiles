@@ -1,5 +1,7 @@
 [General]
 ColorScheme=qt6ct
+TerminalApplication=ghostty
+TerminalService=com.mitchellh.ghostty.desktop
 
 [Icons]
 Theme=Novashell-Mono

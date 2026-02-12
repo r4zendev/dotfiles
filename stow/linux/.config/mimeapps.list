@@ -71,6 +71,7 @@ application/x-archive=org.kde.ark.desktop
 x-scheme-handler/discord=vesktop.desktop
 inode/directory=org.kde.dolphin.desktop
 x-scheme-handler/betterdiscord=discord.desktop
+text/plain=nvim.desktop
 x-scheme-handler/about=zen.desktop
 x-scheme-handler/unknown=zen.desktop
 application/x-bittorrent=org.qbittorrent.qBittorrent.desktop

@@ -1,7 +1,6 @@
 [tools]
 usage = "latest"
 node = "lts"
-python = "3.13"
 go = "latest"
 zig = "master"
 rust = "stable"
@@ -11,6 +10,7 @@ lua = "5.4.7"
 ASDF_LUA_LUAROCKS_VERSION = "3.11.1"
 
 [settings]
+disable_tools = ["python"]
 idiomatic_version_file_enable_tools = ["node"]
 
 [settings.zig]
