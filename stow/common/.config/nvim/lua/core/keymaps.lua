@@ -4,8 +4,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
-map("n", "_", "o<ESC>", { noremap = true, silent = true })
-
 map("n", "<2-LeftMouse>", "<LeftMouse>viw", { noremap = true, silent = true })
 
 map({ "n", "v" }, "<leader>cj", ":%!jq '.'<cr>", { desc = "Format JSON" })

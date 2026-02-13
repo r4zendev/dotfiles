@@ -1,1 +1,6 @@
 .config/hypr/.wallpaper-state
+.config/input-remapper-2/
+.config/hypr/scripts/mc-*
+.config/hypr/mcsr.conf
+.config/keyd/
+
