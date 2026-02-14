@@ -31,6 +31,7 @@ import { Wallpaper } from "~/modules/wallpaper";
 /** handles stylesheet compiling and reloading */
 export class Stylesheet {
 	private static instance: Stylesheet;
+	#generation = 0;
 	#outputPath = Gio.File.new_for_path(
 		`${GLib.get_user_cache_dir()}/novashell/style`,
 	);
@@ -203,6 +204,9 @@ export class Stylesheet {
 	}
 
 	private applyExternalColors(): void {
+		const gen = ++this.#generation;
+		const stale = () => gen !== this.#generation;
+
 		this.compileApply();
 
 		const data = Wallpaper.getDefault().getData();
@@ -212,27 +216,35 @@ export class Stylesheet {
 		broadcastTerminalColors(data);
 
 		const themeId = data.name;
-		Promise.all([
-			updateIconTheme(data),
+
+		reloadNeovim(themeId);
+
+		generateTmuxColors(data, palette)
+			.then(() => {
+				if (!stale()) reloadTmux();
+			})
+			.catch((e) => console.error(`Stylesheet: tmux colors: ${e}`));
+
+		generateFishColors(data)
+			.then(() => {
+				if (!stale()) reloadFish();
+			})
+			.catch((e) => console.error(`Stylesheet: fish colors: ${e}`));
+
+		const slowTasks = [
 			updateGhosttyColors(data),
-			generateFishColors(data),
+			updateIconTheme(data),
 			updateBtopColors(data),
 			updateGtkColors(data, palette),
 			updateQtColors(data, palette),
 			updateKdeColorScheme(data, palette),
-			generateTmuxColors(data, palette),
 			updateTelegramTheme(data, palette),
 			updateVesktopTheme(data, palette),
 			updateYTMusicTheme(data, palette),
 			updateZenTheme(data, palette),
-		])
-			.then(() => {
-				reloadTmux();
-				reloadFish();
-				reloadNeovim(themeId);
-			})
-			.catch((e) => {
-				console.error(`Stylesheet: Error applying external colors: ${e}`);
-			});
+		];
+		Promise.all(slowTasks).catch((e) => {
+			console.error(`Stylesheet: Error applying colors: ${e}`);
+		});
 	}
 }

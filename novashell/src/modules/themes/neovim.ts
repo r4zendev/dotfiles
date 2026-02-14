@@ -18,7 +18,7 @@ export function reloadNeovim(themeName?: string): void {
 	execAsync([
 		"bash",
 		"-c",
-		`for sock in "${runtimeDir}"/nvim.*.0; do [ -e "$sock" ] && nvim --server "$sock" --remote-send ':lua require("core.colorscheme").apply("${escaped}")<CR>' 2>/dev/null; done`,
+		`for sock in "${runtimeDir}"/nvim.*.0; do [ -e "$sock" ] && nvim --server "$sock" --remote-send ':lua require("core.colorscheme").apply("${escaped}", {silent=true})<CR>' 2>/dev/null; done`,
 	])
 		.then(() => {})
 		.catch(() => {});

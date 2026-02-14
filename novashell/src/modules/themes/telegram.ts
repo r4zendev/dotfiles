@@ -6,6 +6,8 @@ import { execAsync } from "ags/process";
 import type { ColorData, DerivedPalette } from "./types";
 import { adjustLightness, ensureDirectory } from "./utils";
 
+let telegramThemeGeneration = 0;
+
 export async function updateTelegramTheme(
 	data: ColorData,
 	p: DerivedPalette,
@@ -526,6 +528,8 @@ historyReplyIconFg: ${p.accent};
 historyVideoMessageProgressFg: ${p.accent};
 `;
 
+	const generation = ++telegramThemeGeneration;
+
 	const cacheDir = `${GLib.get_user_cache_dir()}/novashell`;
 	ensureDirectory(cacheDir);
 
@@ -533,6 +537,8 @@ historyVideoMessageProgressFg: ${p.accent};
 	await writeFileAsync(colorsPath, theme).catch((e: Error) => {
 		console.error(`ColorUtils: Failed to write Telegram colors: ${e.message}`);
 	});
+
+	if (generation !== telegramThemeGeneration) return;
 
 	const themePath = `${cacheDir}/telegram-theme.tdesktop-theme`;
 	const writePlainTheme = async (): Promise<void> => {
@@ -558,6 +564,8 @@ historyVideoMessageProgressFg: ${p.accent};
 				`ColorUtils: Failed to resize wallpaper for Telegram: ${e.message}`,
 			);
 		});
+
+		if (generation !== telegramThemeGeneration) return;
 
 		if (GLib.file_test(resizedPath, GLib.FileTest.EXISTS)) {
 			await execAsync([

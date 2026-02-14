@@ -1,27 +1,31 @@
-function wallpaper --description "Manage Hyprland wallpapers via swww"
+function wallpaper --description "Manage Hyprland wallpapers via novashell"
     set -l dir "$HOME/wallpapers"
 
     function _notify -a msg
         notify-send -e -t 1500 -a Wallpaper "$msg"
     end
 
-    # Collect images based on enabled categories
-    set -l imgs
-    if test (wallpaper-state get exclude_default) != true
-        for f in $dir/*.{jpg,jpeg,png,gif}
-            test -f "$f"; and set -a imgs "$f"
-        end
-    end
-    for cat in nsfw restricted explicit
-        if test (wallpaper-state get allow_$cat) = true; and test -d "$dir/$cat"
-            for f in $dir/$cat/*.{jpg,jpeg,png,gif}
+    function _collect_images
+        set -l dir "$HOME/wallpapers"
+        set -l imgs
+        if test (wallpaper-state get exclude_default) != true
+            for f in $dir/*.{jpg,jpeg,png,gif}
                 test -f "$f"; and set -a imgs "$f"
             end
         end
+        for cat in nsfw restricted explicit
+            if test (wallpaper-state get allow_$cat) = true; and test -d "$dir/$cat"
+                for f in $dir/$cat/*.{jpg,jpeg,png,gif}
+                    test -f "$f"; and set -a imgs "$f"
+                end
+            end
+        end
+        printf '%s\n' $imgs
     end
 
     switch $argv[1]
         case random
+            set -l imgs (_collect_images)
             test (count $imgs) -eq 0; and _notify "No images"; and return 1
             set -l img $imgs[(random 1 (count $imgs))]
             wallpaper-state set current_image "$img"
@@ -37,10 +41,12 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
             else
                 set -l img (wallpaper-state get current_image)
                 if test -z "$img" -o ! -f "$img"
-                    test (count $imgs) -gt 0; and set img $imgs[(random 1 (count $imgs))]; and wallpaper-state set current_image "$img"
+                    set -l imgs (_collect_images)
+                    test (count $imgs) -gt 0; and set img $imgs[(random 1 (count $imgs))]
                 end
                 if test -n "$img" -a -f "$img"
                     wallpaper-state set enabled true
+                    wallpaper-state set current_image "$img"
                     swww img "$img" --transition-type fade --transition-duration 0.3
                     _notify ON
                 end
@@ -66,6 +72,7 @@ function wallpaper --description "Manage Hyprland wallpapers via swww"
             echo "enabled: "(wallpaper-state get enabled)
             echo "image: "(wallpaper-state get current_image)
             echo "nsfw: "(wallpaper-state get allow_nsfw)"  restricted: "(wallpaper-state get allow_restricted)"  explicit: "(wallpaper-state get allow_explicit)"  exclude_default: "(wallpaper-state get exclude_default)
+            set -l imgs (_collect_images)
             echo "available: "(count $imgs)
 
         case '*'

@@ -118,6 +118,8 @@ end
 
 M.pywal_data = nil
 M._pywal_raw = nil
+M._has_focus = true
+M._pending_theme = nil
 
 local function load_pywal_data()
   local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
@@ -228,12 +230,19 @@ function M.get_theme(name)
   return nil
 end
 
-function M.apply(name)
+function M.apply(name, opts)
+  opts = opts or {}
   local theme = M.get_theme(name)
   if not theme then
     return false
   end
 
+  if opts.silent and not M._has_focus then
+    M._pending_theme = name
+    return true
+  end
+
+  M._pending_theme = nil
   vim.g.THEME = name
 
   local ok
@@ -257,13 +266,10 @@ function M.apply(name)
     transparent_statusline()
     diagnostics()
 
-    -- For custom_apply themes, fire ColorScheme so plugins (lualine etc.) update.
-    -- :colorscheme already fires this for built-in themes.
     if theme.custom_apply then
       vim.cmd("doautocmd ColorScheme " .. (theme.colorscheme or ""))
     end
 
-    -- Re-assert diagnostic colors after all plugin ColorScheme handlers settle
     if theme.colorscheme == "pywal" then
       vim.schedule(function()
         if vim.g.colors_name ~= "pywal" then
@@ -301,12 +307,20 @@ vim.api.nvim_create_autocmd("VimEnter", {
 vim.api.nvim_create_autocmd("FocusGained", {
   group = group,
   callback = function()
+    M._has_focus = true
+
+    if M._pending_theme then
+      local pending = M._pending_theme
+      M._pending_theme = nil
+      M.apply(pending)
+      return
+    end
+
     if vim.g.THEME ~= "System (pywal)" then
       return
     end
 
     local file = io.open(vim.fn.expand("~/.cache/wal/colors.json"), "r")
-
     if not file then
       return
     end
@@ -319,6 +333,13 @@ vim.api.nvim_create_autocmd("FocusGained", {
     end
 
     M.apply("System (pywal)")
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusLost", {
+  group = group,
+  callback = function()
+    M._has_focus = false
   end,
 })
 

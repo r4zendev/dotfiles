@@ -128,6 +128,8 @@ export class Wallpaper extends GObject.Object {
 	#wallpaper: string | undefined;
 	#splash: boolean = false;
 	#wallpapersPath: string;
+	#stateMonitor: Gio.FileMonitor | undefined;
+	#colorGeneration = 0;
 
 	@getter(Boolean)
 	public get splash() {
@@ -188,10 +190,11 @@ export class Wallpaper extends GObject.Object {
 		const stateFilename = ".wallpaper-state";
 		let stateDebounce: number | null = null;
 		const stateDirFile = Gio.File.new_for_path(stateDir);
-		const monitor = stateDirFile.monitor_directory(
+		this.#stateMonitor = stateDirFile.monitor_directory(
 			Gio.FileMonitorFlags.WATCH_MOVES,
 			null,
 		);
+		const monitor = this.#stateMonitor;
 		monitor.connect("changed", (_mon, file, _other, _event) => {
 			const path = file.get_path();
 			if (!path?.endsWith(stateFilename)) return;
@@ -336,9 +339,11 @@ export class Wallpaper extends GObject.Object {
 			return;
 		}
 
+		const gen = ++this.#colorGeneration;
 		const light = this.colorMode === "lighten";
 		this.generateColorsFromImage(this.#wallpaper, light)
 			.then(async (data) => {
+				if (gen !== this.#colorGeneration) return;
 				const cacheDir =
 					GLib.getenv("XDG_CACHE_HOME") ?? `${GLib.get_home_dir()}/.cache`;
 				const walDir = `${cacheDir}/wal`;
@@ -350,6 +355,7 @@ export class Wallpaper extends GObject.Object {
 					`${walDir}/colors.json`,
 					JSON.stringify(data, null, 4),
 				);
+				if (gen !== this.#colorGeneration) return;
 				this.emit("colors-reloaded");
 			})
 			.catch((e: Error) => {
