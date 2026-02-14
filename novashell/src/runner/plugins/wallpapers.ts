@@ -8,11 +8,23 @@ import { createRoot, jsx } from "ags";
 import { type Gdk, Gtk } from "ags/gtk4";
 import Fuse, { type IFuseOptions } from "fuse.js";
 
+import { exec } from "ags/process";
+
 import { createScopedConnection } from "~/lib/gnim-utils";
 import { Cache } from "~/modules/cache";
 import { Wallpaper } from "~/modules/wallpaper";
 import { Runner } from "~/runner/Runner";
 import type { ResultWidget } from "~/runner/widgets/ResultWidget";
+
+function getRestrictedFolders(): Set<string> {
+	try {
+		return new Set(
+			exec("wallpaper-state restricted-folders").trim().split(/\s+/).filter(Boolean),
+		);
+	} catch {
+		return new Set();
+	}
+}
 
 class _PluginWallpapers implements Runner.Plugin {
 	prefix = "#";
@@ -21,24 +33,60 @@ class _PluginWallpapers implements Runner.Plugin {
 	#files!: Array<Gio.FileInfo>;
 	#dir: string = Wallpaper.getDefault().wallpapersPath;
 	#subdir: string | undefined = undefined;
+	#flattenedSubdirs: Map<string, string> = new Map();
 	readonly #options = {
 		useExtendedSearch: false,
 		shouldSort: true,
 		isCaseSensitive: false,
 	} satisfies IFuseOptions<string>;
 
+	private isFolderAllowed(name: string): boolean {
+		if (!getRestrictedFolders().has(name)) return true;
+		try {
+			return exec(`wallpaper-state get allow_${name}`).trim() === "true";
+		} catch {
+			return false;
+		}
+	}
+
 	init() {
 		this.#files = [];
 		this.#subdir = undefined;
+		this.#flattenedSubdirs = new Map();
 
 		const dir = Gio.File.new_for_path(this.#dir);
-		if (dir.query_file_type(null, null) === Gio.FileType.DIRECTORY) {
-			for (const file of dir.enumerate_children(
-				"standard::*",
-				Gio.FileQueryInfoFlags.NONE,
-				null,
-			)) {
-				this.#files.push(file);
+		if (dir.query_file_type(null, null) !== Gio.FileType.DIRECTORY) return;
+
+		const subdirsToFlatten: string[] = [];
+
+		for (const file of dir.enumerate_children(
+			"standard::*",
+			Gio.FileQueryInfoFlags.NONE,
+			null,
+		)) {
+			if (file.get_file_type() === Gio.FileType.DIRECTORY) {
+				if (this.isFolderAllowed(file.get_name()))
+					subdirsToFlatten.push(file.get_name());
+				continue;
+			}
+			this.#files.push(file);
+		}
+
+		for (const sub of subdirsToFlatten) {
+			const subDir = Gio.File.new_for_path(`${this.#dir}/${sub}`);
+			try {
+				for (const file of subDir.enumerate_children(
+					"standard::*",
+					Gio.FileQueryInfoFlags.NONE,
+					null,
+				)) {
+					if (file.get_file_type() !== Gio.FileType.DIRECTORY) {
+						this.#files.push(file);
+						this.#flattenedSubdirs.set(file.get_name(), sub);
+					}
+				}
+			} catch (e) {
+				console.warn(`Wallpapers: couldn't enumerate subfolder "${sub}": ${e}`);
 			}
 		}
 
@@ -108,9 +156,11 @@ class _PluginWallpapers implements Runner.Plugin {
 	}
 
 	private getWallpaperPath(fileInfo: Gio.FileInfo): string {
+		const name = fileInfo.get_name();
+		const sub = this.#subdir || this.#flattenedSubdirs.get(name);
 		return `${Wallpaper.getDefault().wallpapersPath}/${
-			this.#subdir ? `${this.#subdir}/` : ""
-		}${fileInfo.get_name()}`;
+			sub ? `${sub}/` : ""
+		}${name}`;
 	}
 
 	private result(info: Gio.FileInfo): Runner.Result {
@@ -224,6 +274,15 @@ class _PluginWallpapers implements Runner.Plugin {
 					: "";
 			split = split.filter((s) => s !== search);
 			this.#subdir = split.join("/");
+
+			const rootFolder = split[0];
+			if (rootFolder && !this.isFolderAllowed(rootFolder)) {
+				return {
+					title: "Folder not allowed",
+					description: `Enable "${rootFolder}" in wallpaper settings first`,
+					icon: "dialog-warning-symbolic",
+				} satisfies Runner.Result;
+			}
 
 			if (
 				GLib.file_test(`${this.#dir}/${this.#subdir}`, GLib.FileTest.IS_DIR)

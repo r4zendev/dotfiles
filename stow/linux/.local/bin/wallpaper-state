@@ -2,7 +2,9 @@
 # Shared wallpaper state file operations
 # Usage: wallpaper-state get <key>
 #        wallpaper-state set <key> <value>
+#        wallpaper-state restricted-folders
 SF="${HOME}/.config/hypr/.wallpaper-state"
+RESTRICTED_FOLDERS="nsfw restricted explicit"
 
 case "$1" in
     get)
@@ -14,8 +16,12 @@ case "$1" in
         echo "${2}=${3}" >> "$t"
         mv "$t" "$SF"
         ;;
+    restricted-folders)
+        echo "$RESTRICTED_FOLDERS"
+        ;;
     *)
         echo "Usage: wallpaper-state {get|set} <key> [value]" >&2
+        echo "       wallpaper-state restricted-folders" >&2
         exit 1
         ;;
 esac

@@ -13,7 +13,7 @@ function wallpaper --description "Manage Hyprland wallpapers via novashell"
                 test -f "$f"; and set -a imgs "$f"
             end
         end
-        for cat in nsfw restricted explicit
+        for cat in (wallpaper-state restricted-folders | string split " ")
             if test (wallpaper-state get allow_$cat) = true; and test -d "$dir/$cat"
                 for f in $dir/$cat/*.{jpg,jpeg,png,gif}
                     test -f "$f"; and set -a imgs "$f"
