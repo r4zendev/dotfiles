@@ -34,6 +34,7 @@ class _PluginWallpapers implements Runner.Plugin {
 	#dir: string = Wallpaper.getDefault().wallpapersPath;
 	#subdir: string | undefined = undefined;
 	#flattenedSubdirs: Map<string, string> = new Map();
+	#cacheKey: string | null = null;
 	readonly #options = {
 		useExtendedSearch: false,
 		shouldSort: true,
@@ -49,9 +50,41 @@ class _PluginWallpapers implements Runner.Plugin {
 		}
 	}
 
-	init() {
+	private getDirMtime(path: string): number {
+		try {
+			return Gio.File.new_for_path(path)
+				.query_info("time::modified", Gio.FileQueryInfoFlags.NONE, null)
+				.get_modification_date_time()?.to_unix() ?? 0;
+		} catch {
+			return 0;
+		}
+	}
+
+	private getCacheKey(): string {
+		const stateMtime = this.getDirMtime(
+			`${GLib.get_home_dir()}/.config/hypr/.wallpaper-state`,
+		);
+		const rootMtime = this.getDirMtime(this.#dir);
+
+		const subMtimes: number[] = [];
+		try {
+			const dir = Gio.File.new_for_path(this.#dir);
+			for (const file of dir.enumerate_children(
+				"standard::name,standard::type,time::modified",
+				Gio.FileQueryInfoFlags.NONE,
+				null,
+			)) {
+				if (file.get_file_type() === Gio.FileType.DIRECTORY) {
+					subMtimes.push(file.get_modification_date_time()?.to_unix() ?? 0);
+				}
+			}
+		} catch {}
+
+		return `${stateMtime}:${rootMtime}:${subMtimes.join(",")}`;
+	}
+
+	private enumerate() {
 		this.#files = [];
-		this.#subdir = undefined;
 		this.#flattenedSubdirs = new Map();
 
 		const dir = Gio.File.new_for_path(this.#dir);
@@ -94,6 +127,16 @@ class _PluginWallpapers implements Runner.Plugin {
 			this.#files.map((inf) => inf.get_name()) as ReadonlyArray<string>,
 			this.#options,
 		);
+	}
+
+	init() {
+		this.#subdir = undefined;
+
+		const key = this.getCacheKey();
+		if (key === this.#cacheKey && this.#files?.length > 0) return;
+
+		this.enumerate();
+		this.#cacheKey = key;
 	}
 
 	onClose() {
