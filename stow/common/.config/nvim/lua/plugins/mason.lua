@@ -1,6 +1,7 @@
 return {
   {
     "williamboman/mason.nvim",
+    event = "VeryLazy",
     opts = {
       ui = {
         icons = {
@@ -83,6 +84,7 @@ return {
   },
   {
     "mason-org/mason-lspconfig.nvim",
+    event = "VeryLazy",
     dependencies = {
       "williamboman/mason.nvim",
       { "neovim/nvim-lspconfig", dependencies = { "b0o/schemastore.nvim" } },
