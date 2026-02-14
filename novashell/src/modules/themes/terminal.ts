@@ -17,8 +17,8 @@ export function broadcastTerminalColors(data: ColorData): void {
 
 	execAsync([
 		"python3",
-		"-c",
-		`import glob,os\nseq="${seq}"\nseq=seq.encode().decode("unicode_escape")\ncount=0\nfor t in glob.glob("/dev/pts/[0-9]*"):\n try:\n  with open(t,"w") as f: f.write(seq); count+=1\n except: pass\nprint(count)`,
+		`${SOURCE_DIR}/scripts/broadcast-terminal-colors.py`,
+		seq,
 	])
 		.then(() => {})
 		.catch((e) => console.error(`ColorUtils: Broadcast failed: ${e}`));

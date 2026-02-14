@@ -570,8 +570,7 @@ historyVideoMessageProgressFg: ${p.accent};
 		if (GLib.file_test(resizedPath, GLib.FileTest.EXISTS)) {
 			await execAsync([
 				"python3",
-				"-c",
-				`import zipfile,sys,os\nwith zipfile.ZipFile(sys.argv[1],"w",zipfile.ZIP_DEFLATED) as z:\n z.write(sys.argv[2],"colors.tdesktop-theme")\n z.write(sys.argv[3],"background.jpg")\nos.unlink(sys.argv[3])`,
+				`${SOURCE_DIR}/scripts/create-telegram-theme.py`,
 				themePath,
 				colorsPath,
 				resizedPath,
