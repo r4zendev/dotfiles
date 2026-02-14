@@ -1,7 +1,7 @@
 {
   "primary_shortcut": "SUPER+ALT+D",
-  "secondary_shortcut": null,
-  "secondary_language": null,
+  "secondary_shortcut": "SUPER+ALT+S",
+  "secondary_language": "ru",
   "recording_mode": "toggle",
   "grab_keys": false,
   "use_hypr_bindings": true,
@@ -13,7 +13,7 @@
   "audio_device_model_id": null,
   "model": "medium",
   "threads": 4,
-  "language": null,
+  "language": "en",
   "word_overrides": {},
   "symbol_replacements": true,
   "whisper_prompt": "Transcribe with proper capitalization, including sentence beginnings, proper nouns, titles, and standard English capitalization rules.",

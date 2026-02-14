@@ -29,6 +29,7 @@ is_recording() {
 }
 
 do_record() {
+    local lang="$1"
     local control_file="$HOME/.config/hyprwhspr/recording_control"
     if is_recording; then
         echo "stop" > "$control_file"
@@ -37,7 +38,11 @@ do_record() {
             systemctl --user start hyprwhspr.service
             sleep 0.5
         fi
-        echo "start" > "$control_file"
+        if [[ -n "$lang" ]]; then
+            echo "start:$lang" > "$control_file"
+        else
+            echo "start" > "$control_file"
+        fi
     fi
 }
 
@@ -51,7 +56,7 @@ do_mute() {
 }
 
 case "${1:-}" in
-    record)  do_record ;;
+    record)  do_record "${2:-}" ;;
     restart) do_restart ;;
     mute)    do_mute ;;
     *) echo "Usage: $0 {record|restart|mute}" ;;
