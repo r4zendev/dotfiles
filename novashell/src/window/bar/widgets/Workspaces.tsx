@@ -21,20 +21,14 @@ function resolveWorkspaceDisplayIcon(
 	lastClient: AstalHyprland.Client | null,
 	focusedClient: AstalHyprland.Client | null,
 ) {
-	const clientsOnWorkspace = clients.filter(
-		(client) => client.workspace?.id === ws.id,
-	);
-
-	const fallbackClient =
-		clientsOnWorkspace.find((client) => client.class || client.initialClass) ??
-		clientsOnWorkspace[0] ??
-		lastClient;
-
 	const focusedOnWs =
 		focusedClient && focusedClient.workspace?.id === ws.id
 			? focusedClient
 			: null;
-	const client = focusedOnWs ?? fallbackClient;
+
+	const client = focusedOnWs ?? lastClient ?? clients.find(
+		(c) => c.workspace?.id === ws.id && (c.class || c.initialClass),
+	) ?? null;
 
 	if (!client) {
 		return {
