@@ -17,6 +17,24 @@ function getDesktopId(app: AstalApps.Application): string {
 	return "";
 }
 
+function matchesAny(
+	app: AstalApps.Application,
+	list: string[],
+): boolean {
+	const name = app.get_name()?.toLowerCase() || "";
+	const desktop = getDesktopId(app).toLowerCase();
+	const wmClass = app.wmClass?.toLowerCase() || "";
+
+	return list.some((entry) => {
+		const lower = entry.toLowerCase();
+		return (
+			name.includes(lower) ||
+			desktop.includes(lower) ||
+			wmClass.includes(lower)
+		);
+	});
+}
+
 export function filterExcludedApps(
 	apps: Array<AstalApps.Application>,
 ): Array<AstalApps.Application> {
@@ -24,20 +42,17 @@ export function filterExcludedApps(
 		(generalConfig.getProperty("apps.exclude", "object") as string[]) || [];
 	if (!exclude.length) return apps;
 
-	return apps.filter((app) => {
-		const name = app.get_name()?.toLowerCase() || "";
-		const desktop = getDesktopId(app).toLowerCase();
-		const wmClass = app.wmClass?.toLowerCase() || "";
+	return apps.filter((app) => !matchesAny(app, exclude));
+}
 
-		return !exclude.some((ex) => {
-			const exLower = ex.toLowerCase();
-			return (
-				name.includes(exLower) ||
-				desktop.includes(exLower) ||
-				wmClass.includes(exLower)
-			);
-		});
-	});
+export function filterRunnerApps(
+	apps: Array<AstalApps.Application>,
+): Array<AstalApps.Application> {
+	const runner =
+		(generalConfig.getProperty("apps.runner", "object") as string[]) || [];
+	if (!runner.length) return filterExcludedApps(apps);
+
+	return apps.filter((app) => matchesAny(app, runner));
 }
 
 export function getApps(): Array<AstalApps.Application> {

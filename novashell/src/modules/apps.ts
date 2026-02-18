@@ -5,6 +5,7 @@ import { execAsync } from "ags/process";
 
 export {
 	filterExcludedApps,
+	filterRunnerApps,
 	getApps,
 	queryApps,
 	updateApps,

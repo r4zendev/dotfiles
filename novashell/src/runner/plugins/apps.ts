@@ -1,5 +1,6 @@
 import {
 	execApp,
+	filterRunnerApps,
 	getAppIcon,
 	getApps,
 	queryApps,
@@ -11,9 +12,11 @@ export const PluginApps = {
 	name: "Apps",
 	init: async () => updateApps(),
 	handle: (text: string, limit?: number) => {
-		const apps = text.trim()
-			? queryApps(text)
-			: [...getApps()].sort((a, b) => b.frequency - a.frequency);
+		const apps = filterRunnerApps(
+			text.trim()
+				? queryApps(text)
+				: [...getApps()].sort((a, b) => b.frequency - a.frequency),
+		);
 
 		return apps.slice(0, limit).map((app) => ({
 			title: app.get_name(),

@@ -436,22 +436,8 @@ export namespace Runner {
 								// Trigger initial results (frecency-sorted apps)
 								gtkEntry?.notify("text");
 							}}
-							actionKeyPressed={(self, keyval, _keycode, state) => {
+							actionKeyPressed={(self, keyval) => {
 								const listbox = getListboxFromPopup(self);
-								const ctrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
-
-								const navigate = (
-									direction: "prev" | "next",
-									steps: number = 1,
-								): void => {
-									if (steps <= 1) {
-										selectItem(listbox, direction);
-									} else {
-										selectItemN(listbox, direction, steps);
-									}
-
-									gtkEntry?.grab_focus();
-								};
 
 								switch (keyval) {
 									case Gdk.KEY_F5:
@@ -460,41 +446,15 @@ export namespace Runner {
 
 									case Gdk.KEY_Left:
 									case Gdk.KEY_Up:
-										navigate("prev");
+										selectItem(listbox, "prev");
+										gtkEntry?.grab_focus();
 										return;
 
 									case Gdk.KEY_Right:
 									case Gdk.KEY_Down:
-										navigate("next");
+										selectItem(listbox, "next");
+										gtkEntry?.grab_focus();
 										return;
-
-									case Gdk.KEY_j:
-										if (ctrl) {
-											navigate("next");
-											return;
-										}
-										break;
-
-									case Gdk.KEY_k:
-										if (ctrl) {
-											navigate("prev");
-											return;
-										}
-										break;
-
-									case Gdk.KEY_d:
-										if (ctrl) {
-											navigate("next", 5);
-											return;
-										}
-										break;
-
-									case Gdk.KEY_u:
-										if (ctrl) {
-											navigate("prev", 5);
-											return;
-										}
-										break;
 								}
 
 								if (ignoredKeys.has(keyval)) return;
@@ -519,6 +479,38 @@ export namespace Runner {
 								placeholderText={props.entryPlaceHolder ?? ""}
 								$={(self) => {
 									gtkEntry = self;
+
+									const entryKeyController = Gtk.EventControllerKey.new();
+									entryKeyController.set_propagation_phase(Gtk.PropagationPhase.CAPTURE);
+									entryKeyController.connect("key-pressed", (_, keyval, _keycode, state) => {
+										const ctrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
+										if (!ctrl) return false;
+
+										const listbox = getListboxFromEntry(self);
+										const navigate = (direction: "prev" | "next", steps = 1) => {
+											if (steps <= 1) selectItem(listbox, direction);
+											else selectItemN(listbox, direction, steps);
+											self.grab_focus();
+										};
+
+										switch (keyval) {
+											case Gdk.KEY_j:
+												navigate("next");
+												return true;
+											case Gdk.KEY_k:
+												navigate("prev");
+												return true;
+											case Gdk.KEY_d:
+												navigate("next", 5);
+												return true;
+											case Gdk.KEY_u:
+												navigate("prev", 5);
+												return true;
+										}
+
+										return false;
+									});
+									self.add_controller(entryKeyController);
 								}}
 								onNotifyText={(self) => {
 									const listbox = getListboxFromEntry(self);

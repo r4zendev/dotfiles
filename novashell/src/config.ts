@@ -102,6 +102,10 @@ const generalConfigDefaults = {
 		/** list of app names or .desktop filenames to exclude from app launcher
 		 * @example ["Avahi SSH Server Browser", "qt5ct", "electron29"] */
 		exclude: [] as string[],
+		/** whitelist of app names or .desktop filenames for the runner.
+		 * when non-empty, only matching apps appear in the runner.
+		 * @example ["Zen Browser", "Ghostty", "Discord"] */
+		runner: [] as string[],
 		/** WM class → icon name overrides for apps whose icons aren't resolved automatically.
 		 * keys are WM class names (from `hyprctl clients`), values are icon names.
 		 * @example { "com.github.th_ch.youtube_music": "pear-desktop" } */
