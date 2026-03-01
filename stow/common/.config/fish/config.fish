@@ -26,6 +26,7 @@ if type -q mise
 end
 
 set -U fish_greeting # disable fish greeting
+bind \ce forward-word
 # i don't use vi mode in fish
 # set -U fish_key_bindings fish_vi_key_bindings
 

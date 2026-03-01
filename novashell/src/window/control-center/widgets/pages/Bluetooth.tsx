@@ -75,7 +75,7 @@ export const BluetoothPage = createRoot(
 						title: "More settings",
 						actionClicked: () => {
 							Windows.getDefault().close("control-center");
-							execApp("overskride", "[float]");
+							execApp("blueman-manager", "[float]");
 						},
 					},
 				]}

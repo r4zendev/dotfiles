@@ -142,9 +142,11 @@ export class Bluetooth extends GObject.Object {
 			const deviceConns: Map<string, number> = new Map();
 
 			this.astalBl.devices.forEach((dev) => {
+				this.ensureTrusted(dev);
 				deviceConns.set(
 					dev.address,
 					dev.connect("notify::connected", () => {
+						this.ensureTrusted(dev);
 						this.#lastDevice = this.getLastConnectedDevice();
 						this.notify("last-device");
 					}),
@@ -158,6 +160,7 @@ export class Bluetooth extends GObject.Object {
 					deviceConns.set(
 						dev.address,
 						dev.connect("notify::connected", () => {
+							this.ensureTrusted(dev);
 							this.#lastDevice = this.getLastConnectedDevice();
 							this.notify("last-device");
 						}),
@@ -183,6 +186,12 @@ export class Bluetooth extends GObject.Object {
 		if (!Bluetooth.instance) Bluetooth.instance = new Bluetooth();
 
 		return Bluetooth.instance;
+	}
+
+	private ensureTrusted(device: AstalBluetooth.Device): void {
+		if (device.paired && device.connected && !device.trusted) {
+			device.set_trusted(true);
+		}
 	}
 
 	private getLastConnectedDevice(): AstalBluetooth.Device | null {
