@@ -1,7 +1,18 @@
-local map = vim.keymap.set
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+require("utils").mirror_keys({
+  ["<C-h>"] = "<C-Left>",
+  ["<C-j>"] = "<C-Down>",
+  ["<C-k>"] = "<C-Up>",
+  ["<C-l>"] = "<C-Right>",
+  ["h"] = "<Left>",
+  ["j"] = "<Down>",
+  ["k"] = "<Up>",
+  ["l"] = "<Right>",
+})
+
+local map = vim.keymap.set
 
 map("i", "jk", "<Esc>", { desc = "Exit insert mode with jk" })
 map("n", "<2-LeftMouse>", "<LeftMouse>viw", { noremap = true, silent = true })
@@ -24,11 +35,6 @@ map("v", "g<M-=>", "g<C-a>gv", { noremap = true, silent = true, desc = "Sequenti
 map("v", "g<M-->", "g<C-x>gv", { noremap = true, silent = true, desc = "Sequential decrement" })
 map({ "n", "v" }, "<C-a>", "<Nop>", { noremap = true, silent = true })
 
-map({ "n", "v" }, "<Left>", "h", { noremap = true, silent = true })
-map({ "n", "v" }, "<Down>", "j", { noremap = true, silent = true })
-map({ "n", "v" }, "<Up>", "k", { noremap = true, silent = true })
-map({ "n", "v" }, "<Right>", "l", { noremap = true, silent = true })
-
 map("n", "<leader>pp", '"_cgn<C-r>"<Esc>', { desc = "Change next match with clipboard" }) -- (dot-repeatable)
 
 map("n", "<leader>yy", ':let @+ = expand("%:p")<CR>', { desc = "Copy buffer's path" })
@@ -49,10 +55,6 @@ map("n", "<leader>wJ", "<C-w>J", { desc = "Move split to bottom" })
 map("n", "<leader>wK", "<C-w>K", { desc = "Move split to top" })
 map("n", "<leader>wL", "<C-w>L", { desc = "Move split to right" })
 
-map("n", "<C-Left>", "5<C-w><", { desc = "Width shrink" })
-map("n", "<C-Right>", "5<C-w>>", { desc = "Width grow" })
-map("n", "<C-Up>", "5<C-w>+", { desc = "Height grow" })
-map("n", "<C-Down>", "5<C-w>-", { desc = "Height shrink" })
 
 map("n", "gp", "`[v`]", { desc = "Select previous paste" })
 
