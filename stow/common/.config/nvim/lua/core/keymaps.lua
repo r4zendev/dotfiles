@@ -63,6 +63,12 @@ end, { expr = true })
 map("n", "j", function()
   return vim.v.count == 0 and "gj" or "j"
 end, { expr = true })
+map("n", "<Up>", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true })
+map("n", "<Down>", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true })
 
 -- repeat dot multiple times
 -- map("n", "<leader>.", function()

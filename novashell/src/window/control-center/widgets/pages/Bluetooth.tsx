@@ -5,9 +5,11 @@ import type Gio from "gi://Gio?version=2.0";
 
 import { createBinding, createComputed, createRoot, For, With } from "ags";
 import { Gtk } from "ags/gtk4";
+import { createPoll } from "ags/time";
 
 import { execApp } from "~/modules/apps";
 import { Bluetooth } from "~/modules/bluetooth";
+import { getSplitBatteryLevels } from "~/modules/bluetooth-battery";
 import { Notifications } from "~/modules/notifications";
 import { variableToBoolean } from "~/modules/utils";
 import { Page, PageButton } from "~/window/control-center/widgets/Page";
@@ -202,6 +204,15 @@ function DeviceWidget({
 }: {
 	device: AstalBluetooth.Device;
 }): Gtk.Widget {
+	const splitBattery = createPoll<number[]>([], 60_000, async () => {
+		if (!device.connected) return [];
+		try {
+			return await getSplitBatteryLevels(device.address);
+		} catch {
+			return [];
+		}
+	});
+
 	const pair = async () => {
 		if (device.paired) return;
 
@@ -256,9 +267,33 @@ function DeviceWidget({
 					<Adw.Spinner visible={createBinding(device, "connecting")} />
 					<Gtk.Box
 						visible={createComputed([
+							splitBattery,
+							createBinding(device, "connected"),
+						]).as(([levels, connected]) => connected && levels.length >= 2)}
+						spacing={4}
+					>
+						<Gtk.Label
+							halign={Gtk.Align.END}
+							label={splitBattery((levels) =>
+								levels.length >= 2
+									? `L: ${levels[0]}% · R: ${levels[1]}%`
+									: "",
+							)}
+						/>
+						<Gtk.Image
+							iconName={splitBattery((levels) => {
+								const min = Math.min(...levels);
+								return `battery-level-${min - (min % 10)}-symbolic`;
+							})}
+							css={"font-size: 16px; margin-left: 6px;"}
+						/>
+					</Gtk.Box>
+					<Gtk.Box
+						visible={createComputed([
+							splitBattery,
 							createBinding(device, "batteryPercentage"),
 							createBinding(device, "connected"),
-						]).as(([batt, connected]) => connected && batt > -1)}
+						]).as(([levels, batt, connected]) => connected && levels.length < 2 && batt > -1)}
 						spacing={4}
 					>
 						<Gtk.Label
@@ -266,7 +301,6 @@ function DeviceWidget({
 							label={createBinding(device, "batteryPercentage").as(
 								(batt) => `${Math.floor(batt * 100)}%`,
 							)}
-							visible={createBinding(device, "connected")}
 						/>
 
 						<Gtk.Image
