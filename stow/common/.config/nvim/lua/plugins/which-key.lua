@@ -3,6 +3,18 @@ return {
   event = "VeryLazy",
   opts = {
     preset = "helix",
+    filter = function(mapping)
+      local lhs = mapping.lhs or ""
+      local prefer_arrows = vim.g.whichkey_prefer_arrows
+      if prefer_arrows == nil then
+        prefer_arrows = vim.fn.has("linux") == 1
+      end
+      if prefer_arrows then
+        return not (lhs:match("[hjklHJKL]$") or lhs:match("<C%-[hjklHJKL]>$"))
+      else
+        return not (lhs:find("<.*Left>") or lhs:find("<.*Right>") or lhs:find("<.*Up>") or lhs:find("<.*Down>"))
+      end
+    end,
     defaults = {},
     icons = {
       rules = {

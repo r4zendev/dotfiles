@@ -45,10 +45,14 @@ end
 
 M.mirror_keys = function(aliases)
   local function replace_lhs(lhs)
+    if type(lhs) ~= "string" or vim.startswith(lhs, "<Plug>") then return end
     for from, to in pairs(aliases) do
       if lhs == from then return to end
       if vim.endswith(lhs, from) then
-        return lhs:sub(1, #lhs - #from) .. to
+        local prefix = lhs:sub(1, #lhs - #from)
+        if not vim.endswith(prefix, "-") then
+          return prefix .. to
+        end
       end
     end
   end
