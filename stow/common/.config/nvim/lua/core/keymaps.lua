@@ -10,6 +10,10 @@ require("utils").mirror_keys({
   ["j"] = "<Down>",
   ["k"] = "<Up>",
   ["l"] = "<Right>",
+  ["H"] = "<S-Left>",
+  ["J"] = "<S-Down>",
+  ["K"] = "<S-Up>",
+  ["L"] = "<S-Right>",
 })
 
 local map = vim.keymap.set
