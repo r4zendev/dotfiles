@@ -21,9 +21,6 @@ PreviewSize=80
 Places Icons Auto-resize=false
 Places Icons Static Size=22
 
-[MainWindow]
-MenuBar=Disabled
-
 [PreviewSettings]
 MaximumRemoteSize=10485760
 MaximumSize=52428800

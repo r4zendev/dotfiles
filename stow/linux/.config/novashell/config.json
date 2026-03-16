@@ -79,7 +79,9 @@
       "Helium Browser",
       "Ghostty",
       "Alacritty",
+      "BambuStudio",
       "Dolphin",
+      "Files",
       "Discord",
       "Vesktop",
       "Telegram",
@@ -104,7 +106,8 @@
       "LibreOffice Writer",
       "Dialect",
       "KiCad",
-      "KDE Connect"
+      "KDE Connect",
+      "FreeCAD"
     ],
     "icon_overrides": {
       "com.github.th_ch.youtube_music": "pear-desktop",
