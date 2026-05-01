@@ -57,7 +57,7 @@ return {
         "black",
         "pylint",
 
-        { "lua_ls", version = "3.16.4" },
+        "lua_ls",
         "stylua",
 
         "typos_lsp",
@@ -92,6 +92,7 @@ return {
     opts = {
       automatic_enable = {
         exclude = {
+          "rust_analyzer",
           "ts_ls",
           -- "vtsls",
           "tsgo",

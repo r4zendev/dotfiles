@@ -4,6 +4,7 @@ return {
   opts = {
     automatic_enable = {
       exclude = {
+        "rust_analyzer",
         "ts_ls",
         "vtsls",
         -- "tsgo",

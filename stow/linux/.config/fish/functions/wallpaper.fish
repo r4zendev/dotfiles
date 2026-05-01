@@ -30,13 +30,13 @@ function wallpaper --description "Manage Hyprland wallpapers via novashell"
             set -l img $imgs[(random 1 (count $imgs))]
             wallpaper-state set current_image "$img"
             wallpaper-state set enabled true
-            swww img "$img" --transition-type fade --transition-duration 0.3
+            awww img "$img" --transition-type fade --transition-duration 0.3
             _notify (basename "$img")
 
         case toggle
             if test (wallpaper-state get enabled) = true
                 wallpaper-state set enabled false
-                swww clear 000000
+                awww clear 000000
                 _notify OFF
             else
                 set -l img (wallpaper-state get current_image)
@@ -47,7 +47,7 @@ function wallpaper --description "Manage Hyprland wallpapers via novashell"
                 if test -n "$img" -a -f "$img"
                     wallpaper-state set enabled true
                     wallpaper-state set current_image "$img"
-                    swww img "$img" --transition-type fade --transition-duration 0.3
+                    awww img "$img" --transition-type fade --transition-duration 0.3
                     _notify ON
                 end
             end

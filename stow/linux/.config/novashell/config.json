@@ -107,7 +107,8 @@
       "Dialect",
       "KiCad",
       "KDE Connect",
-      "FreeCAD"
+      "FreeCAD",
+      "Battle.net"
     ],
     "icon_overrides": {
       "com.github.th_ch.youtube_music": "pear-desktop",

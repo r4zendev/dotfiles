@@ -59,20 +59,19 @@ map("n", "<leader>wJ", "<C-w>J", { desc = "Move split to bottom" })
 map("n", "<leader>wK", "<C-w>K", { desc = "Move split to top" })
 map("n", "<leader>wL", "<C-w>L", { desc = "Move split to right" })
 
-
 map("n", "gp", "`[v`]", { desc = "Select previous paste" })
 
 -- move in wrapped line, useful when vim.opt.wrap is set to true.
-map("n", "k", function()
+map({ "n", "v" }, "k", function()
   return vim.v.count == 0 and "gk" or "k"
 end, { expr = true })
-map("n", "j", function()
+map({ "n", "v" }, "j", function()
   return vim.v.count == 0 and "gj" or "j"
 end, { expr = true })
-map("n", "<Up>", function()
+map({ "n", "v" }, "<Up>", function()
   return vim.v.count == 0 and "gk" or "k"
 end, { expr = true })
-map("n", "<Down>", function()
+map({ "n", "v" }, "<Down>", function()
   return vim.v.count == 0 and "gj" or "j"
 end, { expr = true })
 
