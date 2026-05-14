@@ -208,6 +208,24 @@ stderr for more info.`);
 			: ClipboardItemType.TEXT;
 	}
 
+	private parseHistoryItem(item: string): ClipboardItem | undefined {
+		if (!item) return;
+
+		const separatorIndex = item.indexOf("\t");
+		if (separatorIndex < 0) return;
+
+		const id = Number.parseInt(item.slice(0, separatorIndex), 10);
+		if (Number.isNaN(id)) return;
+
+		const preview = item.slice(separatorIndex + 1);
+
+		return {
+			id,
+			preview,
+			type: this.getContentType(preview),
+		} as ClipboardItem;
+	}
+
 	public async wipeHistory(noExec?: boolean): Promise<void> {
 		if (noExec) {
 			this.#history = [];
@@ -255,38 +273,22 @@ stderr for more info.`);
 				return;
 			}
 
-			const items = stdout.split("\n");
+			const previousIds = new Set(this.#history.map((item) => item.id));
+			const nextHistory = stdout
+				.split("\n")
+				.map((item) => this.parseHistoryItem(item))
+				.filter((item): item is ClipboardItem => item !== undefined);
+
+			this.#history = nextHistory;
+			this.notify("history");
 
 			if (this.#updateDone) {
-				const [id, preview] = items[0].split("\t");
-				const clipItem = {
-					id: Number.parseInt(id),
-					preview,
-					type: this.getContentType(preview),
-				} as ClipboardItem;
+				for (const item of nextHistory) {
+					if (previousIds.has(item.id)) break;
 
-				this.#history.unshift(clipItem);
-
-				this.emit("copied", clipItem);
-				this.notify("history");
+					this.emit("copied", item);
+				}
 				return;
-			}
-
-			for (const item of items) {
-				if (!item) continue;
-
-				const [id, preview] = item.split("\t");
-
-				const clipItem = {
-					id: Number.parseInt(id),
-					preview,
-					type: this.getContentType(preview),
-				} as ClipboardItem;
-
-				this.#history.push(clipItem);
-
-				this.emit("copied", clipItem);
-				this.notify("history");
 			}
 
 			this.#updateDone = true;
