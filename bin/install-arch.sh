@@ -149,6 +149,8 @@ yay -S --needed keyd        # keyboard remapping
 yay -S --needed whisper.cpp # local whisper ASR
 
 # KDE/Dolphin configuration
+sudo pacman -S --needed dolphin kio-extras baloo
+sudo pacman -S --needed plasma-activities plasma-activities-stats kactivitymanagerd kglobalacceld
 sudo pacman -S --needed kio-admin # admin:// protocol for Dolphin
 # Install system service menus
 DOTFILES_DIR="$HOME/projects/dotfiles"
