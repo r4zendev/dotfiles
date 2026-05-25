@@ -1,202 +1,366 @@
 #!/bin/bash
+set -euo pipefail
 
-# Install yay (AUR helper) if not present
-if [[ -z $(command -v yay) ]]; then
-  echo "Installing yay (AUR helper)"
+# Install paru (AUR helper) if not present
+if [[ -z $(command -v paru) ]]; then
+  echo "Installing paru (AUR helper)"
   sudo pacman -Syu --needed git base-devel
-  git clone https://aur.archlinux.org/yay.git /tmp/yay
-  cd /tmp/yay && makepkg -si
+  git clone https://aur.archlinux.org/paru.git /tmp/paru
+  cd /tmp/paru && makepkg -si
   cd ~
 else
-  printf 'yay is already installed, skip it.\n'
+  printf 'paru is already installed, skip it.\n'
 fi
 
-# Update system first to avoid partial upgrades
-yay -Syu
+paru -Syu
 
 cd ~ && mkdir -p projects && cd projects
-git clone git@github.com:r4zendev/dotfiles.git dotfiles
+git clone git@github.com:r4zendev/dotfiles.git dotfiles || true
 
-# Terminal environment
-yay -S --needed ghostty
-# yay -S --needed wezterm
-sudo pacman -S --needed starship
-sudo pacman -S --needed tmux
-yay -S --needed sesh-bin
-sudo pacman -S --needed bash
-sudo pacman -S --needed fish
-yay -S --needed fisher
+# ── Terminal environment ──────────────────────────────────────────────
+paru -S --needed \
+  ghostty \
+  starship \
+  tmux \
+  sesh-bin \
+  bash \
+  fish \
+  neovim \
+  dblab-bin \
+  opencode-bin \
+  micro
+
 curl -fsSL https://claude.ai/install.sh | bash
-curl -fsSL https://opencode.ai/install | bash
-yay -S --needed dblab-bin
-sudo pacman -S --needed neovim
 
-# Git
-sudo pacman -S --needed github-cli
-sudo pacman -S --needed git
-yay -S --needed jujutsu
-# sudo pacman -S --needed git-delta
-# sudo pacman -S --needed difftastic
-sudo pacman -S --needed lazygit
+# ── Git ───────────────────────────────────────────────────────────────
+paru -S --needed \
+  git \
+  git-delta \
+  github-cli \
+  jujutsu \
+  lazygit
 
-# Docker
-sudo pacman -S --needed docker
-sudo pacman -S --needed docker-compose
-yay -S --needed docker-credential-helper
-sudo pacman -S --needed lazydocker
-# Enable docker service
-# sudo systemctl enable --now docker
-# sudo usermod -aG docker $USER
+# ── Docker ────────────────────────────────────────────────────────────
+paru -S --needed \
+  docker \
+  docker-compose \
+  lazydocker
+sudo systemctl enable docker
+sudo usermod -aG docker "$USER"
 
-# PMs / Runtimes
-yay -S --needed bun-bin
-sudo pacman -S --needed pnpm
+# ── Package managers / Runtimes ───────────────────────────────────────
+paru -S --needed \
+  bun-bin \
+  pnpm \
+  uv \
+  mise
 
-yay -S --needed uv
+# ── HTTP clients ──────────────────────────────────────────────────────
+paru -S --needed \
+  curlie \
+  xh
 
-# Curl alternatives
-yay -S --needed curlie
-sudo pacman -S --needed xh
+# ── Wayland / Hyprland ───────────────────────────────────────────────
+paru -S --needed \
+  hyprland \
+  hyprlock \
+  hyprpaper \
+  hyprpicker \
+  hyprpolkitagent \
+  hyprsunset \
+  hyprwhspr \
+  uwsm \
+  wl-clipboard \
+  wl-clip-persist \
+  cliphist \
+  clipse \
+  grim \
+  slurp \
+  wf-recorder \
+  wev \
+  wtype \
+  fuzzel \
+  waybar \
+  xdg-desktop-portal-hyprland \
+  xdg-desktop-portal-gtk \
+  bibata-cursor-git
 
-# Window management (Arch alternatives to yabai)
-sudo pacman -S --needed hyprland
-sudo pacman -S --needed wl-clipboard # clipboard (wl-copy/wl-paste)
-sudo pacman -S --needed grim         # screenshot tool
-sudo pacman -S --needed slurp        # region selection for screenshots
-yay -S --needed hyprpaper            # wallpapers
-yay -S --needed bibata-cursor-git    # cursor theme
+# ── Novashell (AGS/Astal bar) ────────────────────────────────────────
+paru -S --needed \
+  aylurs-gtk-shell-git \
+  libastal-meta \
+  gtk4 \
+  libadwaita \
+  dart-sass \
+  python-pywal16 \
+  libcanberra
 
-# Novashell (replaces waybar, wofi, mako)
-# AGS/Astal runtime
-yay -S --needed aylurs-gtk-shell-git
-yay -S --needed astal-git
-yay -S --needed astal-io-git
-yay -S --needed astal-notifd-git
-yay -S --needed astal-mpris-git
-yay -S --needed astal-wireplumber-git
-yay -S --needed astal-bluetooth-git
-yay -S --needed astal-battery-git
-yay -S --needed astal-network-git
-yay -S --needed astal-tray-git
-yay -S --needed astal-hyprland-git
-yay -S --needed astal-apps-git
-# Novashell build dependencies
-sudo pacman -S --needed gtk4
-sudo pacman -S --needed libadwaita
-sudo pacman -S --needed dart-sass
-# Pywal for theme generation
-yay -S --needed python-pywal16
-# Notification sounds
-sudo pacman -S --needed libcanberra
-# Speech-to-text integration
-yay -S --needed hyprwhspr
+# ── Audio ─────────────────────────────────────────────────────────────
+paru -S --needed \
+  pipewire \
+  pipewire-alsa \
+  pipewire-jack \
+  pipewire-pulse \
+  wireplumber \
+  pavucontrol \
+  playerctl \
+  rtkit
 
-# hyprland.conf -> exec-once = /usr/lib/kdeconnect-indicator
-sudo pacman -S --needed kdeconnect # integration with other devices
-yay -S --needed cliphist           # clipboard manager
-yay -S --needed wl-clip-persist    # keeps clipboard after app closes
+# ── Bluetooth ────────────────────────────────────────────────────────
+paru -S --needed \
+  bluez \
+  bluez-utils \
+  blueman \
+  overskride
 
-sudo pacman -S --needed xdg-desktop-portal-hyprland # screen sharing support
-yay -S --needed wf-recorder                         # screen recording for Wayland
-# sudo pacman -S --needed polkit-kde-agent
+# ── Networking ────────────────────────────────────────────────────────
+paru -S --needed \
+  networkmanager \
+  networkmanager-openvpn \
+  iwd \
+  mullvad-vpn \
+  openssh \
+  bind \
+  ethtool \
+  impala
 
-# yay -S --needed hyprlock # lock screen
-# yay -S --needed hypridle # auto-lock/suspend on idle
+# ── CLI utils ─────────────────────────────────────────────────────────
+paru -S --needed \
+  bat \
+  btop \
+  cowsay \
+  duf \
+  fd \
+  ffmpeg \
+  figlet \
+  fx \
+  fzf \
+  gdu \
+  jq \
+  less \
+  lsd \
+  fastfetch \
+  pv \
+  ripgrep \
+  rsync \
+  stow \
+  tree \
+  wget \
+  yazi \
+  yt-dlp \
+  zoxide \
+  sqlit \
+  plocate
 
-# Various utils (monitoring, peeking, searching, exploring, etc.)
-sudo pacman -S --needed bat       # cat alternative
-sudo pacman -S --needed btop      # system monitor
-sudo pacman -S --needed fd        # find alternative
-sudo pacman -S --needed ffmpeg    # multimedia processing
-sudo pacman -S --needed figlet    # text banners
-yay -S --needed fx                # JSON viewer
-sudo pacman -S --needed fzf       # fuzzy finder
-sudo pacman -S --needed gdu       # disk usage analyzer
-sudo pacman -S --needed jq        # JSON processor
-sudo pacman -S --needed lsd       # ls alternative
-yay -S --needed mise              # version manager
-sudo pacman -S --needed fastfetch # system info (neofetch replacement)
-sudo pacman -S --needed pgcli     # postgres client
-sudo pacman -S --needed ripgrep   # search engine
-sudo pacman -S --needed tealdeer  # quick man-pages extracts
-sudo pacman -S --needed yazi      # file manager
-sudo pacman -S --needed yt-dlp    # youtube downloader
-sudo pacman -S --needed zoxide    # cd alternative
-pnpm i -g fkill-cli               # kill processes
+# ── Fonts ─────────────────────────────────────────────────────────────
+paru -S --needed \
+  ttf-jetbrains-mono-nerd \
+  ttf-meslo-nerd \
+  ttf-iosevka-nerd \
+  otf-monaspace \
+  ttf-dejavu \
+  ttf-liberation \
+  ttf-opensans \
+  noto-fonts \
+  noto-fonts-cjk \
+  noto-fonts-emoji \
+  noto-color-emoji-fontconfig \
+  cantarell-fonts \
+  papirus-icon-theme
 
-# Fonts
-sudo pacman -S --needed ttf-jetbrains-mono-nerd
-sudo pacman -S --needed otf-monaspace
-yay -S --needed ttf-inconsolata-lgc-nerd # cyrillic
+# ── Desktop apps ──────────────────────────────────────────────────────
+paru -S --needed \
+  1password \
+  blender \
+  discord \
+  gimp \
+  libreoffice-fresh \
+  obs-studio \
+  qbittorrent \
+  slack-desktop \
+  telegram-desktop \
+  vesktop-bin \
+  vlc \
+  zen-browser-bin \
+  helium-browser-bin \
+  pear-desktop \
+  losslesscut-bin
 
-# Apps
-sudo pacman -S --needed blender
-sudo pacman -S --needed discord
-sudo pacman -S --needed gimp
-sudo pacman -S --needed libreoffice-fresh
-sudo pacman -S --needed telegram-desktop
-yay -S --needed 1password
-yay -S --needed obsidian
-yay -S --needed slack-desktop
-yay -S --needed pear-desktop
-yay -S --needed zen-browser-bin
-# helium-browser - https://github.com/imputnet/helium-linux
+# ── File management ──────────────────────────────────────────────────
+paru -S --needed \
+  dolphin \
+  kio-admin \
+  ark \
+  loupe \
+  qimgv \
+  imv \
+  nomacs
 
-# System utils
-sudo pacman -S --needed imagemagick
-sudo pacman -S --needed android-tools
-yay -S --needed keyd        # keyboard remapping
-yay -S --needed whisper.cpp # local whisper ASR
+# ── KDE integration ──────────────────────────────────────────────────
+paru -S --needed \
+  kdeconnect \
+  kactivitymanagerd \
+  plasma-activities-stats \
+  kde-cli-tools \
+  qt5ct \
+  qt6ct \
+  qt6-virtualkeyboard \
+  adw-gtk-theme \
+  catppuccin-gtk-theme-mocha \
+  gnome-themes-extra
 
-# KDE/Dolphin configuration
-sudo pacman -S --needed dolphin kio-extras baloo
-sudo pacman -S --needed plasma-activities plasma-activities-stats kactivitymanagerd kglobalacceld
-sudo pacman -S --needed kio-admin # admin:// protocol for Dolphin
-# Install system service menus
+# ── System / Hardware ────────────────────────────────────────────────
+paru -S --needed \
+  keyd \
+  input-remapper \
+  solaar \
+  openrazer-daemon \
+  openrazer-driver-dkms \
+  polychromatic \
+  razer-cli \
+  cpupower \
+  power-profiles-daemon \
+  upower \
+  ufw \
+  cups
+
+# ── NVIDIA ────────────────────────────────────────────────────────────
+paru -S --needed \
+  nvidia-utils \
+  nvidia-settings \
+  lib32-nvidia-utils \
+  opencl-nvidia \
+  lib32-opencl-nvidia \
+  libva-nvidia-driver \
+  cuda \
+  egl-wayland \
+  vulkan-tools \
+  vulkan-validation-layers \
+  vulkan-headers
+
+# ── AMD (iGPU) ────────────────────────────────────────────────────────
+paru -S --needed \
+  vulkan-radeon \
+  lib32-vulkan-radeon \
+  lib32-mesa \
+  xf86-video-amdgpu \
+  mesa-utils
+
+# ── BTRFS / Snapper ──────────────────────────────────────────────────
+paru -S --needed \
+  btrfs-progs \
+  btrfs-assistant \
+  snapper \
+  inotify-tools
+
+# ── Bootloader (Limine) ──────────────────────────────────────────────
+paru -S --needed \
+  limine \
+  limine-mkinitcpio-hook \
+  limine-snapper-sync \
+  efibootmgr \
+  efitools \
+  sbctl
+
+# ── Display manager ──────────────────────────────────────────────────
+paru -S --needed \
+  sddm
+
+# ── Printing ──────────────────────────────────────────────────────────
+paru -S --needed \
+  cups \
+  cups-filters \
+  brother-hl-l1230w
+
+# ── Dev tools ─────────────────────────────────────────────────────────
+paru -S --needed \
+  cmake \
+  ninja \
+  python \
+  android-tools \
+  imagemagick \
+  renderdoc \
+  helix
+
+# ── 3D printing / CAD ────────────────────────────────────────────────
+paru -S --needed \
+  freecad \
+  openscad \
+  kicad \
+  kicad-library \
+  bambustudio-bin \
+  orca-slicer-git
+
+# ── Embedded ─────────────────────────────────────────────────────────
+paru -S --needed \
+  arm-none-eabi-gcc \
+  arm-none-eabi-newlib \
+  picocom
+
+# ── AI / LLM ─────────────────────────────────────────────────────────
+paru -S --needed \
+  llama.cpp-cuda-git \
+  gemini-cli
+
+# ── Crypto ────────────────────────────────────────────────────────────
+paru -S --needed \
+  trezor-suite-appimage
+
+# ── Music production ─────────────────────────────────────────────────
+paru -S --needed \
+  supercollider \
+  sc3-plugins \
+  haskell-tidal
+
+# ── Misc ──────────────────────────────────────────────────────────────
+paru -S --needed \
+  gum \
+  handbrake \
+  meld \
+  dialect \
+  mission-center
+
+# ── Enable services ──────────────────────────────────────────────────
+sudo systemctl enable bluetooth
+sudo systemctl enable cups
+sudo systemctl enable NetworkManager
+sudo systemctl enable iwd
+sudo systemctl enable sddm
+sudo systemctl enable keyd
+sudo systemctl enable input-remapper
+sudo systemctl enable mullvad-daemon
+sudo systemctl enable ufw
+sudo systemctl enable fstrim.timer
+sudo systemctl enable snapper-cleanup.timer
+sudo systemctl enable cpupower
+sudo systemctl enable limine-snapper-sync
+
+# ── User services ────────────────────────────────────────────────────
+systemctl --user enable pipewire.socket
+systemctl --user enable pipewire-pulse.socket
+systemctl --user enable wireplumber
+systemctl --user enable hyprpolkitagent
+systemctl --user enable hyprsunset
+systemctl --user enable hyprwhspr
+
+# ── Stow dotfiles ────────────────────────────────────────────────────
 DOTFILES_DIR="$HOME/projects/dotfiles"
+cd "$DOTFILES_DIR/stow"
+stow -t "$HOME" common
+stow -t "$HOME" linux
+
+# ── KDE service menus ────────────────────────────────────────────────
 if [ -f "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" ]; then
   sudo cp "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" /usr/share/kio/servicemenus/
   sudo chmod 644 /usr/share/kio/servicemenus/admin-folder.desktop
-  echo "Installed Dolphin 'Open as Administrator' context menu"
 fi
 
-# BTRFS snapshots (requires BTRFS filesystem)
-sudo pacman -S --needed snapper       # snapshot management
-sudo pacman -S --needed snap-pac      # auto snapshots on pacman transactions
-yay -S --needed grub-btrfs            # boot into snapshots from GRUB
-sudo pacman -S --needed inotify-tools # required for grub-btrfsd
-
-# Game dev
-sudo pacman -S --needed pipewire wireplumber pipewire-pulse pavucontrol # audio server and control
-sudo pacman -S --needed playerctl                                       # media key control
-sudo pacman -S --needed vulkan-tools vulkan-validation-layers
-sudo pacman -S --needed renderdoc # graphics debugger
-
-# Snapper setup (run manually after install):
-# 1. Create snapper config for root:
-#    sudo snapper -c root create-config /
-#
-# 2. Set snapshot limits in /etc/snapper/configs/root:
-#    TIMELINE_LIMIT_HOURLY="5"
-#    TIMELINE_LIMIT_DAILY="7"
-#    TIMELINE_LIMIT_WEEKLY="0"
-#    TIMELINE_LIMIT_MONTHLY="0"
-#    TIMELINE_LIMIT_YEARLY="0"
-#
-# 3. Enable services:
-#    sudo systemctl enable --now snapper-timeline.timer
-#    sudo systemctl enable --now snapper-cleanup.timer
-#    sudo systemctl enable --now grub-btrfsd
-#
-# 4. Regenerate GRUB config:
-#    sudo grub-mkconfig -o /boot/grub/grub.cfg
-
-# Build and install novashell
-echo "Building novashell..."
-cd ~/projects/dotfiles/novashell
+# ── Build novashell ──────────────────────────────────────────────────
+cd "$DOTFILES_DIR/novashell"
 pnpm install
 pnpm build
 mkdir -p ~/.local/bin
-ln -sf ~/projects/dotfiles/novashell/build/novashell ~/.local/bin/novashell
-ln -sf ~/projects/dotfiles/novashell/build/nsh ~/.local/bin/nsh
-echo "Novashell installed to ~/.local/bin/novashell"
+ln -sf "$DOTFILES_DIR/novashell/build/novashell" ~/.local/bin/novashell
+ln -sf "$DOTFILES_DIR/novashell/build/nsh" ~/.local/bin/nsh
+
+echo "Done. Reboot to apply all changes."
