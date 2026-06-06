@@ -1,0 +1,24 @@
+# User matugen templates, run by DMS on every theme/wallpaper change
+# (DMS invokes matugen with --run-user-templates). These regenerate the
+# pywal-style cache that fish / nvim / tmux / btop read, sourced from DMS's
+# own matugen colors (dank16 = the 16 ANSI colors).
+
+[config]
+
+[templates.pywal_fish]
+input_path = "/home/razen/.config/matugen/templates/colors.fish"
+output_path = "/home/razen/.cache/wal/colors.fish"
+
+[templates.pywal_json]
+input_path = "/home/razen/.config/matugen/templates/colors.json"
+output_path = "/home/razen/.cache/wal/colors.json"
+post_hook = "/home/razen/.local/bin/apply-terminal-colors"
+
+[templates.pywal_tmux]
+input_path = "/home/razen/.config/matugen/templates/tmux-colors.conf"
+output_path = "/home/razen/.cache/wal/tmux-colors.conf"
+post_hook = "tmux source-file /home/razen/.cache/wal/tmux-colors.conf 2>/dev/null || true"
+
+[templates.pywal_btop]
+input_path = "/home/razen/.config/matugen/templates/pywal.theme"
+output_path = "/home/razen/.config/btop/themes/pywal.theme"

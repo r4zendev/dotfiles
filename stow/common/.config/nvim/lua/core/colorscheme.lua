@@ -178,6 +178,89 @@ local function apply_pywal()
   hi(0, "Operator", { fg = c.color6 })
   hi(0, "Pmenu", { fg = fg, bg = c.color0 })
   hi(0, "PmenuSel", { fg = fg, bg = c.color8, bold = true })
+  hi(0, "PmenuSbar", { bg = c.color0 })
+  hi(0, "PmenuThumb", { bg = c.color8 })
+
+  hi(0, "Number", { fg = c.color5 })
+  hi(0, "Boolean", { fg = c.color5 })
+  hi(0, "Title", { fg = c.color4, bold = true })
+  hi(0, "Directory", { fg = c.color4 })
+  hi(0, "MatchParen", { fg = c.color3, bold = true })
+  hi(0, "WinSeparator", { fg = c.color8 })
+  hi(0, "ErrorMsg", { fg = c.color1 })
+  hi(0, "WarningMsg", { fg = c.color3 })
+
+  hi(0, "StatusLine", { fg = fg, bg = c.color0 })
+  hi(0, "StatusLineNC", { fg = c.color8, bg = c.color0 })
+  hi(0, "WinBar", { fg = fg, bg = "NONE" })
+  hi(0, "WinBarNC", { fg = c.color8, bg = "NONE" })
+  hi(0, "TabLine", { fg = c.color8, bg = c.color0 })
+  hi(0, "TabLineSel", { fg = bg, bg = c.color4 })
+  hi(0, "TabLineFill", { bg = c.color0 })
+
+  hi(0, "DiagnosticError", { fg = c.color1 })
+  hi(0, "DiagnosticWarn", { fg = c.color3 })
+  hi(0, "DiagnosticInfo", { fg = c.color4 })
+  hi(0, "DiagnosticHint", { fg = c.color6 })
+  hi(0, "DiagnosticOk", { fg = c.color2 })
+
+  hi(0, "DiffAdd", { fg = c.color2, bg = "NONE" })
+  hi(0, "DiffChange", { fg = c.color3, bg = "NONE" })
+  hi(0, "DiffDelete", { fg = c.color1, bg = "NONE" })
+  hi(0, "GitSignsAdd", { fg = c.color2 })
+  hi(0, "GitSignsChange", { fg = c.color3 })
+  hi(0, "GitSignsDelete", { fg = c.color1 })
+
+  -- Modern nvim no longer links these to base groups by default, so set them explicitly.
+  local ts = {
+    ["@variable"] = "Identifier",
+    ["@variable.builtin"] = "Statement",
+    ["@variable.parameter"] = "Identifier",
+    ["@variable.member"] = "Special",
+    ["@property"] = "Special",
+    ["@field"] = "Special",
+    ["@function"] = "Function",
+    ["@function.call"] = "Function",
+    ["@function.builtin"] = "Function",
+    ["@function.method"] = "Function",
+    ["@function.method.call"] = "Function",
+    ["@constructor"] = "Type",
+    ["@parameter"] = "Identifier",
+    ["@keyword"] = "Keyword",
+    ["@keyword.function"] = "Keyword",
+    ["@keyword.return"] = "Keyword",
+    ["@conditional"] = "Keyword",
+    ["@repeat"] = "Keyword",
+    ["@string"] = "String",
+    ["@string.escape"] = "Special",
+    ["@number"] = "Number",
+    ["@boolean"] = "Boolean",
+    ["@constant"] = "Constant",
+    ["@constant.builtin"] = "Constant",
+    ["@type"] = "Type",
+    ["@type.builtin"] = "Type",
+    ["@operator"] = "Operator",
+    ["@punctuation"] = "Identifier",
+    ["@punctuation.bracket"] = "Identifier",
+    ["@punctuation.delimiter"] = "Identifier",
+    ["@punctuation.special"] = "Special",
+    ["@comment"] = "Comment",
+    ["@tag"] = "Keyword",
+    ["@tag.attribute"] = "Function",
+    ["@tag.delimiter"] = "Identifier",
+    ["@namespace"] = "Type",
+    ["@module"] = "Type",
+    ["@lsp.type.variable"] = "@variable",
+    ["@lsp.type.parameter"] = "@parameter",
+    ["@lsp.type.property"] = "@property",
+    ["@lsp.type.function"] = "@function",
+    ["@lsp.type.method"] = "@function.method",
+    ["@lsp.type.class"] = "@type",
+    ["@lsp.type.namespace"] = "@namespace",
+  }
+  for from, to in pairs(ts) do
+    hi(0, from, { link = to })
+  end
 
   return true
 end
@@ -219,7 +302,7 @@ M.themes = {
   },
 }
 
-vim.g.THEME = vim.g.THEME or "Tokyo Night"
+vim.g.THEME = vim.g.THEME or "System (pywal)"
 
 function M.get_theme(name)
   for _, theme in ipairs(M.themes) do

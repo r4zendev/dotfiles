@@ -1,0 +1,19 @@
+#!/bin/bash
+# Live-apply the new theme to apps that don't watch their config file.
+# Run by matugen's post_hook after the pywal cache is regenerated.
+
+# ghostty: SIGUSR2 is its official "reload config" signal. It re-reads its
+# config (incl. ?themes/dankcolors), so the palette updates live — and because
+# it's the terminal's own palette, this works through tmux too.
+pkill -USR2 -x ghostty 2>/dev/null
+
+# neovim: push the pywal colorscheme into every running instance via its RPC
+# socket (nvim doesn't auto-reload a colors file on its own).
+rt="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+for sock in "$rt"/nvim.*; do
+    [ -S "$sock" ] || continue
+    nvim --server "$sock" --remote-send \
+        ':lua require("core.colorscheme").apply("System (pywal)", {silent=true})<CR>' 2>/dev/null
+done
+
+exit 0

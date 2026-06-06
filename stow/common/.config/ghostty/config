@@ -36,5 +36,6 @@ macos-non-native-fullscreen = padded-notch
 keybind = ctrl+backspace=text:\x17
 
 config-file = ?colors
+config-file = ?themes/dankcolors
 config-file = ?overrides
 config-file = ?background

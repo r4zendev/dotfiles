@@ -415,6 +415,9 @@ sudo systemctl enable cpupower
 sudo systemctl enable limine-snapper-sync
 
 # ── Stow dotfiles ─────────────────────────────────────────────────────
+# Pre-create runtime dirs so stow links individual files instead of folding
+# the whole dir into a symlink (DMS/GTK write generated files into these).
+mkdir -p "$HOME/.config/DankMaterialShell" "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
 cd "$DOTFILES_DIR/stow"
 stow -t "$HOME" common
 stow -t "$HOME" linux
@@ -424,6 +427,13 @@ stow -t "$HOME" linux
 dms greeter install
 dms greeter enable
 sudo systemctl enable greetd
+
+# ── DMS plugins + GTK dynamic-color import (theme settings come from stow) ──
+dms plugins install dankKDEConnect || true
+for d in gtk-3.0 gtk-4.0; do
+  grep -qs dank-colors "$HOME/.config/$d/gtk.css" 2>/dev/null ||
+    echo '@import url("dank-colors.css");' >"$HOME/.config/$d/gtk.css"
+done
 
 # ── Enable user services (after stow links the custom unit files) ─────
 systemctl --user enable pipewire.socket

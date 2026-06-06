@@ -1,4 +1,4 @@
-function wallpaper --description "Manage Hyprland/Niri wallpapers via awww"
+function wallpaper --description "Manage Hyprland/Niri wallpapers via DMS"
     set -l dir "$HOME/wallpapers"
 
     function _notify -a msg
@@ -28,15 +28,25 @@ function wallpaper --description "Manage Hyprland/Niri wallpapers via awww"
             set -l imgs (_collect_images)
             test (count $imgs) -eq 0; and _notify "No images"; and return 1
             set -l img $imgs[(random 1 (count $imgs))]
+            wallpaper-state set previous_image (wallpaper-state get current_image)
             wallpaper-state set current_image "$img"
             wallpaper-state set enabled true
-            awww img "$img" --transition-type fade --transition-duration 0.3
+            dms ipc call wallpaper set "$img"
             _notify (basename "$img")
+
+        case prev previous
+            set -l img (wallpaper-state get previous_image)
+            test -z "$img" -o ! -f "$img"; and _notify "No previous"; and return 1
+            wallpaper-state set previous_image (wallpaper-state get current_image)
+            wallpaper-state set current_image "$img"
+            wallpaper-state set enabled true
+            dms ipc call wallpaper set "$img"
+            _notify "← "(basename "$img")
 
         case toggle
             if test (wallpaper-state get enabled) = true
                 wallpaper-state set enabled false
-                awww clear 000000
+                dms ipc call wallpaper clear
                 _notify OFF
             else
                 set -l img (wallpaper-state get current_image)
@@ -47,7 +57,7 @@ function wallpaper --description "Manage Hyprland/Niri wallpapers via awww"
                 if test -n "$img" -a -f "$img"
                     wallpaper-state set enabled true
                     wallpaper-state set current_image "$img"
-                    awww img "$img" --transition-type fade --transition-duration 0.3
+                    dms ipc call wallpaper set "$img"
                     _notify ON
                 end
             end
@@ -76,6 +86,6 @@ function wallpaper --description "Manage Hyprland/Niri wallpapers via awww"
             echo "available: "(count $imgs)
 
         case '*'
-            echo "Usage: wallpaper {random|toggle|toggle-nsfw|toggle-restricted|toggle-explicit|toggle-default|show|status}"
+            echo "Usage: wallpaper {random|prev|toggle|toggle-nsfw|toggle-restricted|toggle-explicit|toggle-default|show|status}"
     end
 end

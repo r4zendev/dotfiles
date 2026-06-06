@@ -5,3 +5,8 @@ npm-debug.log
 __pycache__
 CLAUDE.md
 AGENTS.md
+
+# DMS-generated niri snippets (regenerated at runtime)
+stow/linux/.config/niri/dms/
+# editor/backup cruft
+*.bak-*

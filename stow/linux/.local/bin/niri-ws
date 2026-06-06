@@ -1,0 +1,28 @@
+#!/bin/bash
+# Cycle to the prev/next OCCUPIED workspace on the focused output, with wrap-around.
+# Runs only on keypress (one `niri msg` + jq), so it's effectively instant.
+# Usage: niri-ws prev|next
+set -euo pipefail
+dir="${1:-next}"
+
+ws="$(niri msg --json workspaces)"
+out="$(printf '%s' "$ws" | jq -r '.[] | select(.is_focused) | .output')"
+cur="$(printf '%s' "$ws" | jq -r '.[] | select(.is_focused) | .idx')"
+
+mapfile -t idxs < <(printf '%s' "$ws" \
+    | jq -r --arg o "$out" '.[] | select(.output==$o and .active_window_id!=null) | .idx' \
+    | sort -n)
+
+n=${#idxs[@]}
+[ "$n" -eq 0 ] && exit 0
+
+pos=-1
+for i in "${!idxs[@]}"; do [ "${idxs[$i]}" = "$cur" ] && pos=$i && break; done
+
+if [ "$dir" = "next" ]; then
+    target="${idxs[$(((pos + 1) % n))]}"
+else
+    target="${idxs[$(((pos - 1 + n) % n))]}"
+fi
+
+niri msg action focus-workspace "$target"

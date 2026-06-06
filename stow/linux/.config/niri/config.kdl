@@ -10,15 +10,15 @@ input {
     }
 
     mouse {
-        accel-profile "flat"
+        accel-profile "adaptive"
     }
 
     warp-mouse-to-focus
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-output "DP-1" {
-    mode "1920x1080@360"
+output "DP-3" {
+    mode "1920x1080@360.000"
     scale 1.0
 }
 
@@ -74,7 +74,7 @@ animations {
 }
 
 environment {
-    DISPLAY ":0"
+    // DISPLAY ":0"   // disabled: niri 26.04 auto-sets DISPLAY via its built-in xwayland-satellite (>=0.7). Hardpinning :0 sent X11 apps to a non-composited Xwayland, making their windows invisible (e.g. Bambu Studio).
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     __GL_MaxFramesAllowed "1"
     __GL_GSYNC_ALLOWED "0"
@@ -83,6 +83,7 @@ environment {
     XCURSOR_SIZE "24"
     QT_QPA_PLATFORMTHEME "qt6ct"
     XDG_CURRENT_DESKTOP "niri"
+    XDG_MENU_PREFIX "arch-"
 }
 
 cursor {
@@ -90,12 +91,13 @@ cursor {
     xcursor-size 24
 }
 
-spawn-at-startup "xwayland-satellite"
+// spawn-at-startup "xwayland-satellite"   // disabled: redundant on niri 26.04, which spawns xwayland-satellite on-demand itself. The manual one grabbed :0 and conflicted.
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular" "--all-mime-type-regex" "(?i)^(?!(?:image|audio|video|font|model)/).+"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 spawn-at-startup "solaar" "--window=hide"
 spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,ssh"
+spawn-at-startup "wayscriber" "--daemon"
 spawn-at-startup "dms" "run"
 
 binds {
@@ -103,15 +105,21 @@ binds {
     Mod+Q { spawn "ghostty"; }
     Mod+P { spawn "dolphin"; }
     Mod+C { close-window; }
+    Mod+Shift+Q      { spawn "sh" "-c" "niri msg --json windows | jq -r '.[]|select(.is_focused)|.pid' | xargs -r kill"; }
+    Mod+Ctrl+Shift+Q { spawn "systemctl" "poweroff"; }
 
-    // DankMaterialShell
-    Mod+Space   { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    // DankMaterialShell (replaces novashell: launcher / clipboard / etc.)
+    Mod+R       { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
     Mod+N       { spawn "dms" "ipc" "call" "notifications" "toggle"; }
     Mod+Comma   { spawn "dms" "ipc" "call" "settings" "toggle"; }
     Mod+V       { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
     Mod+Alt+L   { spawn "dms" "ipc" "call" "lock" "lock"; }
     Super+X     { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
     Mod+M       { spawn "dms" "ipc" "call" "processlist" "toggle"; }
+    Mod+Shift+N { spawn "dms" "ipc" "call" "notepad" "toggle"; }
+    Mod+Shift+B { spawn "dms" "ipc" "call" "night" "toggle"; }
+    Mod+Ctrl+T  { spawn "dms" "ipc" "call" "theme" "toggle"; }
+    Mod+Slash   { spawn "dms" "ipc" "call" "keybinds" "toggle"; }
 
     // Focus
     Mod+Left  { focus-column-left; }
@@ -147,9 +155,10 @@ binds {
     Mod+T       { toggle-window-floating; }
     Mod+Shift+T { switch-preset-column-width; }
 
-    // Consume / expel (like Hyprland group)
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
+    // Consume / expel + tabbed column (like Hyprland group)
+    Mod+Alt+Left  { consume-or-expel-window-left; }
+    Mod+Alt+Right { consume-or-expel-window-right; }
+    Mod+Ctrl+G    { toggle-column-tabbed-display; }
 
     // Workspaces
     Mod+1     { focus-workspace 1; }
@@ -171,10 +180,11 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    Mod+O   { focus-workspace-previous; }
-    Mod+U   { focus-workspace-down; }
+    Mod+O   { spawn "sh" "-c" "~/.local/bin/niri-ws prev"; }
+    Mod+U   { spawn "sh" "-c" "~/.local/bin/niri-ws next"; }
+    Mod+I   { focus-workspace-previous; }
     Mod+Tab { toggle-overview; }
-    Mod+D   { toggle-overview; }
+    Mod+D   { spawn "pkill" "-SIGUSR1" "wayscriber"; }
 
     // Screenshots
     Mod+Shift+S { screenshot; }
@@ -201,6 +211,33 @@ binds {
     Mod+F11 { spawn "playerctl" "previous"; }
     Mod+F12 { spawn "playerctl" "next"; }
 
+    // Brightness
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "-e4" "-n2" "set" "5%+"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "-e4" "-n2" "set" "5%-"; }
+    Mod+F1 { spawn "brightnessctl" "-e4" "-n2" "set" "5%-"; }
+    Mod+F2 { spawn "brightnessctl" "-e4" "-n2" "set" "5%+"; }
+
+    // Wallpaper (your wallpaper.fish: random + category toggles, now via DMS + theming)
+    Mod+Alt+Shift+R { spawn "fish" "-c" "wallpaper random"; }
+    Mod+Alt+Shift+P { spawn "fish" "-c" "wallpaper prev"; }
+    Mod+Alt+Shift+M { spawn "fish" "-c" "wallpaper toggle"; }
+    Mod+Alt+Shift+W { spawn "fish" "-c" "wallpaper toggle-nsfw"; }
+    Mod+Alt+Shift+T { spawn "fish" "-c" "wallpaper toggle-restricted"; }
+    Mod+Alt+Shift+E { spawn "fish" "-c" "wallpaper toggle-explicit"; }
+    Mod+Alt+Shift+D { spawn "fish" "-c" "wallpaper toggle-default"; }
+    Mod+Alt+Shift+I { spawn "fish" "-c" "wallpaper show"; }
+
+    // Speech-to-text (hyprwhspr)
+    Mod+Alt+D { spawn "sh" "-c" "~/.config/hyprwhspr/mic-hyprwhspr.sh record en"; }
+    Mod+Alt+S { spawn "sh" "-c" "~/.config/hyprwhspr/mic-hyprwhspr.sh record ru"; }
+
+    // Misc parity
+    Mod+Shift+C { center-column; }
+    Mod+Shift+X { spawn "sh" "-c" "~/.config/hypr/scripts/color-picker.sh"; }
+    Mod+Shift+P { screenshot-screen; }
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+
     // Quit niri
     Mod+Shift+E { quit; }
 }
@@ -210,15 +247,24 @@ window-rule {
     draw-border-with-background false
 }
 
+// Float utility / file-manager / viewer windows (matches Hyprland)
 window-rule {
     match app-id="^org\\.kde\\.dolphin$"
-    default-column-width { proportion 0.5; }
-}
-
-window-rule {
+    match app-id="^org\\.kde\\.ark$"
+    match app-id="^qimgv$"
+    match app-id="^org\\.gnome\\.Loupe$"
+    match app-id="^nomacs$"
+    match app-id="^vlc$"
     match app-id="^pavucontrol$"
+    match app-id="^org\\.pulseaudio\\.pavucontrol$"
     match app-id="^org\\.gnome\\.Calculator$"
     match app-id="^blueman-manager$"
+    match app-id="^1Password$"
+    match app-id="^io\\.missioncenter\\.MissionCenter$"
+    match app-id="^org\\.qbittorrent\\.qBittorrent$"
+    match app-id="^net\\.lutris\\.Lutris$"
+    match app-id="^app\\.drey\\.Dialect$"
+    match app-id="^nm-connection-editor$"
     open-floating true
 }
 
