@@ -1,0 +1,28 @@
+[Unit]
+Description=Headless Sway session for Sunshine streaming
+After=graphical-session.target sunshine-audio.service
+Requires=sunshine-audio.service
+
+[Service]
+Type=simple
+Environment=WLR_BACKENDS=headless,libinput
+Environment=LIBSEAT_BACKEND=noop
+Environment=WLR_LIBINPUT_NO_DEVICES=1
+Environment=WLR_RENDERER=gles2
+Environment=WLR_RENDER_DRM_DEVICE=/dev/dri/renderD128
+Environment=GBM_BACKEND=nvidia-drm
+Environment=__GLX_VENDOR_LIBRARY_NAME=nvidia
+Environment=XDG_SESSION_TYPE=wayland
+Environment=XDG_CURRENT_DESKTOP=sway
+Environment=SWAYSOCK=/run/user/1000/sway-sunshine.sock
+Environment=PULSE_SERVER=unix:/run/user/1000/sunshine-audio/pulse/native
+Environment=PIPEWIRE_RUNTIME_DIR=/run/user/1000/sunshine-audio
+Environment=PULSE_SINK=sink-sunshine-stereo
+ExecStartPre=-/bin/rm -f /run/user/1000/sway-sunshine.sock
+ExecStart=/usr/bin/sg input -c "/usr/bin/sway --config %h/.config/sway-sunshine/config"
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=default.target

@@ -2,22 +2,12 @@
 
 Desktop environment for my main rig and laptop.
 
-## Screenshots
-
-| Terminal                                | Neovim                                    | Desktop                               |
-| --------------------------------------- | ----------------------------------------- | ------------------------------------- |
-| ![Terminal](./screenshots/terminal.jpg) | ![Neovim](./screenshots/nvim-startup.jpg) | ![Desktop](./screenshots/desktop.jpg) |
-
-| Telegram                                | Discord                               | YT Music Desktop                             |
-| --------------------------------------- | ------------------------------------- | -------------------------------------------- |
-| ![Telegram](./screenshots/telegram.jpg) | ![Discord](./screenshots/discord.jpg) | ![YouTube Music](./screenshots/yt-music.jpg) |
-
 ## Tooling
 
 | Layer          | Tooling                                                              |
 | -------------- | -------------------------------------------------------------------- |
-| OS / WM        | CachyOS (Arch) + Hyprland                                            |
-| OS Shell       | [Novashell](./novashell) (AGS + Astal)                               |
+| OS / WM        | CachyOS (Arch) + Niri (Hyprland kept as fallback)                    |
+| OS Shell       | DankMaterialShell (Quickshell)                                       |
 | Terminal       | Ghostty + tmux + fzf                                                 |
 | Terminal Shell | Fish + Starship + Zoxide                                             |
 | Editor         | Neovim                                                               |
@@ -25,23 +15,17 @@ Desktop environment for my main rig and laptop.
 
 ## Custom features
 
-- Unified shell windows: bar, control center, runner, notification centre, media controls, etc.
-- Live custom theme generation based on wallpaper colors. 10+ apps synced on the fly as well as all kinds of icons.
-- Utilities integrations (Mission Center, btop, Google Calendar, and more)
-- Predictable interface interactions (e.g. notifications, media controls, etc.)
-- `nsh` and `nsh-msg` (fast socket version) for system-specific actions (windows, media, volume, themes, wallpapers, etc.).
-- Runner plugins for apps, shell commands, web search, clipboard, wallpapers, media, themes, and even color conversion.
+- Niri (scrollable tiling) with DankMaterialShell, Hyprland kept as a fallback session.
 - Fish shell with custom helper functions (5+ useful custom fzf pickers and other system utilities).
 - Tmux setup with custom pickers, persistence (restore/continuum) and utility-overlays (e.g. lazygit, lazydocker, dblab, etc.).
 - Highly performant Neovim setup with 50+ plugins and a lot of custom functionality tailored to my workflow. Search-first flow, heavy `snacks.nvim` reliance, AI integration via `codecompanion.nvim` (agentic w/ MCP) & `llama.cpp` (local-first completion).
 
 ## Repository layout
 
-| Path        | Purpose                   |
-| ----------- | ------------------------- |
-| `stow`      | Home directory configs    |
-| `novashell` | Novashell source code     |
-| `bin`       | Install/bootstrap scripts |
+| Path   | Purpose                   |
+| ------ | ------------------------- |
+| `stow` | Home directory configs    |
+| `bin`  | Install/bootstrap scripts |
 
 ## Install
 
@@ -54,7 +38,7 @@ stow -t ~ common
 stow -t ~ linux
 ```
 
-### Full Linux bootstrap (packages + Novashell build)
+### Full Linux bootstrap (packages + stow + services)
 
 ```sh
 ~/projects/dotfiles/bin/install-arch.sh

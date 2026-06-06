@@ -1,21 +1,45 @@
 #!/bin/bash
 set -euo pipefail
 
-# Install paru (AUR helper) if not present
-if [[ -z $(command -v paru) ]]; then
+# ─────────────────────────────────────────────────────────────────────
+# Raw Arch bootstrap for razen's machine.
+#
+# Assumes: a base Arch install is already done (pacstrap + kernel + bootloader
+# + a regular user with sudo, booted into the new system). This script then
+# brings the system up to the full desktop. It is safe to re-run (`--needed`).
+#
+# Targets vanilla Arch (not CachyOS): enables multilib, refreshes mirrors,
+# bootstraps paru, installs the NVIDIA kernel module, and uses greetd + the
+# DankMaterialShell greeter instead of SDDM.
+# ─────────────────────────────────────────────────────────────────────
+
+# ── Pacman config: multilib (needed for lib32-*), color, parallel dl ──
+if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
+  sudo sed -i '/^#\[multilib\]$/,+1 s/^#//' /etc/pacman.conf
+fi
+sudo sed -i 's/^#Color$/Color/' /etc/pacman.conf
+grep -q '^ParallelDownloads' /etc/pacman.conf || sudo sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
+
+# ── Mirrors ───────────────────────────────────────────────────────────
+sudo pacman -Sy --needed --noconfirm reflector
+sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+sudo pacman -Syu --noconfirm
+
+# ── paru (AUR helper) ─────────────────────────────────────────────────
+if ! command -v paru &>/dev/null; then
   echo "Installing paru (AUR helper)"
-  sudo pacman -Syu --needed git base-devel
-  git clone https://aur.archlinux.org/paru.git /tmp/paru
-  cd /tmp/paru && makepkg -si
-  cd ~
+  sudo pacman -S --needed --noconfirm git base-devel
+  tmp="$(mktemp -d)"
+  git clone https://aur.archlinux.org/paru.git "$tmp/paru"
+  (cd "$tmp/paru" && makepkg -si --noconfirm)
 else
-  printf 'paru is already installed, skip it.\n'
+  printf 'paru already installed, skipping.\n'
 fi
 
-paru -Syu
-
-cd ~ && mkdir -p projects && cd projects
-git clone git@github.com:r4zendev/dotfiles.git dotfiles || true
+# ── Dotfiles ──────────────────────────────────────────────────────────
+mkdir -p "$HOME/projects"
+DOTFILES_DIR="$HOME/projects/dotfiles"
+[ -d "$DOTFILES_DIR" ] || git clone https://github.com/r4zendev/dotfiles.git "$DOTFILES_DIR"
 
 # ── Terminal environment ──────────────────────────────────────────────
 paru -S --needed \
@@ -60,7 +84,7 @@ paru -S --needed \
   curlie \
   xh
 
-# ── Wayland / Hyprland ───────────────────────────────────────────────
+# ── Wayland (shared: Hyprland + Niri + Sway) ──────────────────────────
 paru -S --needed \
   hyprland \
   hyprlock \
@@ -69,7 +93,10 @@ paru -S --needed \
   hyprpolkitagent \
   hyprsunset \
   hyprwhspr \
+  hyprshutdown \
   uwsm \
+  awww \
+  wayscriber \
   wl-clipboard \
   wl-clip-persist \
   cliphist \
@@ -85,15 +112,25 @@ paru -S --needed \
   xdg-desktop-portal-gtk \
   bibata-cursor-git
 
-# ── Novashell (AGS/Astal bar) ────────────────────────────────────────
+# ── Niri + DankMaterialShell ──────────────────────────────────────────
+# dms-shell + per-compositor integrations live in Arch `extra`.
+# matugen powers DMS dynamic theming; cava is the audio visualizer.
 paru -S --needed \
-  aylurs-gtk-shell-git \
-  libastal-meta \
-  gtk4 \
-  libadwaita \
-  dart-sass \
-  python-pywal16 \
-  libcanberra
+  niri \
+  xwayland-satellite \
+  quickshell \
+  dms-shell \
+  dms-shell-niri \
+  dms-shell-hyprland \
+  xdg-desktop-portal-wlr \
+  matugen \
+  cava
+
+# ── Sway (headless game-streaming session) ────────────────────────────
+paru -S --needed \
+  sway \
+  swaybg \
+  sunshine
 
 # ── Audio ─────────────────────────────────────────────────────────────
 paru -S --needed \
@@ -166,7 +203,17 @@ paru -S --needed \
   noto-fonts-emoji \
   noto-color-emoji-fontconfig \
   cantarell-fonts \
+  awesome-terminal-fonts \
   papirus-icon-theme
+
+# ── Media codecs / thumbnails ────────────────────────────────────────
+paru -S --needed \
+  gst-plugins-good \
+  gst-plugins-bad \
+  gst-plugins-ugly \
+  gst-libav \
+  ffmpegthumbnailer \
+  libdvdcss
 
 # ── Desktop apps ──────────────────────────────────────────────────────
 paru -S --needed \
@@ -196,7 +243,7 @@ paru -S --needed \
   imv \
   nomacs
 
-# ── KDE integration ──────────────────────────────────────────────────
+# ── KDE / Qt integration + GTK themes ────────────────────────────────
 paru -S --needed \
   kdeconnect \
   kactivitymanagerd \
@@ -218,14 +265,26 @@ paru -S --needed \
   openrazer-driver-dkms \
   polychromatic \
   razer-cli \
+  ydotool \
+  speech-dispatcher \
   cpupower \
   power-profiles-daemon \
   upower \
-  ufw \
-  cups
+  smartmontools \
+  ufw
 
-# ── NVIDIA ────────────────────────────────────────────────────────────
+# ── pacman tooling ────────────────────────────────────────────────────
 paru -S --needed \
+  reflector \
+  pacman-contrib \
+  pkgfile
+
+# ── NVIDIA (RTX 4070 Ti SUPER) ───────────────────────────────────────
+# nvidia-open-dkms = the kernel module (open variant, Turing+). linux-headers
+# is required to build it. Assumes the `linux` kernel; adjust if using another.
+paru -S --needed \
+  linux-headers \
+  nvidia-open-dkms \
   nvidia-utils \
   nvidia-settings \
   lib32-nvidia-utils \
@@ -254,6 +313,8 @@ paru -S --needed \
   inotify-tools
 
 # ── Bootloader (Limine) ──────────────────────────────────────────────
+# NOTE: on raw Arch the bootloader is installed/configured manually during
+# base setup; these packages provide the snapshot-boot tooling only.
 paru -S --needed \
   limine \
   limine-mkinitcpio-hook \
@@ -262,14 +323,16 @@ paru -S --needed \
   efitools \
   sbctl
 
-# ── Display manager ──────────────────────────────────────────────────
+# ── Display manager (greetd + DankMaterialShell greeter) ─────────────
 paru -S --needed \
-  sddm
+  greetd \
+  greetd-dms-greeter-git
 
 # ── Printing ──────────────────────────────────────────────────────────
 paru -S --needed \
   cups \
   cups-filters \
+  cups-pk-helper \
   brother-hl-l1230w
 
 # ── Dev tools ─────────────────────────────────────────────────────────
@@ -320,12 +383,28 @@ paru -S --needed \
   dialect \
   mission-center
 
-# ── Enable services ──────────────────────────────────────────────────
+# ── OPTIONAL (uncomment what you want on a given machine) ─────────────
+# paru -S --needed \
+#   firefox \
+#   chromium chromium-ffmpeg \
+#   multimc-bin \
+#   vencord \
+#   ventoy-bin \
+#   woeusb-ng \
+#   waifu2x-ncnn-vulkan \
+#   youtube-tui \
+#   glances \
+#   bluetui \
+#   freerdp \
+#   sshfs \
+#   ghc opam
+
+# ── Enable system services ────────────────────────────────────────────
 sudo systemctl enable bluetooth
 sudo systemctl enable cups
+sudo systemctl enable avahi-daemon
 sudo systemctl enable NetworkManager
 sudo systemctl enable iwd
-sudo systemctl enable sddm
 sudo systemctl enable keyd
 sudo systemctl enable input-remapper
 sudo systemctl enable mullvad-daemon
@@ -335,19 +414,30 @@ sudo systemctl enable snapper-cleanup.timer
 sudo systemctl enable cpupower
 sudo systemctl enable limine-snapper-sync
 
-# ── User services ────────────────────────────────────────────────────
+# ── Stow dotfiles ─────────────────────────────────────────────────────
+cd "$DOTFILES_DIR/stow"
+stow -t "$HOME" common
+stow -t "$HOME" linux
+
+# ── Display manager: greetd with the DankMaterialShell greeter ────────
+# Configures /etc/greetd to launch the DMS greeter; replaces SDDM.
+dms greeter install
+dms greeter enable
+sudo systemctl enable greetd
+
+# ── Enable user services (after stow links the custom unit files) ─────
 systemctl --user enable pipewire.socket
 systemctl --user enable pipewire-pulse.socket
 systemctl --user enable wireplumber
 systemctl --user enable hyprpolkitagent
 systemctl --user enable hyprsunset
 systemctl --user enable hyprwhspr
+systemctl --user enable ydotool.service
 
-# ── Stow dotfiles ────────────────────────────────────────────────────
-DOTFILES_DIR="$HOME/projects/dotfiles"
-cd "$DOTFILES_DIR/stow"
-stow -t "$HOME" common
-stow -t "$HOME" linux
+# Headless game streaming (Sway + Sunshine). Comment out on non-streaming rigs.
+systemctl --user enable sway-sunshine.service
+systemctl --user enable sunshine-headless.service
+systemctl --user enable sunshine-audio.service
 
 # ── KDE service menus ────────────────────────────────────────────────
 if [ -f "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" ]; then
@@ -355,12 +445,4 @@ if [ -f "$DOTFILES_DIR/system-files/kio-servicemenus/admin-folder.desktop" ]; th
   sudo chmod 644 /usr/share/kio/servicemenus/admin-folder.desktop
 fi
 
-# ── Build novashell ──────────────────────────────────────────────────
-cd "$DOTFILES_DIR/novashell"
-pnpm install
-pnpm build
-mkdir -p ~/.local/bin
-ln -sf "$DOTFILES_DIR/novashell/build/novashell" ~/.local/bin/novashell
-ln -sf "$DOTFILES_DIR/novashell/build/nsh" ~/.local/bin/nsh
-
-echo "Done. Reboot to apply all changes."
+echo "Done. Reboot to apply all changes (greetd will start the DMS greeter)."

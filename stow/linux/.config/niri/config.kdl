@@ -1,0 +1,237 @@
+input {
+    keyboard {
+        xkb {
+            layout "us,ru,ua"
+            options "grp:win_space_toggle"
+        }
+        repeat-delay 300
+        repeat-rate 40
+        numlock
+    }
+
+    mouse {
+        accel-profile "flat"
+    }
+
+    warp-mouse-to-focus
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+output "DP-1" {
+    mode "1920x1080@360"
+    scale 1.0
+}
+
+layout {
+    gaps 8
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width {
+        proportion 0.5
+    }
+
+    focus-ring {
+        off
+    }
+
+    border {
+        width 2
+        active-gradient from="#33ccff" to="#00ff99" angle=45
+        inactive-color "#585b70"
+    }
+
+    shadow {
+        on
+        softness 30
+        spread 5
+        offset x=0 y=3
+        color "#1a1a1aee"
+    }
+}
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+animations {
+    window-open {
+        duration-ms 200
+        curve "ease-out-expo"
+    }
+    window-close {
+        duration-ms 150
+        curve "linear"
+    }
+    workspace-switch {
+        off
+    }
+}
+
+environment {
+    DISPLAY ":0"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    __GL_MaxFramesAllowed "1"
+    __GL_GSYNC_ALLOWED "0"
+    XCURSOR_THEME "Bibata-Modern-Ice"
+    HYPRCURSOR_THEME "Bibata-Modern-Ice"
+    XCURSOR_SIZE "24"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    XDG_CURRENT_DESKTOP "niri"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Ice"
+    xcursor-size 24
+}
+
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular" "--all-mime-type-regex" "(?i)^(?!(?:image|audio|video|font|model)/).+"
+spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
+spawn-at-startup "solaar" "--window=hide"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,ssh"
+spawn-at-startup "dms" "run"
+
+binds {
+    // Apps
+    Mod+Q { spawn "ghostty"; }
+    Mod+P { spawn "dolphin"; }
+    Mod+C { close-window; }
+
+    // DankMaterialShell
+    Mod+Space   { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+N       { spawn "dms" "ipc" "call" "notifications" "toggle"; }
+    Mod+Comma   { spawn "dms" "ipc" "call" "settings" "toggle"; }
+    Mod+V       { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
+    Mod+Alt+L   { spawn "dms" "ipc" "call" "lock" "lock"; }
+    Super+X     { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
+    Mod+M       { spawn "dms" "ipc" "call" "processlist" "toggle"; }
+
+    // Focus
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H     { focus-column-left; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+L     { focus-column-right; }
+
+    // Move windows
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+H     { move-column-left; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+    Mod+Shift+L     { move-column-right; }
+
+    // Resize
+    Mod+Ctrl+Left  { set-column-width "-5%"; }
+    Mod+Ctrl+Right { set-column-width "+5%"; }
+    Mod+Ctrl+Down  { set-window-height "+5%"; }
+    Mod+Ctrl+Up    { set-window-height "-5%"; }
+    Mod+Minus      { set-column-width "-10%"; }
+    Mod+Equal      { set-column-width "+10%"; }
+
+    // Layout
+    Mod+F       { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+T       { toggle-window-floating; }
+    Mod+Shift+T { switch-preset-column-width; }
+
+    // Consume / expel (like Hyprland group)
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+
+    // Workspaces
+    Mod+1     { focus-workspace 1; }
+    Mod+2     { focus-workspace 2; }
+    Mod+3     { focus-workspace 3; }
+    Mod+4     { focus-workspace 4; }
+    Mod+5     { focus-workspace 5; }
+    Mod+6     { focus-workspace 6; }
+    Mod+7     { focus-workspace 7; }
+    Mod+8     { focus-workspace 8; }
+    Mod+9     { focus-workspace 9; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+
+    Mod+O   { focus-workspace-previous; }
+    Mod+U   { focus-workspace-down; }
+    Mod+Tab { toggle-overview; }
+    Mod+D   { toggle-overview; }
+
+    // Screenshots
+    Mod+Shift+S { screenshot; }
+    Print       { screenshot-screen; }
+    Mod+Print   { screenshot-window; }
+
+    // Media keys
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+    XF86AudioPlay  allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioPause allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioNext  allow-when-locked=true { spawn "playerctl" "next"; }
+    XF86AudioPrev  allow-when-locked=true { spawn "playerctl" "previous"; }
+
+    // Super+F keys (matching Hyprland)
+    Mod+F3  { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    Mod+F4  { spawn "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    Mod+F8  { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    Mod+F9  { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    Mod+F10 { spawn "playerctl" "play-pause"; }
+    Mod+F11 { spawn "playerctl" "previous"; }
+    Mod+F12 { spawn "playerctl" "next"; }
+
+    // Quit niri
+    Mod+Shift+E { quit; }
+}
+
+window-rule {
+    match app-id=r#"^org\.gnome\."#
+    draw-border-with-background false
+}
+
+window-rule {
+    match app-id="^org\\.kde\\.dolphin$"
+    default-column-width { proportion 0.5; }
+}
+
+window-rule {
+    match app-id="^pavucontrol$"
+    match app-id="^org\\.gnome\\.Calculator$"
+    match app-id="^blueman-manager$"
+    open-floating true
+}
+
+window-rule {
+    match app-id="^com\\.mitchellh\\.ghostty$"
+    draw-border-with-background false
+}
+
+window-rule {
+    geometry-corner-radius 10 10 10 10
+    clip-to-geometry true
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}

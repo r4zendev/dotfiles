@@ -27,4 +27,4 @@ MaximumSize=52428800
 Plugins=glycin-heif,imagethumbnail,jpegthumbnail,windowsimagethumbnail,svgthumbnail,ffmpegthumbs
 
 [UiSettings]
-ColorScheme=novashell
+ColorScheme=BreezeDark

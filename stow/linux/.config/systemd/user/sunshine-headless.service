@@ -1,0 +1,20 @@
+[Unit]
+Description=Sunshine streaming via headless Sway
+After=sway-sunshine.service sunshine-audio.service
+Requires=sway-sunshine.service sunshine-audio.service
+
+[Service]
+Type=simple
+Environment=SWAYSOCK=/run/user/1000/sway-sunshine.sock
+Environment=XDG_SESSION_TYPE=wayland
+Environment=XDG_CURRENT_DESKTOP=sway
+Environment=PULSE_SERVER=unix:/run/user/1000/sunshine-audio/pulse/native
+Environment=PIPEWIRE_RUNTIME_DIR=/run/user/1000/sunshine-audio
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/sg input -c "%h/.config/sway-sunshine/run-sunshine.sh"
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=default.target

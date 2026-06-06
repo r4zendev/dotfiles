@@ -1,4 +1,4 @@
-function wallpaper --description "Manage Hyprland wallpapers via novashell"
+function wallpaper --description "Manage Hyprland/Niri wallpapers via awww"
     set -l dir "$HOME/wallpapers"
 
     function _notify -a msg
