@@ -1,0 +1,3 @@
+{
+  programs.mangowc.enable = true;
+}

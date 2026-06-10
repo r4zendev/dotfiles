@@ -1,0 +1,6 @@
+[flavor]
+dark = "matugen"
+light = "matugen"
+
+[app]
+overall = { bg = "reset" }

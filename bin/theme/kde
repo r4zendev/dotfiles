@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+import configparser
+import os
+import sys
+from pathlib import Path
+
+config_home = Path(os.environ.get('XDG_CONFIG_HOME') or '~/.config').expanduser()
+data_home = Path(os.environ.get('XDG_DATA_HOME') or '~/.local/share').expanduser()
+
+kglobals = config_home / 'kdeglobals'
+scheme = (data_home / 'color-schemes' / sys.argv[1]).with_suffix('.colors')
+
+kcfg = configparser.RawConfigParser()
+kcfg.optionxform = lambda option: option
+kcfg.read(kglobals)
+scfg = configparser.RawConfigParser()
+scfg.optionxform = lambda option: option
+scfg.read(scheme)
+
+for s in scfg.sections():
+    if s not in kcfg.sections():
+        kcfg.add_section(s)
+    for k, v in scfg[s].items():
+        kcfg[s][k] = v
+
+if 'General' not in kcfg.sections():
+    kcfg.add_section('General')
+kcfg['General']['font'] = 'DejaVu Sans,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1'
+kcfg['General']['menuFont'] = 'DejaVu Sans,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1'
+kcfg['General']['toolBarFont'] = 'DejaVu Sans,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1'
+kcfg['General']['fixed'] = 'Monaspace Argon,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1'
+kcfg['General']['ColorScheme'] = 'matugen'
+if 'KDE' not in kcfg.sections():
+    kcfg.add_section('KDE')
+kcfg['KDE']['widgetStyle'] = 'Breeze' 
+
+with open(kglobals, 'w') as out:
+    kcfg.write(out, space_around_delimiters=False)
+
+try:
+    try:
+        from jeepney import DBusAddress, new_signal
+        from jeepney.io.blocking import open_dbus_connection
+
+        kgs = DBusAddress('/KGlobalSettings', interface='org.kde.KGlobalSettings')
+        with open_dbus_connection(bus='SESSION') as sbus:
+            sbus.send(new_signal(kgs, 'notifyChange', 'ii', (0, 0)))
+    except ModuleNotFoundError:
+        from subprocess import run
+        run((
+            'dbus-send',
+            '--session',
+            '--type=signal',
+            '/KGlobalSettings',
+            'org.kde.KGlobalSettings.notifyChange',
+            'int32:0',
+            'int32:0',
+        ), start_new_session=True)
+except Exception:
+    pass

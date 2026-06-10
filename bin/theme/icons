@@ -1,0 +1,334 @@
+#!/usr/bin/env python3
+import colorsys
+import fcntl
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+
+HOME = os.path.expanduser("~")
+CACHE = os.environ.get("XDG_CACHE_HOME", f"{HOME}/.cache")
+CONFIG = os.environ.get("XDG_CONFIG_HOME", f"{HOME}/.config")
+ICONS = os.environ.get("XDG_DATA_HOME", f"{HOME}/.local/share") + "/icons"
+THEME = "Matugen-Mono"
+BASE = f"{ICONS}/.{THEME}.base"
+LIVE = f"{ICONS}/{THEME}"
+SCHEMA = "v3"
+RECOLOR_DIRS = ("apps", "places")
+
+HEX_RE = re.compile(r"#([0-9a-fA-F]{6})\b")
+
+accent_h = 0.0
+accent_s = 0.0
+
+
+def map_hex(m, _memo={}):
+    hx = m.group(1).lower()
+    out = _memo.get(hx)
+    if out is None:
+        r, g, b = int(hx[0:2], 16), int(hx[2:4], 16), int(hx[4:6], 16)
+        lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255.0
+        ml = min(0.94, max(0.06, lum * 0.9 + 0.04))
+        nr, ng, nb = colorsys.hls_to_rgb(accent_h, ml, accent_s)
+        out = f"#{round(nr*255):02x}{round(ng*255):02x}{round(nb*255):02x}"
+        _memo[hx] = out
+    return out
+
+
+def init_worker(h, s):
+    global accent_h, accent_s
+    accent_h, accent_s = h, s
+
+
+def recolor_pair(pair):
+    src, dst = pair
+    try:
+        with open(src, "r", encoding="utf-8", errors="ignore") as f:
+            data = f.read()
+        with open(dst, "w", encoding="utf-8") as f:
+            f.write(HEX_RE.sub(map_hex, data))
+    except OSError:
+        pass
+
+
+def find_store_theme(name):
+    for root in (f"/etc/profiles/per-user/{os.environ.get('USER', 'razen')}/share", "/run/current-system/sw/share"):
+        p = f"{root}/icons/{name}"
+        if os.path.isdir(p):
+            return os.path.realpath(p)
+    return None
+
+
+def basemark():
+    src = find_store_theme("Papirus-Dark") or ""
+    return f"{SCHEMA}:{src}"
+
+
+def build_base():
+    src = find_store_theme("Papirus-Dark")
+    if not src:
+        return False
+    tmp = f"{ICONS}/.{THEME}.base.tmp-{os.getpid()}"
+    shutil.rmtree(tmp, ignore_errors=True)
+    subprocess.run(["cp", "-r", "--reflink=auto", "--no-preserve=mode,ownership", src, tmp], check=True)
+
+    tmp_real = os.path.realpath(tmp)
+    src_parent = os.path.dirname(src)
+    for root, dirs, files in os.walk(tmp):
+        for d in list(dirs):
+            dp = os.path.join(root, d)
+            if not os.path.islink(dp):
+                continue
+            rel = os.path.relpath(dp, tmp)
+            target = os.path.realpath(os.path.join(src_parent, "Papirus-Dark", rel))
+            if os.path.realpath(dp).startswith(tmp_real) or not os.path.isdir(target):
+                continue
+            os.unlink(dp)
+            subprocess.run(["cp", "-r", "--reflink=auto", "--no-preserve=mode,ownership", target, dp], check=True)
+
+    for root, dirs, files in os.walk(tmp):
+        if os.path.basename(root) not in RECOLOR_DIRS:
+            continue
+        for fn in files:
+            fp = os.path.join(root, fn)
+            if os.path.islink(fp):
+                real = os.path.realpath(fp)
+                if not real.startswith(tmp_real) and os.path.isfile(real):
+                    os.unlink(fp)
+                    try:
+                        shutil.copyfile(real, fp)
+                    except OSError:
+                        pass
+
+    app_dirs = [
+        f"{HOME}/.local/share/applications",
+        f"/etc/profiles/per-user/{os.environ.get('USER', 'razen')}/share/applications",
+        "/run/current-system/sw/share/applications",
+    ]
+    wanted = set()
+    alias_map = {}
+    for d in app_dirs:
+        try:
+            names = os.listdir(d)
+        except OSError:
+            continue
+        for fn in names:
+            if not fn.endswith(".desktop"):
+                continue
+            icon = wmclass = None
+            try:
+                with open(os.path.join(d, fn), errors="ignore") as f:
+                    for line in f:
+                        if line.startswith("Icon=") and not icon:
+                            v = line[5:].strip()
+                            if v and "/" not in v:
+                                icon = v
+                        elif line.startswith("StartupWMClass=") and not wmclass:
+                            wmclass = line[15:].strip()
+            except OSError:
+                continue
+            if not icon:
+                continue
+            wanted.add(icon)
+            base_name = fn[:-8]
+            for alias in {base_name, base_name.lower(), wmclass or "", (wmclass or "").lower()}:
+                if alias and alias != icon:
+                    alias_map[alias] = icon
+
+    have = set()
+    for root, dirs, files in os.walk(tmp):
+        if os.path.basename(root) == "apps":
+            for fn in files:
+                have.add(os.path.splitext(fn)[0])
+
+    overlay_dir = f"{tmp}/48x48/apps"
+    os.makedirs(overlay_dir, exist_ok=True)
+    icon_roots = [
+        f"/etc/profiles/per-user/{os.environ.get('USER', 'razen')}/share",
+        "/run/current-system/sw/share",
+        f"{HOME}/.local/share",
+        f"{HOME}/.nix-profile/share",
+    ]
+    for name in sorted(wanted - have):
+        src_path = None
+        for rootdir in icon_roots:
+            for cand in (
+                f"{rootdir}/icons/hicolor/scalable/apps/{name}.svg",
+                f"{rootdir}/icons/hicolor/512x512/apps/{name}.png",
+                f"{rootdir}/icons/hicolor/256x256/apps/{name}.png",
+                f"{rootdir}/icons/hicolor/128x128/apps/{name}.png",
+                f"{rootdir}/icons/hicolor/64x64/apps/{name}.png",
+                f"{rootdir}/icons/hicolor/48x48/apps/{name}.png",
+                f"{rootdir}/pixmaps/{name}.svg",
+                f"{rootdir}/pixmaps/{name}.png",
+            ):
+                if os.path.isfile(cand):
+                    src_path = cand
+                    break
+            if src_path:
+                break
+        if not src_path:
+            continue
+        ext = ".svg" if src_path.endswith(".svg") else ".png"
+        try:
+            shutil.copyfile(src_path, f"{overlay_dir}/{name}{ext}")
+            os.chmod(f"{overlay_dir}/{name}{ext}", 0o644)
+        except OSError:
+            pass
+
+    icon_files = {}
+    for root, dirs, files in os.walk(tmp):
+        if os.path.basename(root) != "apps":
+            continue
+        for fn in files:
+            stem, ext = os.path.splitext(fn)
+            icon_files.setdefault(stem, []).append((root, fn))
+    for alias, icon in alias_map.items():
+        if alias in icon_files or icon not in icon_files:
+            continue
+        for root, fn in icon_files[icon]:
+            try:
+                os.symlink(fn, os.path.join(root, alias + os.path.splitext(fn)[1]))
+            except OSError:
+                pass
+
+    index = f"{tmp}/index.theme"
+    try:
+        with open(index) as f:
+            idx = f.read()
+        idx = re.sub(r"^Name=.*$", f"Name={THEME}", idx, count=1, flags=re.M)
+        idx = re.sub(r"^Inherits=.*$", "Inherits=Papirus-Dark,breeze-dark,hicolor", idx, count=1, flags=re.M)
+        with open(index, "w") as f:
+            f.write(idx)
+    except OSError:
+        pass
+
+    cache_tool = shutil.which("gtk4-update-icon-cache") or shutil.which("gtk-update-icon-cache")
+    if cache_tool:
+        subprocess.run([cache_tool, "-f", "-t", tmp], capture_output=True)
+
+    with open(f"{tmp}/.basemark", "w") as f:
+        f.write(basemark())
+
+    old = f"{ICONS}/.{THEME}.base.old"
+    shutil.rmtree(old, ignore_errors=True)
+    if os.path.isdir(BASE):
+        os.rename(BASE, old)
+    os.rename(tmp, BASE)
+    shutil.rmtree(old, ignore_errors=True)
+    return True
+
+
+def read_file(path):
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except OSError:
+        return ""
+
+
+def main():
+    t0 = time.monotonic()
+    lock = open(f"{CACHE}/matugen/icons.lock", "w")
+    fcntl.flock(lock, fcntl.LOCK_EX)
+
+    try:
+        with open(f"{CACHE}/matugen/colors.json") as f:
+            accent = json.load(f)["special"]["cursor"].lstrip("#")
+    except (OSError, KeyError, ValueError):
+        return 0
+
+    qaccent = "".join(f"{(int(accent[i:i+2], 16) >> 4):x}" for i in (0, 2, 4))
+    mark = basemark()
+
+    if read_file(f"{LIVE}/.accent") == qaccent and read_file(f"{LIVE}/.basemark") == mark:
+        return 0
+
+    if read_file(f"{BASE}/.basemark") != mark:
+        if not build_base():
+            return 0
+
+    if read_file(f"{LIVE}/.basemark") != mark:
+        tmp = f"{ICONS}/.{THEME}.tmp-{os.getpid()}"
+        shutil.rmtree(tmp, ignore_errors=True)
+        subprocess.run(["cp", "-r", "--reflink=auto", "--no-preserve=mode,ownership", BASE, tmp], check=True)
+        old = f"{ICONS}/.{THEME}.old"
+        shutil.rmtree(old, ignore_errors=True)
+        if os.path.isdir(LIVE):
+            os.rename(LIVE, old)
+        os.rename(tmp, LIVE)
+        shutil.rmtree(old, ignore_errors=True)
+
+    r, g, b = (int(accent[i : i + 2], 16) / 255 for i in (0, 2, 4))
+    h, _, s = colorsys.rgb_to_hls(r, g, b)
+    s = max(s, 0.35)
+
+    svg_pairs = []
+    png_jobs = []
+    base_len = len(BASE)
+    for root, dirs, files in os.walk(BASE):
+        if os.path.basename(root) not in RECOLOR_DIRS:
+            continue
+        for fn in files:
+            sp = os.path.join(root, fn)
+            if os.path.islink(sp):
+                continue
+            dp = LIVE + sp[base_len:]
+            if fn.endswith(".svg") and not fn.endswith("-symbolic.svg"):
+                svg_pairs.append((sp, dp))
+            elif fn.endswith(".png"):
+                png_jobs.append((sp, dp))
+
+    with ProcessPoolExecutor(initializer=init_worker, initargs=(h, s)) as ex:
+        list(ex.map(recolor_pair, svg_pairs, chunksize=128))
+
+    accent_hex = "#" + accent
+
+    def recolor_png(job):
+        sp, dp = job
+        subprocess.run(
+            ["magick", sp, "-resize", "48x48", "(", "+clone", "-alpha", "extract", ")",
+             "(", "-clone", "0", "-colorspace", "gray", "-fill", accent_hex, "-tint", "100", ")",
+             "-delete", "0", "+swap", "-alpha", "off", "-compose", "CopyOpacity", "-composite", dp],
+            capture_output=True)
+
+    if png_jobs:
+        with ThreadPoolExecutor(max_workers=16) as ex:
+            list(ex.map(recolor_png, png_jobs))
+
+    with open(f"{LIVE}/.accent", "w") as f:
+        f.write(qaccent)
+
+    out = subprocess.run(["gsettings", "get", "org.gnome.desktop.interface", "icon-theme"], capture_output=True, text=True)
+    if THEME not in out.stdout:
+        subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "icon-theme", THEME], capture_output=True)
+
+    kdeglobals = f"{CONFIG}/kdeglobals"
+    kg = read_file(kdeglobals)
+    if f"Theme={THEME}" not in kg:
+        if "[Icons]" in kg:
+            head, _, rest = kg.partition("[Icons]")
+            section, nl, tail = rest.partition("\n[")
+            if "Theme=" in section:
+                section = re.sub(r"Theme=.*", f"Theme={THEME}", section, count=1)
+            else:
+                section = f"\nTheme={THEME}" + section
+            kg = head + "[Icons]" + section + nl + tail
+        else:
+            kg += f"\n[Icons]\nTheme={THEME}\n"
+        try:
+            with open(kdeglobals, "w") as f:
+                f.write(kg)
+        except OSError:
+            pass
+
+    print(f"theme-icons: {len(svg_pairs)} svg + {len(png_jobs)} png -> {accent} in {time.monotonic()-t0:.2f}s", file=sys.stderr)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

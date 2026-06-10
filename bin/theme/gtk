@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+mode="${1:-dark}"
+
+command -v gsettings >/dev/null 2>&1 || exit 0
+
+target_theme="adw-gtk3"
+[ "$mode" = "dark" ] && target_theme="adw-gtk3-dark"
+
+opposite="prefer-light"
+[ "$mode" = "light" ] && opposite="prefer-dark"
+
+gsettings set org.gnome.desktop.interface gtk-theme "$target_theme" 2>/dev/null || true
+gsettings set org.gnome.desktop.interface color-scheme "$opposite" 2>/dev/null || true
+sleep 0.1
+gsettings set org.gnome.desktop.interface color-scheme "prefer-$mode" 2>/dev/null || true
+
+exit 0

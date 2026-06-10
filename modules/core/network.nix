@@ -1,0 +1,14 @@
+{
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.powersave = false;
+
+  networking.networkmanager.settings.connection = {
+    "ethernet.cloned-mac-address" = "preserve";
+    "wifi.autoconnect" = "no";
+  };
+
+  boot.extraModprobeConfig = ''
+    options iwlwifi bt_coex_active=0 power_save=0
+    options iwlmvm power_scheme=1
+  '';
+}

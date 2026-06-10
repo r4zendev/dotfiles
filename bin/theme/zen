@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/matugen/zen"
+[ -f "$cache_dir/userChrome.css" ] || exit 0
+
+pref_line='user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+
+apply_to_profile() {
+    local profile="$1"
+    [ -d "$profile" ] || return 0
+    mkdir -p "$profile/chrome"
+    local user_js="$profile/user.js"
+    if ! grep -qs "toolkit.legacyUserProfileCustomizations.stylesheets" "$user_js" 2>/dev/null; then
+        printf '%s\n' "$pref_line" >> "$user_js"
+    fi
+    cp -f "$cache_dir/userChrome.css" "$profile/chrome/userChrome.css"
+    cp -f "$cache_dir/userContent.css" "$profile/chrome/userContent.css"
+}
+
+found=0
+for zen_root in "${XDG_CONFIG_HOME:-$HOME/.config}/zen" "$HOME/.zen"; do
+    ini="$zen_root/profiles.ini"
+    [ -f "$ini" ] || continue
+    found=1
+    while IFS= read -r rel; do
+        apply_to_profile "$zen_root/$rel"
+    done < <(awk -F= '/^IsRelative=1/{rel=1} /^Path=/{path=$2} /^\[/{if (rel && path) print path; rel=0; path=""} END{if (rel && path) print path}' "$ini")
+done
+
+exit 0

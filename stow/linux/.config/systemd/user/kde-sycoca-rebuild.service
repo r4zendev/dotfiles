@@ -1,7 +1,0 @@
-[Unit]
-Description=Rebuild KDE service cache
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/kbuildsycoca6 --noincremental
-Nice=5

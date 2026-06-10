@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+import json
+import os
+import re
+import sys
+
+HOME = os.path.expanduser("~")
+CACHE = os.environ.get("XDG_CACHE_HOME", f"{HOME}/.cache")
+CONFIG = os.environ.get("XDG_CONFIG_HOME", f"{HOME}/.config")
+TPL = f"{CONFIG}/matugen/templates/vesktop-colors.tpl"
+OUT = f"{CONFIG}/vesktop/settings/quickCss.css"
+
+
+def adjust(hex_color, amount):
+    h = hex_color.lstrip("#")
+    ch = [max(0, min(255, int(h[i : i + 2], 16) + amount)) for i in (0, 2, 4)]
+    return "#" + "".join(f"{c:02x}" for c in ch)
+
+
+def main():
+    try:
+        with open(f"{CACHE}/matugen/colors.json") as f:
+            data = json.load(f)
+        with open(TPL) as f:
+            tpl = f.read()
+    except OSError:
+        return 0
+
+    s = data["special"]
+    c = data["colors"]
+    bg, fg = s["background"], s["foreground"]
+    p = {
+        "accent": s.get("cursor", c["color4"]),
+        "surface0": adjust(bg, 15),
+        "surface1": adjust(bg, 25),
+        "surface2": adjust(bg, 40),
+        "mantle": adjust(bg, -5),
+        "crust": adjust(bg, -10),
+        "overlay0": adjust(fg, -80),
+        "overlay1": adjust(fg, -65),
+        "overlay2": adjust(fg, -50),
+        "subtext0": adjust(fg, -30),
+        "subtext1": adjust(fg, -15),
+    }
+    scopes = {"s": s, "p": p, "c": c}
+    locals_ = {
+        "baseLow": adjust(bg, -3),
+        "channelDefault": adjust(p["subtext0"], -5),
+        "sky": adjust(c["color6"], 15),
+    }
+
+    def resolve(m):
+        expr = m.group(1)
+        if expr in locals_:
+            return locals_[expr]
+        fn = re.fullmatch(r"adjustLightness\(([spc])\.(\w+), ?(-?\d+)\)", expr)
+        if fn:
+            return adjust(scopes[fn.group(1)][fn.group(2)], int(fn.group(3)))
+        scope, key = expr.split(".", 1)
+        return scopes[scope][key]
+
+    css = re.sub(r"\$\{([^}]+)\}", resolve, tpl)
+
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w") as f:
+        f.write(css)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

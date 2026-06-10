@@ -1,0 +1,75 @@
+{
+  description = "razen system, home, and dotfiles";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixpkgs-bambu.url = "github:NixOS/nixpkgs/00fa9a692bafc08a86061886f888b843bf7fbdb0";
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    helium = {
+      url = "github:oxcl/nix-flake-helium-browser";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs =
+    inputs@{ nixpkgs, home-manager, ... }:
+    let
+      vars = import ./hosts/razen/variables.nix;
+      shellTemplate = name: {
+        path = ./dev-shells/${name};
+        description = "${name} dev shell with direnv and dotenv layering";
+      };
+    in
+    {
+      templates = {
+        node = shellTemplate "node";
+        bun = shellTemplate "bun";
+        go = shellTemplate "go";
+        rust = shellTemplate "rust";
+        python = shellTemplate "python";
+        zig = shellTemplate "zig";
+        c = shellTemplate "c";
+        empty = shellTemplate "empty";
+        default = shellTemplate "empty";
+      };
+
+      nixosConfigurations.${vars.hostname} = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs vars; };
+        modules = [
+          ./hosts/razen
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hmbak";
+            home-manager.extraSpecialArgs = { inherit inputs vars; };
+            home-manager.users.${vars.username} = import ./home/razen.nix;
+          }
+        ];
+      };
+    };
+}

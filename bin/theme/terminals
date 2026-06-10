@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import glob
+import json
+import os
+
+with open(os.path.expanduser("~/.cache/matugen/colors.json")) as f:
+    data = json.load(f)
+
+parts = []
+for i in range(16):
+    c = data["colors"].get(f"color{i}")
+    if c:
+        parts.append(f"\033]4;{i};{c}\007")
+parts.append(f"\033]10;{data['special']['foreground']}\007")
+parts.append(f"\033]12;{data['special']['cursor']}\007")
+seq = "".join(parts)
+
+for t in glob.glob("/dev/pts/[0-9]*"):
+    try:
+        with open(t, "w") as out:
+            out.write(seq)
+    except OSError:
+        pass

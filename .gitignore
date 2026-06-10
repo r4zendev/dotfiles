@@ -1,12 +1,23 @@
 !.rgignore
 docs
-.DS_Store
-npm-debug.log
-__pycache__
-CLAUDE.md
-AGENTS.md
-
-# DMS-generated niri snippets (regenerated at runtime)
-stow/linux/.config/niri/dms/
-# editor/backup cruft
 *.bak-*
+
+/CLAUDE.md
+/AGENTS.md
+.claude/settings.local.json
+
+result
+result-*
+
+home/files/.dblab.yaml
+config/gh/hosts.yml
+config/fish/fish_variables
+config/fish/conf.d/env.fish
+config/btop/
+config/ghostty/themes/matugen
+config/yazi/flavors/matugen.yazi/
+config/mango/dms/
+config/mango/matugen.conf
+*.sock
+config/DankMaterialShell/*
+!config/DankMaterialShell/settings.json

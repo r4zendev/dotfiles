@@ -1,0 +1,72 @@
+[config]
+
+[config.custom_colors]
+red = { color = "#cc4444", blend = true }
+green = { color = "#44aa44", blend = true }
+yellow = { color = "#ccaa44", blend = true }
+blue = { color = "#4477cc", blend = true }
+magenta = { color = "#aa55aa", blend = true }
+cyan = { color = "#44aaaa", blend = true }
+
+[templates.fish]
+input_path = "/home/razen/.config/matugen/templates/colors.fish"
+output_path = "/home/razen/.cache/matugen/colors.fish"
+
+[templates.json]
+input_path = "/home/razen/.config/matugen/templates/colors.json"
+output_path = "/home/razen/.cache/matugen/colors.json"
+post_hook = "/home/razen/.local/bin/theme-terminals || true; /home/razen/.local/bin/theme-hyprland || true; /home/razen/.local/bin/theme-vesktop || true; sh -c '/home/razen/.local/bin/theme-telegram >/dev/null 2>&1 & /home/razen/.local/bin/theme-icons >/dev/null 2>&1 &'"
+
+[templates.tmux]
+input_path = "/home/razen/.config/matugen/templates/tmux-colors.conf"
+output_path = "/home/razen/.cache/matugen/tmux-colors.conf"
+post_hook = "tmux source-file /home/razen/.cache/matugen/tmux-colors.conf 2>/dev/null || true"
+
+[templates.btop]
+input_path = "/home/razen/.config/matugen/templates/btop.theme"
+output_path = "/home/razen/.config/btop/themes/matugen.theme"
+post_hook = "pkill -SIGUSR2 -x btop 2>/dev/null || true"
+
+[templates.gtk3]
+input_path = "/home/razen/.config/matugen/templates/gtk3.css"
+output_path = "/home/razen/.config/gtk-3.0/matugen.css"
+
+[templates.gtk4]
+input_path = "/home/razen/.config/matugen/templates/gtk4.css"
+output_path = "/home/razen/.config/gtk-4.0/matugen.css"
+post_hook = "/home/razen/.local/bin/theme-gtk dark || true"
+
+[templates.kcolorscheme]
+input_path = "/home/razen/.config/matugen/templates/kcolorscheme.colors"
+output_path = "/home/razen/.local/share/color-schemes/matugen.colors"
+post_hook = "/home/razen/.local/bin/theme-kde matugen 2>/dev/null || true"
+
+[templates.ghostty]
+input_path = "/home/razen/.config/matugen/templates/ghostty"
+output_path = "/home/razen/.config/ghostty/themes/matugen"
+post_hook = "pkill -SIGUSR2 -x ghostty 2>/dev/null || true"
+
+[templates.mango]
+input_path = "/home/razen/.config/matugen/templates/mango.conf"
+output_path = "/home/razen/.cache/matugen/mango.conf"
+post_hook = "test -n \"$MANGO_INSTANCE_SIGNATURE\" && mmsg dispatch reload_config 2>/dev/null || true"
+
+[templates.yazi]
+input_path = "/home/razen/.config/matugen/templates/yazi.toml"
+output_path = "/home/razen/.config/yazi/flavors/matugen.yazi/flavor.toml"
+
+[templates.zen_chrome]
+input_path = "/home/razen/.config/matugen/templates/zen-userChrome.css"
+output_path = "/home/razen/.cache/matugen/zen/userChrome.css"
+post_hook = "/home/razen/.local/bin/theme-zen || true"
+
+[templates.zen_content]
+input_path = "/home/razen/.config/matugen/templates/zen-userContent.css"
+output_path = "/home/razen/.cache/matugen/zen/userContent.css"
+post_hook = "/home/razen/.local/bin/theme-zen || true"
+
+
+[templates.yt_music]
+input_path = "/home/razen/.config/matugen/templates/yt-music.css"
+output_path = "/home/razen/.cache/matugen/yt-music-theme.css"
+
