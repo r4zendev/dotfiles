@@ -47,3 +47,5 @@
 [alias]
 	dlog = log -p --ext-diff
 	du = diff --no-ext-diff
+[push]
+	autoSetupRemote = true
