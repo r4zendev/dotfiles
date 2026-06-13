@@ -1,0 +1,2 @@
+config/matugen/templates/** linguist-vendored
+bin/theme/** linguist-vendored
