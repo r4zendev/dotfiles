@@ -13,4 +13,6 @@
     command = "${lib.getExe config.programs.uwsm.package} start -e -D Hyprland hyprland.desktop";
     user = vars.username;
   };
+
+  security.pam.services.greetd.enableGnomeKeyring = true;
 }

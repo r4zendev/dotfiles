@@ -20,4 +20,3 @@ config/mango/dms/
 config/mango/matugen.conf
 *.sock
 config/DankMaterialShell/*
-!config/DankMaterialShell/settings.json

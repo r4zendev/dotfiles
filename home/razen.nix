@@ -8,6 +8,10 @@ let
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
+  llamaPkgs = import inputs.nixpkgs-llamacpp {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
 in
 {
   imports = [ inputs.dms.homeModules.dank-material-shell ];
@@ -296,7 +300,7 @@ in
     dblab
     delta
     difftastic
-    (llama-cpp.override { cudaSupport = true; })
+    (llamaPkgs.llama-cpp.override { cudaSupport = true; })
     playerctl
     libnotify
     brightnessctl

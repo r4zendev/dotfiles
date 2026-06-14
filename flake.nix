@@ -23,6 +23,8 @@
 
     nixpkgs-bambu.url = "github:NixOS/nixpkgs/00fa9a692bafc08a86061886f888b843bf7fbdb0";
 
+    nixpkgs-llamacpp.url = "github:NixOS/nixpkgs/a799d3e3886da994fa307f817a6bc705ae538eeb";
+
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +34,8 @@
       url = "github:oxcl/nix-flake-helium-browser";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs =
