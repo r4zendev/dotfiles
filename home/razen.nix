@@ -280,54 +280,47 @@ in
   };
 
   home.packages = with pkgs; [
+    # shell & terminal
     ghostty
     tmux
+    helix
     yazi
-    lsd
+    starship
     fishPlugins.autopair
-    lazygit
     zoxide
+    sesh
+    fzf
+
+    # cli utils
+    lsd
     bat
     fd
     ripgrep
-    fzf
-    starship
     fx
-    sesh
-    gh
-    gh-dash
-    lazydocker
-    dblab
-    delta
-    difftastic
-    (llamaPkgs.llama-cpp.override { cudaSupport = true; })
-    playerctl
-    libnotify
-    brightnessctl
-    pavucontrol
-    imagemagick
-    tree-sitter
-    gcc
-    gnumake
-    psmisc
-    usbutils
-    picocom
     tealdeer
-    gnupg
-    uv
-    xdg-utils
-    opencode
-    yt-dlp
     gdu
+    gnupg
     unzip
     (p7zip.override { enableUnfree = true; })
-    loupe
-    kdePackages.ark
-    kdePackages.kio-admin
-    kdePackages.kservice
-    kdePackages.ffmpegthumbs
-    kdePackages.kimageformats
+    imagemagick
+
+    # git & dev workflow
+    lazygit
+    gh
+    gh-dash
+    delta
+    difftastic
+    lazydocker
+    dblab
+
+    # languages & build
+    gcc
+    gnumake
     python3
+    uv
+    tree-sitter
+
+    # lsps, formatters, debug
     nixd
     lua-language-server
     stylua
@@ -346,27 +339,59 @@ in
     tinymist
     bash-language-server
     vscode-js-debug
+
+    # ai
+    (llamaPkgs.llama-cpp.override { cudaSupport = true; })
+    opencode
+
+    # wayland & desktop utils
+    playerctl
+    libnotify
+    brightnessctl
+    pavucontrol
     wl-clip-persist
     wf-recorder
     slurp
     hyprpicker
     matugen
+    satty
+    localPkgs.hyprwhspr
+    xdg-utils
+
+    # system & hardware
+    psmisc
+    usbutils
+
+    # media & downloads
+    yt-dlp
+    qbittorrent
+    vlc
+    qimgv
+    loupe
+
+    # kde integration & thumbnails
+    kdePackages.ark
+    kdePackages.kio-admin
+    kdePackages.kservice
+    kdePackages.ffmpegthumbs
+    kdePackages.kimageformats
+
+    # gui apps
     vesktop
     telegram-desktop
     inputs.zen-browser.packages.x86_64-linux.default
     inputs.helium.packages.x86_64-linux.default
     pear-desktop
-    qimgv
-    vlc
     gimp
+
+    # cad & 3d printing
     blender
     freecad
     kicad
     openscad-unstable
     bambuPkgs.bambu-studio
-    qbittorrent
-    localPkgs.hyprwhspr
-    satty
+
+    # theming
     papirus-icon-theme
     gtk4
   ];
